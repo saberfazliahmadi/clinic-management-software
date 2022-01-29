@@ -34,7 +34,7 @@ class CreatePatientsGeneralInfosTable extends Migration
             $table->string('patient_disease_background','2000')->collation('utf8_general_ci')->nullable() ;
             $table->string('patient_medication_history','2000')->collation('utf8_general_ci')->nullable() ;
             $table->string('patient_allergies_history','2000')->collation('utf8_general_ci')->nullable() ;
-            $table->string('patient_more_description','2000')->collation('utf8_general_ci')->nullable() ;
+            $table->text('patient_more_description')->collation('utf8_general_ci')->nullable() ;
             $table->integer('patient_from_external_platform_id')->nullable() ;
             $table->integer('patient_from_external_platform_step')->nullable() ;
             $table->timestamps();
