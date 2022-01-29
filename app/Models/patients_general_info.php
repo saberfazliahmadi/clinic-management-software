@@ -32,4 +32,9 @@ class patients_general_info extends Model
         'patient_from_external_platform_step' ,
     ] ;
     use HasFactory;
+
+    public function patients_appointments()
+    {
+        return $this->hasMany(patients_appointment::class , 'patient_id' , 'appointment_patient_related_id' ) ;
+    }
 }
