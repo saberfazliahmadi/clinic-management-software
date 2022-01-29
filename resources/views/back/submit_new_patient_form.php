@@ -432,7 +432,12 @@ echo '
                 <br>
         
                 <div id="more_details" class="collapse col-md-12 col-sm-12 col-xs-12">
-        
+                
+                    <p class="text-center">
+                    Created at: '.$key_2->created_at.'
+                    <br>
+                    Updated at: '.$key_2->updated_at.'
+                    </p>
         
                   <div class="form-group">
                     <label class="control-label col-md-3 col-sm-3 col-xs-12">
