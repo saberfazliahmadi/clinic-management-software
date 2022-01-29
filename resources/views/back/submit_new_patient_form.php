@@ -338,8 +338,6 @@ echo '
                             <div class="form-group col-md-12 col-sm-12 col-xs-12" >
                                 <div class="input-group date" >';
 
-                                print_r( $result_edit_patient_form->patients_appointments() )  ;
-
                                 foreach ($result_show_all_appointments_of_this_id as $key_2)
                                 {
                                     echo '

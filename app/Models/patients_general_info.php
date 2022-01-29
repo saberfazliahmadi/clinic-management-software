@@ -33,8 +33,8 @@ class patients_general_info extends Model
     ] ;
     use HasFactory;
 
-    public function patients_appointments()
-    {
-        return $this->hasMany(patients_appointment::class , 'patient_id' , 'appointment_patient_related_id' ) ;
-    }
+//    public function patients_appointments()
+//    {
+//        return $this->hasMany(patients_appointment::class , 'patient_id' , 'appointment_patient_related_id' ) ;
+//    }
 }
