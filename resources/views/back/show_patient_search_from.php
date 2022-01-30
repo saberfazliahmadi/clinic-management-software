@@ -31,7 +31,7 @@ echo '
             <center>
                 <h4 class="col-md-12 col-sm-12 col-xs-12 text-center" align="center" style="direction:ltr;margin-top:40px;" >
                     <div class="col-md-12 col-sm-12 col-xs-12 text-center" align="center" >
-                        your searching word should be based on just <b>one</b> of the below types
+                        your searching word should be based on just <b>1</b> of the below types
                     </div>
                     <hr style="width:1px;" >
                     
@@ -66,7 +66,7 @@ echo '
                 
                 <hr style="width:1px;" >
                 <div class="col-md-12 col-sm-12 col-xs-12" align="center" style="float:none;" >
-                    <input type="text" name="search_text" style="text-align: left!important;float:none;" min="1" max="60" autocomplete="off" aria-autocomplete="list" aria-expanded="false" aria-haspopup="true" role="combobox" spellcheck="false" class="form-control" placeholder="Type just ONE of these types: Name | Family | Mobile Number | Nationality Number | Medical Document Number" align="center" required >
+                    <input type="text" name="search_text" style="text-align: left!important;float:none;" min="1" max="60" autocomplete="off" aria-autocomplete="list" aria-expanded="false" aria-haspopup="true" role="combobox" spellcheck="false" class="form-control" placeholder="Type just 1 of these types: Name | Family | Mobile Number | Nationality Number | Medical Document Number" align="center" required >
                 </div>
                 
             </center>
