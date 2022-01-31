@@ -24,7 +24,7 @@ app('router')->setCompiledRoutes(
         array (
           0 => 
           array (
-            '_route' => 'generated::GgAUehc9yc68AWg4',
+            '_route' => 'generated::x2mqney0PQSRIxSn',
           ),
           1 => NULL,
           2 => 
@@ -44,7 +44,7 @@ app('router')->setCompiledRoutes(
         array (
           0 => 
           array (
-            '_route' => 'generated::Ma3YEtR5RoJM0DWV',
+            '_route' => 'generated::CO2S7duisHG0I1Yv',
           ),
           1 => NULL,
           2 => 
@@ -81,7 +81,7 @@ app('router')->setCompiledRoutes(
         array (
           0 => 
           array (
-            '_route' => 'generated::oHrOQcAVzLfwBAdm',
+            '_route' => 'generated::rfgwlGZDjUgCm0TZ',
           ),
           1 => NULL,
           2 => 
@@ -136,7 +136,7 @@ app('router')->setCompiledRoutes(
         array (
           0 => 
           array (
-            '_route' => 'generated::aL49tAzcglSWTlgP',
+            '_route' => 'generated::kM6RLJzKr3glRX58',
           ),
           1 => NULL,
           2 => 
@@ -227,7 +227,7 @@ app('router')->setCompiledRoutes(
         array (
           0 => 
           array (
-            '_route' => 'generated::4IFRehtfaaNVDYzP',
+            '_route' => 'generated::kanE8AZOFP4r4f7G',
           ),
           1 => NULL,
           2 => 
@@ -246,7 +246,7 @@ app('router')->setCompiledRoutes(
         array (
           0 => 
           array (
-            '_route' => 'generated::5EIfLoHapNWZjbue',
+            '_route' => 'generated::I7ndBk7rDPXmg7XX',
           ),
           1 => NULL,
           2 => 
@@ -632,6 +632,26 @@ app('router')->setCompiledRoutes(
           6 => NULL,
         ),
       ),
+      '/show_patients_ehr_document_page' => 
+      array (
+        0 => 
+        array (
+          0 => 
+          array (
+            '_route' => 'show_patients_ehr_document_page',
+          ),
+          1 => NULL,
+          2 => 
+          array (
+            'GET' => 0,
+            'HEAD' => 1,
+          ),
+          3 => NULL,
+          4 => false,
+          5 => false,
+          6 => NULL,
+        ),
+      ),
     ),
     2 => 
     array (
@@ -816,7 +836,7 @@ app('router')->setCompiledRoutes(
   ),
   'attributes' => 
   array (
-    'generated::GgAUehc9yc68AWg4' => 
+    'generated::x2mqney0PQSRIxSn' => 
     array (
       'methods' => 
       array (
@@ -837,7 +857,7 @@ app('router')->setCompiledRoutes(
         array (
           0 => 'web',
         ),
-        'as' => 'generated::GgAUehc9yc68AWg4',
+        'as' => 'generated::x2mqney0PQSRIxSn',
       ),
       'fallback' => false,
       'defaults' => 
@@ -853,7 +873,7 @@ app('router')->setCompiledRoutes(
       'waitSeconds' => NULL,
       'withTrashed' => false,
     ),
-    'generated::Ma3YEtR5RoJM0DWV' => 
+    'generated::CO2S7duisHG0I1Yv' => 
     array (
       'methods' => 
       array (
@@ -870,13 +890,13 @@ app('router')->setCompiledRoutes(
         ),
         'uses' => 'O:47:"Laravel\\SerializableClosure\\SerializableClosure":1:{s:12:"serializable";O:46:"Laravel\\SerializableClosure\\Serializers\\Signed":2:{s:12:"serializable";s:295:"O:46:"Laravel\\SerializableClosure\\Serializers\\Native":5:{s:3:"use";a:0:{}s:8:"function";s:77:"function (\\Illuminate\\Http\\Request $request) {
     return $request->user();
-}";s:5:"scope";s:37:"Illuminate\\Routing\\RouteFileRegistrar";s:4:"this";N;s:4:"self";s:32:"000000000eafe14d00000000268582c5";}";s:4:"hash";s:44:"YS5wUQ6ip4Qk6YCN9GpaS9k6MB9dtTJ0WM2DKZ8WRnw=";}}',
+}";s:5:"scope";s:37:"Illuminate\\Routing\\RouteFileRegistrar";s:4:"this";N;s:4:"self";s:32:"000000006174381c0000000046f36838";}";s:4:"hash";s:44:"dWHSirlGpBkVVyV2Rz8EgWgR4DKjR1Y/G2vaOSVHUgI=";}}',
         'namespace' => 'App\\Http\\Controllers',
         'prefix' => 'api',
         'where' => 
         array (
         ),
-        'as' => 'generated::Ma3YEtR5RoJM0DWV',
+        'as' => 'generated::CO2S7duisHG0I1Yv',
       ),
       'fallback' => false,
       'defaults' => 
@@ -929,7 +949,7 @@ app('router')->setCompiledRoutes(
       'waitSeconds' => NULL,
       'withTrashed' => false,
     ),
-    'generated::oHrOQcAVzLfwBAdm' => 
+    'generated::rfgwlGZDjUgCm0TZ' => 
     array (
       'methods' => 
       array (
@@ -949,7 +969,7 @@ app('router')->setCompiledRoutes(
         'where' => 
         array (
         ),
-        'as' => 'generated::oHrOQcAVzLfwBAdm',
+        'as' => 'generated::rfgwlGZDjUgCm0TZ',
       ),
       'fallback' => false,
       'defaults' => 
@@ -1038,7 +1058,7 @@ app('router')->setCompiledRoutes(
       'waitSeconds' => NULL,
       'withTrashed' => false,
     ),
-    'generated::aL49tAzcglSWTlgP' => 
+    'generated::kM6RLJzKr3glRX58' => 
     array (
       'methods' => 
       array (
@@ -1058,7 +1078,7 @@ app('router')->setCompiledRoutes(
         'where' => 
         array (
         ),
-        'as' => 'generated::aL49tAzcglSWTlgP',
+        'as' => 'generated::kM6RLJzKr3glRX58',
       ),
       'fallback' => false,
       'defaults' => 
@@ -1257,7 +1277,7 @@ app('router')->setCompiledRoutes(
       'waitSeconds' => NULL,
       'withTrashed' => false,
     ),
-    'generated::4IFRehtfaaNVDYzP' => 
+    'generated::kanE8AZOFP4r4f7G' => 
     array (
       'methods' => 
       array (
@@ -1277,7 +1297,7 @@ app('router')->setCompiledRoutes(
         'where' => 
         array (
         ),
-        'as' => 'generated::4IFRehtfaaNVDYzP',
+        'as' => 'generated::kanE8AZOFP4r4f7G',
       ),
       'fallback' => false,
       'defaults' => 
@@ -1293,7 +1313,7 @@ app('router')->setCompiledRoutes(
       'waitSeconds' => NULL,
       'withTrashed' => false,
     ),
-    'generated::5EIfLoHapNWZjbue' => 
+    'generated::I7ndBk7rDPXmg7XX' => 
     array (
       'methods' => 
       array (
@@ -1307,15 +1327,15 @@ app('router')->setCompiledRoutes(
         array (
           0 => 'web',
         ),
-        'uses' => 'O:47:"Laravel\\SerializableClosure\\SerializableClosure":1:{s:12:"serializable";O:46:"Laravel\\SerializableClosure\\Serializers\\Signed":2:{s:12:"serializable";s:265:"O:46:"Laravel\\SerializableClosure\\Serializers\\Native":5:{s:3:"use";a:0:{}s:8:"function";s:47:"function () {
+        'uses' => 'O:47:"Laravel\\SerializableClosure\\SerializableClosure":1:{s:12:"serializable";O:46:"Laravel\\SerializableClosure\\Serializers\\Signed":2:{s:12:"serializable";s:267:"O:46:"Laravel\\SerializableClosure\\Serializers\\Native":5:{s:3:"use";a:0:{}s:8:"function";s:49:"function () {
     return \\view(\'auth.login\');
-}";s:5:"scope";s:37:"Illuminate\\Routing\\RouteFileRegistrar";s:4:"this";N;s:4:"self";s:32:"000000000eafe14f00000000268582c5";}";s:4:"hash";s:44:"F3zAi+w4pyCFq0vKDVqf41IIo16A+tDS9W+85iW4uN0=";}}',
+}";s:5:"scope";s:37:"Illuminate\\Routing\\RouteFileRegistrar";s:4:"this";N;s:4:"self";s:32:"00000000617438120000000046f36838";}";s:4:"hash";s:44:"Bp0ufLo4ItlOSVoGnZvUuy3v9/bP+S8aCwfX6BAVDs8=";}}',
         'namespace' => 'App\\Http\\Controllers',
         'prefix' => '',
         'where' => 
         array (
         ),
-        'as' => 'generated::5EIfLoHapNWZjbue',
+        'as' => 'generated::I7ndBk7rDPXmg7XX',
       ),
       'fallback' => false,
       'defaults' => 
@@ -2257,6 +2277,44 @@ app('router')->setCompiledRoutes(
         array (
         ),
         'as' => 'update_show_main_settings_of_software_form',
+      ),
+      'fallback' => false,
+      'defaults' => 
+      array (
+      ),
+      'wheres' => 
+      array (
+      ),
+      'bindingFields' => 
+      array (
+      ),
+      'lockSeconds' => NULL,
+      'waitSeconds' => NULL,
+      'withTrashed' => false,
+    ),
+    'show_patients_ehr_document_page' => 
+    array (
+      'methods' => 
+      array (
+        0 => 'GET',
+        1 => 'HEAD',
+      ),
+      'uri' => 'show_patients_ehr_document_page',
+      'action' => 
+      array (
+        'middleware' => 
+        array (
+          0 => 'web',
+          1 => 'protected_page_accessible_for_admin',
+        ),
+        'uses' => 'App\\Http\\Controllers\\PatientsEHRDocumentController@show_patients_ehr_document_page',
+        'controller' => 'App\\Http\\Controllers\\PatientsEHRDocumentController@show_patients_ehr_document_page',
+        'namespace' => 'App\\Http\\Controllers',
+        'prefix' => '',
+        'where' => 
+        array (
+        ),
+        'as' => 'show_patients_ehr_document_page',
       ),
       'fallback' => false,
       'defaults' => 

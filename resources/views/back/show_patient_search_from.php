@@ -175,7 +175,7 @@ echo '
                 <hr style="width:1px;" >
 
                 <div class="col-md-12 col-sm-12 col-xs-12" >
-                    <a href="" class="text-center uiuxtrick" >
+                    <a href="'.route('show_patients_ehr_document_page').'" class="text-center uiuxtrick" >
                         <div class="col-md-4 col-sm-4 col-xs-12 btn btn-default" style="float:right;color:#337ab7;padding-top: 15px;padding-bottom: 15px;" >
                              <i class="fa fa-clone"></i>
                              Medical Document
