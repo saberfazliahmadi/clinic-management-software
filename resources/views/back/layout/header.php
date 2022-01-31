@@ -85,12 +85,100 @@ label
                     <div id="sidebar-menu" class="main_menu_side hidden-print main_menu" >
                         <div class="menu_section" >
                             <ul class="nav side-menu" >
-                                <li><a href="'.route('show_patient_search_from').'" style="font-size: 16px!important;font-weight:bolder;" ><span class="glyphicon glyphicon-search" aria-hidden="true" style="float:left;margin-top:15px;color: #E7E7E7;font-weight: bolder!important;margin-top:0px;"></span>&nbsp;&nbsp;' . $cms_menu_title_data_from_middleware[14] . '</a></li>
-                                <li><a href="'.route('submit_new_patient_form').'"  style="font-size: 16px!important;font-weight:bolder;" ><span class="glyphicon glyphicon-pencil" aria-hidden="true" style="float:left;margin-top:15px;color: #E7E7E7;font-weight: bolder!important;margin-top:0px;" ></span>&nbsp;&nbsp;' . $cms_menu_title_data_from_middleware[15] . '</a></li>
+                            
+                                <li>
+                                    <a href="#search_form" id="various222" style="font-size: 16px!important;font-weight:bolder;" >                              
+                                        <span class="glyphicon glyphicon-search" aria-hidden="true" style="float:left;margin-top:15px;color: #E7E7E7;font-weight: bolder!important;margin-top:0px;" ></span>
+                                        &nbsp;&nbsp;' . $cms_menu_title_data_from_middleware[14] . '
+                                    </a>
+                                </li>
+                                
+                                <li>
+                                    <a href="'.route('submit_new_patient_form').'" style="font-size: 16px!important;font-weight:bolder;" >
+                                        <span class="glyphicon glyphicon-pencil" aria-hidden="true" style="float:left;margin-top:15px;color: #E7E7E7;font-weight: bolder!important;margin-top:0px;" ></span>
+                                        &nbsp;&nbsp;' . $cms_menu_title_data_from_middleware[15] . '
+                                    </a>
+                                </li>
+                                
                             </ul>
                         </div>
                     </div>
                     <!-- /sidebar menu -->
+                    
+                    <!-- START of login fancy console panel search_form -->
+                    <div style="display:none;" >
+                    <div id="search_form" style="overflow:scroll;width:100%!important;height:700px;overflow-x: hidden;" >
+                    
+                    
+                        <form method="post" action="'.route('run_patient_search_form').'" id="medical-file-form" data-parsley-validate style="padding-left:50px;padding-right:50px;"  >
+                            <input type="hidden" name="_token" value="'.csrf_token().'" >
+                            
+                            <center>
+                                <h4 class="col-md-12 col-sm-12 col-xs-12 text-center" align="center" style="direction:ltr;margin-top:40px;" >
+                                    <div class="col-md-12 col-sm-12 col-xs-12 text-center" align="center" >
+                                        your searching word should be based on just <b>1</b> of the below types
+                                    </div>
+                                    <hr style="width:1px;" >
+                                    
+                                    <div class="col-md-2 col-sm-2 col-xs-2" style="float:left;" >
+                                        <i class="glyphicon glyphicon-user" aria-hidden="true" style="font-size:26px;margin-left: 10px;margin-right: 10px;" ></i>
+                                        <br>
+                                        Name
+                                    </div>
+                                    <div class="col-md-2 col-sm-2 col-xs-2" style="float:left;" >
+                                        <i class="glyphicon glyphicon-user" aria-hidden="true" style="font-size:26px;margin-left: 10px;margin-right: 10px;" ></i>
+                                        <br>
+                                        Family
+                                    </div>
+                                    <div class="col-md-2 col-sm-2 col-xs-2" style="float:left;" >
+                                        <i class="glyphicon glyphicon-phone" aria-hidden="true" style="font-size:26px;margin-left: 10px;margin-right: 10px;" ></i>
+                                        <br>
+                                        Mobile Number
+                                    </div>
+                                    <div class="col-md-3 col-sm-3 col-xs-3" style="float:left;" >
+                                        <i class="glyphicon glyphicon-credit-card" aria-hidden="true" style="font-size:26px;margin-left: 10px;margin-right: 10px;" ></i>
+                                        <br>
+                                        Nationality Number
+                                    </div>
+                                    
+                                    <div class="col-md-3 col-sm-3 col-xs-3" style="float:left;" >
+                                        <i class="glyphicon glyphicon-file" aria-hidden="true" style="font-size:26px;margin-left: 10px;margin-right: 10px;" ></i>
+                                        <br>
+                                        Medical Document Number
+                                    </div>
+                                    
+                                </h4>
+                                
+                                <hr style="width:1px;" >
+                                <div class="col-md-12 col-sm-12 col-xs-12" align="center" style="float:none;" >
+                                    <input type="text" name="search_text" style="text-align: left!important;float:none;" min="1" max="60" autocomplete="off" aria-autocomplete="list" aria-expanded="false" aria-haspopup="true" role="combobox" spellcheck="false" class="form-control" placeholder="Type your searching word based on ONE of these types: Name | Family | Mobile Number | Nationality Number | Medical Document Number" align="center" required >
+                                </div>
+                                
+                            </center>
+                
+                            <button type="submit" name="Search" class="btn btn-success btn-group-justified uiuxtrick" style="font-size:28px;position: fixed;bottom: 0px;right: 0px;z-index: 1;margin-bottom:0px;margin-right:0px;" onclick="this.disabled=true;this.form.submit();" >
+                                Search
+                            </button>
+                        </form>
+                        
+                    
+                    </div>
+                    </div>
+                    <!-- END of login fancy console panel search_form -->
+                    
+                    
+                    
+                    
+                    
+                    
+                    
+                    
+                    
+                    
+                    
+                    
+                    
+                    
     
                 </div>
             </div>
@@ -105,7 +193,7 @@ label
     
                         <ul class="nav navbar-nav navbar-right">
                        
-                            <li class="">
+                            <li>
                                 <a href="javascript:;" class="user-profile dropdown-toggle" data-toggle="dropdown" aria-expanded="false">
                                     <span class="glyphicon glyphicon-option-vertical" style="font-size: 17pt;"></span>
                                 </a>
