@@ -103,7 +103,7 @@ echo '
                         </label>
                     </center>
                     <div class="col-md-12 col-sm-12 col-xs-12" >
-                      <input id="tags_2" type="text" name="common_rejim" class="tags form-control" value="' . $key_settings->common_rejim . '" > 
+                      <input id="tags_2" type="text" name="common_diet" class="tags form-control" value="' . $key_settings->common_diet . '" > 
                       <div id="suggestions-container" ></div>
                     </div>
                   </div>

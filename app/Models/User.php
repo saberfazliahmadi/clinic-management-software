@@ -41,7 +41,7 @@ class User extends Authenticatable
         'common_hypersensitivity' ,
         'cms_menu_title' ,
         'common_drug' ,
-        'common_rejim' ,
+        'common_diet' ,
         'common_return_date' ,
         'clinic_doctors_name' ,
         'notif_sms_credit' ,

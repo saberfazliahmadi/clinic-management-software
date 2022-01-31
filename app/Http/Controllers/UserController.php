@@ -82,7 +82,7 @@ class UserController extends Controller
         $clinic_doctors_name = $request->clinic_doctors_name;
         $common_hypersensitivity = $request->common_hypersensitivity;
         $common_drug = str_replace(" ", "_", $request->common_drug);
-        $common_rejim = $request->common_rejim;
+        $common_diet = $request->common_diet;
         $common_return_date = $request->common_return_date;
         $phone_number = $request->phone_number;
         $college_branch = $request->college_branch;
@@ -195,7 +195,7 @@ class UserController extends Controller
                 ->update(
                     [
                         'common_drug' => $common_drug,
-                        'common_rejim' => $common_rejim,
+                        'common_diet' => $common_diet,
                         'common_return_date' => $common_return_date,
                         'phone_number' => $phone_number,
                         'college_branch' => $college_branch,
