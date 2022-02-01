@@ -13,7 +13,7 @@ class CreatePatientsEHRDocumentsTable extends Migration
      */
     public function up()
     {
-        Schema::create('patients_e_h_r_documents', function (Blueprint $table) {
+        Schema::create('patients__e_h_r_documents', function (Blueprint $table) {
             $table->id('EHR_document_id');
             $table->integer('EHR_document_patient_related_id') ;
             $table->integer('EHR_document_dr_related_id') ;
@@ -37,6 +37,6 @@ class CreatePatientsEHRDocumentsTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('patients_e_h_r_documents');
+        Schema::dropIfExists('patients__e_h_r_documents');
     }
 }

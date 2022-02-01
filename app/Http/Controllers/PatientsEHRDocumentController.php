@@ -38,6 +38,20 @@ use Illuminate\Http\Request;
 
 class PatientsEHRDocumentController extends Controller
 {
+    public function find_admin_id_from_users_table()
+    {
+        // If the user has a parent_id so user_type='user' and we use Auth::user()->parent_id
+        if( strlen(Auth::user()->parent_id) > 0 )
+        {
+            return $admin_id_from_users_table = Auth::user()->parent_id ;
+        }
+        // If the user DOES NOT have parent_id so user_type='admin' and we use Auth::user()->id
+        else
+        {
+            return $admin_id_from_users_table = Auth::user()->id ;
+        }
+    }
+
     /**
      * Display a listing of the resource.
      *
@@ -116,16 +130,21 @@ class PatientsEHRDocumentController extends Controller
 
     public function show_patients_ehr_document_page( Request $request )
     {
+        $admin_id_from_users_table = $this->find_admin_id_from_users_table() ;
+
         $result_of_show_patients_ehr_document_page = patients_EHR_document::
         select('*')
         ->where('EHR_document_patient_related_id' , '=' , 'free' )
+        ->where('EHR_document_dr_related_id' , '=' , $admin_id_from_users_table )
+        ->where('EHR_document_related_appointment_id' , '=' , 'free')
+        ->where('EHR_document_related_clinic_doctor_name' , '=' , 'free')
         ->get() ;
 
         return view('back.show_patients_ehr_document_page' ,
         [
             'title_of_page'                             => 'EHR' ,
             'EHR_document_patient_related_id'           => 'free_patient_related_id' ,
-            'EHR_document_dr_related_id'                => Auth::user()->id ,
+            'EHR_document_dr_related_id'                => $admin_id_from_users_table ,
             'EHR_document_related_appointment_id'       => 'free_appointment_id' ,
             'EHR_document_related_clinic_doctor_name'   => 'free_related_clinic_doctor_name' ,
             'result_of_show_patients_ehr_document_page' => $result_of_show_patients_ehr_document_page
