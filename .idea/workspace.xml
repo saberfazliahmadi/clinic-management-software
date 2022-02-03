@@ -4,11 +4,7 @@
     <list default="true" id="c0174df6-326d-4e3b-8008-b6408fdf6aa2" name="Default Changelist" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/app/Http/Controllers/PatientsEHRDocumentController.php" beforeDir="false" afterPath="$PROJECT_DIR$/app/Http/Controllers/PatientsEHRDocumentController.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/Http/Controllers/PatientsGeneralInfoController.php" beforeDir="false" afterPath="$PROJECT_DIR$/app/Http/Controllers/PatientsGeneralInfoController.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/resources/views/back/layout/header.php" beforeDir="false" afterPath="$PROJECT_DIR$/resources/views/back/layout/header.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/resources/views/back/show_patient_search_from.php" beforeDir="false" afterPath="$PROJECT_DIR$/resources/views/back/show_patient_search_from.php" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/resources/views/back/show_patients_ehr_document_page.php" beforeDir="false" afterPath="$PROJECT_DIR$/resources/views/back/show_patients_ehr_document_page.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/routes/web.php" beforeDir="false" afterPath="$PROJECT_DIR$/routes/web.php" afterDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
@@ -178,7 +174,8 @@
     <property name="ToolWindowHierarchy.ShowToolbar" value="false" />
     <property name="WebServerToolWindowFactoryState" value="false" />
     <property name="last_opened_file_path" value="$PROJECT_DIR$" />
-    <property name="settings.editor.selected.configurable" value="preferences.pluginManager" />
+    <property name="nodejs_package_manager_path" value="npm" />
+    <property name="settings.editor.selected.configurable" value="settings.github" />
   </component>
   <component name="RunDashboard">
     <option name="ruleStates">
@@ -230,7 +227,7 @@
       <workItem from="1643547330127" duration="24497000" />
       <workItem from="1643720194744" duration="590000" />
       <workItem from="1643730617574" duration="1897000" />
-      <workItem from="1643797928729" duration="11924000" />
+      <workItem from="1643797928729" duration="29433000" />
     </task>
     <servers />
   </component>

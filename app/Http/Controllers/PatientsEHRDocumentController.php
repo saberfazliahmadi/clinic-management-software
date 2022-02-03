@@ -136,8 +136,9 @@ class PatientsEHRDocumentController extends Controller
 
             $result_of_show_patients_ehr_document_page = patients_EHR_document::
             join('patients_general_infos' , 'patients_general_infos.patient_id' , '=' , 'patients__e_h_r_documents.EHR_document_patient_related_id' )
-            ->where('patients__e_h_r_documents.EHR_document_patient_related_id' , '=' , $request->patient_id )
+            ->where('patients_general_infos.patient_dr_related_id' , '=' , $admin_id_from_users_table )
             ->where('patients__e_h_r_documents.EHR_document_dr_related_id' , '=' , $admin_id_from_users_table )
+            ->where('patients__e_h_r_documents.EHR_document_patient_related_id' , '=' , $request->patient_id )
             ->get() ;
 
             $count_number_of_ehr_document = $result_of_show_patients_ehr_document_page->count() ;
