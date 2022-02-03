@@ -107,7 +107,7 @@ label
                     
                     <!-- START of login fancy console panel search_form -->
                     <div style="display:none;" >
-                    <div id="search_form" style="overflow:scroll;width:100%!important;height:700px;overflow-x: hidden;" >
+                    <div id="search_form" style="overflow:scroll;width:100%!important;height:650px;overflow-x: hidden;" >
                     
                     
                         <form method="post" action="'.route('run_patient_search_form').'" id="medical-file-form" data-parsley-validate style="padding-left:50px;padding-right:50px;"  >
@@ -317,7 +317,7 @@ label
                                 
                                 <!-- START of login fancy console panel today_turn_res -->
                                 <div style="display:none;" >
-                                    <div id="today_turn_res" style="overflow:scroll;width:900px;height:700px;overflow-x: hidden;" >
+                                    <div id="today_turn_res" style="overflow:scroll;width:900px;height:650px;overflow-x: hidden;" >
                                     <div class="row">
                                     <div class="col-md-12">
                                     <div class="col-md-12 col-sm-12 col-xs-12">' ;
@@ -675,13 +675,13 @@ else
     {
         foreach($errors->all() as $error)
         {
-            echo '<center><div class="alert alert-danger" role="alert" > <button type="button" class="close" data-dismiss="alert" aria-label="Close" style="font-size:50px;" ><span aria-hidden="true">&times;</span></button> <h4>'.$error.'</h4></div></center>' ;
+            echo '<div class="alert alert-danger" role="alert" > <button type="button" class="close" data-dismiss="alert" aria-label="Close" style="font-size:50px;" ><span aria-hidden="true">&times;</span></button> <h4 style="text-align:right!important;" >'.$error.'</h4></div>' ;
         }
     }
 
     if(strlen(Session::get('success_message')) > 0 )
     {
-        echo '<center><div class="alert alert-success" role="alert" > <button type="button" class="close" data-dismiss="alert" aria-label="Close" style="font-size:50px;" ><span aria-hidden="true">&times;</span></button> <h3>'.Session::get('success_message').'</h3></div></center>' ;
+        echo '<div class="alert alert-success" role="alert" > <button type="button" class="close" data-dismiss="alert" aria-label="Close" style="font-size:50px;margin-left:15px!important;" ><span aria-hidden="true">&times;</span></button> <h3 style="text-align:right!important;" >'.Session::get('success_message').'</h3></div>' ;
     }
 
 ?>

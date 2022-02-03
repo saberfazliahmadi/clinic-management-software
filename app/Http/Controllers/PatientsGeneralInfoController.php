@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\patients_EHR_document;
 use App\Models\patients_general_info;
 use App\Http\Requests\Storepatients_general_infoRequest;
 use App\Http\Requests\Updatepatients_general_infoRequest;
@@ -105,25 +106,25 @@ class PatientsGeneralInfoController extends Controller
             try
             {
                 $result_store_new_patient_form = new patients_general_info(
-                    [
-                        'patient_dr_related_id' => $admin_id_from_users_table ,
-                        'patient_first_name' => $request->get('patient_first_name'),
-                        'patient_last_name' => $request->get('patient_last_name'),
-                        'patient_mobile_number' => $request->get('patient_mobile_number'),
-                        'patient_nationality_number' => $request->get('patient_nationality_number'),
-                        'patient_last_appointment_date' => $request->get('patient_last_appointment_date'),
-                        'patient_birth_day' => $request->get('patient_birth_day'),
-                        'patient_address' => $request->get('patient_address'),
-                        'patient_phone_number' => $request->get('patient_phone_number'),
-                        'patient_email_address' => $request->get('patient_email_address'),
-                        'patient_relationship_status' => $request->get('patient_relationship_status'),
-                        'patient_gender' => $request->get('patient_gender'),
-                        'patient_surgery_history' => $request->get('patient_surgery_history'),
-                        'patient_disease_background' => $request->get('patient_disease_background'),
-                        'patient_medication_history' => $request->get('patient_medication_history'),
-                        'patient_allergies_history' => $request->get('patient_allergies_history'),
-                        'patient_more_description' => $request->get('patient_more_description')
-                    ]
+                [
+                    'patient_dr_related_id' => $admin_id_from_users_table ,
+                    'patient_first_name' => $request->get('patient_first_name'),
+                    'patient_last_name' => $request->get('patient_last_name'),
+                    'patient_mobile_number' => $request->get('patient_mobile_number'),
+                    'patient_nationality_number' => $request->get('patient_nationality_number'),
+                    'patient_last_appointment_date' => $request->get('patient_last_appointment_date'),
+                    'patient_birth_day' => $request->get('patient_birth_day'),
+                    'patient_address' => $request->get('patient_address'),
+                    'patient_phone_number' => $request->get('patient_phone_number'),
+                    'patient_email_address' => $request->get('patient_email_address'),
+                    'patient_relationship_status' => $request->get('patient_relationship_status'),
+                    'patient_gender' => $request->get('patient_gender'),
+                    'patient_surgery_history' => $request->get('patient_surgery_history'),
+                    'patient_disease_background' => $request->get('patient_disease_background'),
+                    'patient_medication_history' => $request->get('patient_medication_history'),
+                    'patient_allergies_history' => $request->get('patient_allergies_history'),
+                    'patient_more_description' => $request->get('patient_more_description')
+                ]
                 );
 
                 $result_store_new_patient_form->save();
@@ -131,14 +132,25 @@ class PatientsGeneralInfoController extends Controller
                 // Specify last id created here to use in route passing data
                 $choose_time_for_this_patient_id = $result_store_new_patient_form->id ;
 
-                // If this patient has a date appointment then redirect him to route('patient_time_appointment_table') to select the free time for this appointment
+                // Store the first EHR document for this patient because it is essential for join query in PatientsEHRDocumentController@show_patients_ehr_document_page
+                // Method show_patients_ehr_document_page on page PatientsEHRDocumentController needs at least 1 result to show patient data on page show_patients_ehr_page.php
+                $result_store_new_ehr_document = new patients_EHR_document(
+                    [
+                        'EHR_document_patient_related_id'           => $result_store_new_patient_form->id ,
+                        'EHR_document_dr_related_id'                => $admin_id_from_users_table ,
+                    ]
+                );
+
+                $result_store_new_ehr_document->save();
+
+                // If this patient has a date appointment then redirect him to route('show_patient_time_appointment_table') to select the free time for this appointment
                 if( strlen($request->get('patient_last_appointment_date')) > 0 )
                 {
                     $patient_last_appointment_date = $request->get('patient_last_appointment_date') ;
                     \Session::flash('success_message', 'Your New Patient with Name <br><a href="'.route('edit_patient_form', $choose_time_for_this_patient_id ).'" ><b>'.$request->get('patient_first_name').' ' . $request->get('patient_last_name').'</b></a> Successfully Submitted <br>Now choose an appointment time on date '.$patient_last_appointment_date );
                     return redirect(route('show_patient_time_appointment_table', [ 'choose_time_for_this_date' => $request->get('patient_last_appointment_date') , 'choose_time_for_this_patient_id' => $choose_time_for_this_patient_id ] )) ;
                 }
-                // If this patient DOES NOT have a date appointment then redirect him to route('edit_patient_form')
+                // If this patient DOES NOT have a date appointment then redirect him to route('submit_new_patient_form')
                 else
                 {
                     \Session::flash('success_message', 'Your New Patient with Name <br><a href="'.route('edit_patient_form', $choose_time_for_this_patient_id ).'" ><b>'.$request->get('patient_first_name').' ' . $request->get('patient_last_name').'</b></a> Successfully Submitted');

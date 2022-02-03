@@ -65,5 +65,5 @@ Route::group( [ 'middleware' => ['protected_page_accessible_for_admin'] ] , func
     Route::post('update_show_main_settings_of_software_form' , 'UserController@update_show_main_settings_of_software_form')->name('update_show_main_settings_of_software_form') ;
 
     // All Routes related to users table
-    Route::get('show_patients_ehr_document_page' , 'PatientsEHRDocumentController@show_patients_ehr_document_page')->name('show_patients_ehr_document_page') ;
+    Route::get('show_patients_ehr_document_page/{patient_id}' , 'PatientsEHRDocumentController@show_patients_ehr_document_page')->name('show_patients_ehr_document_page') ;
 }) ;

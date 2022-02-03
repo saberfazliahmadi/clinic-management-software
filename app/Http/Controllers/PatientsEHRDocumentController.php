@@ -130,24 +130,41 @@ class PatientsEHRDocumentController extends Controller
 
     public function show_patients_ehr_document_page( Request $request )
     {
-        $admin_id_from_users_table = $this->find_admin_id_from_users_table() ;
+        try
+        {
+            $admin_id_from_users_table = $this->find_admin_id_from_users_table() ;
 
-        $result_of_show_patients_ehr_document_page = patients_EHR_document::
-        select('*')
-        ->where('EHR_document_patient_related_id' , '=' , 'free' )
-        ->where('EHR_document_dr_related_id' , '=' , $admin_id_from_users_table )
-        ->where('EHR_document_related_appointment_id' , '=' , 'free')
-        ->where('EHR_document_related_clinic_doctor_name' , '=' , 'free')
-        ->get() ;
+            $result_of_show_patients_ehr_document_page = patients_EHR_document::
+            join('patients_general_infos' , 'patients_general_infos.patient_id' , '=' , 'patients__e_h_r_documents.EHR_document_patient_related_id' )
+            ->where('patients__e_h_r_documents.EHR_document_patient_related_id' , '=' , $request->patient_id )
+            ->where('patients__e_h_r_documents.EHR_document_dr_related_id' , '=' , $admin_id_from_users_table )
+            ->get() ;
 
-        return view('back.show_patients_ehr_document_page' ,
-        [
-            'title_of_page'                             => 'EHR' ,
-            'EHR_document_patient_related_id'           => 'free_patient_related_id' ,
-            'EHR_document_dr_related_id'                => $admin_id_from_users_table ,
-            'EHR_document_related_appointment_id'       => 'free_appointment_id' ,
-            'EHR_document_related_clinic_doctor_name'   => 'free_related_clinic_doctor_name' ,
-            'result_of_show_patients_ehr_document_page' => $result_of_show_patients_ehr_document_page
-        ]) ;
+            $count_number_of_ehr_document = $result_of_show_patients_ehr_document_page->count() ;
+
+            if( $count_number_of_ehr_document > 0 )
+            {
+                return view('back.show_patients_ehr_document_page' ,
+                [
+                    'title_of_page'                             => 'EHR of '.$request->patient_id ,
+                    'EHR_document_patient_related_id'           => $request->patient_id ,
+                    'EHR_document_dr_related_id'                => $admin_id_from_users_table ,
+                    'EHR_document_related_appointment_id'       => 'free_appointment_id' ,
+                    'EHR_document_related_clinic_doctor_name'   => 'free_related_clinic_doctor_name' ,
+                    'result_of_show_patients_ehr_document_page' => $result_of_show_patients_ehr_document_page
+                ]) ;
+            }
+            else
+            {
+                \Session::flash('success_message', '<span style="color:blue;">There is not any EHR document for this patient!</span>');
+                return redirect(route('home'));
+            }
+
+        }
+        catch (\Exception $exception)
+        {
+            \Session::flash('success_message', '<span style="color:blue;">Can not display this EHR!</span>');
+            return redirect(route('home'));
+        }
     }
 }
