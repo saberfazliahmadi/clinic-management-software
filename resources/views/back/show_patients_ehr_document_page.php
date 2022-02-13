@@ -248,9 +248,10 @@ echo '
 <div class="right_col" role="main" >
     <div class="form-group col-md-12 col-sm-12 col-xs-12" > ' ;
 
+// START of show to Admin user type.
 if( Auth::user()->user_type == 'admin' )
 {
-foreach ( $result_of_show_patients_ehr_document_page as $key )
+foreach ( $result_of_show_patients_general_infos as $key )
 {
     $cms_menu_title = explode("," , Auth::user()->cms_menu_title)  ;
 
@@ -261,10 +262,11 @@ foreach ( $result_of_show_patients_ehr_document_page as $key )
 
     <!-- START of page content -->
     
-  <div class="col-md-12 col-sm-12 col-xs-12" style="margin-top:-30px;" >
+  <div class="col-md-12 col-sm-12 col-xs-12" >
 
-      <form id="medical-file-form" method="post" action="" class="controls export-svg" enctype="multipart/form-data" onsubmit="setFormSubmitting()" >
-
+      <form id="medical-file-form" method="POST" action="'.route('store_patients_ehr_document_page' , ['patient_id' => $key->patient_id ]).'" class="controls export-svg" enctype="multipart/form-data" onsubmit="setFormSubmitting()" >
+            <input type="hidden" name="_token" value="'.csrf_token().'" >
+            <input type="hidden" name="_method" value="post" >
           <div class="x_content" >
 
                 <ul class="nav nav-tabs" role="tablist" style="float:right;font-size:18px;font-weight:bolder;" >' ;
@@ -279,133 +281,136 @@ foreach ( $result_of_show_patients_ehr_document_page as $key )
                             </a>
                         </li>
                         
-                        <!-- START of fancy console panel Patient medical records -->
-                        <div style="display:none;" >
-                            <div id="patient_medical_records" style="height:550px;width:900px!important;overflow-x: hidden!important;padding-bottom:30px;padding-top:35px;" class="row" >
-                        
-                              <div class="form-group col-md-12 col-sm-12 col-xs-12" >' ;
+                        <!-- START of fancy console panel to show all Patient medical records -->
+                        <div id="patient_medical_records" style="display:none;height:550px;width:900px!important;overflow-x: hidden!important;padding-bottom:30px;padding-top:35px;" >
+                    
+                          <div class="form-group col-md-12 col-sm-12 col-xs-12" >' ;
 
-                                // Make a trick to prevent from POST method error (post method should'nt have Space in him content)
-                                $common_hypersensitivity = str_replace( " " , "_" , Auth::user()->common_hypersensitivity ) ;
-                                // Explode and array these title.
-                                $common_hypersensitivity = explode(",",$common_hypersensitivity)  ;
-                                // Estimate how many title this text have.
-                                $common_hypersensitivity_number = count($common_hypersensitivity) ;
+                            // Make a trick to prevent from POST method error (post method should'nt have Space in content)
+                            $common_hypersensitivity = str_replace( " " , "_" , Auth::user()->common_hypersensitivity ) ;
+                            // Explode and array these title.
+                            $common_hypersensitivity = explode(",",$common_hypersensitivity)  ;
+                            // Estimate how many title this text have.
+                            $common_hypersensitivity_number = count($common_hypersensitivity) ;
 
-                                // Estimate how many title exist on this text record to use of for loop.
-                                $end_2213 = $common_hypersensitivity_number ;
+                            // Estimate how many title exist on this text record to use of for loop.
+                            $end_hypersensitivity = $common_hypersensitivity_number ;
 
-                                // START of if dr define common_hypersensitivity.
-                                if( $end_2213 > 1 )
-                                {
-                                    echo '
-                                    <center>
-                                        <h2 class="justify-content-center control-label col-md-12 col-sm-12 col-xs-12" style="margin-bottom:5px;margin-top:5px;text-align:center;" >
-                                            Common Predefined '.$cms_menu_title[5].'
-                                        </h2>
-                                    </center>
-                                    
-                                    <div class="col-md-12 col-sm-12 col-xs-12" style="margin-top: 15px;" >
-                                        <select name="common_hypersensitivity_2311[]" id="dates-field2" class="col-md-12 col-sm-12 col-xs-12 multiselect-ui" multiple="multiple" >' ;
-                                        for( $start_2213='0' ; $start_2213 < $end_2213 ; $start_2213++ )
-                                        {
-                                            if( strlen($common_hypersensitivity[$start_2213]) > 0 )
-                                            {
-                                                echo '
-                                                <option value="'.$common_hypersensitivity[$start_2213].'" class="col-md-4 col-sm-12 col-xs-12" >
-                                                    '.$common_hypersensitivity[$start_2213].'
-                                                </option>' ;
-                                            }
-                                        }
-                                        echo '
-                                        </select>
-                                    </div>';
-                                }
-                                // END of if dr define common_hypersensitivity.
-                                else
-                                {
-                                    echo '
-                                    <center>
-                                        <a href="setting.php" class="btn btn-default" style="font-size:18px;margin-top:50px;border-radius: 4px 4px 0 0; border: 1px solid #e3e3e3;" >
-                                             <i class="fa fa-plus text-center col-md-12 col-sm-12 col-xs-12" style="font-size:46px;padding:19px;" ></i>
-                                             <div class="col-md-12 col-sm-12 col-xs-12" style="padding-top:17px;padding-bottom:17px;" >
-                                                  Add predefined routine records to add to patient records '.$cms_menu_title[5].'
-                                             </div>
-                                        </a>
-                                    </center>';
-                                }
-
+                            // START of if dr define common_hypersensitivity.
+                            if( $end_hypersensitivity > 1 )
+                            {
                                 echo '
-                                <div class="col-md-12 col-sm-12 col-xs-12" style="margin-top:20px;" >
-                                    <input type="text" name="keyboard_savabegh" style="width:100%;text-align:right;direction:rtl;font-size:22px;height:40px;" placeholder="Type your favorite '.$cms_menu_title[5].'" >
-                                </div>';
-
-                                // If there was any more description value then show it
-                                if( strlen($key->patient_more_description) > 0 )
-                                {
-                                    echo '
-                                    <div class="form-group col-md-12 col-sm-12 col-xs-12 well" style="background-color:white;margin:0px 0px 0px 0px;padding:0px 0px 0px 0px;margin-top:25px;border: 1px solid #CCC;text-align:center;background-color:white;line-height: 40px;font-size:22px; word-break: break-all;" >
-                                        <center>
-                                            <span>
-                                                More Description
-                                            </span>
-                                        </center>
-                                        '.$key->patient_more_description.'
-                                    </div>';
-                                }
-
-                                echo '
-                                <input type="hidden" name="more_description" class="tags form-control" value="'.$key->more_description.'" >
-                            
-                              </div>
-                            
-                              <div class="form-group col-md-3 col-sm-3 col-xs-12" style="margin-top: 15px;" >
                                 <center>
-                                    <h2 class="control-label col-md-12 col-sm-12 col-xs-12" style="margin-bottom:5px;margin-top:5px;text-align:center;" >
-                                        History of surgery
+                                    <h2 class="justify-content-center control-label col-md-12 col-sm-12 col-xs-12" style="margin-bottom:5px;margin-top:5px;text-align:center;" >
+                                        Common Predefined '.$cms_menu_title[5].'
                                     </h2>
                                 </center>
+                                
+                                <div class="col-md-12 col-sm-12 col-xs-12" style="margin-top: 15px;border: 1px solid #CCC;" >
+                                    <select name="common_hypersensitivity_2311[]" id="dates-field2" class="col-md-12 col-sm-12 col-xs-12 multiselect-ui" multiple="multiple" >' ;
+                                    for( $start_hypersensitivity ='0' ; $start_hypersensitivity < $end_hypersensitivity ; $start_hypersensitivity ++ )
+                                    {
+                                        if( strlen($common_hypersensitivity[$start_hypersensitivity]) > 0 )
+                                        {
+                                            echo '
+                                            <option value="'.$common_hypersensitivity[$start_hypersensitivity].'" class="col-md-4 col-sm-12 col-xs-12" >
+                                                '.$common_hypersensitivity[$start_hypersensitivity].'
+                                            </option>' ;
+                                        }
+                                    }
+                                    echo '
+                                    </select>
+                                </div>';
+                            }
+                            // END of if dr define common_hypersensitivity.
+                            else
+                            {
+                                echo '
+                                <center>
+                                    <a href="setting.php" class="btn btn-default" style="font-size:18px;margin-top:50px;border-radius: 4px 4px 0 0; border: 1px solid #CCC;" >
+                                        <i class="fa fa-plus text-center col-md-12 col-sm-12 col-xs-12" style="font-size:46px;padding:19px;" ></i>
+                                        <div class="col-md-12 col-sm-12 col-xs-12" style="padding-top:17px;padding-bottom:17px;" >
+                                            Add predefined '.$cms_menu_title[5].' to add to patient records
+                                        </div>
+                                    </a>
+                                </center>';
+                            }
+
+                            echo '
+                            <div class="col-md-12 col-sm-12 col-xs-12" style="margin-top:20px;" >
+                                <input type="text" name="keyboard_savabegh" style="width:100%;text-align:right;direction:rtl;font-size:22px;height:40px;border: 1px solid #CCC;" placeholder="Type your favorite '.$cms_menu_title[5].'" >
+                            </div>';
+
+                            // If there was any more description value then show it
+                            if( strlen($key->patient_more_description) > 0 )
+                            {
+                                echo '
+                                <div class="form-group col-md-12 col-sm-12 col-xs-12 well" style="background-color:white;margin:0px 0px 0px 0px;padding:0px 0px 0px 0px;margin-top:25px;border: 1px solid #CCC;text-align:center;background-color:white;line-height: 40px;font-size:22px; word-break: break-all;" >
+                                    <center>
+                                        <span>
+                                            More Description
+                                        </span>
+                                        <br>
+                                    '.$key->patient_more_description.'
+                                    </center>
+                                </div>';
+                            }
+
+                            echo '
+                            <input type="hidden" name="more_description" class="tags form-control" value="'.$key->more_description.'" >
+                        
+                          </div>
+                        
+                          <div class="form-group col-md-3 col-sm-3 col-xs-12" style="margin-top: 15px;" >
+                            <center>
+                                <h2 class="control-label col-md-12 col-sm-12 col-xs-12" style="margin-bottom:5px;margin-top:5px;text-align:center;" >
+                                    History of Surgery
+                                </h2>
+                            
                                 <div class="col-md-12 col-sm-12 col-xs-12" >
                                   '.$key->patient_surgery_history.'
                                 </div>
-                              </div>
+                            </center>
+                          </div>
+                        
+                          <div class="form-group col-md-3 col-sm-3 col-xs-12" style="margin-top: 15px;" >
+                            <center>
+                                <h2 class="control-label col-md-12 col-sm-12 col-xs-12" style="margin-bottom:5px;margin-top:5px;text-align:center;" >
+                                    Disease Background
+                                </h2>
                             
-                              <div class="form-group col-md-3 col-sm-3 col-xs-12" style="margin-top: 15px;" >
-                                <center>
-                                    <h2 class="control-label col-md-12 col-sm-12 col-xs-12" style="margin-bottom:5px;margin-top:5px;text-align:center;" >
-                                        disease background
-                                    </h2>
-                                </center>
                                 <div class="col-md-12 col-sm-12 col-xs-12" >
                                   '.$key->patient_disease_background.'
                                 </div>
-                              </div>
+                            </center>
+                          </div>
+                        
+                          <div class="form-group col-md-3 col-sm-3 col-xs-12" style="margin-top: 15px;" >
+                            <center>
+                                <h2 class="control-label col-md-12 col-sm-12 col-xs-12" style="margin-bottom:5px;margin-top:5px;text-align:center;" >
+                                    Medications
+                                </h2>
                             
-                              <div class="form-group col-md-3 col-sm-3 col-xs-12" style="margin-top: 15px;" >
-                                <center>
-                                    <h2 class="control-label col-md-12 col-sm-12 col-xs-12" style="margin-bottom:5px;margin-top:5px;text-align:center;" >
-                                        Medications
-                                    </h2>
-                                </center>
                                 <div class="col-md-12 col-sm-12 col-xs-12" >
                                   '.$key->patient_medication_history.'
                                 </div>
-                              </div>
+                            </center>
+                          </div>
+                        
+                          <div class="form-group col-md-3 col-sm-3 col-xs-12" style="margin-top: 15px;" >
+                            <center>
+                                <h2 class="control-label col-md-12 col-sm-3 col-xs-12" style="margin-bottom:5px;margin-top:5px;text-align:center;" >
+                                    History of Allergies
+                                </h2>
                             
-                              <div class="form-group col-md-3 col-sm-3 col-xs-12" style="margin-top: 15px;" >
-                                <center>
-                                    <h2 class="control-label col-md-12 col-sm-3 col-xs-12" style="margin-bottom:5px;margin-top:5px;text-align:center;" >
-                                        History of allergies
-                                    </h2>
-                                </center>
                                 <div class="col-md-12 col-sm-12 col-xs-12" >
                                     '.$key->patient_allergies_history.'
                                 </div>
-                              </div>
-    
-                             </div>
+                            </center>
+                          </div>
+
                         </div>
-                        <!-- END of fancy console panel Patient medical records -->';
+                        <!-- END of fancy console panel to show all Patient medical records -->';
                     } // END of if $cms_menu_title[5] exist
 
                     // START of if $cms_menu_title[4] exist
@@ -418,15 +423,15 @@ foreach ( $result_of_show_patients_ehr_document_page as $key )
                             </a>
                         </li>
 
-                        <!-- START of login fancy console panel medications -->
+                        <!-- START of login fancy console panel medications picker -->
                         <div style="display:none;" >
-                            <div id="medications_picker" style="height:550px;width:980px!important;overflow-x: hidden!important;padding-bottom:30px;padding-top:35px;" class="row" >
+                            <div id="medications_picker" style="height:550px;width:980px!important;overflow-x: hidden!important;padding-bottom:30px;padding-top:35px;" >
                         
                                 <div class="col-md-12 col-sm-12 col-xs-12" style="margin-bottom:20px;" >
-                                    <input type="text" name="keyboard_medications_picker" style="width:100%;text-align:right;direction:rtl;font-size:22px;height:40px;" placeholder="Type your favorite '.$cms_menu_title[4].'" class="well" >
+                                    <input type="text" name="keyboard_medications_picker" style="width:100%;text-align:right;direction:rtl;font-size:22px;height:40px;border: 1px solid #CCC;" placeholder="Type your favorite '.$cms_menu_title[4].'" class="well" >
                                 </div>';
 
-                                // START of common drug definded
+                                // START of common drug predefined
                                 if(strlen(Auth::user()->common_drug))
                                 {
                                     // Make a trick to prevent from POST method error (post method should not have Space in its content)
@@ -548,16 +553,16 @@ foreach ( $result_of_show_patients_ehr_document_page as $key )
                                               </div>';
                                         }
                                     }
-                                } // END of common drug defineded
+                                } // END of common drug predefined
                                 else
                                 {
                                     echo '
                                     <center>
-                                        <a href="'.$LOGIN_LINK.'setting.php?us='.$_SESSION['user_name'].'&ut='.$_SESSION['ra'].$_SESSION['ckey'].$_SESSION['ra'].'" class="btn btn-default" style="font-size:18px;margin-top:50px;border-radius: 4px 4px 0 0; border: 1px solid #e3e3e3;" >
-                                             <i class="fa fa-medkit text-center col-md-12 col-sm-12 col-xs-12" style="font-size:46px;padding: 19px;" ></i>
-                                             <div class="col-md-12 col-sm-12 col-xs-12" style="padding-top:17px;padding-bottom:17px;" >
-                                                 + Add predefined '.$cms_menu_title[4].' to prescribe to patients 
-                                             </div>
+                                        <a href="setting.php" class="btn btn-default" style="font-size:18px;margin-top:50px;border-radius: 4px 4px 0 0; border: 1px solid #e3e3e3;" >
+                                            <i class="fa fa-medkit text-center col-md-12 col-sm-12 col-xs-12" style="font-size:46px;padding: 19px;" ></i>
+                                            <div class="col-md-12 col-sm-12 col-xs-12" style="padding-top:17px;padding-bottom:17px;" >
+                                              + Add predefined '.$cms_menu_title[4].' to patients 
+                                            </div>
                                         </a>
                                     </center>';
                                 }
@@ -565,7 +570,7 @@ foreach ( $result_of_show_patients_ehr_document_page as $key )
                             echo '
                            </div>
                         </div>
-                        <!-- END of login fancy console panel drug_picker -->';
+                        <!-- END of login fancy console panel medications picker -->';
                     } // END of if $cms_menu_title[4] exist
 
                     // START of if $cms_menu_title[3] exist
@@ -580,11 +585,11 @@ foreach ( $result_of_show_patients_ehr_document_page as $key )
     
                         <!-- START of login fancy console panel common_diet -->
                         <div style="display:none;" >
-                            <div id="rejim" style="min-height:600px!important;width:900px!important;overflow-x: hidden!important;padding-bottom:30px;padding-top:35px;" class="row" >';
+                            <div id="rejim" style="min-height:600px!important;width:900px!important;overflow-x: hidden!important;padding-bottom:30px;padding-top:35px;" >';
 
                             if( strlen(Auth::user()->common_diet) > 0 )
                             {
-                                // Make a trick to prevent from POST method error (post method should'nt have Space in him content)
+                                // Make a trick to prevent from POST method error (post method should'nt have Space in content)
                                 $common_rejim = str_replace( " " , "_" , Auth::user()->common_diet ) ;
                                 // Explode and array these title
                                 $common_rejim_1 = explode(",",$common_rejim) ;
@@ -601,7 +606,7 @@ foreach ( $result_of_show_patients_ehr_document_page as $key )
                                     </h2>
                                 </center>
 
-                                <div class="col-md-12 col-sm-12 col-xs-12" style="margin-top: 15px;" >
+                                <div class="col-md-12 col-sm-12 col-xs-12" style="margin-top: 15px;border:1px solid #CCC;" >
                                     <select name="rejim[]" id="dates-field211" class="col-md-12 col-sm-12 col-xs-12 multiselect-ui" multiple="multiple" >' ;
                                         // START of make a for loop to access all common_rejim_1
                                         for( $start='0' ; $start < $end ; $start++ )
@@ -634,13 +639,13 @@ foreach ( $result_of_show_patients_ehr_document_page as $key )
 
                             echo '
                             <div class="col-md-12 col-sm-12 col-xs-12" style="margin-top:20px;" >
-                                <input type="text" name="keyboard_rejim"  style="width:100%;text-align:right;direction:rtl;font-size:22px;height:40px;" placeholder="Type your favorite '.$cms_menu_title[3].'..." >
+                                <input type="text" name="keyboard_rejim"  style="width:100%;text-align:right;direction:rtl;font-size:22px;height:40px;border:1px solid #CCC;" placeholder="Type your favorite '.$cms_menu_title[3].'" >
                             </div>';
 
-                        echo '
+                            echo '
                             </div>
                         </div>
-                        <!-- END of login fancy console panel rejim -->';
+                        <!-- END of login fancy console panel common_diet -->';
                      } // END of if $cms_menu_title[3] exist
 
                     // START of if $cms_menu_title[2] exist
@@ -655,11 +660,11 @@ foreach ( $result_of_show_patients_ehr_document_page as $key )
                         
                         <!-- START of login fancy console panel common_return_date -->
                         <div style="display:none;" >
-                            <div id="common_return_date" style="min-height:600px!important;width:900px!important;overflow-x: hidden!important;padding-bottom:30px;padding-top:35px;" class="row" >';
+                            <div id="common_return_date" style="min-height:600px!important;width:900px!important;overflow-x: hidden!important;padding-bottom:30px;padding-top:35px;" >';
 
                                 if(strlen(Auth::user()->common_return_date))
                                 {
-                                    // Make a trick to prevent from POST method error (post method should'nt have Space in him content)
+                                    // Make a trick to prevent from POST method error (post method should'nt have Space in content)
                                     $common_return_date = str_replace( " " , "_" , Auth::user()->common_return_date ) ;
                                     // Explode and array these title.
                                     $common_return_date_1 = explode(",",$common_return_date);
@@ -672,12 +677,12 @@ foreach ( $result_of_show_patients_ehr_document_page as $key )
 
                                     echo '
                                     <center>
-                                    <h2 class="control-label col-md-12 col-sm-12 col-xs-12" style="margin-bottom:5px;margin-top:5px;text-align:center;" >
+                                        <h2 class="control-label col-md-12 col-sm-12 col-xs-12" style="margin-bottom:5px;margin-top:5px;text-align:center;" >
                                             Common Predefined '.$cms_menu_title[2].'
-                                    </h2>
+                                        </h2>
                                     </center>
                                     
-                                    <div class="col-md-12 col-sm-12 col-xs-12" style="margin-top: 15px;" >
+                                    <div class="col-md-12 col-sm-12 col-xs-12" style="margin-top: 15px;border:1px solid #CCC;" >
                                       <select name="common_return_date[]" id="dates-field222" class="col-md-12 col-sm-12 col-xs-12 multiselect-ui" multiple="multiple"  >' ;
                                         // START of make a for loop to access all common_return_date_1 .
                                         for( $start='0' ; $start < $end ; $start++ )
@@ -698,7 +703,7 @@ foreach ( $result_of_show_patients_ehr_document_page as $key )
                                 {
                                     echo '
                                     <center>
-                                        <a href="'.$LOGIN_LINK.'setting.php?us='.$_SESSION['user_name'].'&ut='.$_SESSION['ra'].$_SESSION['ckey'].$_SESSION['ra'].'" class="btn btn-default text-center" style="font-size:18px;margin-top:50px;border-radius: 4px 4px 0 0; border: 1px solid #e3e3e3;" >
+                                        <a href="setting.php" class="btn btn-default text-center" style="font-size:18px;margin-top:50px;border-radius: 4px 4px 0 0; border: 1px solid #e3e3e3;" >
                                              <i class="fa fa-clock-o text-center col-md-12" style="font-size:46px;padding: 19px;" ></i>
                                              <div class="col-md-12 col-sm-12 col-xs-12" style="padding-top:17px;padding-bottom:17px;" >
                                                  + Add '.$cms_menu_title[2].' time intervals Predefined to determine the next visit of patient
@@ -709,7 +714,7 @@ foreach ( $result_of_show_patients_ehr_document_page as $key )
 
                                 echo '
                                 <div class="col-md-12 col-sm-12 col-xs-12" style="margin-top:20px;" >
-                                    <input type="text" name="keyboard_moraje_badi"  style="width:100%;text-align:right;direction:rtl;font-size:22px;height:40px;" placeholder="Type your favorite '.$cms_menu_title[2].'" >
+                                    <input type="text" name="keyboard_moraje_badi"  style="width:100%;text-align:right;direction:rtl;font-size:22px;height:40px;border:1px solid #CCC;" placeholder="Type your favorite '.$cms_menu_title[2].'" >
                                 </div>
                     
                             </div>
@@ -730,39 +735,39 @@ foreach ( $result_of_show_patients_ehr_document_page as $key )
                         
                         <!-- START of login fancy console panel paraclinic -->
                         <div style="display:none;" >
-                            <div id="paraclinic" style="height:550px;width:900px!important;overflow-x: hidden!important;padding-bottom:30px;padding-top:35px;" class="row" >
+                            <div id="paraclinic" style="height:550px;width:900px!important;overflow-x: hidden!important;padding-bottom:30px;padding-top:35px;" >
                         
-                                <div class="col-md-12 col-sm-12 col-xs-12 text-center" style="margin-bottom:9px;" >
-                        
-                                    <div class="col-md-12 col-sm-12 col-xs-12" >
-                        
-                                        <a id="various222" href="#help_photo_upload" class="btn-primary btn-lg" type="button" style="cursor:pointer;color:black!important;background-color:#F7F7F7!important;border:1px solid #bfbdbd;font-size:14px;" >
-                                            Image Adding Guide | Read it
-                                        </a>
-                        
-                                    </div>
-                        
-                                    <hr style="width:1px;" >
+                                <div class="col-md-12 col-sm-12 col-xs-12 text-center" style="margin-bottom:19px;" >
                         
                                     <div class="col-md-12 col-sm-12 col-xs-12" >
                         
-                                        <label class="btn btn-default btn-file" style="font-size:22px;" >
-                                            Add Photo +
-                                            <input name="uploaded" type="file" hidden >
+                                        <label class="btn btn-default btn-file" style="font-size:22px;border:1px solid #CCC;" >
+                                            + Add Photo
+                                            <input type="file" name="image" placeholder="Choose image" id="image">
                                         </label>
-                        
-                                        <input type="text" name="keyboard_paraclinic_file_title" style="width:100%;text-align:right;direction:rtl;font-size:22px;height:40px;" placeholder="Type your favorite title ..." >
+                                        
+                                        <hr style="width:1px;" >
+                                    
+                                        <input type="text" name="keyboard_paraclinic_file_title" style="width:100%;text-align:right;direction:rtl;font-size:22px;height:40px;border:1px solid #CCC;" placeholder="Type your favorite title" >
                                         <br>
                                         <hr>
-                        
+                                        
+                                        <div class="col-md-12 col-sm-12 col-xs-12" >
+                            
+                                            <a id="various222" href="#help_photo_upload" class="btn-primary btn-lg" type="button" style="cursor:pointer;color:black!important;background-color:#F7F7F7!important;border:1px solid #bfbdbd;font-size:14px;" >
+                                                Guide - Must Read
+                                            </a>
+                            
+                                        </div>
+                                        
                                     </div>
-                        
+                                    
                                 </div>
                         
                                 <!-- START of login fancy console panel help_photo_upload -->
                                 <div style="display:none;" >
-                                    <div id="help_photo_upload" style="width:900px;height:350px;overflow-x: hidden;" class="row" >
-                                      <div class="col-md-12 col-sm-12 col-xs-12" style="line-height: 25px!important;">
+                                    <div id="help_photo_upload" style="width:900px;height:350px;overflow-x: hidden;" >
+                                      <div class="col-md-12 col-sm-12 col-xs-12" style="line-height: 25px!important;font-family:Tahoma!important;">
                         
                                         <center>
                                             <h4 class="col-md-12 col-sm-12 col-xs-12 text-center" style="margin-top:70px;" >
@@ -789,64 +794,49 @@ foreach ( $result_of_show_patients_ehr_document_page as $key )
                         
                                 <div class="col-md-12 col-sm-12 col-xs-12" >' ;
 
-                                    // Fetch paraclinic data.
-                                    //$res_para_data = mysql_query( " SELECT * FROM $DB_NAME_LOGIN.para
-                                    //WHERE para_sicker_rel_id = '".filter($_GET['sicker_id'])."'
-                                    //AND   para_dr_rel_id     = '".filter($_SESSION['user_id'])."'
-                                    //ORDER BY para_uniqe_id DESC
-                                    //" , $database_connection) or die( " Error : Connection section res_last_para_uniqe_id. " .mysql_error() ) ;
-                                    // Estimate how many paraclinic result exist.
-                                    //$num_res_para_data = mysql_num_rows($res_para_data) ;
-                                        $num_res_para_data = 0 ;
-
                                     // START of if there was paraclinic data for this sicker.
-                                    if( $num_res_para_data > 0 )
+                                    if( $num_result_of_patients_photo > 0)
                                     {
-                                        // Make a count varaiable trick.
+                                        // Make a count variable trick
                                         $count_trick_paraclinic_photo = 0 ;
 
-                                        // START of while.
-                                        //    while( $row_para_data = mysql_fetch_array($res_para_data) )
-                                        //    {
-                                        //        extract( $row_para_data ) ;
-
-                                            $count_trick_paraclinic_photo  = $para_uniqe_id ;
-                                            // let to sum $para_uniqe_id with 17 for forbiideb hack calculation.
+                                        foreach ( $result_of_patients_photo as $key_patient_photo )
+                                        {
+                                            $count_trick_paraclinic_photo  = $key_patient_photo->patients_photos_id ;
+                                            // let to sum patients_photos_id with 17 to prevent hack calculation
                                             $count_trick_paraclinic_photo += 17		     ;
 
-                                            // Let to make a variable trick for show file title in all situation.
-                                            if( strlen($paraclinic_file_title) > 0 )
+                                            // Let to make a variable trick for show file title in all situation
+                                            if( strlen($key_patient_photo->patients_photos_file_description) > 0 )
                                             {
-                                                $trick_of_paraclinic_file_title = $paraclinic_file_title ;
+                                                $patients_photos_file_description = $key_patient_photo->patients_photos_file_description ;
                                             }
                                             else
                                             {
-                                                $trick_of_paraclinic_file_title = 'Without title'.$count_trick_paraclinic_photo ;
+                                                $patients_photos_file_description = 'Without title '.$count_trick_paraclinic_photo ;
                                             }
 
                                             echo '
-                                            <a class="fancybox-buttons" href="picture/'.$user_name.'/'.$_GET['sicker_id'].'/para/'.$para_title.'" data-fancybox-group="button" style="text-align:center;" >
+                                            <a class="fancybox-buttons" href="'.url('images/'.Auth::user()->name.'/'.$key_patient_photo->patients_photos_patient_related_id.'/para/'.$key_patient_photo->patients_photos_file_name).'" data-fancybox-group="button" style="text-align:center;" >
                                                 <div class="col-md-3 col-sm-3 col-xs-3 well" >
                                                     <div class="block_content">
                                                       <h2 class="title" align="center" style="text-align:center;" >
                                                          <b>
                                                             <div style="float:left;font-size:17px;" class="col-md-12 col-sm-12 col-xs-12" >
-                                                                '.$trick_of_paraclinic_file_title.'
+                                                                '.$patients_photos_file_description.'
                                                             </div>
                                                             <i class="fa fa-picture-o col-md-12 col-sm-12 col-xs-12" style="padding:19px;" ></i>
                                                             <div style="float:right;margin-top:10px;font-size:18px;" class="col-md-12 col-sm-12 col-xs-12" >
                                                                 Show Photo
-                                                            </div>
+                                                            </div>l
                                                          </b>
                                                       </h2>
                                                     </div>
                                                 </div>
                                             </a>';
-                                    //    }
-                                    //    // END of while.
+                                        }
                                     }
-                                    // END of if there was paraclinic data for this sicker.
-
+                                    // END of if there was paraclinic data for this sicker
                                     else
                                     {
                                         echo '
@@ -855,7 +845,7 @@ foreach ( $result_of_show_patients_ehr_document_page as $key )
                                                 <i class="fa fa fa-heartbeat" style="font-size:46px;padding: 19px;" ></i>
                                             </div>
                                             <div class="col-md-12 col-sm-12 col-xs-12" style="font-size:26px;margin-top:25px;" >
-                                                هیچ اطلاعات '.$cms_menu_title[1].' از بیمار ذخیره نشده
+                                                No '.$cms_menu_title[1].' information was stored for this patient
                                             </div>
                                         </div>';
                                     }
@@ -867,279 +857,351 @@ foreach ( $result_of_show_patients_ehr_document_page as $key )
                         <!-- END of login fancy console panel paraclinic -->';
                     } // END of if $cms_menu_title[1] exist
 
-if( strlen($cms_menu_title[0]) > 0 )
-{
-echo '
-<li role="presentation">
-    <a id="various222" href="#previous_patient_history_category" type="button" aria-controls="profile" type="button" role="tab" data-toggle="tab" >
-        '.$cms_menu_title[0].'
-    </a>
-</li>
+                    // START of if $cms_menu_title[0] exist
+                    if( strlen($cms_menu_title[0]) > 0 )
+                    {
+                        echo '
+                        <li role="presentation">
+                            <a id="various222" href="#previous_patient_history_category" type="button" aria-controls="profile" type="button" role="tab" data-toggle="tab" >
+                                '.$cms_menu_title[0].'
+                            </a>
+                        </li>
+                        
+                        <!-- START of login fancy console panel sharhe_hal_haye_pishin_category -->
+                        <div style="display:none;" >
+                            <div id="previous_patient_history_category" style="height:550px;width:900px!important;overflow-x: hidden!important;padding-bottom:30px;padding-top:35px;" >
+                                <div class="col-md-12 col-sm-12 col-xs-12 text-center" >
+                                    <center>
+                        
+                                        <br>
+                                        <hr style="width:1px;" >
+                        
+                                        <a id="various222" href="#sharhe_hal_haye_pishin_normal" type="button" aria-controls="profile" role="tab" data-toggle="tab" class="btn btn-success btn-group col-md-10 col-sm-10 col-xs-10" style="float:none;font-size:25px;" >
+                                            Prescriptions given to the patient
+                                        </a>
+                        
+                                        <!-- START of login fancy console panel sharhe_hal_haye_pishin_normal -->
+                                        <div style="display:none;" >
+                                            <div id="sharhe_hal_haye_pishin_normal" style="height:80px!important;width:920px!important;overflow-x: hidden!important;" >' ;
 
-<!-- START of login fancy console panel sharhe_hal_haye_pishin_category -->
-<div style="display:none;" >
-    <div id="previous_patient_history_category" style="height:550px;width:900px!important;overflow-x: hidden!important;padding-bottom:30px;padding-top:35px;" class="row" >
-        <div class="col-md-12 col-sm-12 col-xs-12 text-center" >
-            <center>
+                                                //// Create mysql query for extract all of titles record in mysql data base we want to avoid these title.
+                                                // $res_sik_doc_time_line = mysql_query( " SELECT sic_rel_id , doc_rel_id , doc_id , doc_turn_id , child_dr_name_rel_doc , doc_date_created FROM $DB_NAME_LOGIN.sik_doc
+                                                //                                                                                                WHERE sic_rel_id     = '".filter($sicker_id)."'
+                                                //                                                                                                AND   doc_rel_id     = '".filter($_SESSION['user_id'])."'
+                                                //                                                                                                ORDER BY doc_id DESC
+                                                //                                                                                              " , $database_connection) or die( " Error : Connection section res_sik_doc_time_line . " .mysql_error() ) ;
 
-                <br>
-                <hr style="width:1px;" >
+                                                $res_sik_doc_time_line = $count_number_of_ehr_document ;
+                                                // START  of if there was more than 1 document for this sicker then show it on document time line
+                                                if( $res_sik_doc_time_line > 0 )
+                                                {
+                                                    echo '
+                                                    <div class="col-md-12 col-sm-12 col-xs-12" >'.$res_sik_doc_time_line ;
 
-                <a id="various222" href="#sharhe_hal_haye_pishin_normal" type="button" aria-controls="profile" role="tab" data-toggle="tab" class="btn btn-success btn-group col-md-10 col-sm-10 col-xs-10" style="float:none;font-size:25px;" >
-                    Prescriptions given to the patient
-                </a>
+                                                    // Make a trick to prevent from POST method error (post method should'nt have Space in him content)
+                                                    $common_rejim = str_replace( "_" , " " , $common_rejim ) ;
+                                                    //$common_rejim = str_replace( "," , "\n" , $common_rejim ) ;
 
-                <!-- START of login fancy console panel sharhe_hal_haye_pishin_normal -->
-                <div style="display:none;" >
-                    <div id="sharhe_hal_haye_pishin_normal" style="height:80px!important;width:920px!important;overflow-x: hidden!important;" >' ;
+                                                    $common_drug = str_replace( "_" , " " , $common_drug ) ;
+                                                    //$common_drug = str_replace( "," , "\n" , $common_drug ) ;
 
-//// Create mysql query for extract all of titles record in mysql data base we want to avoid these title.
-//$res_sik_doc_time_line = mysql_query( " SELECT sic_rel_id , doc_rel_id , doc_id , doc_turn_id , child_dr_name_rel_doc , doc_date_created FROM $DB_NAME_LOGIN.sik_doc
-//                                                                                                WHERE sic_rel_id     = '".filter($sicker_id)."'
-//                                                                                                AND   doc_rel_id     = '".filter($_SESSION['user_id'])."'
-//                                                                                                ORDER BY doc_id DESC
-//                                                                                              " , $database_connection) or die( " Error : Connection section res_sik_doc_time_line . " .mysql_error() ) ;
+                                                    $common_return_date = str_replace( "_" , " " , $common_return_date ) ;
+                                                    //$common_return_date = str_replace( "," , "\n" , $common_return_date ) ;
 
-    $res_sik_doc_time_line = '0' ;
-// START  of if there was more than 1 documnet for this sicker then show it on documnet time line.
-if( $res_sik_doc_time_line > 0 )
-{
-    echo '
-    <div class="col-md-12 col-sm-12 col-xs-12" >' ;
+                                                    echo '
+                                                    <!-- START Modal -->
+                                                    <div id="amghezi" class="modal fade modal-fullscreen" role="dialog" >
+                                                        <div class="modal-dialog">
+                                                            <!-- Modal content-->
+                                                            <div class="modal-content" style="margin-top: 100px!important;" >' ;
 
-//    // START of while.
-//    while( $row_sik_doc_time_line = mysql_fetch_array($res_sik_doc_time_line) )
-//    {
-//        extract( $row_sik_doc_time_line ) ;
-//
-//        // Create mysql query for extract all of titles record in mysql data base we want to avoid these title.
-//        $res_turns_flow = mysql_query( " SELECT * FROM $DB_NAME_LOGIN.turns_flow
-//                                             WHERE turn_id        = '".filter($doc_turn_id)."'
-//                                             AND   dr_related_id  = '".filter($_SESSION['user_id'])."'
-//                                             LIMIT 1
-//                                           " , $database_connection) or die( " Error : Connection section res_turns_flow Failed . " .mysql_error() ) ;
+                                                                if( strlen($cms_menu_title[4]) > 0 )
+                                                                {
+                                                                    echo '
+                                                                    <div class="well col-md-3 col-sm-3 col-xs-3" style="background-color: inherit;border-bottom:0px;border-left:0px;font-size:17px;margin-bottom:0px;padding-bottom:0px;" >
+                                                                        : '.$cms_menu_title[4].' added
+                                                                        <p class="common-drug"></p>
+                                                                    </div>';
+                                                                }
 
-//        if( mysql_num_rows($res_turns_flow) > 0 )
-//        {
-//            // START of while.
-//            while( $row_turns_flow = mysql_fetch_array($res_turns_flow) )
-//            {
-//                extract( $row_turns_flow ) ;
+                                                                if( strlen($cms_menu_title[3]) > 0 )
+                                                                {
+                                                                    echo '
+                                                                    <div class="well col-md-3 col-sm-3 col-xs-3" style="background-color: inherit;border-bottom:0px;border-left:0px;font-size:17px;margin-bottom:0px;padding-bottom:0px;" >
+                                                                        : '.$cms_menu_title[3].' added
+                                                                        <p class="common-rejim"></p>
+                                                                    </div>';
+                                                                }
 
-//                echo '
-//                <div style="float:left;" >
-//                    <button type="button" class="btn btn-default showAmghezi" data-toggle="modal" data-target="#amghezi" url="'.$INDEX_LINK.'show_svg.php?doc_id='.$doc_id.'&sicker_id='.$sicker_id.$st_2_trick.'" target="_blank style="float:left;font-size:16px!important;width:auto;height:35px;" >
-//                        تاریخ ویزیت : '.$turn_date.'
-//                        <i class="fa fa-clone" style="font-size:18px!important;" ></i>
-//                    </button>
-//                    <span class="glyphicon glyphicon-triangle-right" aria-hidden="true" style="top:10px;font-size: 21pt;opacity: 0.5;"></span>
-//                </div>' ;
-//            }
-//        }
-//        else
-//        {
-//            echo '
-//             <div style="float:left;" >
-//                    <button type="button" class="btn btn-default showAmghezi" data-toggle="modal" data-target="#amghezi" url="'.$INDEX_LINK.'show_svg.php?doc_id='.$doc_id.'&sicker_id='.$sicker_id.$st_2_trick.'" target="_blank style="float:left;font-size:16px!important;width:auto;height:35px;" >
-//                        بودن نوبت : '.$doc_date_created.'
-//                        <i class="fa fa-clone" style="font-size:18px!important;" ></i>
-//                    </button>
-//                    <span class="glyphicon glyphicon-triangle-right" aria-hidden="true" style="top:10px;font-size: 21pt;opacity: 0.5;"></span>
-//              </div>' ;
-//        }
+                                                                if( strlen($cms_menu_title[2]) > 0 )
+                                                                {
+                                                                    echo '
+                                                                    <div class="well col-md-3 col-sm-3 col-xs-3" style="background-color: inherit;border-bottom:0px;border-left:0px;font-size:17px;margin-bottom:0px;padding-bottom:0px;" >
+                                                                        : '.$cms_menu_title[2].'
+                                                                        <p class="common-return-date"></p>
+                                                                    </div>' ;
+                                                                }
 
-//    }
-//    // END of while.
+                                                                echo '
+                                                                <div class="well col-md-3 col-sm-3 col-xs-3" style="background-color: inherit;border-bottom:0px;border-left:0px;font-size:17px;margin-bottom:0px;padding-bottom:0px;" >
+                                                                    : Doctor
+                                                                    <p class="child-dr-name-rel-doc"></p>
+                                                                </div>
+                                                                
+                                                                <div class="modal-body" align="center" style="margin-top:0px;padding-top:0px;">
+                                                                    <img src="" class="img-responsive" />
+                                                                </div>
+                                                                
+                                                                <hr style="width:1px;" >
+                                                                <hr style="width:1px;" >
+                                                                <hr style="width:1px;" >
+                                                                <hr style="width:1px;" >
+                                                                
+                                                                <div class="modal-footer">
+                                                                    <button type="button" class="btn btn-success btn-group col-md-12 col-sm-12 col-xs-12" data-dismiss="modal" style="font-size: 25px;position: fixed;bottom: 0px;right: 0px;z-index: 1;">
+                                                                        Close
+                                                                    </button>
+                                                                </div>
+                                                    
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                    <!-- END Modal -->' ;
 
-    echo '
-    </div>' ;
+                                                //    // START of while.
+                                                //    while( $row_sik_doc_time_line = mysql_fetch_array($res_sik_doc_time_line) )
+                                                //    {
+                                                //        extract( $row_sik_doc_time_line ) ;
+                                                //
+                                                //        // Create mysql query for extract all of titles record in mysql data base we want to avoid these title.
+                                                //        $res_turns_flow = mysql_query( " SELECT * FROM $DB_NAME_LOGIN.turns_flow
+                                                //                                             WHERE turn_id        = '".filter($doc_turn_id)."'
+                                                //                                             AND   dr_related_id  = '".filter($_SESSION['user_id'])."'
+                                                //                                             LIMIT 1
+                                                //                                           " , $database_connection) or die( " Error : Connection section res_turns_flow Failed . " .mysql_error() ) ;
 
-}
-// END  of if there was more than 1 documnet for this sicker then show it on documnet time line.
-else
-{
-    echo '
-    <center>
-        <div class="col-md-12 col-sm-12 col-xs-12" >
-            <h3 style="padding-top:10px;font-size:25px;opacity:0.7;text-align:center;" >
-                 <i class="glyphicon glyphicon-file" style="font-size:46px;padding: 19px;float:right;" ></i>
-                 No appointment has been booked for this patient so far and there are no referral details
-            </h3>
-        </div>
-    </center>';
-}
+                                                //        if( mysql_num_rows($res_turns_flow) > 0 )
+                                                //        {
+                                                //            // START of while.
+                                                //            while( $row_turns_flow = mysql_fetch_array($res_turns_flow) )
+                                                //            {
+                                                //                extract( $row_turns_flow ) ;
 
-echo '
-    </div>
-</div>
-<!-- END of login fancy console panel sharhe_hal_haye_pishin_normal -->' ;
+                                                //                echo '
+                                                //                <div style="float:left;" >
+                                                //                    <button type="button" class="btn btn-default showAmghezi" data-toggle="modal" data-target="#amghezi" url="'.$INDEX_LINK.'show_svg.php?doc_id='.$doc_id.'&sicker_id='.$sicker_id.$st_2_trick.'" target="_blank style="float:left;font-size:16px!important;width:auto;height:35px;" >
+                                                //                        Date of appointment : '.$turn_date.'
+                                                //                        <i class="fa fa-clone" style="font-size:18px!important;" ></i>
+                                                //                    </button>
+                                                //                    <span class="glyphicon glyphicon-triangle-right" aria-hidden="true" style="top:10px;font-size: 21pt;opacity: 0.5;"></span>
+                                                //                </div>' ;
+                                                //            }
+                                                //        }
+                                                //        else
+                                                //        {
+                                                //            echo '
+                                                //             <div style="float:left;" >
+                                                //                    <button type="button" class="btn btn-default showAmghezi" data-toggle="modal" data-target="#amghezi" url="'.$INDEX_LINK.'show_svg.php?doc_id='.$doc_id.'&sicker_id='.$sicker_id.$st_2_trick.'" target="_blank style="float:left;font-size:16px!important;width:auto;height:35px;" >
+                                                //                        Without date of appointment : '.$doc_date_created.'
+                                                //                        <i class="fa fa-clone" style="font-size:18px!important;" ></i>
+                                                //                    </button>
+                                                //                    <span class="glyphicon glyphicon-triangle-right" aria-hidden="true" style="top:10px;font-size: 21pt;opacity: 0.5;"></span>
+                                                //              </div>' ;
+                                                //        }
 
-if ( strlen($cms_menu_title[7]) > 0 )
-{
-    echo '
-    <br>
-    <hr style="width:1px;" >
+                                                //    }
+                                                //    // END of while.
 
-    <a id="various222" href="#sharhe_hal_haye_pishin_normal_1" type="button" aria-controls="profile" role="tab" data-toggle="tab" class="btn btn-success btn-group col-md-10 col-sm-10 col-xs-10" style="float:none;font-size:25px;" >
-        '.$cms_menu_title[0].' '.$cms_menu_title[7].'
-    </a>
+                                                    echo '
+                                                    </div>' ;
 
-    <!-- START of login fancy console panel sharhe_hal_haye_pishin_normal_1 -->
-    <div style="display:none;" >
-        <div id="sharhe_hal_haye_pishin_normal_1" style="height:80px!important;width:900px!important;overflow-x: hidden!important;" >' ;
+                                                }
+                                                // END  of if there was more than 1 document for this sicker then show it on document time line.
+                                                else
+                                                {
+                                                    echo '
+                                                    <center>
+                                                        <div class="col-md-12 col-sm-12 col-xs-12" >
+                                                            <h3 style="padding-top:10px;font-size:25px;opacity:0.7;text-align:center;" >
+                                                                 <i class="glyphicon glyphicon-file" style="font-size:46px;padding: 19px;float:right;" ></i>
+                                                                 No appointment has been booked for this patient so far and there are no referral details
+                                                            </h3>
+                                                        </div>
+                                                    </center>';
+                                                }
 
-    // Create mysql query for extract all of titles record in mysql data base we want to avoid these title.
-//    $res_sharhe_hal_haye_pishin_normal_1 = mysql_query( " SELECT sicker_uniqe_doc_paper_id , sicker_uniqe_doc_paper_sicker_id , sicker_uniqe_doc_paper_dr_rel_id , sicker_uniqe_doc_paper_date_created FROM $DB_NAME_LOGIN.sicker_uniqe_doc_extra_paper
-//                                         WHERE sicker_uniqe_doc_paper_sicker_id     = '".filter($sicker_id)."'
-//                                          AND   sicker_uniqe_doc_paper_dr_rel_id     = '".filter($_SESSION['user_id'])."'
-//                                          ORDER BY sicker_uniqe_doc_paper_id DESC
-//                                        " , $database_connection) or die( " Error : Connection section res_sharhe_hal_haye_pishin_normal_1 . " .mysql_error() ) ;
+                                            echo '
+                                            </div>
+                                        </div>
+                                        <!-- END of login fancy console panel sharhe_hal_haye_pishin_normal -->' ;
 
-//    // Let to make a variable to cound sicker_uniqe_doc_paper.
-//    $mysql_num_rows_res_sharhe_hal_haye_pishin_normal_1 = mysql_num_rows($res_sharhe_hal_haye_pishin_normal_1) ;
+                        if ( strlen($cms_menu_title[7]) > 0 )
+                        {
+                            echo '
+                            <br>
+                            <hr style="width:1px;" >
+                        
+                            <a id="various222" href="#sharhe_hal_haye_pishin_normal_1" type="button" aria-controls="profile" role="tab" data-toggle="tab" class="btn btn-success btn-group col-md-10 col-sm-10 col-xs-10" style="float:none;font-size:25px;" >
+                                '.$cms_menu_title[0].' '.$cms_menu_title[7].'
+                            </a>
+                        
+                            <!-- START of login fancy console panel sharhe_hal_haye_pishin_normal_1 -->
+                            <div style="display:none;" >
+                                <div id="sharhe_hal_haye_pishin_normal_1" style="height:80px!important;width:900px!important;overflow-x: hidden!important;" >' ;
 
-//    // START  of if there was more than 1 documnet for this sicker then show it on documnet time line.
-//    if( $mysql_num_rows_res_sharhe_hal_haye_pishin_normal_1 > 0 )
-//    {
-//        echo '
-//        <div class="col-md-12 col-sm-12 col-xs-12" >' ;
-//
-//        // Let to Sum this value with 1 to start count from 1 instead of zero
-//        $mysql_num_rows_res_sharhe_hal_haye_pishin_normal_1 += 1 ;
-//
-//        // START of while.
-//        while( $row_sharhe_hal_haye_pishin_normal_1 = mysql_fetch_array($res_sharhe_hal_haye_pishin_normal_1) )
-//        {
-//            extract( $row_sharhe_hal_haye_pishin_normal_1 ) ;
-//
-//            // Decrise ONE value from prevues value to count it.
-//            $mysql_num_rows_res_sharhe_hal_haye_pishin_normal_1 -= 1 ;
-//
-//            echo '
-//                <div style="float:left;" >
-//                    <button type="button" class="btn btn-default showAmghezi_1" data-toggle="modal" data-target="#amghezi_1" url="'.$INDEX_LINK.'show_svg_1.php?sicker_uniqe_doc_paper_id='.$sicker_uniqe_doc_paper_id.'&sicker_uniqe_doc_paper_sicker_id='.$sicker_uniqe_doc_paper_sicker_id.$st_2_trick.'" target="_blank style="float:left;font-size:18px!important;width:180px;height:35px;" >
-//                    '.$mysql_num_rows_res_sharhe_hal_haye_pishin_normal_1.'=  '.$sicker_uniqe_doc_paper_date_created.'
-//                        <i class="fa fa-clone" style="font-size:18px!important;" ></i>
-//                    </button>
-//                    <span class="glyphicon glyphicon-triangle-right" aria-hidden="true" style="top:10px;font-size: 21pt;opacity: 0.5;"></span>
-//                </div>' ;
-//        }
-//        // END of while.
-//
-//        echo '
-//        </div>' ;
-//    }
-//    // END  of if there was more than 1 documnet for this sicker then show it on documnet time line.
-//    else
-//    {
-        echo '
-        <center>
-            <div class="col-md-12 col-sm-12 col-xs-12" >
-                <h3 style="font-size:21px;opacity:0.7;text-align:center;" >
-                     <i class="glyphicon glyphicon-file" style="font-size:46px;padding: 19px;float:right;" ></i>
-                     '.$cms_menu_title[0].' for this patient
-                     <br>
-                     '.$cms_menu_title[7].'
-                     <br>
-                     Dose not exist 
-                </h3>
-            </div>
-        </center>';
-//    }
+                            // Create mysql query for extract all of titles record in mysql data base we want to avoid these title.
+                        //    $res_sharhe_hal_haye_pishin_normal_1 = mysql_query( " SELECT sicker_uniqe_doc_paper_id , sicker_uniqe_doc_paper_sicker_id , sicker_uniqe_doc_paper_dr_rel_id , sicker_uniqe_doc_paper_date_created FROM $DB_NAME_LOGIN.sicker_uniqe_doc_extra_paper
+                        //                                         WHERE sicker_uniqe_doc_paper_sicker_id     = '".filter($sicker_id)."'
+                        //                                          AND   sicker_uniqe_doc_paper_dr_rel_id     = '".filter($_SESSION['user_id'])."'
+                        //                                          ORDER BY sicker_uniqe_doc_paper_id DESC
+                        //                                        " , $database_connection) or die( " Error : Connection section res_sharhe_hal_haye_pishin_normal_1 . " .mysql_error() ) ;
 
-    echo '
-        </div>
-    </div>
-    <!-- END of login fancy console panel sharhe_hal_haye_pishin_normal_1 -->' ;
-}
+                        //    // Let to make a variable to cound sicker_uniqe_doc_paper.
+                        //    $mysql_num_rows_res_sharhe_hal_haye_pishin_normal_1 = mysql_num_rows($res_sharhe_hal_haye_pishin_normal_1) ;
 
-if ( strlen($cms_menu_title[8]) > 0 )
-{
-    echo '
-    <br>
-    <hr style="width:1px;" >
+                        //    // START  of if there was more than 1 documnet for this sicker then show it on documnet time line.
+                        //    if( $mysql_num_rows_res_sharhe_hal_haye_pishin_normal_1 > 0 )
+                        //    {
+                        //        echo '
+                        //        <div class="col-md-12 col-sm-12 col-xs-12" >' ;
+                        //
+                        //        // Let to Sum this value with 1 to start count from 1 instead of zero
+                        //        $mysql_num_rows_res_sharhe_hal_haye_pishin_normal_1 += 1 ;
+                        //
+                        //        // START of while.
+                        //        while( $row_sharhe_hal_haye_pishin_normal_1 = mysql_fetch_array($res_sharhe_hal_haye_pishin_normal_1) )
+                        //        {
+                        //            extract( $row_sharhe_hal_haye_pishin_normal_1 ) ;
+                        //
+                        //            // Decrise ONE value from prevues value to count it.
+                        //            $mysql_num_rows_res_sharhe_hal_haye_pishin_normal_1 -= 1 ;
+                        //
+                        //            echo '
+                        //                <div style="float:left;" >
+                        //                    <button type="button" class="btn btn-default showAmghezi_1" data-toggle="modal" data-target="#amghezi_1" url="'.$INDEX_LINK.'show_svg_1.php?sicker_uniqe_doc_paper_id='.$sicker_uniqe_doc_paper_id.'&sicker_uniqe_doc_paper_sicker_id='.$sicker_uniqe_doc_paper_sicker_id.$st_2_trick.'" target="_blank style="float:left;font-size:18px!important;width:180px;height:35px;" >
+                        //                    '.$mysql_num_rows_res_sharhe_hal_haye_pishin_normal_1.'=  '.$sicker_uniqe_doc_paper_date_created.'
+                        //                        <i class="fa fa-clone" style="font-size:18px!important;" ></i>
+                        //                    </button>
+                        //                    <span class="glyphicon glyphicon-triangle-right" aria-hidden="true" style="top:10px;font-size: 21pt;opacity: 0.5;"></span>
+                        //                </div>' ;
+                        //        }
+                        //        // END of while.
+                        //
+                        //        echo '
+                        //        </div>' ;
+                        //    }
+                        //    // END  of if there was more than 1 documnet for this sicker then show it on documnet time line.
+                        //    else
+                        //    {
+                                echo '
+                                <center>
+                                    <div class="col-md-12 col-sm-12 col-xs-12" >
+                                        <h3 style="font-size:21px;opacity:0.7;text-align:center;" >
+                                             <i class="glyphicon glyphicon-file" style="font-size:46px;padding: 19px;float:right;" ></i>
+                                             '.$cms_menu_title[0].' for this patient
+                                             <br>
+                                             '.$cms_menu_title[7].'
+                                             <br>
+                                             Dose not exist 
+                                        </h3>
+                                    </div>
+                                </center>';
+                        //    }
 
-    <a id="various222" href="#sharhe_hal_haye_pishin_normal_2" type="button" aria-controls="profile" role="tab" data-toggle="tab" class="btn btn-success btn-group col-md-10 col-sm-10 col-xs-10" style="float:none;font-size:25px;" >
-         '.$cms_menu_title[0].' '.$cms_menu_title[8].'
-    </a> ' ;
+                            echo '
+                                </div>
+                            </div>
+                            <!-- END of login fancy console panel sharhe_hal_haye_pishin_normal_1 -->' ;
+                        }
 
-//    echo '
-//    <!-- START of login fancy console panel sharhe_hal_haye_pishin_normal_2 -->
-//    <div style="display:none;" >
-//    <div id="sharhe_hal_haye_pishin_normal_2" style="height:80px!important;width:900px!important;overflow-x: hidden!important;" >' ;
-//    $res_sharhe_hal_haye_pishin_normal_2 = mysql_query( " SELECT sicker_uniqe_doc_paper_id_3 , sicker_uniqe_doc_paper_sicker_id_3 , sicker_uniqe_doc_paper_dr_rel_id_3 , sicker_uniqe_doc_paper_date_created_3 FROM $DB_NAME_LOGIN.sicker_uniqe_doc_extra_paper_3
-//    WHERE sicker_uniqe_doc_paper_sicker_id_3     = '".filter($sicker_id)."'
-//    AND   sicker_uniqe_doc_paper_dr_rel_id_3     = '".filter($_SESSION['user_id'])."'
-//    ORDER BY sicker_uniqe_doc_paper_id_3 DESC
-//    " , $database_connection) or die( " Error : Connection section sicker_uniqe_doc_extra_paper_3 . " .mysql_error() ) ;
-//
-//    // Let to make a variable to cound sicker_uniqe_doc_paper.
-//    $mysql_num_rows_res_sharhe_hal_haye_pishin_normal_2 = mysql_num_rows($res_sharhe_hal_haye_pishin_normal_2) ;
-//
-//    // START  of if there was more than 1 documnet for this sicker then show it on documnet time line.
-//    if( $mysql_num_rows_res_sharhe_hal_haye_pishin_normal_2 > 0 )
-//    {
-//    echo '
-//    <div class="col-md-12 col-sm-12 col-xs-12" >' ;
-//
-//    // Let to Sum this value with 1 to start count from 1 instead of zero
-//    $mysql_num_rows_res_sharhe_hal_haye_pishin_normal_2 += 1 ;
-//
-//    // START of while.
-//    while( $row_sharhe_hal_haye_pishin_normal_3 = mysql_fetch_array($res_sharhe_hal_haye_pishin_normal_2) )
-//    {
-//
-//    extract( $row_sharhe_hal_haye_pishin_normal_3 ) ;
-//
-//    // Decrise ONE value from prevues value to count it.
-//    $mysql_num_rows_res_sharhe_hal_haye_pishin_normal_2 -= 1 ;
-//
-//
-//    echo '
-//        <div style="float:left;" >
-//            <button type="button" class="btn btn-default showAmghezi_2" data-toggle="modal" data-target="#amghezi_2" url="'.$INDEX_LINK.'show_svg_2.php?sicker_uniqe_doc_paper_id_3='.$sicker_uniqe_doc_paper_id_3.'&sicker_uniqe_doc_paper_sicker_id_3='.$sicker_uniqe_doc_paper_sicker_id_3.$st_2_trick.'" target="_blank style="float:left;font-size:18px!important;width:180px;height:35px;" >					'.$mysql_num_rows_res_sharhe_hal_haye_pishin_normal_2.'=  '.$sicker_uniqe_doc_paper_date_created_3.'
-//                <i class="fa fa-clone" style="font-size:18px!important;" ></i>
-//            </button>
-//            <span class="glyphicon glyphicon-triangle-right" aria-hidden="true" style="top:10px;font-size: 21pt;opacity: 0.5;"></span>
-//        </div>' ;
-//    }
-//    // END of while.
-//
-//    echo '
-//
-//    </div>' ;
-//    }
-//    // END  of if there was more than 1 documnet for this sicker then show it on documnet time line.
-//    else
-//    {
-//    echo '
-//    <center>
-//    <div class="col-md-12 col-sm-12 col-xs-12" >
-//        <h3 style="font-size:21px;opacity:0.7;text-align:center;" >
-//             <i class="glyphicon glyphicon-file" style="font-size:46px;padding: 19px;float:right;" ></i>
-//              برای این بیمار '.$cms_menu_title[0].'
-//              <br>
-//              '.$cms_menu_title[8].'
-//              <br>
-//              وجود ندارد
-//        </h3>
-//    </div>
-//    </center>';
-//    }
-//
-//    echo '
-//    </div>
-//    </div>
-//    <!-- END of login fancy console panel sharhe_hal_haye_pishin_normal_2 -->' ;
-}
+                        if ( strlen($cms_menu_title[8]) > 0 )
+                        {
+                            echo '
+                            <br>
+                            <hr style="width:1px;" >
+                        
+                            <a id="various222" href="#sharhe_hal_haye_pishin_normal_2" type="button" aria-controls="profile" role="tab" data-toggle="tab" class="btn btn-success btn-group col-md-10 col-sm-10 col-xs-10" style="float:none;font-size:25px;" >
+                                 '.$cms_menu_title[0].' '.$cms_menu_title[8].'
+                            </a> ' ;
 
-echo '
-            </center>
-        </div>
-    </div>
-</div>
-<!-- END of login fancy console panel sharhe_hal_haye_pishin_category -->';
-}
+                        //    echo '
+                        //    <!-- START of login fancy console panel sharhe_hal_haye_pishin_normal_2 -->
+                        //    <div style="display:none;" >
+                        //    <div id="sharhe_hal_haye_pishin_normal_2" style="height:80px!important;width:900px!important;overflow-x: hidden!important;" >' ;
+                        //    $res_sharhe_hal_haye_pishin_normal_2 = mysql_query( " SELECT sicker_uniqe_doc_paper_id_3 , sicker_uniqe_doc_paper_sicker_id_3 , sicker_uniqe_doc_paper_dr_rel_id_3 , sicker_uniqe_doc_paper_date_created_3 FROM $DB_NAME_LOGIN.sicker_uniqe_doc_extra_paper_3
+                        //    WHERE sicker_uniqe_doc_paper_sicker_id_3     = '".filter($sicker_id)."'
+                        //    AND   sicker_uniqe_doc_paper_dr_rel_id_3     = '".filter($_SESSION['user_id'])."'
+                        //    ORDER BY sicker_uniqe_doc_paper_id_3 DESC
+                        //    " , $database_connection) or die( " Error : Connection section sicker_uniqe_doc_extra_paper_3 . " .mysql_error() ) ;
+                        //
+                        //    // Let to make a variable to cound sicker_uniqe_doc_paper.
+                        //    $mysql_num_rows_res_sharhe_hal_haye_pishin_normal_2 = mysql_num_rows($res_sharhe_hal_haye_pishin_normal_2) ;
+                        //
+                        //    // START  of if there was more than 1 documnet for this sicker then show it on documnet time line.
+                        //    if( $mysql_num_rows_res_sharhe_hal_haye_pishin_normal_2 > 0 )
+                        //    {
+                        //    echo '
+                        //    <div class="col-md-12 col-sm-12 col-xs-12" >' ;
+                        //
+                        //    // Let to Sum this value with 1 to start count from 1 instead of zero
+                        //    $mysql_num_rows_res_sharhe_hal_haye_pishin_normal_2 += 1 ;
+                        //
+                        //    // START of while.
+                        //    while( $row_sharhe_hal_haye_pishin_normal_3 = mysql_fetch_array($res_sharhe_hal_haye_pishin_normal_2) )
+                        //    {
+                        //
+                        //    extract( $row_sharhe_hal_haye_pishin_normal_3 ) ;
+                        //
+                        //    // Decrise ONE value from prevues value to count it.
+                        //    $mysql_num_rows_res_sharhe_hal_haye_pishin_normal_2 -= 1 ;
+                        //
+                        //
+                        //    echo '
+                        //        <div style="float:left;" >
+                        //            <button type="button" class="btn btn-default showAmghezi_2" data-toggle="modal" data-target="#amghezi_2" url="'.$INDEX_LINK.'show_svg_2.php?sicker_uniqe_doc_paper_id_3='.$sicker_uniqe_doc_paper_id_3.'&sicker_uniqe_doc_paper_sicker_id_3='.$sicker_uniqe_doc_paper_sicker_id_3.$st_2_trick.'" target="_blank style="float:left;font-size:18px!important;width:180px;height:35px;" >					'.$mysql_num_rows_res_sharhe_hal_haye_pishin_normal_2.'=  '.$sicker_uniqe_doc_paper_date_created_3.'
+                        //                <i class="fa fa-clone" style="font-size:18px!important;" ></i>
+                        //            </button>
+                        //            <span class="glyphicon glyphicon-triangle-right" aria-hidden="true" style="top:10px;font-size: 21pt;opacity: 0.5;"></span>
+                        //        </div>' ;
+                        //    }
+                        //    // END of while.
+                        //
+                        //    echo '
+                        //
+                        //    </div>' ;
+                        //    }
+                        //    // END  of if there was more than 1 documnet for this sicker then show it on documnet time line.
+                        //    else
+                        //    {
+                        //    echo '
+                        //    <center>
+                        //    <div class="col-md-12 col-sm-12 col-xs-12" >
+                        //        <h3 style="font-size:21px;opacity:0.7;text-align:center;" >
+                        //             <i class="glyphicon glyphicon-file" style="font-size:46px;padding: 19px;float:right;" ></i>
+                        //              برای این بیمار '.$cms_menu_title[0].'
+                        //              <br>
+                        //              '.$cms_menu_title[8].'
+                        //              <br>
+                        //              وجود ندارد
+                        //        </h3>
+                        //    </div>
+                        //    </center>';
+                        //    }
+                        //
+                        //    echo '
+                        //    </div>
+                        //    </div>
+                        //    <!-- END of login fancy console panel sharhe_hal_haye_pishin_normal_2 -->' ;
+                        }
+
+                                    echo '
+                                    </center>
+                                </div>
+                            </div>
+                        </div>
+                        <!-- END of login fancy console panel sharhe_hal_haye_pishin_category -->';
+                    }
+                    // END of if $cms_menu_title[0] exist
 
 if( strlen($cms_menu_title[9]) > 0 )
 {
@@ -1152,7 +1214,7 @@ echo '
 
 <!-- START of login fancy console panel chart -->
 <div style="display:none;" >
-    <div id="chart" style="height:550px;width:900px!important;overflow-x: hidden!important;padding-bottom:30px;padding-top:35px;" class="row" >
+    <div id="chart" style="height:550px;width:900px!important;overflow-x: hidden!important;padding-bottom:30px;padding-top:35px;" >
 
         <div class="col-md-12 col-sm-12 col-xs-12 text-center" style="margin-bottom:9px;" >
 
@@ -1160,28 +1222,28 @@ echo '
                 <div class="btn btn-group col-md-12 col-sm-12 col-xs-12" style="font-size: 18px!important;color:gray;" >
                     '.$cms_menu_title[10].'
                 </div>
-                <input type="text" name="keyboard_chart_1" style="width:100%;text-align:right;direction:rtl;font-size:14px;height:40px;" placeholder="Type your favorite value..." >
+                <input type="text" name="keyboard_chart_1" style="width:100%;text-align:right;direction:rtl;font-size:14px;height:40px;" placeholder="Type your favorite value" >
             </div>
 
             <div class="col-md-3 col-sm-3 col-xs-12" style="margin-top:20px;" >
                 <div class="btn btn-group col-md-12 col-sm-12 col-xs-12" style="font-size: 18px!important;color:gray;" >
                     '.$cms_menu_title[11].'
                 </div>
-                <input type="text" name="keyboard_chart_2" style="width:100%;text-align:right;direction:rtl;font-size:14px;height:40px;" placeholder="Type your favorite value..." >
+                <input type="text" name="keyboard_chart_2" style="width:100%;text-align:right;direction:rtl;font-size:14px;height:40px;" placeholder="Type your favorite value" >
             </div>
 
             <div class="col-md-3 col-sm-3 col-xs-12" style="margin-top:20px;" >
                 <div class="btn btn-group col-md-12 col-sm-12 col-xs-12" style="font-size: 18px!important;color:gray;" >
                     '.$cms_menu_title[12].'
                 </div>
-                <input type="text" name="keyboard_chart_3" style="width:100%;text-align:right;direction:rtl;font-size:14px;height:40px;" placeholder="Type your favorite value..." >
+                <input type="text" name="keyboard_chart_3" style="width:100%;text-align:right;direction:rtl;font-size:14px;height:40px;" placeholder="Type your favorite value" >
             </div>
 
             <div class="col-md-3 col-sm-3 col-xs-12" style="margin-top:20px;" >
                 <div class="btn btn-group col-md-12 col-sm-12 col-xs-12" style="font-size: 18px!important;color:gray;" >
                     '.$cms_menu_title[13].'
                 </div>
-                <input type="text" name="keyboard_chart_4" style="width:100%;text-align:right;direction:rtl;font-size:14px;height:40px;" placeholder="Type your favorite value..." >
+                <input type="text" name="keyboard_chart_4" style="width:100%;text-align:right;direction:rtl;font-size:14px;height:40px;" placeholder="Type your favorite value" >
             </div>
 
         </div>
@@ -1190,9 +1252,9 @@ echo '
         <hr style="width:1px;" >
 
         <div class="form-group">
-            <label class="control-label col-md-3 col-sm-3 col-xs-12" style="color:gray" >تاریخ نوبت</label>
+            <label class="control-label col-md-4 col-sm-4 col-xs-12" style="color:gray;text-align: right;" >Date of appointment</label>
 
-            <div class="col-md-6 col-sm-6 col-xs-12" >
+            <div class="col-md-6 col-sm-6 col-xs-12" style="" >
                 <input type="text" name="doc_date_created" class="form-control col-md-7 col-xs-12 has-feedback-right" id="" data-MdDateTimePicker="true" value="" autocomplete="off" aria-autocomplete="list" aria-expanded="false" aria-haspopup="true" role="combobox" spellcheck="false" />
                 <span class="glyphicon glyphicon-calendar form-control-feedback right" aria-hidden="true"></span>
             </div>
@@ -1281,7 +1343,7 @@ if ( strlen($cms_menu_title[7]) > 0 || strlen($cms_menu_title[8]) > 0 )
     
     <!-- START of login fancy console panel new_sicker_uniqe_doc_paper_plz_console -->
     <div style="display:none;" >
-        <div id="new_sicker_uniqe_doc_paper_plz_console" style="height:550px;width:900px!important;overflow-x: hidden!important;padding-bottom:30px;padding-top:35px;" class="row" >
+        <div id="new_sicker_uniqe_doc_paper_plz_console" style="height:550px;width:900px!important;overflow-x: hidden!important;padding-bottom:30px;padding-top:35px;" >
             <div class="col-md-12 col-sm-12 col-xs-12 text-center" >
                 <center>
     
@@ -1324,7 +1386,7 @@ echo '
 <div class="well col-md-12 col-sm-12 col-xs-12" style="min-height:52px;" >
 
     <div style="float:right;font-size:16px;margin-right:9px;" >
-        بیمار : '.$key->patient_first_name.' '.$key->patient_last_name.'
+        Name: '.$key->patient_first_name.' '.$key->patient_last_name.'
     </div>
 
     <div style="float:right;font-size:16px;margin-right:10px;" >' ;
@@ -1410,7 +1472,7 @@ echo '
 <div class="tab-content">
 
 <div style="float:right;margin-right: 20px;position: fixed;bottom: 50px;right: 0px;font-size:16pt;color: #73879C;margin-bottom:16px;" >
-In order to store information press the Save button at the end of visiting
+to store new EHR information press the Save button at the end of visiting
 <span class="glyphicon glyphicon-arrow-down" aria-hidden="true"></span>
 </div> ';
 
@@ -1708,6 +1770,7 @@ echo '
 
 }
 }
+// END of show to Admin user type.
 else
 {
 echo '<P>This page is not accessible for you</P>' ;

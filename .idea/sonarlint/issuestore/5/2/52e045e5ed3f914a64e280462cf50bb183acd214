@@ -1,0 +1,11 @@
+
+	php:S1192Ì"tDefine a constant instead of duplicating this literal "financial_transactions.financial_patient_related_id" 3 times.(•ßÅ‘şÿÿÿÿ
+Y	php:S1481/"?Remove this unused "$admin_id_from_users_table" local variable.(ÌÏÎÒûÿÿÿÿ
+j	php:S1192è"ODefine a constant instead of duplicating this literal "required|min:1" 6 times.(‹íØïıÿÿÿÿ
+}	php:S1192Ì"bDefine a constant instead of duplicating this literal "patients_general_infos.patient_id" 3 times.(•ßÅ‘şÿÿÿÿ
+{	php:S1481å"`Remove this unused "$validation_of_store_show_submit_financial_transaction_form" local variable.(ûÄ›Âùÿÿÿÿ
+‹	php:S1192Ï"pDefine a constant instead of duplicating this literal "financial_transactions.financial_transaction_id" 3 times.(Ö®®Èüÿÿÿÿ
+o	php:S1481­"YRemove this unused "$result_save_financial_settings_receiving_money_form" local variable.(üŠµö
+…	php:S1192Î"oDefine a constant instead of duplicating this literal "financial_transactions.financial_dr_related_id" 3 times.(øèÜ
+b	php:S1481…"LRemove this unused "$result_of_delete_financial_transaction" local variable.(”³…°
+r	php:S1481®"\Remove this unused "$validation_of_run_financial_transaction_reporting_form" local variable.(éÀ—à

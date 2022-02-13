@@ -2,9 +2,40 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="c0174df6-326d-4e3b-8008-b6408fdf6aa2" name="Default Changelist" comment="">
+      <change afterPath="$PROJECT_DIR$/app/Http/Controllers/PatientsPhotoController.php" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/app/Http/Requests/Storepatients_photoRequest.php" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/app/Http/Requests/Updatepatients_photoRequest.php" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/app/Models/patients_photo.php" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/app/Policies/PatientsPhotoPolicy.php" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/database/factories/PatientsPhotoFactory.php" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/database/migrations/2022_02_08_151527_create_patients_photos_table.php" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/database/seeders/PatientsPhotoSeeder.php" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/public/images/SABER FAZLIAHMADI/1/para/3234016447604251968145861.jpg" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/public/images/SABER FAZLIAHMADI/1/para/6029516447605051980958196.jpg" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/public/images/SABER FAZLIAHMADI/1/para/8213916447606341969627171.jpg" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/public/images/SABER FAZLIAHMADI/1/para/832551644760396756339010.jpg" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.env" beforeDir="false" afterPath="$PROJECT_DIR$/.env" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/sonarlint/issuestore/index.pb" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/sonarlint/issuestore/index.pb" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/app/Http/Controllers/PatientsEHRDocumentController.php" beforeDir="false" afterPath="$PROJECT_DIR$/app/Http/Controllers/PatientsEHRDocumentController.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/Http/Controllers/PatientsGeneralInfoController.php" beforeDir="false" afterPath="$PROJECT_DIR$/app/Http/Controllers/PatientsGeneralInfoController.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/bootstrap/cache/packages.php" beforeDir="false" afterPath="$PROJECT_DIR$/bootstrap/cache/packages.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/bootstrap/cache/routes-v7.php" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/bootstrap/cache/services.php" beforeDir="false" afterPath="$PROJECT_DIR$/bootstrap/cache/services.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/config/filesystems.php" beforeDir="false" afterPath="$PROJECT_DIR$/config/filesystems.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/resources/views/back/layout/header.php" beforeDir="false" afterPath="$PROJECT_DIR$/resources/views/back/layout/header.php" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/resources/views/back/show_patients_ehr_document_page.php" beforeDir="false" afterPath="$PROJECT_DIR$/resources/views/back/show_patients_ehr_document_page.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/routes/web.php" beforeDir="false" afterPath="$PROJECT_DIR$/routes/web.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/vendor/autoload.php" beforeDir="false" afterPath="$PROJECT_DIR$/vendor/autoload.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/vendor/composer/ClassLoader.php" beforeDir="false" afterPath="$PROJECT_DIR$/vendor/composer/ClassLoader.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/vendor/composer/LICENSE" beforeDir="false" afterPath="$PROJECT_DIR$/vendor/composer/LICENSE" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/vendor/composer/autoload_classmap.php" beforeDir="false" afterPath="$PROJECT_DIR$/vendor/composer/autoload_classmap.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/vendor/composer/autoload_files.php" beforeDir="false" afterPath="$PROJECT_DIR$/vendor/composer/autoload_files.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/vendor/composer/autoload_namespaces.php" beforeDir="false" afterPath="$PROJECT_DIR$/vendor/composer/autoload_namespaces.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/vendor/composer/autoload_psr4.php" beforeDir="false" afterPath="$PROJECT_DIR$/vendor/composer/autoload_psr4.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/vendor/composer/autoload_real.php" beforeDir="false" afterPath="$PROJECT_DIR$/vendor/composer/autoload_real.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/vendor/composer/autoload_static.php" beforeDir="false" afterPath="$PROJECT_DIR$/vendor/composer/autoload_static.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/vendor/composer/platform_check.php" beforeDir="false" afterPath="$PROJECT_DIR$/vendor/composer/platform_check.php" afterDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
@@ -175,7 +206,7 @@
     <property name="WebServerToolWindowFactoryState" value="false" />
     <property name="last_opened_file_path" value="$PROJECT_DIR$" />
     <property name="nodejs_package_manager_path" value="npm" />
-    <property name="settings.editor.selected.configurable" value="settings.github" />
+    <property name="settings.editor.selected.configurable" value="vcs.Git" />
   </component>
   <component name="RunDashboard">
     <option name="ruleStates">
@@ -227,7 +258,11 @@
       <workItem from="1643547330127" duration="24497000" />
       <workItem from="1643720194744" duration="590000" />
       <workItem from="1643730617574" duration="1897000" />
-      <workItem from="1643797928729" duration="29433000" />
+      <workItem from="1643797928729" duration="32452000" />
+      <workItem from="1644161104306" duration="2562000" />
+      <workItem from="1644246577489" duration="9290000" />
+      <workItem from="1644397588986" duration="18470000" />
+      <workItem from="1644681089572" duration="14056000" />
     </task>
     <servers />
   </component>

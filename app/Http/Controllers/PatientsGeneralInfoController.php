@@ -2,7 +2,6 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\patients_EHR_document;
 use App\Models\patients_general_info;
 use App\Http\Requests\Storepatients_general_infoRequest;
 use App\Http\Requests\Updatepatients_general_infoRequest;
@@ -131,17 +130,6 @@ class PatientsGeneralInfoController extends Controller
 
                 // Specify last id created here to use in route passing data
                 $choose_time_for_this_patient_id = $result_store_new_patient_form->id ;
-
-                // Store the first EHR document for this patient because it is essential for join query in PatientsEHRDocumentController@show_patients_ehr_document_page
-                // Method show_patients_ehr_document_page on page PatientsEHRDocumentController needs at least 1 result to show patient data on page show_patients_ehr_page.php
-                $result_store_new_ehr_document = new patients_EHR_document(
-                    [
-                        'EHR_document_patient_related_id'           => $result_store_new_patient_form->id ,
-                        'EHR_document_dr_related_id'                => $admin_id_from_users_table ,
-                    ]
-                );
-
-                $result_store_new_ehr_document->save();
 
                 // If this patient has a date appointment then redirect him to route('show_patient_time_appointment_table') to select the free time for this appointment
                 if( strlen($request->get('patient_last_appointment_date')) > 0 )

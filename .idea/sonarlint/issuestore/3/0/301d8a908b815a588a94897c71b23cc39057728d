@@ -1,0 +1,8 @@
+
+R	php:S1142À"<This method has 4 returns, which is more than the 3 allowed.(øâ¸Ø
+Y	php:S1481‡"CRemove this unused "$result_update_this_patient_id" local variable.(•½ë
+Y	php:S1481b"DRemove this unused "$validation_of_new_patient_form" local variable.(©Üõß
+d	php:S1192d"ODefine a constant instead of duplicating this literal "required|min:3" 4 times.(Õ±“Ç
+V	php:S1142T"<This method has 4 returns, which is more than the 3 allowed.(¾»àøÿÿÿÿ
+e	php:S1481ý"JRemove this unused "$validation_of_update_this_patient_id" local variable.(³Ò”Ïúÿÿÿÿ
+Y	php:S14810"?Remove this unused "$admin_id_from_users_table" local variable.(ÌÏÎÒûÿÿÿÿ

@@ -472,7 +472,7 @@ if ( isset($count_of_appointment_in_header) && $count_of_appointment_in_header >
                                 echo '
                                 <div style="float:left;font-size:13px;text-align:left;" class="col-md-12 col-sm-12 col-xs-12" >
                                     <span class="glyphicon glyphicon-ok" aria-hidden="true" ></span>
-                                    Already Connected to BALE Bot
+                                    Already Connected to Bot
                                 </div>' ;
                             }
                             else
@@ -481,7 +481,7 @@ if ( isset($count_of_appointment_in_header) && $count_of_appointment_in_header >
                                 <a href="'.route('edit_patient_form', $key_appointment->patient_id ).'" >
                                     <div style="float:left;font-size:13px;text-align:left;" class="col-md-12 col-sm-12 col-xs-12" >
                                         <span class="glyphicon glyphicon-remove" aria-hidden="true" ></span>
-                                        NOT Connected to BALE Bot
+                                        NOT Connected to Bot
                                     </div>
                                 </a>' ;
                             }
@@ -557,7 +557,7 @@ if ( isset($count_of_appointment_in_header) && $count_of_appointment_in_header >
                     {
                         echo '
                         <a href="" class="uiuxtrick" style="float:left;color: white; font-size: 13px; float: left;background-color:#5A738E;border:1px solid #5A738E; " class="uiuxtrick btn btn-success" >
-                            <i class="glyphicon glyphicon-envelope" aria-hidden="true" title="Send a reminder SMS with the BALE robot to this patient" ></i>
+                            <i class="glyphicon glyphicon-envelope" aria-hidden="true" title="Send a reminder SMS with the BOT to this patient" ></i>
                         </a>';
                     }
 

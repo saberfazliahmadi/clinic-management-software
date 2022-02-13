@@ -66,4 +66,5 @@ Route::group( [ 'middleware' => ['protected_page_accessible_for_admin'] ] , func
 
     // All Routes related to users table
     Route::get('show_patients_ehr_document_page/{patient_id}' , 'PatientsEHRDocumentController@show_patients_ehr_document_page')->name('show_patients_ehr_document_page') ;
+    Route::post('store_patients_ehr_document_page/{patient_id}' , 'PatientsEHRDocumentController@store_patients_ehr_document_page')->name('store_patients_ehr_document_page') ;
 }) ;
