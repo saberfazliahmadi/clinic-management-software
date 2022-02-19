@@ -106,23 +106,23 @@ class PatientsGeneralInfoController extends Controller
             {
                 $result_store_new_patient_form = new patients_general_info(
                 [
-                    'patient_dr_related_id' => $admin_id_from_users_table ,
-                    'patient_first_name' => $request->get('patient_first_name'),
-                    'patient_last_name' => $request->get('patient_last_name'),
-                    'patient_mobile_number' => $request->get('patient_mobile_number'),
-                    'patient_nationality_number' => $request->get('patient_nationality_number'),
+                    'patient_dr_related_id'       => $admin_id_from_users_table ,
+                    'patient_first_name'          => $request->get('patient_first_name'),
+                    'patient_last_name'           => $request->get('patient_last_name'),
+                    'patient_mobile_number'       => $request->get('patient_mobile_number'),
+                    'patient_nationality_number'  => $request->get('patient_nationality_number'),
                     'patient_last_appointment_date' => $request->get('patient_last_appointment_date'),
-                    'patient_birth_day' => $request->get('patient_birth_day'),
-                    'patient_address' => $request->get('patient_address'),
-                    'patient_phone_number' => $request->get('patient_phone_number'),
-                    'patient_email_address' => $request->get('patient_email_address'),
+                    'patient_birth_day'           => $request->get('patient_birth_day'),
+                    'patient_address'             => $request->get('patient_address'),
+                    'patient_phone_number'        => $request->get('patient_phone_number'),
+                    'patient_email_address'       => $request->get('patient_email_address'),
                     'patient_relationship_status' => $request->get('patient_relationship_status'),
-                    'patient_gender' => $request->get('patient_gender'),
-                    'patient_surgery_history' => $request->get('patient_surgery_history'),
-                    'patient_disease_background' => $request->get('patient_disease_background'),
-                    'patient_medication_history' => $request->get('patient_medication_history'),
-                    'patient_allergies_history' => $request->get('patient_allergies_history'),
-                    'patient_more_description' => $request->get('patient_more_description')
+                    'patient_gender'              => $request->get('patient_gender'),
+                    'patient_surgery_history'     => $request->get('patient_surgery_history'),
+                    'patient_disease_background'  => $request->get('patient_disease_background'),
+                    'patient_medication_history'  => $request->get('patient_medication_history'),
+                    'patient_allergies_history'   => $request->get('patient_allergies_history'),
+                    'patient_more_description'    => $request->get('patient_more_description')
                 ]
                 );
 

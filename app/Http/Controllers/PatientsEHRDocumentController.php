@@ -151,7 +151,7 @@ class PatientsEHRDocumentController extends Controller
             $count_result_of_patients_ehr_document = $result_of_patients_ehr_document->count() ;
 
             $result_of_show_patients_general_infos = patients_general_info::
-            ->where('patient_dr_related_id' , '=' , $admin_id_from_users_table )
+            where('patient_dr_related_id' , '=' , $admin_id_from_users_table )
             ->where('patient_id' , '=' , $request->patient_id )
             ->get() ;
             $count_number_of_patients_general_infos = $result_of_show_patients_general_infos->count() ;
@@ -169,8 +169,8 @@ class PatientsEHRDocumentController extends Controller
                     'count_result_of_patients_photo'            => $count_result_of_patients_photo ,
                     'result_of_patients_ehr_document'           => $result_of_patients_ehr_document ,
                     'count_result_of_patients_ehr_document'     => $count_result_of_patients_ehr_document ,
-                    'result_of_show_patients_general_infos'     => $result_of_show_patients_general_infos ,
-                    'count_number_of_patients_general_infos'    => $count_number_of_patients_general_infos
+                    'result_of_patients_general_infos'     => $result_of_show_patients_general_infos ,
+                    'count_result_of_patients_general_infos'    => $count_number_of_patients_general_infos
                 ]) ;
             }
             else
@@ -191,31 +191,119 @@ class PatientsEHRDocumentController extends Controller
     {
         $admin_id_from_users_table = $this->find_admin_id_from_users_table() ;
 
-        if($request->hasFile('image'))
+        try
         {
-            $validatedData = $request->validate([
-                'image' => 'image|mimes:jpg|max:2048',
-            ]);
+            $patient_more_description = '' ;
+            $patient_more_description .= $request->patient_more_description ;
 
-            $file            = $request->file('image') ;
-            $fileName        = rand(11111, 99999).time().rand().'.jpg' ;
-            $destinationPath = public_path().'/images/'.Auth::user()->name.'/'.$request->patient_id.'/para' ;
-            $file->move($destinationPath, $fileName);
-            //$path = $request->file('image')->sotre('public/images/'.Auth::user()->name.'/'.$request->patient_id.'/para' , $name );
+            if(is_array($request->common_hypersensitivity_2311))
+            {
+                foreach ($request->common_hypersensitivity_2311 as $item)
+                {
+                    $patient_more_description .= ','.$item;
+                }
+            }
 
-            $result_store_patient_photo = new patients_photo(
+            if (strlen($request->typed_keyboard_savabegh) > 0)
+            {
+                $patient_more_description .= ','.$request->typed_keyboard_savabegh;
+            }
+
+            $update_patients_ehr_document_page = patients_general_info::
+            select('*')
+            ->where('patient_dr_related_id', '=' , $admin_id_from_users_table)
+            ->where('patient_id'           , '=' , $request->patient_id)
+            ->update(
             [
-                'patients_photos_file_name' => $fileName,
-                'patients_photos_file_description' => $request->keyboard_paraclinic_file_title,
-                'patients_photos_patient_related_id' => $request->patient_id,
-                'patients_photos_dr_related_id' => $admin_id_from_users_table
+                'patient_more_description'   => $patient_more_description ,
+                'patient_surgery_history'    => $request->post('patient_surgery_history') ,
+                'patient_disease_background' => $request->post('patient_disease_background') ,
+                'patient_medication_history' => $request->post('patient_medication_history') ,
+                'patient_allergies_history'  => $request->post('patient_allergies_history')
             ]
             );
-            $result_store_patient_photo->save();
-        }
 
-        \Session::flash('success_message', 'EHR information of Patient Successfully Saved');
-        return redirect(route('home'));
-        //return redirect('upload-image')->with('status', 'Image Has been uploaded');
+            if(strlen(Auth::user()->common_drug))
+            {
+                $common_drug        = Auth::user()->common_drug ;
+                // Explode and make an array of this variable
+                $common_drug_1      = explode(",",$common_drug) ;
+                // Estimate how many drug this variable has
+                $common_drug_number = count($common_drug_1) ;
+                // Estimate how many drug this variable has to use of for loop
+                $end                = $common_drug_number ;
+                // Define a new variable
+                $common_drug_2 = '' ;
+
+                // Make a for loop to check all drugs validation
+                for( $start='0' ; $start < $end ; $start++ )
+                {
+                    // Drug should be exist on ADMIN drug list and $request->common_drug_1[$start]
+                    if( strlen($common_drug_1[$start]) > 0 && strlen($request->post($common_drug_1[$start])) > 0 )
+                    {
+                        $common_drug_2 .= $common_drug_1[$start].' = '.$request->post($common_drug_1[$start]) ;
+                        if( $start < $end - 1 )
+                        {
+                            $common_drug_2 .= ',' ;
+                        }
+                    }
+                }
+
+                // Get keyboard_medications_picker
+                if( strlen($request->keyboard_medications_picker) > 0  )
+                {
+                    $common_drug_2 .= $request->post('keyboard_medications_picker').','     ;
+                }
+            }
+            else
+            {
+                $common_drug_2 = '' ;
+            }
+
+            $result_store_new_ehr_doc = new patients_EHR_document(
+                [
+                    'EHR_document_prescribed_common_drug' => $common_drug_2 ,
+                    'EHR_document_patient_related_id'     => $request->post('patient_id') ,
+                    'EHR_document_dr_related_id'          => $admin_id_from_users_table ,
+                ]
+            ) ;
+
+            $result_store_new_ehr_doc->save() ;
+
+
+
+
+            if ($request->hasFile('image'))
+            {
+                $validatedData = $request->validate([
+                    'image' => 'image|mimes:jpg|max:2048',
+                ]);
+
+                $file = $request->file('image');
+                $fileName = rand(11111, 99999) . time() . rand() . '.jpg';
+                $destinationPath = public_path() . '/storage/images/' . Auth::user()->name . '/' . $request->patient_id . '/para';
+                $file->move($destinationPath, $fileName);
+                //$path = $request->file('image')->sotre('public/images/'.Auth::user()->name.'/'.$request->patient_id.'/para' , $name );
+
+                $result_store_patient_photo = new patients_photo(
+                    [
+                        'patients_photos_file_name' => $fileName,
+                        'patients_photos_file_description' => $request->keyboard_paraclinic_file_title,
+                        'patients_photos_patient_related_id' => $request->patient_id,
+                        'patients_photos_dr_related_id' => $admin_id_from_users_table
+                    ]
+                );
+                $result_store_patient_photo->save();
+            }
+
+            \Session::flash('success_message', 'EHR information of Patient Successfully Saved');
+            return redirect(route('home'));
+            //return redirect('upload-image')->with('status', 'Image Has been uploaded');
+        }
+        catch (\Exception $exception)
+        {
+            \Session::flash('success_message', $exception.'<span style="color:blue;">Can not Save new EHR!</span>');
+            return redirect(route('home'));
+        }
     }
 }

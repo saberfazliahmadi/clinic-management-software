@@ -46,14 +46,14 @@ include 'layout/header.php' ;
 
     .checkbox
     {
-        text-align: right;
+        /*text-align: right;*/
         font-size: 19px;
     }
 
-    .dropdown-menu
-    {
-        width:100%;
-    }
+    /*.dropdown-menu*/
+    /*{*/
+    /*    width:100%;*/
+    /*}*/
 
     .fs-container
     {
@@ -240,6 +240,10 @@ include 'layout/header.php' ;
         padding-left:30px;
     }
 
+    .nav-tabs>li.active>a:hover {
+        cursor: pointer;
+    }
+
 </style>
 <?php
 
@@ -251,7 +255,7 @@ echo '
 // START of show to Admin user type.
 if( Auth::user()->user_type == 'admin' )
 {
-foreach ( $result_of_show_patients_general_infos as $key )
+foreach ( $result_of_patients_general_infos as $key )
 {
     $cms_menu_title = explode("," , Auth::user()->cms_menu_title)  ;
 
@@ -338,27 +342,25 @@ foreach ( $result_of_show_patients_general_infos as $key )
 
                             echo '
                             <div class="col-md-12 col-sm-12 col-xs-12" style="margin-top:20px;" >
-                                <input type="text" name="keyboard_savabegh" style="width:100%;text-align:right;direction:rtl;font-size:22px;height:40px;border: 1px solid #CCC;" placeholder="Type your favorite '.$cms_menu_title[5].'" >
+                                <input type="text" name="typed_keyboard_savabegh" style="width:100%;text-align:right;direction:rtl;font-size:22px;height:40px;border: 1px solid #CCC;" placeholder="Type your favorite '.$cms_menu_title[5].'" >
                             </div>';
 
                             // If there was any more description value then show it
                             if( strlen($key->patient_more_description) > 0 )
                             {
                                 echo '
-                                <div class="form-group col-md-12 col-sm-12 col-xs-12 well" style="background-color:white;margin:0px 0px 0px 0px;padding:0px 0px 0px 0px;margin-top:25px;border: 1px solid #CCC;text-align:center;background-color:white;line-height: 40px;font-size:22px; word-break: break-all;" >
+                                <div class="form-group col-md-12 col-sm-12 col-xs-12" style="background-color:white;margin:0px 0px 0px 0px;padding:0px 0px 0px 0px;margin-top:25px;text-align:center;background-color:white;line-height: 40px;font-size:22px; word-break: break-all;" >
                                     <center>
                                         <span>
                                             More Description
                                         </span>
                                         <br>
-                                    '.$key->patient_more_description.'
+                                        <input type="text" name="patient_more_description" class="form-control" value="'.$key->patient_more_description.'" >
                                     </center>
                                 </div>';
                             }
 
                             echo '
-                            <input type="hidden" name="more_description" class="tags form-control" value="'.$key->more_description.'" >
-                        
                           </div>
                         
                           <div class="form-group col-md-3 col-sm-3 col-xs-12" style="margin-top: 15px;" >
@@ -368,7 +370,7 @@ foreach ( $result_of_show_patients_general_infos as $key )
                                 </h2>
                             
                                 <div class="col-md-12 col-sm-12 col-xs-12" >
-                                  '.$key->patient_surgery_history.'
+                                    <input type="text" name="patient_surgery_history" class="form-control" value="'.$key->patient_surgery_history.'" >
                                 </div>
                             </center>
                           </div>
@@ -380,7 +382,7 @@ foreach ( $result_of_show_patients_general_infos as $key )
                                 </h2>
                             
                                 <div class="col-md-12 col-sm-12 col-xs-12" >
-                                  '.$key->patient_disease_background.'
+                                    <input type="text" name="patient_disease_background" class="form-control" value="'.$key->patient_disease_background.'" >
                                 </div>
                             </center>
                           </div>
@@ -392,7 +394,7 @@ foreach ( $result_of_show_patients_general_infos as $key )
                                 </h2>
                             
                                 <div class="col-md-12 col-sm-12 col-xs-12" >
-                                  '.$key->patient_medication_history.'
+                                    <input type="text" name="patient_medication_history" class="form-control" value="'.$key->patient_medication_history.'" >
                                 </div>
                             </center>
                           </div>
@@ -404,7 +406,7 @@ foreach ( $result_of_show_patients_general_infos as $key )
                                 </h2>
                             
                                 <div class="col-md-12 col-sm-12 col-xs-12" >
-                                    '.$key->patient_allergies_history.'
+                                    <input type="text" name="patient_allergies_history" class="form-control" value="'.$key->patient_allergies_history.'" >
                                 </div>
                             </center>
                           </div>
@@ -455,8 +457,8 @@ foreach ( $result_of_show_patients_general_infos as $key )
                                                 <span type="button" data-toggle="collapse" data-target="#'.$start.'" class="btn-primary control-label col-md-12 col-sm-12 col-xs-12" style="font-size:27px;font-weight:normal;text-align:center;cursor:pointer;color:gray;background-color:white;border:1px solid #bfbdbd;">
                                                     '.$common_drug_1[$start].'
                                                 </span>
-                                                <div class="col-md-12 col-sm-12 col-xs-12 collapse" id="'.$start.'" style="font-family:tahoma!important;" >
-                                                  <div class="btn-group btn-group-justified" data-toggle="buttons" style="font-size: 13px!important;height:60px;" >
+                                                <div class="col-md-12 col-sm-12 col-xs-12 collapse" id="'.$start.'" style="font-family:Tahoma!important;" >
+                                                  <div class="btn-group btn-group-justified" data-toggle="buttons" style="height:60px;" >
                                     
                                                     <label class="btn btn-default" data-toggle-class="btn-primary" >
                                                       <input type="radio" name="'.$common_drug_1[$start].'" value="روزانه_یک_عدد" > Daily
@@ -590,9 +592,9 @@ foreach ( $result_of_show_patients_general_infos as $key )
                             if( strlen(Auth::user()->common_diet) > 0 )
                             {
                                 // Make a trick to prevent from POST method error (post method should'nt have Space in content)
-                                $common_rejim = str_replace( " " , "_" , Auth::user()->common_diet ) ;
+                                $common_rejim_1 = str_replace( " " , "_" , Auth::user()->common_diet ) ;
                                 // Explode and array these title
-                                $common_rejim_1 = explode(",",$common_rejim) ;
+                                $common_rejim_1 = explode("," , $common_rejim_1) ;
                                 // Estimate how many title this text have
                                 $common_rejim_number = count($common_rejim_1) ;
 
@@ -795,7 +797,7 @@ foreach ( $result_of_show_patients_general_infos as $key )
                                 <div class="col-md-12 col-sm-12 col-xs-12" >' ;
 
                                     // START of if there was paraclinic data for this sicker.
-                                    if( $num_result_of_patients_photo > 0)
+                                    if( $count_result_of_patients_photo > 0)
                                     {
                                         // Make a count variable trick
                                         $count_trick_paraclinic_photo = 0 ;
@@ -817,7 +819,7 @@ foreach ( $result_of_show_patients_general_infos as $key )
                                             }
 
                                             echo '
-                                            <a class="fancybox-buttons" href="'.url('images/'.Auth::user()->name.'/'.$key_patient_photo->patients_photos_patient_related_id.'/para/'.$key_patient_photo->patients_photos_file_name).'" data-fancybox-group="button" style="text-align:center;" >
+                                            <a class="fancybox-buttons" href="'.url('storage/images/'.Auth::user()->name.'/'.$key_patient_photo->patients_photos_patient_related_id.'/para/'.$key_patient_photo->patients_photos_file_name).'" data-fancybox-group="button" style="text-align:center;" >
                                                 <div class="col-md-3 col-sm-3 col-xs-3 well" >
                                                     <div class="block_content">
                                                       <h2 class="title" align="center" style="text-align:center;" >
@@ -828,7 +830,7 @@ foreach ( $result_of_show_patients_general_infos as $key )
                                                             <i class="fa fa-picture-o col-md-12 col-sm-12 col-xs-12" style="padding:19px;" ></i>
                                                             <div style="float:right;margin-top:10px;font-size:18px;" class="col-md-12 col-sm-12 col-xs-12" >
                                                                 Show Photo
-                                                            </div>l
+                                                            </div>
                                                          </b>
                                                       </h2>
                                                     </div>
@@ -869,7 +871,7 @@ foreach ( $result_of_show_patients_general_infos as $key )
                         
                         <!-- START of login fancy console panel sharhe_hal_haye_pishin_category -->
                         <div style="display:none;" >
-                            <div id="previous_patient_history_category" style="height:550px;width:900px!important;overflow-x: hidden!important;padding-bottom:30px;padding-top:35px;" >
+                            <div id="previous_patient_history_category" style="height:450px!important;width:900px!important;overflow-x: hidden!important;padding-bottom:30px;padding-top:35px;" >
                                 <div class="col-md-12 col-sm-12 col-xs-12 text-center" >
                                     <center>
                         
@@ -882,70 +884,76 @@ foreach ( $result_of_show_patients_general_infos as $key )
                         
                                         <!-- START of login fancy console panel sharhe_hal_haye_pishin_normal -->
                                         <div style="display:none;" >
-                                            <div id="sharhe_hal_haye_pishin_normal" style="height:80px!important;width:920px!important;overflow-x: hidden!important;" >' ;
+                                            <div id="sharhe_hal_haye_pishin_normal" style="height:550px!important;width:920px!important;overflow-x: hidden!important;" >' ;
 
-                                                //// Create mysql query for extract all of titles record in mysql data base we want to avoid these title.
+                                                // // Create mysql query for extract all of titles record in mysql data base we want to avoid these title.
                                                 // $res_sik_doc_time_line = mysql_query( " SELECT sic_rel_id , doc_rel_id , doc_id , doc_turn_id , child_dr_name_rel_doc , doc_date_created FROM $DB_NAME_LOGIN.sik_doc
-                                                //                                                                                                WHERE sic_rel_id     = '".filter($sicker_id)."'
-                                                //                                                                                                AND   doc_rel_id     = '".filter($_SESSION['user_id'])."'
-                                                //                                                                                                ORDER BY doc_id DESC
-                                                //                                                                                              " , $database_connection) or die( " Error : Connection section res_sik_doc_time_line . " .mysql_error() ) ;
 
-                                                $res_sik_doc_time_line = $count_number_of_ehr_document ;
-                                                // START  of if there was more than 1 document for this sicker then show it on document time line
-                                                if( $res_sik_doc_time_line > 0 )
+                                                // START of if there was more than 1 document for this patient then show it on document time line
+                                                if( $count_result_of_patients_ehr_document > 0 )
                                                 {
-                                                    echo '
-                                                    <div class="col-md-12 col-sm-12 col-xs-12" >'.$res_sik_doc_time_line ;
+                                                    // START of foreach EHR
+                                                    foreach ( $result_of_patients_ehr_document as $key_ehr )
+                                                    {
+                                                        // Make a trick to prevent from POST method error (post method should'nt have Space in him content)
+                                                        $EHR_document_prescribed_common_diet      = str_replace("_", " ", $key_ehr->EHR_document_prescribed_common_diet );
+                                                        $EHR_document_prescribed_common_drug      = str_replace("_", " ", $key_ehr->EHR_document_prescribed_common_drug );
+                                                        $EHR_document_prescribed_next_appointment = str_replace("_", " ", $key_ehr->EHR_document_prescribed_next_appointment );
 
-                                                    // Make a trick to prevent from POST method error (post method should'nt have Space in him content)
-                                                    $common_rejim = str_replace( "_" , " " , $common_rejim ) ;
-                                                    //$common_rejim = str_replace( "," , "\n" , $common_rejim ) ;
+                                                        echo '
+                                                        <!-- Button trigger modal -->
+                                                        <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#ehr_detail_'.$key_ehr->EHR_document_id.'" style="margin:5px 5px 5px 5px;" >
+                                                          '.$key_ehr->EHR_document_id.' => '.substr($key_ehr->created_at , '0' , '10').'
+                                                        </button>
+                                                        
+                                                        
+                                                        <!-- START Modal -->
+                                                        <div class="modal fade" id="ehr_detail_'.$key_ehr->EHR_document_id.'" tabindex="-1'.$key_ehr->EHR_document_id.'" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                                                          <div class="modal-dialog" role="document">
+                                                            <div class="modal-content">
+                                                              <div class="modal-header">
+                                                                <center>
+                                                                <h5 class="modal-title" id="exampleModalLabel" style="float:none;">
+                                                                    '.$key_ehr->EHR_document_id.' => '.substr($key_ehr->created_at , '0' , '10').'
+                                                                </h5>
+                                                                </center>
+                                                                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                                                  <span aria-hidden="true">&times;</span>
+                                                                </button>
+                                                              </div>
+                                                              <div class="modal-body">';
 
-                                                    $common_drug = str_replace( "_" , " " , $common_drug ) ;
-                                                    //$common_drug = str_replace( "," , "\n" , $common_drug ) ;
-
-                                                    $common_return_date = str_replace( "_" , " " , $common_return_date ) ;
-                                                    //$common_return_date = str_replace( "," , "\n" , $common_return_date ) ;
-
-                                                    echo '
-                                                    <!-- START Modal -->
-                                                    <div id="amghezi" class="modal fade modal-fullscreen" role="dialog" >
-                                                        <div class="modal-dialog">
-                                                            <!-- Modal content-->
-                                                            <div class="modal-content" style="margin-top: 100px!important;" >' ;
-
-                                                                if( strlen($cms_menu_title[4]) > 0 )
+                                                                if (strlen($cms_menu_title[4]) > 0)
                                                                 {
                                                                     echo '
-                                                                    <div class="well col-md-3 col-sm-3 col-xs-3" style="background-color: inherit;border-bottom:0px;border-left:0px;font-size:17px;margin-bottom:0px;padding-bottom:0px;" >
-                                                                        : '.$cms_menu_title[4].' added
-                                                                        <p class="common-drug"></p>
+                                                                    <div class="well" style="background-color: inherit;border-bottom:0px;border-left:0px;font-size:17px;margin-bottom:0px;padding-bottom:0px;" >
+                                                                        ' . $cms_menu_title[4] . '
+                                                                        <p class="common-drug">'.$EHR_document_prescribed_common_drug.'</p>
                                                                     </div>';
                                                                 }
 
-                                                                if( strlen($cms_menu_title[3]) > 0 )
+                                                                if (strlen($cms_menu_title[3]) > 0)
                                                                 {
                                                                     echo '
-                                                                    <div class="well col-md-3 col-sm-3 col-xs-3" style="background-color: inherit;border-bottom:0px;border-left:0px;font-size:17px;margin-bottom:0px;padding-bottom:0px;" >
-                                                                        : '.$cms_menu_title[3].' added
-                                                                        <p class="common-rejim"></p>
+                                                                    <div class="well" style="background-color: inherit;border-bottom:0px;border-left:0px;font-size:17px;margin-bottom:0px;padding-bottom:0px;" >
+                                                                         ' . $cms_menu_title[3] . '
+                                                                        <p class="common-rejim">'.$EHR_document_prescribed_common_diet.'</p>
                                                                     </div>';
                                                                 }
 
-                                                                if( strlen($cms_menu_title[2]) > 0 )
+                                                                if (strlen($cms_menu_title[2]) > 0)
                                                                 {
                                                                     echo '
-                                                                    <div class="well col-md-3 col-sm-3 col-xs-3" style="background-color: inherit;border-bottom:0px;border-left:0px;font-size:17px;margin-bottom:0px;padding-bottom:0px;" >
-                                                                        : '.$cms_menu_title[2].'
-                                                                        <p class="common-return-date"></p>
-                                                                    </div>' ;
+                                                                    <div class="well" style="background-color: inherit;border-bottom:0px;border-left:0px;font-size:17px;margin-bottom:0px;padding-bottom:0px;" >
+                                                                        '.$cms_menu_title[2] .'
+                                                                        <p class="common-return-date">'.$EHR_document_prescribed_next_appointment.'</p>
+                                                                    </div>';
                                                                 }
 
                                                                 echo '
-                                                                <div class="well col-md-3 col-sm-3 col-xs-3" style="background-color: inherit;border-bottom:0px;border-left:0px;font-size:17px;margin-bottom:0px;padding-bottom:0px;" >
-                                                                    : Doctor
-                                                                    <p class="child-dr-name-rel-doc"></p>
+                                                                <div class="well" style="background-color: inherit;border-bottom:0px;border-left:0px;font-size:17px;margin-bottom:0px;padding-bottom:0px;" >
+                                                                    Doctor:
+                                                                    <p class="child-dr-name-rel-doc">'.$key_ehr->EHR_document_related_clinic_doctor_name.'</p>
                                                                 </div>
                                                                 
                                                                 <div class="modal-body" align="center" style="margin-top:0px;padding-top:0px;">
@@ -955,76 +963,28 @@ foreach ( $result_of_show_patients_general_infos as $key )
                                                                 <hr style="width:1px;" >
                                                                 <hr style="width:1px;" >
                                                                 <hr style="width:1px;" >
-                                                                <hr style="width:1px;" >
+                                                                <hr style="width:1px;" >  
                                                                 
-                                                                <div class="modal-footer">
-                                                                    <button type="button" class="btn btn-success btn-group col-md-12 col-sm-12 col-xs-12" data-dismiss="modal" style="font-size: 25px;position: fixed;bottom: 0px;right: 0px;z-index: 1;">
-                                                                        Close
-                                                                    </button>
-                                                                </div>
-                                                    
+                                                              </div>
+                                                              <div class="modal-footer">
+                                                                <button type="button" class="btn btn-primary btn-lg btn-block" data-dismiss="modal">Close</button>
+                                                              </div>
                                                             </div>
+                                                          </div>
                                                         </div>
-                                                    </div>
-                                                    <!-- END Modal -->' ;
-
-                                                //    // START of while.
-                                                //    while( $row_sik_doc_time_line = mysql_fetch_array($res_sik_doc_time_line) )
-                                                //    {
-                                                //        extract( $row_sik_doc_time_line ) ;
-                                                //
-                                                //        // Create mysql query for extract all of titles record in mysql data base we want to avoid these title.
-                                                //        $res_turns_flow = mysql_query( " SELECT * FROM $DB_NAME_LOGIN.turns_flow
-                                                //                                             WHERE turn_id        = '".filter($doc_turn_id)."'
-                                                //                                             AND   dr_related_id  = '".filter($_SESSION['user_id'])."'
-                                                //                                             LIMIT 1
-                                                //                                           " , $database_connection) or die( " Error : Connection section res_turns_flow Failed . " .mysql_error() ) ;
-
-                                                //        if( mysql_num_rows($res_turns_flow) > 0 )
-                                                //        {
-                                                //            // START of while.
-                                                //            while( $row_turns_flow = mysql_fetch_array($res_turns_flow) )
-                                                //            {
-                                                //                extract( $row_turns_flow ) ;
-
-                                                //                echo '
-                                                //                <div style="float:left;" >
-                                                //                    <button type="button" class="btn btn-default showAmghezi" data-toggle="modal" data-target="#amghezi" url="'.$INDEX_LINK.'show_svg.php?doc_id='.$doc_id.'&sicker_id='.$sicker_id.$st_2_trick.'" target="_blank style="float:left;font-size:16px!important;width:auto;height:35px;" >
-                                                //                        Date of appointment : '.$turn_date.'
-                                                //                        <i class="fa fa-clone" style="font-size:18px!important;" ></i>
-                                                //                    </button>
-                                                //                    <span class="glyphicon glyphicon-triangle-right" aria-hidden="true" style="top:10px;font-size: 21pt;opacity: 0.5;"></span>
-                                                //                </div>' ;
-                                                //            }
-                                                //        }
-                                                //        else
-                                                //        {
-                                                //            echo '
-                                                //             <div style="float:left;" >
-                                                //                    <button type="button" class="btn btn-default showAmghezi" data-toggle="modal" data-target="#amghezi" url="'.$INDEX_LINK.'show_svg.php?doc_id='.$doc_id.'&sicker_id='.$sicker_id.$st_2_trick.'" target="_blank style="float:left;font-size:16px!important;width:auto;height:35px;" >
-                                                //                        Without date of appointment : '.$doc_date_created.'
-                                                //                        <i class="fa fa-clone" style="font-size:18px!important;" ></i>
-                                                //                    </button>
-                                                //                    <span class="glyphicon glyphicon-triangle-right" aria-hidden="true" style="top:10px;font-size: 21pt;opacity: 0.5;"></span>
-                                                //              </div>' ;
-                                                //        }
-
-                                                //    }
-                                                //    // END of while.
-
-                                                    echo '
-                                                    </div>' ;
-
-                                                }
-                                                // END  of if there was more than 1 document for this sicker then show it on document time line.
+                                                        <!-- END Modal --> ';
+                                                    } // END of foreach EHR
+                                                } // END  of if there was more than 1 document for this sicker then show it on document time line.
                                                 else
                                                 {
                                                     echo '
                                                     <center>
                                                         <div class="col-md-12 col-sm-12 col-xs-12" >
                                                             <h3 style="padding-top:10px;font-size:25px;opacity:0.7;text-align:center;" >
-                                                                 <i class="glyphicon glyphicon-file" style="font-size:46px;padding: 19px;float:right;" ></i>
-                                                                 No appointment has been booked for this patient so far and there are no referral details
+                                                                <br>
+                                                                No EHR document has been saved for this patient
+                                                                <br>
+                                                                 <i class="glyphicon glyphicon-file" style="font-size:46px;padding: 19px;float:none;" ></i>
                                                             </h3>
                                                         </div>
                                                     </center>';
@@ -1033,374 +993,210 @@ foreach ( $result_of_show_patients_general_infos as $key )
                                             echo '
                                             </div>
                                         </div>
-                                        <!-- END of login fancy console panel sharhe_hal_haye_pishin_normal -->' ;
-
-                        if ( strlen($cms_menu_title[7]) > 0 )
-                        {
-                            echo '
-                            <br>
-                            <hr style="width:1px;" >
-                        
-                            <a id="various222" href="#sharhe_hal_haye_pishin_normal_1" type="button" aria-controls="profile" role="tab" data-toggle="tab" class="btn btn-success btn-group col-md-10 col-sm-10 col-xs-10" style="float:none;font-size:25px;" >
-                                '.$cms_menu_title[0].' '.$cms_menu_title[7].'
-                            </a>
-                        
-                            <!-- START of login fancy console panel sharhe_hal_haye_pishin_normal_1 -->
-                            <div style="display:none;" >
-                                <div id="sharhe_hal_haye_pishin_normal_1" style="height:80px!important;width:900px!important;overflow-x: hidden!important;" >' ;
-
-                            // Create mysql query for extract all of titles record in mysql data base we want to avoid these title.
-                        //    $res_sharhe_hal_haye_pishin_normal_1 = mysql_query( " SELECT sicker_uniqe_doc_paper_id , sicker_uniqe_doc_paper_sicker_id , sicker_uniqe_doc_paper_dr_rel_id , sicker_uniqe_doc_paper_date_created FROM $DB_NAME_LOGIN.sicker_uniqe_doc_extra_paper
-                        //                                         WHERE sicker_uniqe_doc_paper_sicker_id     = '".filter($sicker_id)."'
-                        //                                          AND   sicker_uniqe_doc_paper_dr_rel_id     = '".filter($_SESSION['user_id'])."'
-                        //                                          ORDER BY sicker_uniqe_doc_paper_id DESC
-                        //                                        " , $database_connection) or die( " Error : Connection section res_sharhe_hal_haye_pishin_normal_1 . " .mysql_error() ) ;
-
-                        //    // Let to make a variable to cound sicker_uniqe_doc_paper.
-                        //    $mysql_num_rows_res_sharhe_hal_haye_pishin_normal_1 = mysql_num_rows($res_sharhe_hal_haye_pishin_normal_1) ;
-
-                        //    // START  of if there was more than 1 documnet for this sicker then show it on documnet time line.
-                        //    if( $mysql_num_rows_res_sharhe_hal_haye_pishin_normal_1 > 0 )
-                        //    {
-                        //        echo '
-                        //        <div class="col-md-12 col-sm-12 col-xs-12" >' ;
-                        //
-                        //        // Let to Sum this value with 1 to start count from 1 instead of zero
-                        //        $mysql_num_rows_res_sharhe_hal_haye_pishin_normal_1 += 1 ;
-                        //
-                        //        // START of while.
-                        //        while( $row_sharhe_hal_haye_pishin_normal_1 = mysql_fetch_array($res_sharhe_hal_haye_pishin_normal_1) )
-                        //        {
-                        //            extract( $row_sharhe_hal_haye_pishin_normal_1 ) ;
-                        //
-                        //            // Decrise ONE value from prevues value to count it.
-                        //            $mysql_num_rows_res_sharhe_hal_haye_pishin_normal_1 -= 1 ;
-                        //
-                        //            echo '
-                        //                <div style="float:left;" >
-                        //                    <button type="button" class="btn btn-default showAmghezi_1" data-toggle="modal" data-target="#amghezi_1" url="'.$INDEX_LINK.'show_svg_1.php?sicker_uniqe_doc_paper_id='.$sicker_uniqe_doc_paper_id.'&sicker_uniqe_doc_paper_sicker_id='.$sicker_uniqe_doc_paper_sicker_id.$st_2_trick.'" target="_blank style="float:left;font-size:18px!important;width:180px;height:35px;" >
-                        //                    '.$mysql_num_rows_res_sharhe_hal_haye_pishin_normal_1.'=  '.$sicker_uniqe_doc_paper_date_created.'
-                        //                        <i class="fa fa-clone" style="font-size:18px!important;" ></i>
-                        //                    </button>
-                        //                    <span class="glyphicon glyphicon-triangle-right" aria-hidden="true" style="top:10px;font-size: 21pt;opacity: 0.5;"></span>
-                        //                </div>' ;
-                        //        }
-                        //        // END of while.
-                        //
-                        //        echo '
-                        //        </div>' ;
-                        //    }
-                        //    // END  of if there was more than 1 documnet for this sicker then show it on documnet time line.
-                        //    else
-                        //    {
-                                echo '
-                                <center>
-                                    <div class="col-md-12 col-sm-12 col-xs-12" >
-                                        <h3 style="font-size:21px;opacity:0.7;text-align:center;" >
-                                             <i class="glyphicon glyphicon-file" style="font-size:46px;padding: 19px;float:right;" ></i>
-                                             '.$cms_menu_title[0].' for this patient
-                                             <br>
-                                             '.$cms_menu_title[7].'
-                                             <br>
-                                             Dose not exist 
-                                        </h3>
-                                    </div>
-                                </center>';
-                        //    }
-
-                            echo '
-                                </div>
-                            </div>
-                            <!-- END of login fancy console panel sharhe_hal_haye_pishin_normal_1 -->' ;
-                        }
-
-                        if ( strlen($cms_menu_title[8]) > 0 )
-                        {
-                            echo '
-                            <br>
-                            <hr style="width:1px;" >
-                        
-                            <a id="various222" href="#sharhe_hal_haye_pishin_normal_2" type="button" aria-controls="profile" role="tab" data-toggle="tab" class="btn btn-success btn-group col-md-10 col-sm-10 col-xs-10" style="float:none;font-size:25px;" >
-                                 '.$cms_menu_title[0].' '.$cms_menu_title[8].'
-                            </a> ' ;
-
-                        //    echo '
-                        //    <!-- START of login fancy console panel sharhe_hal_haye_pishin_normal_2 -->
-                        //    <div style="display:none;" >
-                        //    <div id="sharhe_hal_haye_pishin_normal_2" style="height:80px!important;width:900px!important;overflow-x: hidden!important;" >' ;
-                        //    $res_sharhe_hal_haye_pishin_normal_2 = mysql_query( " SELECT sicker_uniqe_doc_paper_id_3 , sicker_uniqe_doc_paper_sicker_id_3 , sicker_uniqe_doc_paper_dr_rel_id_3 , sicker_uniqe_doc_paper_date_created_3 FROM $DB_NAME_LOGIN.sicker_uniqe_doc_extra_paper_3
-                        //    WHERE sicker_uniqe_doc_paper_sicker_id_3     = '".filter($sicker_id)."'
-                        //    AND   sicker_uniqe_doc_paper_dr_rel_id_3     = '".filter($_SESSION['user_id'])."'
-                        //    ORDER BY sicker_uniqe_doc_paper_id_3 DESC
-                        //    " , $database_connection) or die( " Error : Connection section sicker_uniqe_doc_extra_paper_3 . " .mysql_error() ) ;
-                        //
-                        //    // Let to make a variable to cound sicker_uniqe_doc_paper.
-                        //    $mysql_num_rows_res_sharhe_hal_haye_pishin_normal_2 = mysql_num_rows($res_sharhe_hal_haye_pishin_normal_2) ;
-                        //
-                        //    // START  of if there was more than 1 documnet for this sicker then show it on documnet time line.
-                        //    if( $mysql_num_rows_res_sharhe_hal_haye_pishin_normal_2 > 0 )
-                        //    {
-                        //    echo '
-                        //    <div class="col-md-12 col-sm-12 col-xs-12" >' ;
-                        //
-                        //    // Let to Sum this value with 1 to start count from 1 instead of zero
-                        //    $mysql_num_rows_res_sharhe_hal_haye_pishin_normal_2 += 1 ;
-                        //
-                        //    // START of while.
-                        //    while( $row_sharhe_hal_haye_pishin_normal_3 = mysql_fetch_array($res_sharhe_hal_haye_pishin_normal_2) )
-                        //    {
-                        //
-                        //    extract( $row_sharhe_hal_haye_pishin_normal_3 ) ;
-                        //
-                        //    // Decrise ONE value from prevues value to count it.
-                        //    $mysql_num_rows_res_sharhe_hal_haye_pishin_normal_2 -= 1 ;
-                        //
-                        //
-                        //    echo '
-                        //        <div style="float:left;" >
-                        //            <button type="button" class="btn btn-default showAmghezi_2" data-toggle="modal" data-target="#amghezi_2" url="'.$INDEX_LINK.'show_svg_2.php?sicker_uniqe_doc_paper_id_3='.$sicker_uniqe_doc_paper_id_3.'&sicker_uniqe_doc_paper_sicker_id_3='.$sicker_uniqe_doc_paper_sicker_id_3.$st_2_trick.'" target="_blank style="float:left;font-size:18px!important;width:180px;height:35px;" >					'.$mysql_num_rows_res_sharhe_hal_haye_pishin_normal_2.'=  '.$sicker_uniqe_doc_paper_date_created_3.'
-                        //                <i class="fa fa-clone" style="font-size:18px!important;" ></i>
-                        //            </button>
-                        //            <span class="glyphicon glyphicon-triangle-right" aria-hidden="true" style="top:10px;font-size: 21pt;opacity: 0.5;"></span>
-                        //        </div>' ;
-                        //    }
-                        //    // END of while.
-                        //
-                        //    echo '
-                        //
-                        //    </div>' ;
-                        //    }
-                        //    // END  of if there was more than 1 documnet for this sicker then show it on documnet time line.
-                        //    else
-                        //    {
-                        //    echo '
-                        //    <center>
-                        //    <div class="col-md-12 col-sm-12 col-xs-12" >
-                        //        <h3 style="font-size:21px;opacity:0.7;text-align:center;" >
-                        //             <i class="glyphicon glyphicon-file" style="font-size:46px;padding: 19px;float:right;" ></i>
-                        //              برای این بیمار '.$cms_menu_title[0].'
-                        //              <br>
-                        //              '.$cms_menu_title[8].'
-                        //              <br>
-                        //              وجود ندارد
-                        //        </h3>
-                        //    </div>
-                        //    </center>';
-                        //    }
-                        //
-                        //    echo '
-                        //    </div>
-                        //    </div>
-                        //    <!-- END of login fancy console panel sharhe_hal_haye_pishin_normal_2 -->' ;
-                        }
-
-                                    echo '
+                                        <!-- END of login fancy console panel sharhe_hal_haye_pishin_normal -->
                                     </center>
                                 </div>
                             </div>
+                        </div>' ;
+                        // <!-- END of login fancy console panel sharhe_hal_haye_pishin_category -->';
+                    } // END of if $cms_menu_title[0] exist
+
+                    if( strlen($cms_menu_title[9]) > 0 )
+                    {
+                        echo '
+                        <li role="presentation" >
+                            <a id="various222" href="#chart" type="button" aria-controls="profile" type="button" role="tab" data-toggle="tab" >
+                                '.$cms_menu_title[9].'
+                            </a>
+                        </li>
+
+                        <!-- START of login fancy console panel chart -->
+                        <div style="display:none;" >
+                            <div id="chart" style="height:550px;width:900px!important;overflow-x: hidden!important;padding-bottom:30px;padding-top:35px;" >
+                        
+                                <div class="col-md-12 col-sm-12 col-xs-12 text-center" style="margin-bottom:9px;" >
+                        
+                                    <div class="col-md-3 col-sm-3 col-xs-12" style="margin-top:20px;" >
+                                        <div class="btn btn-group col-md-12 col-sm-12 col-xs-12" style="font-size: 18px!important;color:gray;" >
+                                            '.$cms_menu_title[10].'
+                                        </div>
+                                        <input type="text" name="keyboard_chart_1" style="width:100%;text-align:right;direction:rtl;font-size:14px;height:40px;" placeholder="Type your favorite value" >
+                                    </div>
+                        
+                                    <div class="col-md-3 col-sm-3 col-xs-12" style="margin-top:20px;" >
+                                        <div class="btn btn-group col-md-12 col-sm-12 col-xs-12" style="font-size: 18px!important;color:gray;" >
+                                            '.$cms_menu_title[11].'
+                                        </div>
+                                        <input type="text" name="keyboard_chart_2" style="width:100%;text-align:right;direction:rtl;font-size:14px;height:40px;" placeholder="Type your favorite value" >
+                                    </div>
+                        
+                                    <div class="col-md-3 col-sm-3 col-xs-12" style="margin-top:20px;" >
+                                        <div class="btn btn-group col-md-12 col-sm-12 col-xs-12" style="font-size: 18px!important;color:gray;" >
+                                            '.$cms_menu_title[12].'
+                                        </div>
+                                        <input type="text" name="keyboard_chart_3" style="width:100%;text-align:right;direction:rtl;font-size:14px;height:40px;" placeholder="Type your favorite value" >
+                                    </div>
+                        
+                                    <div class="col-md-3 col-sm-3 col-xs-12" style="margin-top:20px;" >
+                                        <div class="btn btn-group col-md-12 col-sm-12 col-xs-12" style="font-size: 18px!important;color:gray;" >
+                                            '.$cms_menu_title[13].'
+                                        </div>
+                                        <input type="text" name="keyboard_chart_4" style="width:100%;text-align:right;direction:rtl;font-size:14px;height:40px;" placeholder="Type your favorite value" >
+                                    </div>
+                        
+                                </div>
+                        
+                                <br>
+                                <hr style="width:1px;" >
+                        
+                                <div class="form-group">
+                                    <label class="control-label col-md-4 col-sm-4 col-xs-12" style="color:gray;text-align: right;" >Date of appointment</label>
+                        
+                                    <div class="col-md-6 col-sm-6 col-xs-12" style="" >
+                                        <input type="text" name="doc_date_created" class="form-control col-md-7 col-xs-12 has-feedback-right" id="" data-MdDateTimePicker="true" value="" autocomplete="off" aria-autocomplete="list" aria-expanded="false" aria-haspopup="true" role="combobox" spellcheck="false" />
+                                        <span class="glyphicon glyphicon-calendar form-control-feedback right" aria-hidden="true"></span>
+                                    </div>
+                                  </div>
+                        
+                                <div class="col-md-12 col-sm-12 col-xs-12" >
+                        
+                                    <hr style="width:1px;" >
+                                    <hr style="width:1px;" >' ;
+
+                                    //// Create mysql query for extract chart data.
+                                    //$res_sik_doc_chart = mysql_query( " SELECT sic_rel_id , doc_rel_id , doc_id , doc_date_created , chart_1 , chart_2 ,chart_3 , chart_4 FROM $DB_NAME_LOGIN.sik_doc
+                                    //                                        WHERE sic_rel_id     = '".filter($sicker_id)."'
+                                    //                                        AND   doc_rel_id     = '".filter($_SESSION['user_id'])."'
+                                    //                                        ORDER BY doc_id ASC
+                                    //                                      " , $database_connection) or die( " Error : Connection section res_sik_doc_time_line . " .mysql_error() ) ;
+                                    //
+                                    //if( mysql_num_rows($res_sik_doc_chart) > 0 )
+                                    //{
+                                    //    echo '
+                                    //    <div class="col-md-12 col-sm-12 col-xs-12" >
+                                    //        <center>
+                                    //            <font size="+2" class="text-center" style="float:none;" >
+                                    //                <span> مقایسه همزمان شاخص های حیاتی بیمار بر روی نمودار در گذر زمان </span>
+                                    //            </font>
+                                    //        </center>
+                                    //        <hr style="width:1px;" >
+                                    //        <hr style="width:1px;" >
+                                    //        <div id="container" style="min-width: 310px; height: 400px; margin: 0 auto"></div>
+                                    //    </div>' ;
+                                    //
+                                    //    $data_chart_date_1  = '' ;
+                                    //    $data_chart_value_1 = '' ;
+
+                                    //    // START of while.
+                                    //    while( $row_sik_doc_chart = mysql_fetch_array($res_sik_doc_chart) )
+                                    //    {
+                                    //        extract( $row_sik_doc_chart ) ;
+                                    //
+                                    //        // make label chart string variable to use on charts.
+                                    //        $data_chart_date_1    .= "'".$doc_date_created."'," ;
+                                    //        // make data chart string variable to use on charts.
+                                    //        $data_chart_value_1   .= $chart_1.',' 			   ;
+                                    //        $data_chart_value_2   .= $chart_2.',' 			   ;
+                                    //        $data_chart_value_3   .= $chart_3.',' 			   ;
+                                    //        $data_chart_value_4   .= $chart_4.',' 			   ;
+                                    //    }
+                                    //    // END of while.
+                        //
+                        //                echo '
+                        //                <p align="center" style="text-align:center" >
+                        //                    با کلیک بر روی اسم هر نمودار در بالا می توانید نمودار مربوطه را فعال یا غیر فعال نمایید
+                        //                </p>' ;
+                        //            }
+                        //            else
+                        //            {
+                        //                echo '
+                        //                <center>
+                        //                    <div class="col-md-12 col-sm-12 col-xs-12" >
+                        //                        <h3 style="padding-top:10px;font-size:25px;opacity:0.7;text-align:center;" >
+                        //                             <i class="glyphicon glyphicon-file" style="font-size:46px;padding: 19px;float:right;" ></i>
+                        //                             تا به حال برای این بیمار اطلاعاتی ثبت نشده
+                        //                        </h3>
+                        //                    </div>
+                        //                </center>';
+                        //            }
+
+                                echo '
+                                </div>
+                        
+                            </div>
                         </div>
-                        <!-- END of login fancy console panel sharhe_hal_haye_pishin_category -->';
-                    }
-                    // END of if $cms_menu_title[0] exist
-
-if( strlen($cms_menu_title[9]) > 0 )
-{
-echo '
-<li role="presentation" >
-    <a id="various222" href="#chart" type="button" aria-controls="profile" type="button" role="tab" data-toggle="tab" >
-        '.$cms_menu_title[9].'
-    </a>
-</li>
-
-<!-- START of login fancy console panel chart -->
-<div style="display:none;" >
-    <div id="chart" style="height:550px;width:900px!important;overflow-x: hidden!important;padding-bottom:30px;padding-top:35px;" >
-
-        <div class="col-md-12 col-sm-12 col-xs-12 text-center" style="margin-bottom:9px;" >
-
-            <div class="col-md-3 col-sm-3 col-xs-12" style="margin-top:20px;" >
-                <div class="btn btn-group col-md-12 col-sm-12 col-xs-12" style="font-size: 18px!important;color:gray;" >
-                    '.$cms_menu_title[10].'
-                </div>
-                <input type="text" name="keyboard_chart_1" style="width:100%;text-align:right;direction:rtl;font-size:14px;height:40px;" placeholder="Type your favorite value" >
-            </div>
-
-            <div class="col-md-3 col-sm-3 col-xs-12" style="margin-top:20px;" >
-                <div class="btn btn-group col-md-12 col-sm-12 col-xs-12" style="font-size: 18px!important;color:gray;" >
-                    '.$cms_menu_title[11].'
-                </div>
-                <input type="text" name="keyboard_chart_2" style="width:100%;text-align:right;direction:rtl;font-size:14px;height:40px;" placeholder="Type your favorite value" >
-            </div>
-
-            <div class="col-md-3 col-sm-3 col-xs-12" style="margin-top:20px;" >
-                <div class="btn btn-group col-md-12 col-sm-12 col-xs-12" style="font-size: 18px!important;color:gray;" >
-                    '.$cms_menu_title[12].'
-                </div>
-                <input type="text" name="keyboard_chart_3" style="width:100%;text-align:right;direction:rtl;font-size:14px;height:40px;" placeholder="Type your favorite value" >
-            </div>
-
-            <div class="col-md-3 col-sm-3 col-xs-12" style="margin-top:20px;" >
-                <div class="btn btn-group col-md-12 col-sm-12 col-xs-12" style="font-size: 18px!important;color:gray;" >
-                    '.$cms_menu_title[13].'
-                </div>
-                <input type="text" name="keyboard_chart_4" style="width:100%;text-align:right;direction:rtl;font-size:14px;height:40px;" placeholder="Type your favorite value" >
-            </div>
-
-        </div>
-
-        <br>
-        <hr style="width:1px;" >
-
-        <div class="form-group">
-            <label class="control-label col-md-4 col-sm-4 col-xs-12" style="color:gray;text-align: right;" >Date of appointment</label>
-
-            <div class="col-md-6 col-sm-6 col-xs-12" style="" >
-                <input type="text" name="doc_date_created" class="form-control col-md-7 col-xs-12 has-feedback-right" id="" data-MdDateTimePicker="true" value="" autocomplete="off" aria-autocomplete="list" aria-expanded="false" aria-haspopup="true" role="combobox" spellcheck="false" />
-                <span class="glyphicon glyphicon-calendar form-control-feedback right" aria-hidden="true"></span>
-            </div>
-          </div>
-
-        <div class="col-md-12 col-sm-12 col-xs-12" >
-
-            <hr style="width:1px;" >
-            <hr style="width:1px;" >' ;
-
-            //// Create mysql query for extract chart data.
-            //$res_sik_doc_chart = mysql_query( " SELECT sic_rel_id , doc_rel_id , doc_id , doc_date_created , chart_1 , chart_2 ,chart_3 , chart_4 FROM $DB_NAME_LOGIN.sik_doc
-            //                                        WHERE sic_rel_id     = '".filter($sicker_id)."'
-            //                                        AND   doc_rel_id     = '".filter($_SESSION['user_id'])."'
-            //                                        ORDER BY doc_id ASC
-            //                                      " , $database_connection) or die( " Error : Connection section res_sik_doc_time_line . " .mysql_error() ) ;
-            //
-            //if( mysql_num_rows($res_sik_doc_chart) > 0 )
-            //{
-            //    echo '
-            //    <div class="col-md-12 col-sm-12 col-xs-12" >
-            //        <center>
-            //            <font size="+2" class="text-center" style="float:none;" >
-            //                <span> مقایسه همزمان شاخص های حیاتی بیمار بر روی نمودار در گذر زمان </span>
-            //            </font>
-            //        </center>
-            //        <hr style="width:1px;" >
-            //        <hr style="width:1px;" >
-            //        <div id="container" style="min-width: 310px; height: 400px; margin: 0 auto"></div>
-            //    </div>' ;
-            //
-            //    $data_chart_date_1  = '' ;
-            //    $data_chart_value_1 = '' ;
-
-            //    // START of while.
-            //    while( $row_sik_doc_chart = mysql_fetch_array($res_sik_doc_chart) )
-            //    {
-            //        extract( $row_sik_doc_chart ) ;
-            //
-            //        // make label chart string variable to use on charts.
-            //        $data_chart_date_1    .= "'".$doc_date_created."'," ;
-            //        // make data chart string variable to use on charts.
-            //        $data_chart_value_1   .= $chart_1.',' 			   ;
-            //        $data_chart_value_2   .= $chart_2.',' 			   ;
-            //        $data_chart_value_3   .= $chart_3.',' 			   ;
-            //        $data_chart_value_4   .= $chart_4.',' 			   ;
-            //    }
-            //    // END of while.
-//
-//                echo '
-//                <p align="center" style="text-align:center" >
-//                    با کلیک بر روی اسم هر نمودار در بالا می توانید نمودار مربوطه را فعال یا غیر فعال نمایید
-//                </p>' ;
-//            }
-//            else
-//            {
-//                echo '
-//                <center>
-//                    <div class="col-md-12 col-sm-12 col-xs-12" >
-//                        <h3 style="padding-top:10px;font-size:25px;opacity:0.7;text-align:center;" >
-//                             <i class="glyphicon glyphicon-file" style="font-size:46px;padding: 19px;float:right;" ></i>
-//                             تا به حال برای این بیمار اطلاعاتی ثبت نشده
-//                        </h3>
-//                    </div>
-//                </center>';
-//            }
-
-        echo '
-        </div>
-
-    </div>
-</div>
-<!-- END of login fancy console panel chart -->';
-}
+                        <!-- END of login fancy console panel chart -->';
+                        }
 
 
-if ( strlen($cms_menu_title[7]) > 0 || strlen($cms_menu_title[8]) > 0 )
-{
-
-    echo '
-    <li role="presentation" >
-        <a id="various222" href="#new_sicker_uniqe_doc_paper_plz_console" type="button" aria-controls="profile" role="tab" data-toggle="tab" >
-            New Paper
-        </a>
-    </li>
-    
-    <!-- START of login fancy console panel new_sicker_uniqe_doc_paper_plz_console -->
-    <div style="display:none;" >
-        <div id="new_sicker_uniqe_doc_paper_plz_console" style="height:550px;width:900px!important;overflow-x: hidden!important;padding-bottom:30px;padding-top:35px;" >
-            <div class="col-md-12 col-sm-12 col-xs-12 text-center" >
-                <center>
-    
-                    <div class="col-md-12 col-sm-12 col-xs-12" style="font-size:26px;margin-top:25px;" >
-                        If the patient\'s current tab is full, you can add a new tab with a pre-defined design
-                    </div>' ;
-
-                    if ( strlen($cms_menu_title[7]) > 0 )
-                    {
-                        echo '
-                        <br>
-                        <hr style="width:1px;" >
-                        <br>
-                        <hr style="width:1px;" >
-                        <a id="various222" href="#new_sicker_uniqe_doc_paper_plz" type="button" aria-controls="profile" role="tab" data-toggle="tab" class="btn btn-success btn-group col-md-10 col-sm-10 col-xs-10" style="float:none;font-size:25px;" >
-                            Add New '.$cms_menu_title[7].' Paper
-                        </a>
-                        <br>
-                        <hr style="width:1px;" >' ;
-                    }
-                    if ( strlen($cms_menu_title[8]) > 0 )
-                    {
-                        echo '
-                        <a id="various222" href="#new_sicker_uniqe_doc_paper_plz_3" type="button" aria-controls="profile" role="tab" data-toggle="tab" class="btn btn-success btn-group col-md-10 col-sm-10 col-xs-10" style="float:none;font-size:25px;" >
-                             Add New '.$cms_menu_title[8].' Paper
-                        </a>' ;
-                    }
+                        //if ( strlen($cms_menu_title[7]) > 0 || strlen($cms_menu_title[8]) > 0 )
+                        //{
+                        //
+                        //    echo '
+                        //    <li role="presentation" >
+                        //        <a id="various222" href="#new_sicker_uniqe_doc_paper_plz_console" type="button" aria-controls="profile" role="tab" data-toggle="tab" >
+                        //            New Paper
+                        //        </a>
+                        //    </li>
+                        //
+                        //    <!-- START of login fancy console panel new_sicker_uniqe_doc_paper_plz_console -->
+                        //    <div style="display:none;" >
+                        //        <div id="new_sicker_uniqe_doc_paper_plz_console" style="height:550px;width:900px!important;overflow-x: hidden!important;padding-bottom:30px;padding-top:35px;" >
+                        //            <div class="col-md-12 col-sm-12 col-xs-12 text-center" >
+                        //                <center>
+                        //
+                        //                    <div class="col-md-12 col-sm-12 col-xs-12" style="font-size:26px;margin-top:25px;" >
+                        //                        If the patient\'s current tab is full, you can add a new tab with a pre-defined design
+                        //                    </div>' ;
+                        //
+                        //                    if ( strlen($cms_menu_title[7]) > 0 )
+                        //                    {
+                        //                        echo '
+                        //                        <br>
+                        //                        <hr style="width:1px;" >
+                        //                        <br>
+                        //                        <hr style="width:1px;" >
+                        //                        <a id="various222" href="#new_sicker_uniqe_doc_paper_plz" type="button" aria-controls="profile" role="tab" data-toggle="tab" class="btn btn-success btn-group col-md-10 col-sm-10 col-xs-10" style="float:none;font-size:25px;" >
+                        //                            Add New '.$cms_menu_title[7].' Paper
+                        //                        </a>
+                        //                        <br>
+                        //                        <hr style="width:1px;" >' ;
+                        //                    }
+                        //                    if ( strlen($cms_menu_title[8]) > 0 )
+                        //                    {
+                        //                        echo '
+                        //                        <a id="various222" href="#new_sicker_uniqe_doc_paper_plz_3" type="button" aria-controls="profile" role="tab" data-toggle="tab" class="btn btn-success btn-group col-md-10 col-sm-10 col-xs-10" style="float:none;font-size:25px;" >
+                        //                             Add New '.$cms_menu_title[8].' Paper
+                        //                        </a>' ;
+                        //                    }
+                        //
+                        //                echo '
+                        //                </center>
+                        //            </div>
+                        //        </div>
+                        //    </div>
+                        //    <!-- END of login fancy console panel new_sicker_uniqe_doc_paper_plz_console -->';
+                        //}
 
                 echo '
-                </center>
-            </div>
-        </div>
-    </div>
-    <!-- END of login fancy console panel new_sicker_uniqe_doc_paper_plz_console -->';
-}
-
-echo '
-</ul>
+                </ul>
 
 <div class="well col-md-12 col-sm-12 col-xs-12" style="min-height:52px;" >
 
-    <div style="float:right;font-size:16px;margin-right:9px;" >
-        Name: '.$key->patient_first_name.' '.$key->patient_last_name.'
-    </div>
+    <div style="float:right;font-size:16px;margin-right:9px;" >Name: '.$key->patient_first_name.' '.$key->patient_last_name.'</div>
 
     <div style="float:right;font-size:16px;margin-right:10px;" >' ;
         if($key->patient_relationship_status == 'single')
         {
-            echo '| marital status Single' ;
+            echo 'Marital Status: Single | ' ;
         }
         elseif($key->patient_relationship_status == 'married')
         {
-            echo '| marital status: Married' ;
+            echo 'Marital Status: Married | ' ;
         }
         elseif($key->patient_relationship_status == 'divorced')
         {
-            echo '| Marital status: Divorced' ;
+            echo 'Marital Status: Divorced | ' ;
         }
         echo '
     </div>';
@@ -1408,42 +1204,34 @@ echo '
 if( isset($_GET['EHR_document_related_clinic_doctor_name']) )
 {
     echo '
-    <div style="float:right;font-size:16px;margin-right:10px;" >
-         &nbsp; Doctor : '.$_GET['EHR_document_related_clinic_doctor_name'].' |
-    </div>' ;
+    <div style="float:right;font-size:16px;margin-right:10px;" >Doctor : '.$_GET['EHR_document_related_clinic_doctor_name'].' | </div>' ;
 }
 
-if( strlen($key->patient_birth_day) > 0 && $key->patient_birth_day !== '0000-00-00' )
+if( strlen($key->patient_birth_day) > 0 )
 {
     echo '
-    <div style="float:right;font-size:16px;margin-right:10px;" >
-         &nbsp;	Birthdate : '.$key->patient_birth_day.' |
-    </div>' ;
+    <div style="float:right;font-size:16px;margin-right:10px;" >Birthday : '.$key->patient_birth_day.' | </div>' ;
 }
 
 $options_for_user = (unserialize(Auth::user()->options_for_user)) ;
 
-// START of if user active money section.
-if( $options_for_user[0] == 't' )
-{
-    if( isset($_GET['money_receive']) )
-    {
-        if( $_GET['money_receive'] == '0' )
-        {
-            echo '
-            <div style="float:right;font-size:16px;margin-right:10px;" title="The fee did not receive" >
-                 <span class="glyphicon glyphicon-remove" aria-hidden="true" style="color:red;" ></span> Pay &nbsp; |
-            </div>';
-        }
-        else
-        {
-            echo '
-            <div style="float:right;font-size:16px;margin-right:10px;" title="The fee received '.$_GET['money_receive'].'" >
-                 <span class="glyphicon glyphicon-ok" aria-hidden="true" ></span> Pay &nbsp; |
-            </div>';
-        }
-    }
-} // END of if user active money section
+//// START of if admin activated money section
+//if( $options_for_user[0] == 't' )
+//{
+//    if( isset($_GET['money_receive']) )
+//    {
+//        if( $_GET['money_receive'] == '0' )
+//        {
+//            echo '
+//            <div style="float:right;font-size:16px;margin-right:10px;" title="The fee did not receive" ><span class="glyphicon glyphicon-remove" aria-hidden="true" style="color:red;" ></span> Pay | </div>';
+//        }
+//        else
+//        {
+//            echo '
+//            <div style="float:right;font-size:16px;margin-right:10px;" title="The fee received '.$_GET['money_receive'].'" ><span class="glyphicon glyphicon-ok" aria-hidden="true" ></span> Paid &nbsp; | </div>';
+//        }
+//    }
+//} // END of if admin activated money section
 
 // START OF IF DR TELEGRAM ACTIVATED
 if( Auth::user()->telegram == 'true' )
@@ -1451,16 +1239,12 @@ if( Auth::user()->telegram == 'true' )
     if( strlen($key->patient_from_external_platform_id) > 0  )
     {
         echo '
-        <div style="float:right;font-size:16px;margin-right:10px;" >
-             <span class="glyphicon glyphicon-ok" aria-hidden="true" ></span> Connected to Bot &nbsp; |
-        </div>' ;
+        <div style="float:right;font-size:16px;margin-right:10px;" ><span class="glyphicon glyphicon-ok" aria-hidden="true" ></span> Connected to Bot | </div>' ;
     }
     else
     {
         echo '
-        <div style="float:right;font-size:16px;margin-right:10px;" >
-             <span class="glyphicon glyphicon-remove" aria-hidden="true" style="color:red;" ></span> Dose not Connected to Bot &nbsp; |
-        </div>' ;
+        <div style="float:right;font-size:16px;margin-right:10px;" ><span class="glyphicon glyphicon-remove" aria-hidden="true" style="color:red;opacity:50%;" ></span> Dose not Connected to Bot | </div>' ;
     }
 }
 // END OF IF DR TELEGRAM ACTIVATED
@@ -1472,20 +1256,19 @@ echo '
 <div class="tab-content">
 
 <div style="float:right;margin-right: 20px;position: fixed;bottom: 50px;right: 0px;font-size:16pt;color: #73879C;margin-bottom:16px;" >
-to store new EHR information press the Save button at the end of visiting
-<span class="glyphicon glyphicon-arrow-down" aria-hidden="true"></span>
-</div> ';
+    to store new EHR information press the Save button at the end of visiting
+    <span class="glyphicon glyphicon-arrow-down" aria-hidden="true"></span>
+</div>
+
+<input type="hidden" name="patient_id" value="'.$EHR_document_patient_related_id.'" >
+<input  type="hidden" name="dr_visit_stat" value="dr_visited" >';
 
 //<input  type="hidden" name="turn_id"               value="'.$_GET['turn_id'].'"               >
-//<input  type="hidden" name="sicker_id"             value="'.$_GET['sicker_id'].'" 			   >
-//<input  type="hidden" name="dr_visit_stat"         value="dr_visited" 						  >
 //<input  type="hidden" name="related_child_dr_name" value="'.$_GET['related_child_dr_name'].'" >
 //<input  type="hidden" name="svg_post"              value="" id="svg"  						  >
 
 echo '
-<button type="submit" name="final" class="btn btn-success btn-group col-md-12 col-sm-12 col-xs-12 uiuxtrick" data-action="export-as-svg" value="Export as SVG" style="font-size:25px;position: fixed;bottom: 0px;right: 0px;z-index: 1;" onclick="this.disabled=true;this.form.submit();formSubmitting=true;" >
-Save
-</button>';
+<button type="submit" name="final" class="btn btn-success btn-lg btn-block col-md-12 col-sm-12 col-xs-12 uiuxtrick" data-action="export-as-svg" value="Export as SVG" style="font-size:25px;position: fixed;bottom: 0px;right: 0px;z-index: 1;" onclick="this.disabled=true;this.form.submit();formSubmitting=true;" >Save</button>';
 
 //if ( strlen($cms_menu_title[6]) > 0 )
 //{
@@ -1505,65 +1288,6 @@ Save
 //</a>';
 //}
 
-echo '
-<!-- START Modal -->
-<div id="amghezi" class="modal fade modal-fullscreen" role="dialog" >
-    <div class="modal-dialog">
-        <!-- Modal content-->
-        <div class="modal-content" style="margin-top: 100px!important;" >' ;
-
-            if( strlen($cms_menu_title[4]) > 0 )
-            {
-                echo '
-                <div class="well col-md-3 col-sm-3 col-xs-3" style="background-color: inherit;border-bottom:0px;border-left:0px;font-size:17px;margin-bottom:0px;padding-bottom:0px;" >
-                    : '.$cms_menu_title[4].' added
-                    <p class="common-drug"></p>
-                </div>';
-            }
-
-            if( strlen($cms_menu_title[3]) > 0 )
-            {
-                echo '
-                <div class="well col-md-3 col-sm-3 col-xs-3" style="background-color: inherit;border-bottom:0px;border-left:0px;font-size:17px;margin-bottom:0px;padding-bottom:0px;" >
-                    : '.$cms_menu_title[3].' added
-                    <p class="common-rejim"></p>
-                </div>';
-            }
-
-            if( strlen($cms_menu_title[2]) > 0 )
-            {
-                echo '
-                <div class="well col-md-3 col-sm-3 col-xs-3" style="background-color: inherit;border-bottom:0px;border-left:0px;font-size:17px;margin-bottom:0px;padding-bottom:0px;" >
-                    : '.$cms_menu_title[2].'
-                    <p class="common-return-date"></p>
-                </div>' ;
-            }
-
-            echo '
-            <div class="well col-md-3 col-sm-3 col-xs-3" style="background-color: inherit;border-bottom:0px;border-left:0px;font-size:17px;margin-bottom:0px;padding-bottom:0px;" >
-                : Doctor
-                <p class="child-dr-name-rel-doc"></p>
-            </div>
-            
-            <div class="modal-body" align="center" style="margin-top:0px;padding-top:0px;">
-                <img src="" class="img-responsive" />
-            </div>
-            
-            <hr style="width:1px;" >
-            <hr style="width:1px;" >
-            <hr style="width:1px;" >
-            <hr style="width:1px;" >
-            
-            <div class="modal-footer">
-                <button type="button" class="btn btn-success btn-group col-md-12 col-sm-12 col-xs-12" data-dismiss="modal" style="font-size: 25px;position: fixed;bottom: 0px;right: 0px;z-index: 1;">
-                    Close
-                </button>
-            </div>
-
-        </div>
-    </div>
-</div>
-<!-- END Modal -->' ;
 
 // START of Let to check user visit this page with SUMSUNG GALAXY TAB S3
 $is_campatible_android_device = '' 			;
@@ -1623,121 +1347,7 @@ else
 }
 // END of Let to check user visit this page with SUMSUNG GALAXY TAB S3
 
-if ( strlen($cms_menu_title[7]) > 0 )
-{
-    // Let to show this section just on SUMSUNG GALAXY TAB S3
-    if( $is_campatible_android_device == 'true' )
-    {
-        echo '
-        <div class="col-md-12 col-sm-12 col-xs-12" style="margin:0px 0px 0px 0px;padding:0px 0px 0px 0px;" >
-            <div class="export-svg-2 fs-container-2" style="float:right;margin:0px 0px 0px 0px;padding:0px 0px 0px 0px;" >
-                <div id="lc2" ></div>
-            </div>
-        </div>
-    
-        <a id="canvas-fullscreen-2" style="float:left;font-size:25px;border: 1px solid #e3e3e3;border-radius: 4px;" class="btn btn-group col-md-12 col-sm-12 col-xs-12" >
-             '.$cms_menu_title[7].'
-        </a>
-    
-        <a id="canvas-close-2" style="float: right; position: absolute;z-index: 1000000;background-image: url(../vendors/fancybox/fancybox_sprite.png);zoom: 1.75 !important; right: -14px !important;top:-28px !important;cursor: pointer;width: 36px;height: 36px;" >
-    
-        </a>';
-    }
-
-    echo '
-    <!-- START Modal 1 -->
-    <div id="amghezi_1" class="modal fade modal-fullscreen" role="dialog" >
-      <div class="modal-dialog">
-
-        <!-- Modal 1 content-->
-        <div class="modal-content" style="margin-top: 100px!important;" >
-
-          <div class="modal-body" align="center" style="margin-top:0px;padding-top:0px;">
-            <img src="" class="img-responsive" />
-          </div>
-          <hr style="width:1px;" >
-          <hr style="width:1px;" >
-          <hr style="width:1px;" >
-          <hr style="width:1px;" >
-          <div class="modal-footer">
-            <button type="button" class="btn btn-success btn-group col-md-12 col-sm-12 col-xs-12" data-dismiss="modal" style="font-size: 25px;position: fixed;bottom: 0px;right: 0px;z-index: 1;">
-                Close
-            </button>
-          </div>
-        </div>
-
-      </div>
-    </div>
-    <!-- END Modal 1 -->';
-}
-
-if ( strlen($cms_menu_title[8]) > 0 )
-{
-    // Let to show this section just on SUMSUNG GALAXY TAB S3
-    if( $is_campatible_android_device == 'true' )
-    {
-        echo '
-        <div class="col-md-12 col-sm-12 col-xs-12" style="margin:0px 0px 0px 0px;padding:0px 0px 0px 0px;" >
-            <div class="export-svg-3 fs-container-3" style="float:right;margin:0px 0px 0px 0px;padding:0px 0px 0px 0px;" >
-                <div id="lc3" >
-                </div>
-            </div>
-        </div>
-    
-    
-    
-        <a id="canvas-fullscreen-3" style="float:left;font-size:25px;border: 1px solid #e3e3e3;border-radius: 4px;" class="btn btn-group col-md-12 col-sm-12 col-xs-12" >
-             '.$cms_menu_title[8].'
-        </a>
-    
-        <a id="canvas-close-3" style="float: right; position: absolute;z-index: 1000000;background-image: url(../vendors/fancybox/fancybox_sprite.png);zoom: 1.75 !important; right: -14px !important;top:-28px !important;cursor: pointer;width: 36px;height: 36px;" >
-    
-        </a>' ;
-    }
-
-    echo '
-    <!-- START Modal 2 -->
-    <div id="amghezi_2" class="modal fade modal-fullscreen" role="dialog" >
-      <div class="modal-dialog">
-
-        <!-- Modal 2 content-->
-        <div class="modal-content" style="margin-top: 100px!important;" >
-
-          <div class="modal-body" align="center" style="margin-top:0px;padding-top:0px;">
-            <img src="" class="img-responsive" />
-          </div>
-          <hr style="width:1px;" >
-          <hr style="width:1px;" >
-          <hr style="width:1px;" >
-          <hr style="width:1px;" >
-          <div class="modal-footer">
-            <button type="button" class="btn btn-success btn-group col-md-12 col-sm-12 col-xs-12" data-dismiss="modal" style="font-size: 25px;position: fixed;bottom: 0px;right: 0px;z-index: 1;">
-                Close
-            </button>
-          </div>
-        </div>
-
-      </div>
-    </div>
-    <!-- END Modal 2 -->';
-}
-
-if( isset($_GET['m']) ) {
-    if ($_GET['m'] == 'extra_paper_suc_creat') {
-        echo '
-        <center>
-            <div class="col-md-12 col-sm-12 col-xs-12" style="margin:0px 0px 0px 0px;padding:0px 0px 0px 0px;margin-top:30px;" >
-                <p style="text-align: center;" >
-                    <strong style="font-size: 26px;color:#08c;" >
-                        The new patient sheet was successfully created.
-                    </strong>
-                </p>
-            </div>
-        </center>';
-    }
-}
-
-echo '
+                    echo '
                     </div>
                     <!-- END Tab panes -->
 
@@ -1750,30 +1360,12 @@ echo '
   <!-- END of page content -->';
 // END of content.
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 }
 }
 // END of show to Admin user type.
 else
 {
-echo '<P>This page is not accessible for you</P>' ;
+    echo '<P>This page is not accessible for you</P>' ;
 }
 
     echo '

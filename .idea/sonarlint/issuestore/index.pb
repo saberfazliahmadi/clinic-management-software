@@ -39,3 +39,11 @@ v
 Fdatabase/migrations/2022_02_08_151527_create_patients_photos_table.php,3\5\3526cc7e2006d5a3312ca0a73f3a5436e63ad4f0
 M
 app/Models/patients_photo.php,6\9\6915325a6e0ca786ff39677002cc171a4ad21fbd
+F
+config/filesystems.php,0\8\0851bcf6cd0903bba3a25c52b3b65e4e473a57d6
+l
+<database/migrations/2014_10_12_000000_create_users_table.php,d\e\de963aaada5c6577b654cfbdcf083dc355b1fa2b
+`
+0app/Http/Requests/Storepatients_photoRequest.php,6\d\6d97c708f7e2879147c47481cc7ee75829d78d30
+a
+1app/Http/Requests/Updatepatients_photoRequest.php,6\d\6d84f200afe9e76acea73094d9631edf686e46a2

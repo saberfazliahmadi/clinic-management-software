@@ -156,7 +156,7 @@ label
                                 
                             </center>
                 
-                            <button type="submit" name="Search" class="btn btn-success btn-group-justified uiuxtrick" style="font-size:28px;position: fixed;bottom: 0px;right: 0px;z-index: 1;margin-bottom:0px;margin-right:0px;" onclick="this.disabled=true;this.form.submit();" >
+                            <button type="submit" name="Search" class="btn btn-success btn-lg btn-block uiuxtrick" style="font-size:28px;position: fixed;bottom: 0px;right: 0px;z-index: 1;margin-bottom:0px;margin-right:0px;" onclick="this.disabled=true;this.form.submit();" >
                                 Search
                             </button>
                         </form>
@@ -494,7 +494,6 @@ if ( isset($count_of_appointment_in_header) && $count_of_appointment_in_header >
                     
                     <div class="col-md-12 col-sm-12 col-xs-12" style="float:right;margin-top:12px;text-align:center;" >
                         '.$key_appointment->appointment_child_dr_related_name.'
-                        
                     </div>
                     <br>' ;
 
@@ -533,6 +532,10 @@ if ( isset($count_of_appointment_in_header) && $count_of_appointment_in_header >
                         {
                             echo '$'.$key_appointment->appointment_received_financial_status.'<span class="fa fa-money" aria-hidden="true" style="margin-left:5px;font-size:20px;" title="$'.$key_appointment->appointment_received_financial_status.' of This Appointment Received" ></span>' ;
                         }
+                        elseif($key_appointment->appointment_status == '0' && !($key_appointment->appointment_received_financial_status > 0))
+                        {
+                            echo '<center><div style="font-size:16px;float:none;" title="The fee did not receive" >$<span class="glyphicon glyphicon-remove" aria-hidden="true" style="color:red;float:none;" ></span></div></center>' ;
+                        }
                         else
                         {
                             echo '&nbsp;' ;
@@ -544,14 +547,14 @@ if ( isset($count_of_appointment_in_header) && $count_of_appointment_in_header >
             </div>
             
             <div class="col-md-2" style="padding-right:0px;padding-left:0px;margin-right:0px;margin-left:0px;margin-top:10px;" >
-                <div class="col-md-12" style="'.$opacity_appointment_trick.'" >
+                <div  style="'.$opacity_appointment_trick.'" >
                     <a href="'.route('delete_this_appointment_by_this_id' , [ 'appointment_id' => $key_appointment->appointment_id , 'show_all_appointments_this_date' => $key_appointment->appointment_date ] ).'" style="float:left;color: white; font-size: 13px; float: left;background-color:#5A738E;border:1px solid #5A738E; " class="btn btn-success" ' ; ?> onclick="return confirm('Are you sure to delete this appointment?') <?php echo '" title="Delete This Appointment" >
                         <i class="fa fa-trash-o" aria-hidden="true" ></i>
                         Delete
                     </a>
                 </div>
                 
-                <div class="col-md-12" style="'.$opacity_appointment_trick.';margin-top:12px;" > ';
+                <div style="'.$opacity_appointment_trick.';margin-top:12px;" > ';
                     // If the patient has mobile number and active ROBOT then make link of send message by BOT.
                     if( strlen($key_appointment->patient_mobile_number) > 0  && strlen($key_appointment->patient_from_external_platform_id) > 0)
                     {
@@ -568,7 +571,7 @@ if ( isset($count_of_appointment_in_header) && $count_of_appointment_in_header >
                     </a>
                 </div>
                 
-                <div class="col-md-12" style="'.$opacity_appointment_trick.';margin-top:12px;" >
+                <div style="'.$opacity_appointment_trick.';margin-top:12px;" >
                     <a id="various222" href="#a'.$count_trick.'" title="Quick Show Patient Profile" style="float:left;color: white; font-size: 13px; float: left;background-color:#5A738E;border:1px solid #5A738E;" class="btn btn-success" type="button" >
                         <span class="glyphicon glyphicon-user" aria-hidden="true"></span>
                         Profile
@@ -628,7 +631,7 @@ if ( isset($count_of_appointment_in_header) && $count_of_appointment_in_header >
     echo '
     <hr style="width:1px;" >
     
-    <button type="submit" name="send_patient_to_doctor_room" class="btn btn-success btn-group-justified uiuxtrick" style="font-size:28px;position: fixed;bottom: 0px;right: 0px;z-index: 1;margin-bottom:0px;margin-right:0px;" onclick="this.disabled=true;this.form.submit();" >
+    <button type="submit" name="send_patient_to_doctor_room" class="btn btn-success btn-lg btn-block uiuxtrick" style="font-size:28px;position: fixed;bottom: 0px;right: 0px;z-index: 1;margin-bottom:0px;margin-right:0px;" onclick="this.disabled=true;this.form.submit();" >
         Send Patient to Doctor\'s Room
     </button>
     </form>' ;

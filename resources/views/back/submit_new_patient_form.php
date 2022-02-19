@@ -252,7 +252,7 @@ echo '
                 <div class="form-group col-md-12 col-sm-12 col-xs-12 ">
                 
                     <div class="col-md-12 col-sm-12 col-xs-12">
-                        <button type="submit" name="booking_status" class="btn btn-success btn-group-justified uiuxtrick" style="margin-bottom:0px;margin-right:0px;font-size:28px;position: fixed;bottom: 0px;right: 0px;z-index: 1;"  >
+                        <button type="submit" name="booking_status" class="btn btn-success btn-lg btn-block uiuxtrick" style="margin-bottom:0px;margin-right:0px;font-size:28px;position: fixed;bottom: 0px;right: 0px;z-index: 1;"  >
                             Submit
                         </button>				
                     </div>
@@ -613,7 +613,7 @@ echo '
                         <div class="form-group col-md-12 col-sm-12 col-xs-12 ">
                         
                             <div class="col-md-12 col-sm-12 col-xs-12">
-                                <button type="submit" name="booking_status" class="btn btn-success btn-group-justified uiuxtrick" style="margin-bottom:0px;margin-right:0px;font-size:28px;position: fixed;bottom: 0px;right: 0px;z-index: 1;"  >
+                                <button type="submit" name="booking_status" class="btn btn-success btn-lg btn-block uiuxtrick" style="margin-bottom:0px;margin-right:0px;font-size:28px;position: fixed;bottom: 0px;right: 0px;z-index: 1;"  >
                                     Update
                                 </button>				
                             </div>
