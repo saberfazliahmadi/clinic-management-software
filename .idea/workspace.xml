@@ -2,20 +2,9 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="c0174df6-326d-4e3b-8008-b6408fdf6aa2" name="Default Changelist" comment="">
-      <change beforePath="$PROJECT_DIR$/.gitignore" beforeDir="false" afterPath="$PROJECT_DIR$/.gitignore" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/sonarlint/issuestore/2/4/24cc3712c4a2c0e3a1998dfb4f29f701f1b870cb" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/sonarlint/issuestore/2/4/24cc3712c4a2c0e3a1998dfb4f29f701f1b870cb" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/sonarlint/issuestore/3/0/301d8a908b815a588a94897c71b23cc39057728d" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/sonarlint/issuestore/3/0/301d8a908b815a588a94897c71b23cc39057728d" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/sonarlint/issuestore/9/f/9fc9c00822579ea7fd2ced46291ac475d72a2b7e" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/sonarlint/issuestore/9/f/9fc9c00822579ea7fd2ced46291ac475d72a2b7e" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/sonarlint/issuestore/c/1/c1fbaf18568f699f20cf2d145cc47031a4cb9cbf" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/sonarlint/issuestore/c/1/c1fbaf18568f699f20cf2d145cc47031a4cb9cbf" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/sonarlint/issuestore/index.pb" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/sonarlint/issuestore/index.pb" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/app/Http/Controllers/PatientsEHRDocumentController.php" beforeDir="false" afterPath="$PROJECT_DIR$/app/Http/Controllers/PatientsEHRDocumentController.php" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/app/Http/Controllers/PatientsGeneralInfoController.php" beforeDir="false" afterPath="$PROJECT_DIR$/app/Http/Controllers/PatientsGeneralInfoController.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/database/migrations/2014_10_12_000000_create_users_table.php" beforeDir="false" afterPath="$PROJECT_DIR$/database/migrations/2014_10_12_000000_create_users_table.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/public/images/SABER FAZLIAHMADI/1/para/3234016447604251968145861.jpg" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/public/images/SABER FAZLIAHMADI/1/para/6029516447605051980958196.jpg" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/public/images/SABER FAZLIAHMADI/1/para/8213916447606341969627171.jpg" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/public/images/SABER FAZLIAHMADI/1/para/832551644760396756339010.jpg" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/resources/views/back/home.php" beforeDir="false" afterPath="$PROJECT_DIR$/resources/views/back/home.php" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/resources/views/back/layout/header.php" beforeDir="false" afterPath="$PROJECT_DIR$/resources/views/back/layout/header.php" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/resources/views/back/show_patient_search_from.php" beforeDir="false" afterPath="$PROJECT_DIR$/resources/views/back/show_patient_search_from.php" afterDir="false" />
@@ -249,7 +238,7 @@
       <workItem from="1644397588986" duration="18470000" />
       <workItem from="1644681089572" duration="28780000" />
       <workItem from="1645005188035" duration="7423000" />
-      <workItem from="1645272227695" duration="12207000" />
+      <workItem from="1645272227695" duration="25508000" />
     </task>
     <servers />
   </component>

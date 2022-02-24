@@ -16,13 +16,13 @@ echo '
 <div class="right_col" role="main" >
     
     <div style="width: 100%;height: 80px;padding: 10px 0;" >
-	  <center>
-		 <h3 style="text-align:center;">
-			 '.$title_of_page.'
-			 <br>
-		 </h3>
-	  </center>
-	</div>
+        <center>
+            <h3 style="text-align:center;">
+                '.$title_of_page.'
+                <br>
+            </h3>
+        </center>
+    </div>
     
     <div class="col-md-12 col-sm-12 col-xs-12">  
         <form method="post" action="'.route('run_patient_search_form').'" id="medical-file-form" data-parsley-validate  >

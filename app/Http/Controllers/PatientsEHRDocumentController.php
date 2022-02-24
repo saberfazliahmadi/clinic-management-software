@@ -260,18 +260,63 @@ class PatientsEHRDocumentController extends Controller
                 $common_drug_2 = '' ;
             }
 
+            if( strlen(Auth::user()->common_diet) )
+            {
+                // Define a new variable
+                $common_diet_2 = '' ;
+
+                if(is_array($request->common_diet))
+                {
+                    foreach ($request->common_diet as $item)
+                    {
+                        $common_diet_2 .= $item.',' ;
+                    }
+                }
+
+                if( strlen($request->keyboard_common_diet) > 0 )
+                {
+                    $common_diet_2 .= $request->post('keyboard_common_diet').',' ;
+                }
+            }
+            else
+            {
+                $common_diet_2 = '' ;
+            }
+
+            if( strlen(Auth::user()->common_return_date) )
+            {
+                // Define a new variable
+                $common_return_date_2 = '' ;
+
+                if(is_array($request->common_return_date))
+                {
+                    foreach ($request->common_return_date as $item)
+                    {
+                        $common_return_date_2 .= $item.',' ;
+                    }
+                }
+
+                if( strlen($request->keyboard_common_return_date) > 0 )
+                {
+                    $common_return_date_2 .= $request->post('keyboard_common_return_date').',' ;
+                }
+            }
+            else
+            {
+                $common_return_date_2 = '' ;
+            }
+
             $result_store_new_ehr_doc = new patients_EHR_document(
                 [
-                    'EHR_document_prescribed_common_drug' => $common_drug_2 ,
-                    'EHR_document_patient_related_id'     => $request->post('patient_id') ,
-                    'EHR_document_dr_related_id'          => $admin_id_from_users_table ,
+                    'EHR_document_prescribed_common_drug'      => $common_drug_2 ,
+                    'EHR_document_prescribed_common_diet'      => $common_diet_2 ,
+                    'EHR_document_prescribed_next_appointment' => $common_return_date_2 ,
+                    'EHR_document_patient_related_id'          => $request->post('patient_id') ,
+                    'EHR_document_dr_related_id'               => $admin_id_from_users_table ,
                 ]
             ) ;
 
             $result_store_new_ehr_doc->save() ;
-
-
-
 
             if ($request->hasFile('image'))
             {

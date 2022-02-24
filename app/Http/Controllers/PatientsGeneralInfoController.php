@@ -70,8 +70,20 @@ class PatientsGeneralInfoController extends Controller
      */
     public function create()
     {
+        $admin_id_from_users_table = $this->find_admin_id_from_users_table() ;
+
+        $result_total_patients_number = patients_general_info::
+        select('patient_id' , 'patient_dr_related_id')
+        ->where('patient_dr_related_id' , '=' , $admin_id_from_users_table)
+        ->get() ;
+
+        $number_of_total_clinic_patients = $result_total_patients_number->count() ;
+
         $title_of_page = 'Submit a New Patient';
-        return view('back.submit_new_patient_form', ['title_of_page' => $title_of_page]);
+        return view('back.submit_new_patient_form' , [
+            'title_of_page'                   => $title_of_page ,
+            'number_of_total_clinic_patients' => $number_of_total_clinic_patients
+        ] );
     }
 
     /**
@@ -184,21 +196,34 @@ class PatientsGeneralInfoController extends Controller
         {
             $result_edit_patient_form = patients_general_info::
             select('*')
-            ->where('patient_id' , '=' , $edit_this_patient_id)
-            ->where('patient_dr_related_id', '=', $admin_id_from_users_table)
-            ->get() ;
-
-            $result_show_all_appointments_of_this_id = patients_appointment::
-            select('*')
-            ->where('appointment_patient_related_id' , '=' , $edit_this_patient_id)
-            ->where('appointment_dr_related_id', '=', $admin_id_from_users_table)
-            ->orderBy('appointment_id', 'desc')
+            ->where('patient_id'            , '=' , $edit_this_patient_id)
+            ->where('patient_dr_related_id' , '=' , $admin_id_from_users_table)
             ->get() ;
 
             if( $result_edit_patient_form->count() > 0 )
             {
+                $result_total_patients_number = patients_general_info::
+                select('patient_id' , 'patient_dr_related_id')
+                ->where('patient_dr_related_id' , '=' , $admin_id_from_users_table)
+                ->get() ;
+
+                $number_of_total_clinic_patients = $result_total_patients_number->count() ;
+
+                $result_show_all_appointments_of_this_id = patients_appointment::
+                select('*')
+                ->where('appointment_patient_related_id' , '=' , $edit_this_patient_id)
+                ->where('appointment_dr_related_id'      , '=' , $admin_id_from_users_table)
+                ->orderBy('appointment_id', 'desc')
+                ->get() ;
+
                 $title_of_page = 'Edit Patient Information' ;
-                return view('back.submit_new_patient_form' , [ 'title_of_page' => $title_of_page , 'result_edit_patient_form' => $result_edit_patient_form , 'result_show_all_appointments_of_this_id' => $result_show_all_appointments_of_this_id ] ) ;
+                return view('back.submit_new_patient_form' ,
+                [
+                    'title_of_page'                           => $title_of_page ,
+                    'result_edit_patient_form'                => $result_edit_patient_form ,
+                    'result_show_all_appointments_of_this_id' => $result_show_all_appointments_of_this_id ,
+                    'number_of_total_clinic_patients'         => $number_of_total_clinic_patients
+                ] ) ;
             }
             else
             {

@@ -95,7 +95,7 @@ label
                                 
                                 <li>
                                     <a href="'.route('submit_new_patient_form').'" style="font-size: 16px!important;font-weight:bolder;" >
-                                        <span class="glyphicon glyphicon-pencil" aria-hidden="true" style="float:left;margin-top:15px;color: #E7E7E7;font-weight: bolder!important;margin-top:0px;" ></span>
+                                        <span class="glyphicon glyphicon-plus" aria-hidden="true" style="float:left;margin-top:15px;color: #E7E7E7;font-weight: bolder!important;margin-top:0px;" ></span>
                                         &nbsp;&nbsp;' . $cms_menu_title_data_from_middleware[15] . '
                                     </a>
                                 </li>
@@ -116,7 +116,7 @@ label
                             <center>
                                 <h4 class="col-md-12 col-sm-12 col-xs-12 text-center" align="center" style="direction:ltr;margin-top:40px;" >
                                     <div class="col-md-12 col-sm-12 col-xs-12 text-center" align="center" >
-                                        your searching word should be based on just <b>1</b> of the below types
+                                        Your searching word should be based on just <b>1</b> of the below types
                                     </div>
                                     <hr style="width:1px;" >
                                     
@@ -326,7 +326,7 @@ label
 if ( isset($count_of_appointment_in_header) && $count_of_appointment_in_header > 0 )
 {
     echo '
-    <form method="get" action="'.route('home').'" id="header_today_appointments" data-parsley-validate  >
+    <form method="get" action="'.route('home').'" id="header_today_appointments" data-parsley-validate >
     <input type="hidden" name="_token" value="'.csrf_token().'" >
     <input type="hidden" name="send_patient_to_doctors_room" value="true" >
     

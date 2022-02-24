@@ -581,7 +581,7 @@ foreach ( $result_of_patients_general_infos as $key )
                         echo '
                         <li role="presentation">
                             <a id="various222" href="#rejim" type="button" aria-controls="profile" role="tab" data-toggle="tab" >
-                                '.$cms_menu_title[3].'
+                               '.$cms_menu_title[3].'
                             </a>
                         </li>
     
@@ -609,7 +609,7 @@ foreach ( $result_of_patients_general_infos as $key )
                                 </center>
 
                                 <div class="col-md-12 col-sm-12 col-xs-12" style="margin-top: 15px;border:1px solid #CCC;" >
-                                    <select name="rejim[]" id="dates-field211" class="col-md-12 col-sm-12 col-xs-12 multiselect-ui" multiple="multiple" >' ;
+                                    <select name="common_diet[]" id="dates-field211" class="col-md-12 col-sm-12 col-xs-12 multiselect-ui" multiple="multiple" >' ;
                                         // START of make a for loop to access all common_rejim_1
                                         for( $start='0' ; $start < $end ; $start++ )
                                         {
@@ -639,12 +639,11 @@ foreach ( $result_of_patients_general_infos as $key )
                                 </center>';
                             }
 
-                            echo '
-                            <div class="col-md-12 col-sm-12 col-xs-12" style="margin-top:20px;" >
-                                <input type="text" name="keyboard_rejim"  style="width:100%;text-align:right;direction:rtl;font-size:22px;height:40px;border:1px solid #CCC;" placeholder="Type your favorite '.$cms_menu_title[3].'" >
-                            </div>';
-
-                            echo '
+                                echo '
+                                <div class="col-md-12 col-sm-12 col-xs-12" style="margin-top:20px;" >
+                                    <input type="text" name="keyboard_common_diet"  style="width:100%;text-align:right;direction:rtl;font-size:22px;height:40px;border:1px solid #CCC;" placeholder="Type your favorite '.$cms_menu_title[3].'" >
+                                </div>
+                            
                             </div>
                         </div>
                         <!-- END of login fancy console panel common_diet -->';
@@ -716,7 +715,7 @@ foreach ( $result_of_patients_general_infos as $key )
 
                                 echo '
                                 <div class="col-md-12 col-sm-12 col-xs-12" style="margin-top:20px;" >
-                                    <input type="text" name="keyboard_moraje_badi"  style="width:100%;text-align:right;direction:rtl;font-size:22px;height:40px;border:1px solid #CCC;" placeholder="Type your favorite '.$cms_menu_title[2].'" >
+                                    <input type="text" name="keyboard_common_return_date"  style="width:100%;text-align:right;direction:rtl;font-size:22px;height:40px;border:1px solid #CCC;" placeholder="Type your favorite '.$cms_menu_title[2].'" >
                                 </div>
                     
                             </div>

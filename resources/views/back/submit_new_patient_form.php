@@ -17,13 +17,21 @@ echo '
 <!-- page content -->
 <div class="right_col" role="main" >
     
-    <div style="width: 100%;height: 80px;padding: 10px 0;" >
-	  <center>
-		 <h3 style="text-align:center;">
-			 '.$title_of_page.'
-			 <br>
-		 </h3>
-	  </center>
+    <div style="width: 100%;height: 50px;padding: 0px 0;" >
+        <div class="col-md-11 col-sm-11 col-xs-11">
+            <center>
+            <h3 style="text-align:center;">
+                '.$title_of_page.'
+                <br>
+            </h3>
+            </center>
+        </div>
+        <div class="col-md-1 col-sm-1 col-xs-1">
+            <h5 title="Total Number of Submitted Patients">
+                Total 
+                '.$number_of_total_clinic_patients.'
+            </h5>
+        </div>
 	</div>
     
     <div class="col-md-12 col-sm-12 col-xs-12">' ;

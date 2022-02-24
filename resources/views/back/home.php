@@ -29,7 +29,7 @@ echo '
             <span class="step_no">1</span>
             <span class="step_descr">
                 <center>
-                    <i class="glyphicon glyphicon-pencil"></i>
+                    <i class="glyphicon glyphicon-plus"></i>
                    Submit New Patient 
                 </center>
               </span>
