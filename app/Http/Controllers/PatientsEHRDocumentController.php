@@ -193,7 +193,7 @@ class PatientsEHRDocumentController extends Controller
 
         try
         {
-            $patient_more_description = '' ;
+            $patient_more_description  = '' ;
             $patient_more_description .= $request->patient_more_description ;
 
             if(is_array($request->common_hypersensitivity_2311))
@@ -341,13 +341,26 @@ class PatientsEHRDocumentController extends Controller
                 $result_store_patient_photo->save();
             }
 
-            \Session::flash('success_message', 'EHR information of Patient Successfully Saved');
-            return redirect(route('home'));
+            // \Session::flash('success_message', 'EHR information of Patient Successfully Saved');
+            return view('back.home' , [
+                'title_of_page'                            => 'a new EHR information of patient <br> with document id: '.$request->post('patient_id').' <br> successfully saved at date '.date("Y/m/d") ,
+                'show_ehr_report'                          => 'true' ,
+                'patient_more_description'                 => $patient_more_description ,
+                'patient_surgery_history'                  => $request->post('patient_surgery_history') ,
+                'patient_disease_background'               => $request->post('patient_disease_background') ,
+                'patient_medication_history'               => $request->post('patient_medication_history') ,
+                'patient_allergies_history'                => $request->post('patient_allergies_history') ,
+                'EHR_document_prescribed_common_drug'      => $common_drug_2 ,
+                'EHR_document_prescribed_common_diet'      => $common_diet_2 ,
+                'EHR_document_prescribed_next_appointment' => $common_return_date_2 ,
+                'EHR_document_patient_related_id'          => $request->post('patient_id') ,
+                'EHR_document_dr_related_id'               => $admin_id_from_users_table ,
+            ] );
             //return redirect('upload-image')->with('status', 'Image Has been uploaded');
         }
         catch (\Exception $exception)
         {
-            \Session::flash('success_message', $exception.'<span style="color:blue;">Can not Save new EHR!</span>');
+            \Session::flash('success_message', '<span style="color:blue;">Can not Save new EHR!</span>');
             return redirect(route('home'));
         }
     }
