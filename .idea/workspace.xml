@@ -2,9 +2,8 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="c0174df6-326d-4e3b-8008-b6408fdf6aa2" name="Default Changelist" comment="">
+      <change beforePath="$PROJECT_DIR$/.gitignore" beforeDir="false" afterPath="$PROJECT_DIR$/.gitignore" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/Http/Controllers/PatientsEHRDocumentController.php" beforeDir="false" afterPath="$PROJECT_DIR$/app/Http/Controllers/PatientsEHRDocumentController.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/resources/views/back/home.php" beforeDir="false" afterPath="$PROJECT_DIR$/resources/views/back/home.php" afterDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
@@ -233,7 +232,7 @@
       <workItem from="1644397588986" duration="18470000" />
       <workItem from="1644681089572" duration="28780000" />
       <workItem from="1645005188035" duration="7423000" />
-      <workItem from="1645272227695" duration="38570000" />
+      <workItem from="1645272227695" duration="39009000" />
     </task>
     <servers />
   </component>
