@@ -905,7 +905,6 @@ foreach ( $result_of_patients_general_infos as $key )
                                                           '.$key_ehr->EHR_document_id.' => '.substr($key_ehr->created_at , '0' , '10').'
                                                         </button>
                                                         
-                                                        
                                                         <!-- START Modal -->
                                                         <div class="modal fade" id="ehr_detail_'.$key_ehr->EHR_document_id.'" tabindex="-1'.$key_ehr->EHR_document_id.'" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
                                                           <div class="modal-dialog" role="document">
@@ -927,7 +926,7 @@ foreach ( $result_of_patients_general_infos as $key )
                                                                     echo '
                                                                     <div class="well" style="background-color: inherit;border-bottom:0px;border-left:0px;font-size:17px;margin-bottom:0px;padding-bottom:0px;" >
                                                                         ' . $cms_menu_title[4] . '
-                                                                        <p class="common-drug">'.$EHR_document_prescribed_common_drug.'</p>
+                                                                        <p class="common-drug">'.$key_ehr->EHR_document_prescribed_common_drug.'</p>
                                                                     </div>';
                                                                 }
 
@@ -936,7 +935,7 @@ foreach ( $result_of_patients_general_infos as $key )
                                                                     echo '
                                                                     <div class="well" style="background-color: inherit;border-bottom:0px;border-left:0px;font-size:17px;margin-bottom:0px;padding-bottom:0px;" >
                                                                          ' . $cms_menu_title[3] . '
-                                                                        <p class="common-rejim">'.$EHR_document_prescribed_common_diet.'</p>
+                                                                        <p class="common-rejim">'.$key_ehr->EHR_document_prescribed_common_diet.'</p>
                                                                     </div>';
                                                                 }
 
@@ -945,7 +944,7 @@ foreach ( $result_of_patients_general_infos as $key )
                                                                     echo '
                                                                     <div class="well" style="background-color: inherit;border-bottom:0px;border-left:0px;font-size:17px;margin-bottom:0px;padding-bottom:0px;" >
                                                                         '.$cms_menu_title[2] .'
-                                                                        <p class="common-return-date">'.$EHR_document_prescribed_next_appointment.'</p>
+                                                                        <p class="common-return-date">'.$key_ehr->EHR_document_prescribed_next_appointment.'</p>
                                                                     </div>';
                                                                 }
 
@@ -1200,10 +1199,10 @@ foreach ( $result_of_patients_general_infos as $key )
         echo '
     </div>';
 
-if( isset($_GET['EHR_document_related_clinic_doctor_name']) )
+if( isset($EHR_document_related_clinic_doctor_name) )
 {
     echo '
-    <div style="float:right;font-size:16px;margin-right:10px;" >Doctor : '.$_GET['EHR_document_related_clinic_doctor_name'].' | </div>' ;
+    <div style="float:right;font-size:16px;margin-right:10px;" >Doctor: '.$EHR_document_related_clinic_doctor_name.' | </div>' ;
 }
 
 if( strlen($key->patient_birth_day) > 0 )
@@ -1260,10 +1259,9 @@ echo '
 </div>
 
 <input type="hidden" name="patient_id" value="'.$EHR_document_patient_related_id.'" >
-<input  type="hidden" name="dr_visit_stat" value="dr_visited" >';
-
-//<input  type="hidden" name="turn_id"               value="'.$_GET['turn_id'].'"               >
-//<input  type="hidden" name="related_child_dr_name" value="'.$_GET['related_child_dr_name'].'" >
+<input  type="hidden" name="dr_visit_stat" value="dr_visited" >
+<input  type="hidden" name="EHR_document_related_appointment_id" value="'.$EHR_document_related_appointment_id.'">
+<input  type="hidden" name="EHR_document_related_clinic_doctor_name" value="'.$EHR_document_related_clinic_doctor_name.'" >' ;
 //<input  type="hidden" name="svg_post"              value="" id="svg"  						  >
 
 echo '

@@ -64,7 +64,8 @@ Route::group( [ 'middleware' => ['protected_page_accessible_for_admin'] ] , func
     Route::get('show_main_settings_of_software_form' , 'UserController@show_main_settings_of_software_form')->name('show_main_settings_of_software_form') ;
     Route::post('update_show_main_settings_of_software_form' , 'UserController@update_show_main_settings_of_software_form')->name('update_show_main_settings_of_software_form') ;
 
-    // All Routes related to users table
-    Route::get('show_patients_ehr_document_page/{patient_id}' , 'PatientsEHRDocumentController@show_patients_ehr_document_page')->name('show_patients_ehr_document_page') ;
+    // All Routes related to ehr table
+    Route::get('show_patients_ehr_document_page/{patient_id}/{related_appointment_id}/{child_dr_related_name}' , 'PatientsEHRDocumentController@show_patients_ehr_document_page')->name('show_patients_ehr_document_page') ;
     Route::post('store_patients_ehr_document_page/{patient_id}' , 'PatientsEHRDocumentController@store_patients_ehr_document_page')->name('store_patients_ehr_document_page') ;
+    Route::get('show_new_saved_ehr/{EHR_document_id}' , 'PatientsEHRDocumentController@show_new_saved_ehr' )->name('show_new_saved_ehr') ;
 }) ;

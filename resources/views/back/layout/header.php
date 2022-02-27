@@ -546,15 +546,28 @@ if ( isset($count_of_appointment_in_header) && $count_of_appointment_in_header >
                 
             </div>
             
-            <div class="col-md-2" style="padding-right:0px;padding-left:0px;margin-right:0px;margin-left:0px;margin-top:10px;" >
-                <div  style="'.$opacity_appointment_trick.'" >
-                    <a href="'.route('delete_this_appointment_by_this_id' , [ 'appointment_id' => $key_appointment->appointment_id , 'show_all_appointments_this_date' => $key_appointment->appointment_date ] ).'" style="float:left;color: white; font-size: 13px; float: left;background-color:#5A738E;border:1px solid #5A738E; " class="btn btn-success" ' ; ?> onclick="return confirm('Are you sure to delete this appointment?') <?php echo '" title="Delete This Appointment" >
-                        <i class="fa fa-trash-o" aria-hidden="true" ></i>
-                        Delete
+            <div class="col-md-2" style="padding-right:0px;padding-left:0px;margin-right:0px;margin-left:0px;margin-top:10px;" >';
+
+                // This variable should always have a value cause it will use on route parameters
+                // which is a require parameter for routing
+                if( strlen($key_appointment->appointment_child_dr_related_name) > 0 )
+                {
+                    $trick_of_variable_appointment_child_dr_related_name = $key_appointment->appointment_child_dr_related_name ;
+                }
+                else
+                {
+                    $trick_of_variable_appointment_child_dr_related_name = 'free' ;
+                }
+
+                echo '
+                <div style="'.$opacity_appointment_trick.';margin-top:12px;" >
+                    <a title="Display EHR Document" href="'.route('show_patients_ehr_document_page' , [ 'patient_id' => $key_appointment->patient_id , 'related_appointment_id' => $key_appointment->appointment_id , 'child_dr_related_name' => $trick_of_variable_appointment_child_dr_related_name ] ).'" style="float:left;color: white; font-size: 13px; float: left;background-color:#5A738E;border:1px solid #5A738E; " class="uiuxtrick btn btn-success" >
+                        <i class="fa fa-clone"></i>
+                        EHR Doc
                     </a>
                 </div>
                 
-                <div style="'.$opacity_appointment_trick.';margin-top:12px;" > ';
+                <div style="'.$opacity_appointment_trick.';margin-top:12px;" >';
                     // If the patient has mobile number and active ROBOT then make link of send message by BOT.
                     if( strlen($key_appointment->patient_mobile_number) > 0  && strlen($key_appointment->patient_from_external_platform_id) > 0)
                     {
@@ -619,6 +632,13 @@ if ( isset($count_of_appointment_in_header) && $count_of_appointment_in_header >
                          
                         </div>
                     </div>
+                </div>
+                
+                <div  style="'.$opacity_appointment_trick.'" >
+                    <a href="'.route('delete_this_appointment_by_this_id' , [ 'appointment_id' => $key_appointment->appointment_id , 'show_all_appointments_this_date' => $key_appointment->appointment_date ] ).'" style="float:left;color: white; font-size: 13px; float: left;background-color:#5A738E;border:1px solid #5A738E; " class="btn btn-success" ' ; ?> onclick="return confirm('Are you sure to delete this appointment?') <?php echo '" title="Delete This Appointment" >
+                        <i class="fa fa-trash-o" aria-hidden="true" ></i>
+                        Delete
+                    </a>
                 </div>
                 
             </div>

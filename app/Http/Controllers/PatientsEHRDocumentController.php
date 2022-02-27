@@ -163,13 +163,13 @@ class PatientsEHRDocumentController extends Controller
                     'title_of_page'                             => 'EHR of '.$request->patient_id ,
                     'EHR_document_patient_related_id'           => $request->patient_id ,
                     'EHR_document_dr_related_id'                => $admin_id_from_users_table ,
-                    'EHR_document_related_appointment_id'       => 'free_appointment_id' ,
-                    'EHR_document_related_clinic_doctor_name'   => 'free_related_clinic_doctor_name' ,
+                    'EHR_document_related_appointment_id'       => $request->related_appointment_id ,
+                    'EHR_document_related_clinic_doctor_name'   => $request->child_dr_related_name ,
                     'result_of_patients_photo'                  => $result_of_patients_photo ,
                     'count_result_of_patients_photo'            => $count_result_of_patients_photo ,
                     'result_of_patients_ehr_document'           => $result_of_patients_ehr_document ,
                     'count_result_of_patients_ehr_document'     => $count_result_of_patients_ehr_document ,
-                    'result_of_patients_general_infos'     => $result_of_show_patients_general_infos ,
+                    'result_of_patients_general_infos'          => $result_of_show_patients_general_infos ,
                     'count_result_of_patients_general_infos'    => $count_number_of_patients_general_infos
                 ]) ;
             }
@@ -313,10 +313,13 @@ class PatientsEHRDocumentController extends Controller
                     'EHR_document_prescribed_next_appointment' => $common_return_date_2 ,
                     'EHR_document_patient_related_id'          => $request->post('patient_id') ,
                     'EHR_document_dr_related_id'               => $admin_id_from_users_table ,
+                    'EHR_document_related_appointment_id'      => $request->post('EHR_document_related_appointment_id') ,
+                    'EHR_document_related_clinic_doctor_name'  => $request->post('EHR_document_related_clinic_doctor_name')
                 ]
             ) ;
 
             $result_store_new_ehr_doc->save() ;
+            $EHR_document_id = $result_store_new_ehr_doc->id ;
 
             if ($request->hasFile('image'))
             {
@@ -341,27 +344,44 @@ class PatientsEHRDocumentController extends Controller
                 $result_store_patient_photo->save();
             }
 
-            // \Session::flash('success_message', 'EHR information of Patient Successfully Saved');
-            return view('back.home' , [
-                'title_of_page'                            => 'a new EHR information of patient <br> with document id: '.$request->post('patient_id').' <br> successfully saved at date '.date("Y/m/d") ,
-                'show_ehr_report'                          => 'true' ,
-                'patient_more_description'                 => $patient_more_description ,
-                'patient_surgery_history'                  => $request->post('patient_surgery_history') ,
-                'patient_disease_background'               => $request->post('patient_disease_background') ,
-                'patient_medication_history'               => $request->post('patient_medication_history') ,
-                'patient_allergies_history'                => $request->post('patient_allergies_history') ,
-                'EHR_document_prescribed_common_drug'      => $common_drug_2 ,
-                'EHR_document_prescribed_common_diet'      => $common_diet_2 ,
-                'EHR_document_prescribed_next_appointment' => $common_return_date_2 ,
-                'EHR_document_patient_related_id'          => $request->post('patient_id') ,
-                'EHR_document_dr_related_id'               => $admin_id_from_users_table ,
-            ] );
-            //return redirect('upload-image')->with('status', 'Image Has been uploaded');
+            return redirect(route('show_new_saved_ehr', $EHR_document_id)) ;
         }
         catch (\Exception $exception)
         {
-            \Session::flash('success_message', '<span style="color:blue;">Can not Save new EHR!</span>');
+            \Session::flash('success_message', '<span style="color:blue;">Can not Save new EHR!</span>') ;
             return redirect(route('home'));
         }
     }
+
+    public function show_new_saved_ehr( Request $request )
+    {
+        $admin_id_from_users_table = $this->find_admin_id_from_users_table() ;
+        try
+        {
+            $result_show_new_saved_ehr = patients_EHR_document::
+            where('EHR_document_dr_related_id' , '=' , $admin_id_from_users_table )
+            ->where('EHR_document_id' , '=' , $request->EHR_document_id )
+            ->get() ;
+            foreach ($result_show_new_saved_ehr as $key)
+            {
+                return view('back.show_new_saved_ehr' ,
+                [
+                    'title_of_page'                            => 'a new EHR information of patient <br> with document id: '.$key->EHR_document_patient_related_id.'<br> successfully saved at date '.date("Y/m/d") ,
+                    'show_ehr_report'                          => 'true' ,
+                    'EHR_document_patient_related_id'          => $key->EHR_document_patient_related_id ,
+                    'EHR_document_prescribed_common_drug'      => $key->EHR_document_prescribed_common_drug ,
+                    'EHR_document_prescribed_common_diet'      => $key->EHR_document_prescribed_common_diet ,
+                    'EHR_document_prescribed_next_appointment' => $key->EHR_document_prescribed_next_appointment ,
+                    'EHR_document_related_clinic_doctor_name'  => $key->EHR_document_related_clinic_doctor_name ,
+                    'EHR_document_dr_related_id'               => $admin_id_from_users_table ,
+                ] ) ;
+            }
+        }
+        catch (\Exception $exception)
+        {
+            \Session::flash('success_message', '<span style="color:blue;">Can not show new EHR!</span>');
+            return redirect(route('home'));
+        }
+    }
+
 }
