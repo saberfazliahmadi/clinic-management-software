@@ -22,7 +22,7 @@ class middleware_check_page_access_for_admin_level
         {
             return $next($request);
         }
-        else
+        else 
         {
             Auth::logout();
             return redirect('/login');

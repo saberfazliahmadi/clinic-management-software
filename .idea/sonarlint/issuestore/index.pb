@@ -47,3 +47,13 @@ l
 0app/Http/Requests/Storepatients_photoRequest.php,6\d\6d97c708f7e2879147c47481cc7ee75829d78d30
 a
 1app/Http/Requests/Updatepatients_photoRequest.php,6\d\6d84f200afe9e76acea73094d9631edf686e46a2
+M
+resources/views/back/home.php,6\5\6585018e2078c2f4c0191d8c0dab5fa95bf83898
+C
+app/Http/Kernel.php,4\0\405f423e61f666bcedb754ae8befdce9e746176e
+T
+$app/Providers/AppServiceProvider.php,4\8\48b8d8112e9bdd32ee7e25b1224d6739eece1e72
+f
+6app/Http/Middleware/middleware_provide_header_data.php,e\0\e057f18109affac88ca3df3a674fe732c827c1c6
+t
+Dapp/Http/Middleware/middleware_check_page_access_for_admin_level.php,9\3\93a216b0d2cf41ba3af322788e6534cff902c7a5
