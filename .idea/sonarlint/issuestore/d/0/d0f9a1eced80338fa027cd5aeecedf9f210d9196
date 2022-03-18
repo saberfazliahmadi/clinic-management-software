@@ -1,8 +1,0 @@
-
-‹	php:S1192"pDefine a constant instead of duplicating this literal "back.show_form_of_appointments_on_specific_date" 4 times.(ùÃ¯»ùÿÿÿÿ
-Y	php:S1481«"CRemove this unused "$result_update_this_patient_id" local variable.(•½ë
-|	php:S1192x"bDefine a constant instead of duplicating this literal "patients_general_infos.patient_id" 3 times.(š‚æñüÿÿÿÿ
-j	php:S3776Ñ"TRefactor this function to reduce its Cognitive Complexity from 24 to the 15 allowed.(ó¸±Ü
-]	php:S1481Á"BRemove this unused "$result_of_delete_oppointment" local variable.(À½ïÿÿÿÿÿ
-Y	php:S14812"?Remove this unused "$admin_id_from_users_table" local variable.(ÌÏÎÒûÿÿÿÿ
-s	php:S1481ù"XRemove this unused "$validation_of_store_patient_time_appointment_table" local variable.(û‰Ï¦ûÿÿÿÿ
