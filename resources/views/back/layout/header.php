@@ -114,7 +114,7 @@ label
                             <input type="hidden" name="_token" value="'.csrf_token().'" >
                             
                             <center>
-                                <h4 class="col-md-12 col-sm-12 col-xs-12 text-center" align="center" style="direction:ltr;margin-top:40px;" >
+                                <h4 class="col-md-12 col-sm-12 col-xs-12 text-center" align="center" style="margin-top:40px;" >
                                     <div class="col-md-12 col-sm-12 col-xs-12 text-center" align="center" >
                                         Your searching word should be based on just <b>1</b> of the below types
                                     </div>

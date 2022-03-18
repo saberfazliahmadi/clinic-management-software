@@ -176,19 +176,19 @@ echo '
 
                 <div class="col-md-12 col-sm-12 col-xs-12" >
                     <a href="'.route('show_patients_ehr_document_page' , [ 'patient_id' => $key->patient_id , 'related_appointment_id' => '0' , 'child_dr_related_name' => 'free' ] ).'" class="text-center uiuxtrick" >
-                        <div class="col-md-4 col-sm-4 col-xs-12 btn btn-default" style="float:right;color:#337ab7;padding-top: 15px;padding-bottom: 15px;" >
+                        <div class="col-md-4 col-sm-4 col-xs-12 btn btn-default" style="border:1px solid #e3e3e3;float:right;color:#337ab7;padding-top: 15px;padding-bottom: 15px;" >
                              <i class="fa fa-clone"></i>
                              Medical Document
                         </div>
                     </a>
                     <a href="" class="text-center uiuxtrick" >
-                        <div class="col-md-4 col-sm-4 col-xs-12 btn btn-default" style="float:right;color:#337ab7;padding-top: 15px;padding-bottom: 15px;" >
+                        <div class="col-md-4 col-sm-4 col-xs-12 btn btn-default" style="border:1px solid #e3e3e3;float:right;color:#337ab7;padding-top: 15px;padding-bottom: 15px;" >
                              <i class="glyphicon glyphicon-tags"></i>&nbsp;
                              Medical Prescriptions
                         </div>
                     </a>
                     <a href="'.route('edit_patient_form', $key->patient_id ).'" class="text-center uiuxtrick" >
-                        <div class="col-md-3 col-sm-3 col-xs-12 btn btn-default" style="float:right;color:#337ab7;padding-top: 15px;padding-bottom: 15px;" >
+                        <div class="col-md-3 col-sm-3 col-xs-12 btn btn-default" style="border:1px solid #e3e3e3;float:right;color:#337ab7;padding-top: 15px;padding-bottom: 15px;" >
                               <i class="fa fa-edit"></i>
                              Book Appointment | Edit Info
                         </div>
