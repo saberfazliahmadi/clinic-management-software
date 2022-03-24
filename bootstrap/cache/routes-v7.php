@@ -24,7 +24,7 @@ app('router')->setCompiledRoutes(
         array (
           0 => 
           array (
-            '_route' => 'generated::dWqOyewZKbXGGJZv',
+            '_route' => 'generated::l1XilhMdIYWKAUxZ',
           ),
           1 => NULL,
           2 => 
@@ -44,7 +44,7 @@ app('router')->setCompiledRoutes(
         array (
           0 => 
           array (
-            '_route' => 'generated::NT2LjfvwzTa9vLAK',
+            '_route' => 'generated::AsXklDKdBAklDoUM',
           ),
           1 => NULL,
           2 => 
@@ -81,7 +81,7 @@ app('router')->setCompiledRoutes(
         array (
           0 => 
           array (
-            '_route' => 'generated::g39zkniZB5GY5esQ',
+            '_route' => 'generated::kVQK0lvApE4SuUH3',
           ),
           1 => NULL,
           2 => 
@@ -136,7 +136,7 @@ app('router')->setCompiledRoutes(
         array (
           0 => 
           array (
-            '_route' => 'generated::cPB0iAabGr3hMlK6',
+            '_route' => 'generated::y5dDiGQR0ApzjeoW',
           ),
           1 => NULL,
           2 => 
@@ -227,7 +227,7 @@ app('router')->setCompiledRoutes(
         array (
           0 => 
           array (
-            '_route' => 'generated::5ocDo4yApUEr9u5T',
+            '_route' => 'generated::WoFLGhyPlzLVwYS6',
           ),
           1 => NULL,
           2 => 
@@ -246,7 +246,7 @@ app('router')->setCompiledRoutes(
         array (
           0 => 
           array (
-            '_route' => 'generated::4NFpzgnKjtyFHYwV',
+            '_route' => 'generated::6syv018TXRky0KtS',
           ),
           1 => NULL,
           2 => 
@@ -635,7 +635,7 @@ app('router')->setCompiledRoutes(
     ),
     2 => 
     array (
-      0 => '{^(?|/password/reset/([^/]++)(*:31)|/update_this_patient/([^/]++)(*:67)|/edit_patient_form/([^/]++)(*:101)|/s(?|how_(?|patient(?|_time_appointment_table/([^/]++)/([^/]++)(*:172)|s_ehr_document_page/([^/]++)/([^/]++)/([^/]++)(*:226))|new_saved_ehr/([^/]++)(*:257))|tore_patients_ehr_document_page/([^/]++)(*:306))|/run_show_form_of_appointments_on_specific_date_by_get_method/([^/]++)(*:385)|/delete_this_(?|appointment_by_this_id/([^/]++)/([^/]++)(*:449)|financial_transaction/([^/]++)(*:487)))/?$}sDu',
+      0 => '{^(?|/password/reset/([^/]++)(*:31)|/update_this_patient/([0-9]+)(*:67)|/edit_patient_form/([0-9]+)(*:101)|/s(?|how_(?|patient(?|_time_appointment_table/([0-9--]+)/([0-9]+)(*:174)|s_ehr_document_page/([0-9]+)(?:/([0-9]+)(?:/([0-z--- ]+))?)?(*:242))|new_saved_ehr/([0-9]+)(*:273))|tore_patients_ehr_document_page/([0-9]+)(*:322))|/run_show_form_of_appointments_on_specific_date_by_get_method/([0-9--]+)(*:403)|/delete_this_(?|appointment_by_this_id/([0-9]+)/([0-9--]+)(*:469)|financial_transaction/([0-9]+)(*:507)))/?$}sDu',
     ),
     3 => 
     array (
@@ -707,7 +707,7 @@ app('router')->setCompiledRoutes(
           6 => NULL,
         ),
       ),
-      172 => 
+      174 => 
       array (
         0 => 
         array (
@@ -731,13 +731,15 @@ app('router')->setCompiledRoutes(
           6 => NULL,
         ),
       ),
-      226 => 
+      242 => 
       array (
         0 => 
         array (
           0 => 
           array (
             '_route' => 'show_patients_ehr_document_page',
+            'related_appointment_id' => NULL,
+            'child_dr_related_name' => NULL,
           ),
           1 => 
           array (
@@ -756,7 +758,7 @@ app('router')->setCompiledRoutes(
           6 => NULL,
         ),
       ),
-      257 => 
+      273 => 
       array (
         0 => 
         array (
@@ -779,7 +781,7 @@ app('router')->setCompiledRoutes(
           6 => NULL,
         ),
       ),
-      306 => 
+      322 => 
       array (
         0 => 
         array (
@@ -801,7 +803,7 @@ app('router')->setCompiledRoutes(
           6 => NULL,
         ),
       ),
-      385 => 
+      403 => 
       array (
         0 => 
         array (
@@ -824,7 +826,7 @@ app('router')->setCompiledRoutes(
           6 => NULL,
         ),
       ),
-      449 => 
+      469 => 
       array (
         0 => 
         array (
@@ -848,7 +850,7 @@ app('router')->setCompiledRoutes(
           6 => NULL,
         ),
       ),
-      487 => 
+      507 => 
       array (
         0 => 
         array (
@@ -886,7 +888,7 @@ app('router')->setCompiledRoutes(
   ),
   'attributes' => 
   array (
-    'generated::dWqOyewZKbXGGJZv' => 
+    'generated::l1XilhMdIYWKAUxZ' => 
     array (
       'methods' => 
       array (
@@ -907,7 +909,7 @@ app('router')->setCompiledRoutes(
         array (
           0 => 'web',
         ),
-        'as' => 'generated::dWqOyewZKbXGGJZv',
+        'as' => 'generated::l1XilhMdIYWKAUxZ',
       ),
       'fallback' => false,
       'defaults' => 
@@ -923,7 +925,7 @@ app('router')->setCompiledRoutes(
       'waitSeconds' => NULL,
       'withTrashed' => false,
     ),
-    'generated::NT2LjfvwzTa9vLAK' => 
+    'generated::AsXklDKdBAklDoUM' => 
     array (
       'methods' => 
       array (
@@ -940,13 +942,13 @@ app('router')->setCompiledRoutes(
         ),
         'uses' => 'O:47:"Laravel\\SerializableClosure\\SerializableClosure":1:{s:12:"serializable";O:46:"Laravel\\SerializableClosure\\Serializers\\Signed":2:{s:12:"serializable";s:297:"O:46:"Laravel\\SerializableClosure\\Serializers\\Native":5:{s:3:"use";a:0:{}s:8:"function";s:79:"function (\\Illuminate\\Http\\Request $request) {
     return $request->user();
-}";s:5:"scope";s:37:"Illuminate\\Routing\\RouteFileRegistrar";s:4:"this";N;s:4:"self";s:32:"0000000039c5a9e70000000006529937";}";s:4:"hash";s:44:"5uHdO7OxyNLZZJIBDuZr7G5IAn6NWLENoXCXXePQUfE=";}}',
+}";s:5:"scope";s:37:"Illuminate\\Routing\\RouteFileRegistrar";s:4:"this";N;s:4:"self";s:32:"000000006f159ee7000000003803b05d";}";s:4:"hash";s:44:"xr3k0kuP1R3mt3LAd25ke0M06bReUB4REslalqp84ew=";}}',
         'namespace' => 'App\\Http\\Controllers',
         'prefix' => 'api',
         'where' => 
         array (
         ),
-        'as' => 'generated::NT2LjfvwzTa9vLAK',
+        'as' => 'generated::AsXklDKdBAklDoUM',
       ),
       'fallback' => false,
       'defaults' => 
@@ -999,7 +1001,7 @@ app('router')->setCompiledRoutes(
       'waitSeconds' => NULL,
       'withTrashed' => false,
     ),
-    'generated::g39zkniZB5GY5esQ' => 
+    'generated::kVQK0lvApE4SuUH3' => 
     array (
       'methods' => 
       array (
@@ -1019,7 +1021,7 @@ app('router')->setCompiledRoutes(
         'where' => 
         array (
         ),
-        'as' => 'generated::g39zkniZB5GY5esQ',
+        'as' => 'generated::kVQK0lvApE4SuUH3',
       ),
       'fallback' => false,
       'defaults' => 
@@ -1108,7 +1110,7 @@ app('router')->setCompiledRoutes(
       'waitSeconds' => NULL,
       'withTrashed' => false,
     ),
-    'generated::cPB0iAabGr3hMlK6' => 
+    'generated::y5dDiGQR0ApzjeoW' => 
     array (
       'methods' => 
       array (
@@ -1128,7 +1130,7 @@ app('router')->setCompiledRoutes(
         'where' => 
         array (
         ),
-        'as' => 'generated::cPB0iAabGr3hMlK6',
+        'as' => 'generated::y5dDiGQR0ApzjeoW',
       ),
       'fallback' => false,
       'defaults' => 
@@ -1327,7 +1329,7 @@ app('router')->setCompiledRoutes(
       'waitSeconds' => NULL,
       'withTrashed' => false,
     ),
-    'generated::5ocDo4yApUEr9u5T' => 
+    'generated::WoFLGhyPlzLVwYS6' => 
     array (
       'methods' => 
       array (
@@ -1347,7 +1349,7 @@ app('router')->setCompiledRoutes(
         'where' => 
         array (
         ),
-        'as' => 'generated::5ocDo4yApUEr9u5T',
+        'as' => 'generated::WoFLGhyPlzLVwYS6',
       ),
       'fallback' => false,
       'defaults' => 
@@ -1363,7 +1365,7 @@ app('router')->setCompiledRoutes(
       'waitSeconds' => NULL,
       'withTrashed' => false,
     ),
-    'generated::4NFpzgnKjtyFHYwV' => 
+    'generated::6syv018TXRky0KtS' => 
     array (
       'methods' => 
       array (
@@ -1379,13 +1381,13 @@ app('router')->setCompiledRoutes(
         ),
         'uses' => 'O:47:"Laravel\\SerializableClosure\\SerializableClosure":1:{s:12:"serializable";O:46:"Laravel\\SerializableClosure\\Serializers\\Signed":2:{s:12:"serializable";s:267:"O:46:"Laravel\\SerializableClosure\\Serializers\\Native":5:{s:3:"use";a:0:{}s:8:"function";s:49:"function () {
     return \\view(\'auth.login\');
-}";s:5:"scope";s:37:"Illuminate\\Routing\\RouteFileRegistrar";s:4:"this";N;s:4:"self";s:32:"0000000039c5a9e50000000006529937";}";s:4:"hash";s:44:"d4zFTnuoIcfJn/kSibKvLhMjMEFW8XisQI8gx+cg4AU=";}}',
+}";s:5:"scope";s:37:"Illuminate\\Routing\\RouteFileRegistrar";s:4:"this";N;s:4:"self";s:32:"000000006f159ee9000000003803b05d";}";s:4:"hash";s:44:"u9ehTqr6GrkFadpzAzaXBsXpNUWNM5UXw5WMq/eBiZM=";}}',
         'namespace' => 'App\\Http\\Controllers',
         'prefix' => '',
         'where' => 
         array (
         ),
-        'as' => 'generated::4NFpzgnKjtyFHYwV',
+        'as' => 'generated::6syv018TXRky0KtS',
       ),
       'fallback' => false,
       'defaults' => 
@@ -1468,6 +1470,7 @@ app('router')->setCompiledRoutes(
       ),
       'wheres' => 
       array (
+        'update_this_patient_id' => '[0-9]+',
       ),
       'bindingFields' => 
       array (
@@ -1506,6 +1509,7 @@ app('router')->setCompiledRoutes(
       ),
       'wheres' => 
       array (
+        'edit_this_patient_id' => '[0-9]+',
       ),
       'bindingFields' => 
       array (
@@ -1694,6 +1698,8 @@ app('router')->setCompiledRoutes(
       ),
       'wheres' => 
       array (
+        'choose_time_for_this_date' => '[0-9--]+',
+        'choose_time_for_this_patient_id' => '[0-9]+',
       ),
       'bindingFields' => 
       array (
@@ -1844,6 +1850,7 @@ app('router')->setCompiledRoutes(
       ),
       'wheres' => 
       array (
+        'show_all_appointments_this_date' => '[0-9--]+',
       ),
       'bindingFields' => 
       array (
@@ -1882,6 +1889,8 @@ app('router')->setCompiledRoutes(
       ),
       'wheres' => 
       array (
+        'appointment_id' => '[0-9]+',
+        'show_all_appointments_this_date' => '[0-9--]+',
       ),
       'bindingFields' => 
       array (
@@ -2109,6 +2118,7 @@ app('router')->setCompiledRoutes(
       ),
       'wheres' => 
       array (
+        'financial_transaction_id' => '[0-9]+',
       ),
       'bindingFields' => 
       array (
@@ -2349,7 +2359,7 @@ app('router')->setCompiledRoutes(
         0 => 'GET',
         1 => 'HEAD',
       ),
-      'uri' => 'show_patients_ehr_document_page/{patient_id}/{related_appointment_id}/{child_dr_related_name}',
+      'uri' => 'show_patients_ehr_document_page/{patient_id}/{related_appointment_id?}/{child_dr_related_name?}',
       'action' => 
       array (
         'middleware' => 
@@ -2372,6 +2382,9 @@ app('router')->setCompiledRoutes(
       ),
       'wheres' => 
       array (
+        'patient_id' => '[0-9]+',
+        'related_appointment_id' => '[0-9]+',
+        'child_dr_related_name' => '[0-z--- ]+',
       ),
       'bindingFields' => 
       array (
@@ -2409,6 +2422,7 @@ app('router')->setCompiledRoutes(
       ),
       'wheres' => 
       array (
+        'patient_id' => '[0-9]+',
       ),
       'bindingFields' => 
       array (
@@ -2447,6 +2461,7 @@ app('router')->setCompiledRoutes(
       ),
       'wheres' => 
       array (
+        'EHR_document_id' => '[0-9]+',
       ),
       'bindingFields' => 
       array (

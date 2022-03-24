@@ -22,13 +22,12 @@ echo '
             <center>
             <h3 style="text-align:center;">
                 '.$title_of_page.'
-                <br>
             </h3>
             </center>
         </div>
         <div class="col-md-1 col-sm-1 col-xs-1">
             <h5 title="Total Number of Submitted Patients">
-                Total 
+                Total
                 '.$number_of_total_clinic_patients.'
             </h5>
         </div>
@@ -278,6 +277,14 @@ echo '
         foreach ( $result_edit_patient_form as $key )
         {
             echo '
+            <center>
+                <div class="col-md-12 col-sm-12 col-xs-12">
+                    <a title="Display ' .$key->patient_first_name. ' ' .$key->patient_last_name. ' EHR Document" href="'.route('show_patients_ehr_document_page' , [ 'patient_id' => $key->patient_id ] ).'" style="float:right;color: white; font-size: 13px; background-color:#73879C;border:1px solid #5A738E; " class="uiuxtrick btn btn-success" >
+                        <i class="fa fa-clone"></i>
+                        EHR Document
+                    </a>
+                </div>
+            </center>
             <form method="POST" action="'.route('update_this_patient' , $key->patient_id ).'" data-parsley-validate class="form-horizontal form-label-left" style="text-align:left!important;direction:ltr!important;font-size:15pt;margin-top:40px!important;" id="medical-file-form" >
                 
                 <input type="hidden" name="_token" value="' . csrf_token() . '" >
@@ -432,19 +439,21 @@ echo '
                   
                 <br>
                 <center>
-                    <span data-toggle="collapse" data-target="#more_details" class="btn-primary btn-lg" type="button" style="cursor:pointer;color:gray;background-color:white;border:1px solid #bfbdbd;" >
-                        <span class="glyphicon glyphicon-plus" aria-hidden="true" style="color:#ccc;margin-left:5px;" ></span>
-                        More Details
-                    </span>
+                    <div class="col-md-12 col-sm-12 col-xs-12">
+                        <span data-toggle="collapse" data-target="#more_details" class="btn-primary btn-lg" type="button" style="cursor:pointer;color:gray;background-color:white;border:1px solid #bfbdbd;" >
+                            <span class="glyphicon glyphicon-plus" aria-hidden="true" style="color:#ccc;margin-left:5px;" ></span>
+                            More Details
+                        </span>
+                    </div>
                 </center>
                 <br>
         
                 <div id="more_details" class="collapse col-md-12 col-sm-12 col-xs-12">
                 
                     <p class="text-center">
-                    This Profile Created at: '.$key_2->created_at.'
+                    This Profile Created at: '.$key->created_at.'
                     <br>
-                    This Profile Last Updated at: '.$key_2->updated_at.'
+                    This Profile Last Updated at: '.$key->updated_at.'
                     </p>
         
                   <div class="form-group">

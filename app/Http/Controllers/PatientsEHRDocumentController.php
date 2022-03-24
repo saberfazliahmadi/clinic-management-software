@@ -324,7 +324,7 @@ class PatientsEHRDocumentController extends Controller
             if ($request->hasFile('image'))
             {
                 $validatedData = $request->validate([
-                    'image' => 'image|mimes:jpg|max:2048',
+                    'image' => 'image|mimes:jpg|max:10048',
                 ]);
 
                 $file = $request->file('image');
@@ -348,7 +348,7 @@ class PatientsEHRDocumentController extends Controller
         }
         catch (\Exception $exception)
         {
-            \Session::flash('success_message', '<span style="color:blue;">Can not Save new EHR!</span>') ;
+            \Session::flash('success_message', $exception.'<span style="color:blue;">Can not Save new EHR!</span>') ;
             return redirect(route('home'));
         }
     }

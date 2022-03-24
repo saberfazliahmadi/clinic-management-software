@@ -59,14 +59,14 @@ echo '
                     <div class="col-md-3 col-sm-3 col-xs-3" style="float:left;" >
                         <i class="glyphicon glyphicon-file" aria-hidden="true" style="font-size:26px;margin-left: 10px;margin-right: 10px;" ></i>
                         <br>
-                        Medical Document Number
+                        EHR Document Number
                     </div>
                     
                 </h4>
                 
                 <hr style="width:1px;" >
                 <div class="col-md-12 col-sm-12 col-xs-12" align="center" style="float:none;" >
-                    <input type="text" name="search_text" style="text-align: left!important;float:none;" min="1" max="60" autocomplete="off" aria-autocomplete="list" aria-expanded="false" aria-haspopup="true" role="combobox" spellcheck="false" class="form-control" placeholder="Type your searching word based on ONE of these types: Name | Family | Mobile Number | Nationality Number | Medical Document Number" align="center" required >
+                    <input type="text" name="search_text" style="text-align: left!important;float:none;" min="1" max="60" autocomplete="off" aria-autocomplete="list" aria-expanded="false" aria-haspopup="true" role="combobox" spellcheck="false" class="form-control" placeholder="Type your searching word based on ONE of these types: Name | Family | Mobile Number | Nationality Number | EHR Document Number" align="center" required >
                 </div>
                 
             </center>
@@ -107,7 +107,7 @@ echo '
             <div class="col-md-3 col-sm-3 col-xs-3">
                 <h4>
                     <span style="font-weight:bolder;color:gray;" class="btn-link">
-                        Medical Document Number
+                        EHR Document Number
                     </span>
                 </h4>
             </div>
@@ -175,10 +175,10 @@ echo '
                 <hr style="width:1px;" >
 
                 <div class="col-md-12 col-sm-12 col-xs-12" >
-                    <a href="'.route('show_patients_ehr_document_page' , [ 'patient_id' => $key->patient_id , 'related_appointment_id' => '0' , 'child_dr_related_name' => 'free' ] ).'" class="text-center uiuxtrick" >
+                    <a href="'.route('show_patients_ehr_document_page' , [ 'patient_id' => $key->patient_id ] ).'" class="text-center uiuxtrick" >
                         <div class="col-md-4 col-sm-4 col-xs-12 btn btn-default" style="border:1px solid #e3e3e3;float:right;color:#337ab7;padding-top: 15px;padding-bottom: 15px;" >
                              <i class="fa fa-clone"></i>
-                             Medical Document
+                             EHR Document
                         </div>
                     </a>
                     <a href="" class="text-center uiuxtrick" >

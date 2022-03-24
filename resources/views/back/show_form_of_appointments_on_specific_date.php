@@ -291,14 +291,14 @@ echo '
                         </div>
                             
                         <div class="col-md-2" style="padding-right:0px;padding-left:0px;margin-right:0px;margin-left:0px;margin-top:10px;" >
-                            <div class="col-md-12" style="'.$opacity_appointment_trick.'" >
-                                <a href="'.route('delete_this_appointment_by_this_id' , [ 'appointment_id' => $key->appointment_id , 'show_all_appointments_this_date' => $show_all_appointments_on_this_date ] ).'" style="float:left;color: white; font-size: 13px; float: left;background-color:#5A738E;border:1px solid #5A738E; " class="uiuxtrick btn btn-success" ' ; ?> onclick="return confirm('Are you sure to delete this appointment?') <?php echo '" >
-                                    <i class="fa fa-trash-o" aria-hidden="true" ></i>
-                                    Delete
+                            
+                            <div class="col-md-12" style="'.$opacity_appointment_trick.';" >
+                                <a title="Display EHR Document" href="'.route('show_patients_ehr_document_page' , [ 'patient_id' => $key->patient_id ] ).'" style="float:left;color: white; font-size: 13px; float: left;background-color:#5A738E;border:1px solid #5A738E; " class="uiuxtrick btn btn-success" >
+                                    <i class="fa fa-clone"></i>
+                                    EHR Document
                                 </a>
                             </div>
-                            
-                            <div class="col-md-12" style="'.$opacity_appointment_trick.';margin-top:12px;" > ';
+                            <div class="col-md-12" style="'.$opacity_appointment_trick.';" > ';
                                 // If the patient has mobile number and active ROBOT then make link of send message by BOT.
                                 if( strlen($key->patient_mobile_number) > 0  && strlen($key->patient_from_external_platform_id) > 0)
                                 {
@@ -315,7 +315,7 @@ echo '
                                 </a>
                             </div>
                             
-                            <div class="col-md-12" style="'.$opacity_appointment_trick.';margin-top:12px;" >
+                            <div class="col-md-12" style="'.$opacity_appointment_trick.';" >
                                 <a id="various222" href="#a'.$count_trick.'" title="Quick Show Patient Profile" style="float:left;color: white; font-size: 13px; float: left;background-color:#5A738E;border:1px solid #5A738E;" class="btn btn-success" type="button" >
                                     <span class="glyphicon glyphicon-user" aria-hidden="true"></span>
                                     Profile
@@ -363,6 +363,13 @@ echo '
                                      
                                     </div>
                                 </div>
+                            </div>
+                            
+                            <div class="col-md-12" style="'.$opacity_appointment_trick.'" >
+                                <a href="'.route('delete_this_appointment_by_this_id' , [ 'appointment_id' => $key->appointment_id , 'show_all_appointments_this_date' => $show_all_appointments_on_this_date ] ).'" style="float:left;color: white; font-size: 13px; float: left;background-color:#5A738E;border:1px solid #5A738E; " class="uiuxtrick btn btn-success" ' ; ?> onclick="return confirm('Are you sure to delete this appointment?') <?php echo '" >
+                                    <i class="fa fa-trash-o" aria-hidden="true" ></i>
+                                    Delete
+                                </a>
                             </div>
                       </div>
                       </div>' ;
