@@ -252,21 +252,22 @@ class PatientsGeneralInfoController extends Controller
         $admin_id_from_users_table = $this->find_admin_id_from_users_table() ;
 
         // Check for mobile number duplication.
-        // EXCEPT condition ( patient_id != $update_this_patient_id)
+        // EXCEPTION condition ( patient_id != $update_this_patient_id)
+        // WE SHOULD NOT HAVE TWO PATIENTS WITH SAME MOBILE NUMBERS IN OUR DATABASE! the mobile numbers should be unique
         $number_of_duplicate_mobile_number = patients_general_info::
-                                            select('patient_mobile_number' , 'patient_id')
-                                            ->where('patient_mobile_number', '=', $request->post('patient_mobile_number') )
-                                            ->where('patient_dr_related_id', '=', $admin_id_from_users_table)
-                                            ->where('patient_id', '!=', $update_this_patient_id )
-                                            ->count();
+        select('patient_mobile_number'  , 'patient_id' , 'patient_dr_related_id' )
+        ->where('patient_mobile_number' , '=' , $request->post('patient_mobile_number') )
+        ->where('patient_dr_related_id' , '=' , $admin_id_from_users_table)
+        ->where('patient_id'            , '!=', $update_this_patient_id )
+        ->count();
 
         // START of If the mobile number of patient was unique.
         if ( $number_of_duplicate_mobile_number == '0' )
         {
             $validation_of_update_this_patient_id = $request->validate(
                 [
-                    'patient_first_name' => 'required|min:3',
-                    'patient_last_name' => 'required|min:3',
+                    'patient_first_name'    => 'required|min:3' ,
+                    'patient_last_name'     => 'required|min:3' ,
                     'patient_mobile_number' => 'required|regex:/^([0-9\s\-\+\(\)]*)$/|min:8'
                 ]
             );

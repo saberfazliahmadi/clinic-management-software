@@ -277,14 +277,13 @@ echo '
         foreach ( $result_edit_patient_form as $key )
         {
             echo '
-            <center>
-                <div class="col-md-12 col-sm-12 col-xs-12">
-                    <a title="Display ' .$key->patient_first_name. ' ' .$key->patient_last_name. ' EHR Document" href="'.route('show_patients_ehr_document_page' , [ 'patient_id' => $key->patient_id ] ).'" style="float:right;color: white; font-size: 13px; background-color:#73879C;border:1px solid #5A738E; " class="uiuxtrick btn btn-success" >
-                        <i class="fa fa-clone"></i>
-                        EHR Document
-                    </a>
-                </div>
-            </center>
+            <div class="col-md-12 col-sm-12 col-xs-12" style="float:right;" >
+                <a title="Display ' .$key->patient_first_name. ' ' .$key->patient_last_name. ' EHR Document" href="'.route('show_patients_ehr_document_page' , [ 'patient_id' => $key->patient_id ] ).'" style="float:right;color: white; font-size: 13px; background-color:#73879C;border:1px solid #5A738E;" class="uiuxtrick btn btn-success" >
+                    <i class="fa fa-clone"></i>
+                    EHR Document
+                </a>
+            </div>
+                
             <form method="POST" action="'.route('update_this_patient' , $key->patient_id ).'" data-parsley-validate class="form-horizontal form-label-left" style="text-align:left!important;direction:ltr!important;font-size:15pt;margin-top:40px!important;" id="medical-file-form" >
                 
                 <input type="hidden" name="_token" value="' . csrf_token() . '" >

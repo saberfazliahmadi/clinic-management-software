@@ -818,7 +818,7 @@ foreach ( $result_of_patients_general_infos as $key )
                                             }
 
                                             echo '
-                                            <a class="fancybox-buttons" href="'.url('storage/images/'.Auth::user()->name.'/'.$key_patient_photo->patients_photos_patient_related_id.'/para/'.$key_patient_photo->patients_photos_file_name).'" data-fancybox-group="button" style="text-align:center;" >
+                                            <a class="fancybox-buttons" href="'.url('storage/images/'.$admin_id_from_users_table.'/'.$key_patient_photo->patients_photos_patient_related_id.'/para/'.$key_patient_photo->patients_photos_file_name).'" data-fancybox-group="button" style="text-align:center;" >
                                                 <div class="col-md-3 col-sm-3 col-xs-3 well" >
                                                     <div class="block_content">
                                                       <h2 class="title" align="center" style="text-align:center;" >

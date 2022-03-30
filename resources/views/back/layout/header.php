@@ -25,7 +25,34 @@ echo '
     '.$extra_links_header.'
 </head>
 
-<style  type="text/css" >
+<style  type="text/css" >' ;
+
+/*
+    If the language set to 'locale' => 'fa'
+    in config/app.php then add persian font-family: 'IRANSansNums'
+*/
+if( app()->getLocale() == 'fa' )
+{
+    echo '
+    @font-face 
+    {
+        font-family: \'IRANSansNums\';
+        font-style: normal;
+        font-weight: normal;
+        src: url(\''.url('back/font/ir/iransans/IRANSansWeb(FaNum).eot').'\');
+        src: url(\''.url('back/font/ir/iransans/IRANSansWeb(FaNum).eot?#iefix').'\') format(\'embedded-opentype\'),  /* IE6-8 */
+        url(\''.url('back/font/ir/iransans/IRANSansWeb(FaNum).woff2').'\') format(\'woff2\'),  /* FF39+,Chrome36+, Opera24+*/
+        url(\''.url('back/font/ir/iransans/IRANSansWeb(FaNum).woff').'\') format(\'woff\'),  /* FF3.6+, IE9, Chrome6+, Saf5.1+*/
+        url(\''.url('back/cdn/font/ir/iransans/IRANSansWeb(FaNum).ttf').'\') format(\'truetype\');
+    }
+    
+    body,h1,h2,h3,h4,h5,h6,p,a,li
+    {
+        font-family: IRANSansNums, Tahoma, Roboto, Arial, "Droid Sans", sans-serif!important;
+    }' ;
+}
+
+echo '
 button, .buttons, .modal-footer .btn+.btn
 {
     margin-bottom: 0px!important;
@@ -166,20 +193,6 @@ label
                     </div>
                     <!-- END of login fancy console panel search_form -->
                     
-                    
-                    
-                    
-                    
-                    
-                    
-                    
-                    
-                    
-                    
-                    
-                    
-                    
-    
                 </div>
             </div>
     
@@ -244,6 +257,7 @@ label
                                         </span>
                                     </li>' ;
 
+                                    // If the user has admin type then show_main_settings_of_software_form
                                     if( Auth::user()->user_type == 'admin' )
                                     {
                                         echo '
@@ -278,13 +292,11 @@ label
                                     <br>
                                     
                                     <li style="margin-top:15px;" >
-                                        
                                         <span class="fa fa-sign-out pull-left" aria-hidden="true" style="float:left;font-size:26px;margin-left:0px;padding-left:15px;padding-right:19px;"></span>
                                         <form method="post" action="'.route('logout').'" >
                                             <input type="hidden" name="_token" value="'.csrf_token().'" >
                                             <input type="submit" name="logout" value="' . $cms_menu_title_data_from_middleware[28] . '" class="btn btn-success" >
                                         </form>
-                                        
                                     </li>
                                     
                                 </ul>
@@ -672,12 +684,6 @@ else
     </center>' ;
 }
 
-
-
-
-
-
-
                                     echo '
                                     </div>
                                     </div>
@@ -698,13 +704,17 @@ else
     {
         foreach($errors->all() as $error)
         {
-            echo '<div class="alert alert-danger" role="alert" > <button type="button" class="close" data-dismiss="alert" aria-label="Close" style="font-size:50px;" ><span aria-hidden="true">&times;</span></button> <h4 style="text-align:right!important;" >'.$error.'</h4></div>' ;
+            echo '
+            <p><strong>Opps Something went wrong</strong></p>
+            <br>
+            <div class="alert alert-danger" role="alert" > <button type="button" class="close" data-dismiss="alert" aria-label="Close" style="font-size:50px;" ><span aria-hidden="true">&times;</span></button> <h4 style="text-align:right!important;" >'.$error.'</h4></div>' ;
         }
     }
 
-    if(strlen(Session::get('success_message')) > 0 )
+    if( session()->has('success_message') )
     {
         echo '<div class="alert alert-success" role="alert" > <button type="button" class="close" data-dismiss="alert" aria-label="Close" style="font-size:50px;margin-left:15px!important;" ><span aria-hidden="true">&times;</span></button> <h3 style="text-align:right!important;" >'.Session::get('success_message').'</h3></div>' ;
+        session()->pull('success_message') ;
     }
 
 ?>

@@ -23,7 +23,7 @@ class HomeController extends Controller
      */
     public function index()
     {
-        $title_of_page = 'Welcome to Clinic Management Software' ;
+        $title_of_page = 'Welcome to MatabeOnline Clinic Management Software' ;
         return view('back.home', [ 'title_of_page' => $title_of_page ] ) ;
     }
 }

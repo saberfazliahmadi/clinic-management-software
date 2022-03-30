@@ -143,7 +143,7 @@ class PatientsAppointmentController extends Controller
             }
             else
             {
-                \Session::flash('success_message' , '<span style="color:blue;" >There are not any Appointment on Date '.$show_all_appointments_on_this_date.'</span> <br> Choose another Date to Show Appointments') ;
+                \Session::flash('success_message' , '<span style="color:blue;" >There are not any Appointment on Date '.$show_all_appointments_on_this_date.'</span> <br> Choose a Date to Show Appointments') ;
                 return view('back.show_form_of_appointments_on_specific_date' , [ 'title_of_page' => $title_of_page ] ) ;
             }
         }

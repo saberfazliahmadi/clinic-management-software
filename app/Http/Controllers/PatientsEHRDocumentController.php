@@ -170,7 +170,8 @@ class PatientsEHRDocumentController extends Controller
                     'result_of_patients_ehr_document'           => $result_of_patients_ehr_document ,
                     'count_result_of_patients_ehr_document'     => $count_result_of_patients_ehr_document ,
                     'result_of_patients_general_infos'          => $result_of_show_patients_general_infos ,
-                    'count_result_of_patients_general_infos'    => $count_number_of_patients_general_infos
+                    'count_result_of_patients_general_infos'    => $count_number_of_patients_general_infos ,
+                    'admin_id_from_users_table'                 => $admin_id_from_users_table
                 ]) ;
             }
             else
@@ -324,12 +325,13 @@ class PatientsEHRDocumentController extends Controller
             if ($request->hasFile('image'))
             {
                 $validatedData = $request->validate([
-                    'image' => 'image|mimes:jpg|max:10048',
+                    'image' => 'image|mimes:jpeg,png,jpg,gif,svg|max:10048',
                 ]);
 
                 $file = $request->file('image');
-                $fileName = rand(11111, 99999) . time() . rand() . '.jpg';
-                $destinationPath = public_path() . '/storage/images/' . Auth::user()->name . '/' . $request->patient_id . '/para';
+                $extension = $request->file('image')->extension();
+                $fileName = rand(11111, 99999) . time() . rand() . '.'.$extension ;
+                $destinationPath = public_path() . '/storage/images/' . $admin_id_from_users_table . '/' . $request->patient_id . '/para';
                 $file->move($destinationPath, $fileName);
                 //$path = $request->file('image')->sotre('public/images/'.Auth::user()->name.'/'.$request->patient_id.'/para' , $name );
 
@@ -348,7 +350,7 @@ class PatientsEHRDocumentController extends Controller
         }
         catch (\Exception $exception)
         {
-            \Session::flash('success_message', $exception.'<span style="color:blue;">Can not Save new EHR!</span>') ;
+            \Session::flash('success_message', '<span style="color:blue;">Can not Save new EHR!</span>') ;
             return redirect(route('home'));
         }
     }

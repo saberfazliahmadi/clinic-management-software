@@ -20,7 +20,7 @@ Route::get('/', function () {
 });
 
 // protected page accessible for user and admin
-Route::group( [ 'middleware' => ['protected_page_accessible_for_user_and_admin'] ] , function()
+Route::group( [ 'middleware' => ['protected_page_accessible_for_user_and_admin' ] ] , function()
 {
     Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
 

@@ -38,33 +38,25 @@ use Hash;
 
 class UserController extends Controller
 {
-    public function find_admin_id_from_users_table()
-    {
-        // If the user has a parent_id so user_type='user' and we use Auth::user()->parent_id
-        if (strlen(Auth::user()->parent_id) > 0) {
-            return $admin_id_from_users_table = Auth::user()->parent_id;
-        } // If the user DOES NOT have parent_id so user_type='admin' and we use Auth::user()->id
-        else {
-            return $admin_id_from_users_table = Auth::user()->id;
-        }
-    }
-
     public function show_main_settings_of_software_form()
     {
         try
         {
             $result_show_main_settings_of_software_form = User::
             select('*')
-                ->where('id', '=', Auth::user()->id)
-                ->where('name', '=', Auth::user()->name)
-                ->get();
+            ->where('id'  , '=' , Auth::user()->id)
+            ->where('name', '=' , Auth::user()->name)
+            ->get();
 
             $count_result_show_main_settings_of_software_form = $result_show_main_settings_of_software_form->count();
 
-            if ($count_result_show_main_settings_of_software_form) {
+            if ($count_result_show_main_settings_of_software_form)
+            {
                 $title_of_page = 'Main Settings of Software';
                 return view('back.show_main_settings_of_software_form', ['title_of_page' => $title_of_page, 'result_show_main_settings_of_software_form' => $result_show_main_settings_of_software_form]);
-            } else {
+            }
+            else
+            {
                 \Session::flash('success_message', '<b style="color:blue;" >We have an error to show main settings of software</b>');
                 return redirect(route('home'));
             }
@@ -79,15 +71,15 @@ class UserController extends Controller
 
     public function update_show_main_settings_of_software_form(Request $request)
     {
-        $clinic_doctors_name = $request->clinic_doctors_name;
+        $clinic_doctors_name     = $request->clinic_doctors_name;
         $common_hypersensitivity = $request->common_hypersensitivity;
-        $common_drug = str_replace(" ", "_", $request->common_drug);
-        $common_diet = $request->common_diet;
-        $common_return_date = $request->common_return_date;
-        $phone_number = $request->phone_number;
-        $college_branch = $request->college_branch;
-        $contact_address = $request->contact_address;
-        $money_console_status = $request->money_console_status;
+        $common_drug             = str_replace(" ", "_", $request->common_drug);
+        $common_diet             = $request->common_diet;
+        $common_return_date      = $request->common_return_date;
+        $phone_number            = $request->phone_number;
+        $college_branch          = $request->college_branch;
+        $contact_address         = $request->contact_address;
+        $money_console_status    = $request->money_console_status;
 
         $gap_time_between_appointments = str_replace(" ", "", $request->gap_time_between_appointments);
         // $gap_time_between_appointments should be an amount between 5 and 60 seconds
@@ -170,9 +162,10 @@ class UserController extends Controller
             . ',' . $cms_menu_title_28;
 
         // START of processing to unserialize an array variable and add new value at the end of it and then serialize that variable again. a:1:{i:0;s:1:"f";}
-        $options_for_user = Auth::user()->options_for_user;
-        $options_for_user = (unserialize($options_for_user));
+        $options_for_user   = Auth::user()->options_for_user;
+        $options_for_user   = (unserialize($options_for_user));
         $num_of_index_array = count($options_for_user);
+
         if ($money_console_status == 'true')
         {
             $options_for_user[0] = 't';
@@ -181,31 +174,30 @@ class UserController extends Controller
         {
             $options_for_user[0] = 'f';
         }
+
         $options_for_user = serialize($options_for_user);
         // END of processing to unserialize an array variable and add new value at the end of it and then serialize that variable again. a:1:{i:0;s:1:"f";}
-
-        $find_admin_id_from_users_table = $this->find_admin_id_from_users_table();
 
         try
         {
             $result_update_show_main_settings_of_software_form = User::
             select('*')
-                ->where('id', '=', $find_admin_id_from_users_table)
-                ->where('name', '=', Auth::user()->name)
-                ->update(
-                    [
-                        'common_drug' => $common_drug,
-                        'common_diet' => $common_diet,
-                        'common_return_date' => $common_return_date,
-                        'phone_number' => $phone_number,
-                        'college_branch' => $college_branch,
-                        'contact_address' => $contact_address,
-                        'common_hypersensitivity' => $common_hypersensitivity,
-                        'options_for_user' => $options_for_user,
-                        'cms_menu_title' => $cms_menu_title,
-                        'gap_time_between_appointments' => $gap_time_between_appointments,
-                        'clinic_doctors_name' => $clinic_doctors_name
-                    ]);
+            ->where('id'  , '=' , Auth::user()->id)
+            ->where('name', '=' , Auth::user()->name)
+            ->update(
+            [
+                'common_drug'             => $common_drug,
+                'common_diet'             => $common_diet,
+                'common_return_date'      => $common_return_date,
+                'phone_number'            => $phone_number,
+                'college_branch'          => $college_branch,
+                'contact_address'         => $contact_address,
+                'common_hypersensitivity' => $common_hypersensitivity,
+                'options_for_user'        => $options_for_user,
+                'cms_menu_title'          => $cms_menu_title,
+                'gap_time_between_appointments' => $gap_time_between_appointments,
+                'clinic_doctors_name'     => $clinic_doctors_name
+            ]);
 
             \Session::flash('success_message', 'The New Settings of Software Successfully Updated') ;
             return redirect(route('show_main_settings_of_software_form'));
@@ -245,8 +237,8 @@ class UserController extends Controller
 
                     $result_cunt_run_change_password_form = User::
                     select('*' )
-                    ->where('id', '=', Auth::user()->id)
-                    ->where('name', '=', Auth::user()->name)
+                    ->where('id'  , '=' , Auth::user()->id)
+                    ->where('name', '=' , Auth::user()->name)
                     ->update(
                     [
                         'password' => $hashed_new_password
