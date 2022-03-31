@@ -36,7 +36,7 @@ Route::group( [ 'middleware' => ['protected_page_accessible_for_user_and_admin' 
     Route::get('show_patient_time_appointment_table/{choose_time_for_this_date}/{choose_time_for_this_patient_id}' , 'PatientsAppointmentController@show_patient_time_appointment_table' )->name('show_patient_time_appointment_table')->where(['choose_time_for_this_date' => '[0-9--]+' , 'choose_time_for_this_patient_id' => '[0-9]+' ]);
     Route::put('store_patient_time_appointment_table' , 'PatientsAppointmentController@store_patient_time_appointment_table')->name('store_patient_time_appointment_table') ;
     Route::get('show_form_of_appointments_on_specific_date' , 'PatientsAppointmentController@show_form_of_appointments_on_specific_date')->name('show_form_of_appointments_on_specific_date') ;
-    Route::post('run_show_form_of_appointments_on_specific_date' ,'PatientsAppointmentController@show' )->name('run_show_form_of_appointments_on_specific_date') ;
+    Route::get('run_show_form_of_appointments_on_specific_date' ,'PatientsAppointmentController@show' )->name('run_show_form_of_appointments_on_specific_date') ;
     Route::get('run_show_form_of_appointments_on_specific_date_by_get_method/{show_all_appointments_this_date}' ,'PatientsAppointmentController@show' )->name('run_show_form_of_appointments_on_specific_date_by_get_method')->where(['show_all_appointments_this_date' => '[0-9--]+' ]);
     Route::get('delete_this_appointment_by_this_id/{appointment_id}/{show_all_appointments_this_date}' , 'PatientsAppointmentController@destroy')->name('delete_this_appointment_by_this_id')->where(['appointment_id' => '[0-9]+' , 'show_all_appointments_this_date' => '[0-9--]+' ]);
 

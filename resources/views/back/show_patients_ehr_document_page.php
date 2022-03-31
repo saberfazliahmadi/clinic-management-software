@@ -107,7 +107,7 @@ include 'layout/header.php' ;
     .modal.modal-fullscreen .modal-dialog,.modal.modal-fullscreen .modal-content{bottom:0;left:0;position:absolute;right:0;top:0}
     .modal.modal-fullscreen .modal-dialog{margin:0;width:100%}
     .modal.modal-fullscreen .modal-content{border:none;-moz-border-radius:0;border-radius:0;-webkit-box-shadow:inherit;-moz-box-shadow:inherit;-o-box-shadow:inherit;box-shadow:inherit}
-    .modal.modal-fullscreen.force-fullscreen .modal-body{padding:0}
+    .modal.modal-fullscreen.force-fullscreen .modal-body{padding:0;}
     .modal.modal-fullscreen.force-fullscreen .modal-header,.modal.modal-fullscreen.force-fullscreen .modal-footer{left:0;position:absolute;right:0}
     .modal.modal-fullscreen.force-fullscreen .modal-header{top:0;}
     .modal.modal-fullscreen.force-fullscreen .modal-footer{bottom:0}
@@ -919,7 +919,7 @@ foreach ( $result_of_patients_general_infos as $key )
                                                                   <span aria-hidden="true">&times;</span>
                                                                 </button>
                                                               </div>
-                                                              <div class="modal-body">';
+                                                              <div class="modal-body" style="overflow: auto!important;" >';
 
                                                                 if (strlen($cms_menu_title[4]) > 0)
                                                                 {

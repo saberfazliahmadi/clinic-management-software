@@ -29,7 +29,7 @@ echo '
 	</div>
     
     <div class="col-md-12 col-sm-12 col-xs-12">  
-        <form method="post" action="'.route('run_show_form_of_appointments_on_specific_date').'" id="medical-file-form" data-parsley-validate  >
+        <form method="get" action="'.route('run_show_form_of_appointments_on_specific_date').'" id="medical-file-form" data-parsley-validate  >
         
             <input type="hidden" name="_token" value="'.csrf_token().'" >
             
@@ -366,7 +366,7 @@ echo '
                             </div>
                             
                             <div class="col-md-12" style="'.$opacity_appointment_trick.'" >
-                                <a href="'.route('delete_this_appointment_by_this_id' , [ 'appointment_id' => $key->appointment_id , 'show_all_appointments_this_date' => $show_all_appointments_on_this_date ] ).'" style="float:left;color: white; font-size: 13px; float: left;background-color:#5A738E;border:1px solid #5A738E; " class="uiuxtrick btn btn-success" ' ; ?> onclick="return confirm('Are you sure to delete this appointment?') <?php echo '" >
+                                <a href="'.route('delete_this_appointment_by_this_id' , [ 'appointment_id' => $key->appointment_id , 'show_all_appointments_this_date' => $show_all_appointments_on_this_date ] ).'" style="float:left;color: white; font-size: 13px; float: left;background-color:#5A738E;border:1px solid #5A738E; " class="uiuxtrick btn btn-success" ' ; ?> onclick="return confirm('Are you sure to delete this appointment?') <?php echo '" title="Delete This Appointment" >
                                     <i class="fa fa-trash-o" aria-hidden="true" ></i>
                                     Delete
                                 </a>
@@ -377,8 +377,8 @@ echo '
                     } // END of foreach.
 
                     // Put this piece of code to make a gap between search button and the last result for better UX
-                    echo '<hr style="width:1px;" >';
                     echo '
+                    <hr style="width:1px;" >
                     <button type="submit" name="Search" class="btn btn-success btn-group-justified uiuxtrick" style="font-size:28px;position: fixed;bottom: 0px;right: 0px;z-index: 1;margin-bottom:0px;margin-right:0px;" onclick="this.disabled=true;this.form.submit();" >
                         Display All Appointments on This Date
                     </button>' ;

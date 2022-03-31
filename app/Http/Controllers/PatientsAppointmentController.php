@@ -138,12 +138,11 @@ class PatientsAppointmentController extends Controller
                 {
                     $financial_management_data = '' ;
                 }
-
                 return view('back.show_form_of_appointments_on_specific_date' , [ 'title_of_page' => $title_of_page , 'result_show_form_of_appointments_on_specific_date' => $result_show_form_of_appointments_on_specific_date , 'count_of_appointment' => $count_of_appointment , 'show_all_appointments_on_this_date' => $show_all_appointments_on_this_date , 'financial_management_data' => $financial_management_data ] ) ;
             }
             else
             {
-                \Session::flash('success_message' , '<span style="color:blue;" >There are not any Appointment on Date '.$show_all_appointments_on_this_date.'</span> <br> Choose a Date to Show Appointments') ;
+                \Session::flash('success_message' , '<span style="color:blue;" >There are not any Appointment on Date '.$show_all_appointments_on_this_date.'</span> <br> Please, Choose a Date to Show Appointments') ;
                 return view('back.show_form_of_appointments_on_specific_date' , [ 'title_of_page' => $title_of_page ] ) ;
             }
         }
@@ -192,17 +191,15 @@ class PatientsAppointmentController extends Controller
         {
             $result_of_delete_oppointment = patients_appointment::
             select('*')
-            ->where( 'appointment_id' , '=' , $request->appointment_id )
+            ->where( 'appointment_id'            , '=' , $request->appointment_id )
             ->where( 'appointment_dr_related_id' , '=' , $admin_id_from_users_table )
             ->delete() ;
 
-            \Session::flash('success_message', '<span>The Selected Appointment Successfully Deleted</span>');
-            return redirect(route('run_show_form_of_appointments_on_specific_date_by_get_method' , $show_all_appointments_this_date ));
+            return redirect()->back()->with(['success_message' => '<span>The Selected Appointment Successfully Deleted</span>']);
         }
         catch (\Exception $exception)
         {
-            \Session::flash('success_message', '<span style="color:blue;">The Selected Appointment WAS NOT Deleted!</span>');
-            return redirect(route('show_form_of_appointments_on_specific_date'));
+            return redirect()->back()->with(['success_message' => '<span style="color:blue;">The Selected Appointment WAS NOT Deleted!</span>']);
         }
     }
 

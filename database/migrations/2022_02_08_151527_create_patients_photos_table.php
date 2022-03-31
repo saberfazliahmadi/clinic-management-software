@@ -17,8 +17,8 @@ class CreatePatientsPhotosTable extends Migration
         $table->id('patients_photos_id');
         $table->string('patients_photos_file_name')->collation('utf8_general_ci');
         $table->string('patients_photos_file_description')->collation('utf8_general_ci')->nullable();
-        $table->integer('patients_photos_patient_related_id')->collation('utf8_general_ci');
-        $table->integer('patients_photos_dr_related_id')->collation('utf8_general_ci');
+        $table->foreignId('patients_photos_patient_related_id')->references('patient_id')->on('patients_general_infos') ;
+        $table->foreignId('patients_photos_dr_related_id')->references('id')->on('users') ;
         $table->timestamps();
         });
     }

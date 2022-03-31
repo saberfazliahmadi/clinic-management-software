@@ -646,7 +646,7 @@ if ( isset($count_of_appointment_in_header) && $count_of_appointment_in_header >
                     </div>
                 </div>
                 
-                <div  style="'.$opacity_appointment_trick.'" >
+                <div style="'.$opacity_appointment_trick.'" >
                     <a href="'.route('delete_this_appointment_by_this_id' , [ 'appointment_id' => $key_appointment->appointment_id , 'show_all_appointments_this_date' => $key_appointment->appointment_date ] ).'" style="float:left;color: white; font-size: 13px; float: left;background-color:#5A738E;border:1px solid #5A738E; " class="btn btn-success" ' ; ?> onclick="return confirm('Are you sure to delete this appointment?') <?php echo '" title="Delete This Appointment" >
                         <i class="fa fa-trash-o" aria-hidden="true" ></i>
                         Delete

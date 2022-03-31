@@ -12,6 +12,8 @@ use App\Models\patients_photo;
 use App\Models\patients_general_info;
 
 use Illuminate\Http\Request;
+use Psr\Log\NullLogger;
+
 // START OF MANUALLY RECEIVING DATA FROM A FORM BY GET OR POST METHOD AND USE IT IN YOUR CUSTOMIZE FUNCTIONS.
 // https://stackoverflow.com/questions/32718870/how-to-get-all-input-of-post-in-laravel
 // step(1) add this use to top of your controller page after the name space.
@@ -234,7 +236,7 @@ class PatientsEHRDocumentController extends Controller
                 // Estimate how many drug this variable has to use of for loop
                 $end                = $common_drug_number ;
                 // Define a new variable
-                $common_drug_2 = '' ;
+                $common_drug_2 = NUll ;
 
                 // Make a for loop to check all drugs validation
                 for( $start='0' ; $start < $end ; $start++ )
@@ -258,13 +260,13 @@ class PatientsEHRDocumentController extends Controller
             }
             else
             {
-                $common_drug_2 = '' ;
+                $common_drug_2 = NULL ;
             }
 
             if( strlen(Auth::user()->common_diet) )
             {
                 // Define a new variable
-                $common_diet_2 = '' ;
+                $common_diet_2 = NULL ;
 
                 if(is_array($request->common_diet))
                 {
@@ -281,13 +283,13 @@ class PatientsEHRDocumentController extends Controller
             }
             else
             {
-                $common_diet_2 = '' ;
+                $common_diet_2 = NULL ;
             }
 
             if( strlen(Auth::user()->common_return_date) )
             {
                 // Define a new variable
-                $common_return_date_2 = '' ;
+                $common_return_date_2 = NULL ;
 
                 if(is_array($request->common_return_date))
                 {
@@ -304,7 +306,25 @@ class PatientsEHRDocumentController extends Controller
             }
             else
             {
-                $common_return_date_2 = '' ;
+                $common_return_date_2 = NULL ;
+            }
+
+            if( strlen($request->post('EHR_document_related_appointment_id')) > 0 )
+            {
+                $EHR_document_related_appointment_id_trick = $request->post('EHR_document_related_appointment_id') ;
+            }
+            else
+            {
+                $EHR_document_related_appointment_id_trick = NULL ;
+            }
+
+            if( strlen($request->post('EHR_document_related_clinic_doctor_name')) > 0 )
+            {
+                $EHR_document_related_clinic_doctor_name_trick = $request->post('EHR_document_related_clinic_doctor_name') ;
+            }
+            else
+            {
+                $EHR_document_related_clinic_doctor_name_trick = NULL ;
             }
 
             $result_store_new_ehr_doc = new patients_EHR_document(
@@ -314,8 +334,8 @@ class PatientsEHRDocumentController extends Controller
                     'EHR_document_prescribed_next_appointment' => $common_return_date_2 ,
                     'EHR_document_patient_related_id'          => $request->post('patient_id') ,
                     'EHR_document_dr_related_id'               => $admin_id_from_users_table ,
-                    'EHR_document_related_appointment_id'      => $request->post('EHR_document_related_appointment_id') ,
-                    'EHR_document_related_clinic_doctor_name'  => $request->post('EHR_document_related_clinic_doctor_name')
+                    'EHR_document_related_appointment_id'      => $EHR_document_related_appointment_id_trick ,
+                    'EHR_document_related_clinic_doctor_name'  => $EHR_document_related_clinic_doctor_name_trick
                 ]
             ) ;
 
@@ -368,7 +388,7 @@ class PatientsEHRDocumentController extends Controller
             {
                 return view('back.show_new_saved_ehr' ,
                 [
-                    'title_of_page'                            => 'a new EHR information of patient <br> with document id: '.$key->EHR_document_patient_related_id.'<br> successfully saved at date '.date("Y/m/d") ,
+                    'title_of_page'                            => 'a new EHR information of patient <br>with patient number: '.$key->EHR_document_patient_related_id.'<br> successfully saved at date '.date("Y/m/d") ,
                     'show_ehr_report'                          => 'true' ,
                     'EHR_document_patient_related_id'          => $key->EHR_document_patient_related_id ,
                     'EHR_document_prescribed_common_drug'      => $key->EHR_document_prescribed_common_drug ,

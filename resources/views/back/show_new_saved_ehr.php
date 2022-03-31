@@ -120,7 +120,7 @@ echo '
     <div style="margin-top:15px;" class="col-md-12 col-sm-12 col-xs-12" align="center" >
         <h1 style="text-align:center;font-size:17pt;margin-top:10px;;" align="center" >
             <div class="col-md-12 col-sm-12 col-xs-12" >
-                This information will be sent to smartphone of patient by BOT automatically
+                This information will be sent to the Smartphone of the patient by BOT automatically
                 <br>
                 <br>
                 
