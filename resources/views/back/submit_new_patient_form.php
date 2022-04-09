@@ -27,7 +27,7 @@ echo '
         </div>
         <div class="col-md-1 col-sm-1 col-xs-1">
             <h5 title="Total Number of Submitted Patients">
-                Total
+                Total Patients
                 '.$number_of_total_clinic_patients.'
             </h5>
         </div>
@@ -270,20 +270,12 @@ echo '
         </form>';
     }
     // END of If user came to this page from route('submit_new_patient_form').
-
     // START of If user came to this page from route('update_this_patient').
     else
     {
         foreach ( $result_edit_patient_form as $key )
         {
             echo '
-            <div class="col-md-12 col-sm-12 col-xs-12" style="float:right;" >
-                <a title="Display ' .$key->patient_first_name. ' ' .$key->patient_last_name. ' EHR Document" href="'.route('show_patients_ehr_document_page' , [ 'patient_id' => $key->patient_id ] ).'" style="float:right;color: white; font-size: 13px; background-color:#73879C;border:1px solid #5A738E;" class="uiuxtrick btn btn-success" >
-                    <i class="fa fa-clone"></i>
-                    EHR Document
-                </a>
-            </div>
-                
             <form method="POST" action="'.route('update_this_patient' , $key->patient_id ).'" data-parsley-validate class="form-horizontal form-label-left" style="text-align:left!important;direction:ltr!important;font-size:15pt;margin-top:40px!important;" id="medical-file-form" >
                 
                 <input type="hidden" name="_token" value="' . csrf_token() . '" >
@@ -439,15 +431,32 @@ echo '
                 <br>
                 <center>
                     <div class="col-md-12 col-sm-12 col-xs-12">
-                        <span data-toggle="collapse" data-target="#more_details" class="btn-primary btn-lg" type="button" style="cursor:pointer;color:gray;background-color:white;border:1px solid #bfbdbd;" >
-                            <span class="glyphicon glyphicon-plus" aria-hidden="true" style="color:#ccc;margin-left:5px;" ></span>
-                            More Details
-                        </span>
+                        <center>
+                        <div class="col-md-4 col-sm-3 col-xs-3" style="float:left;font-size:13px;" >
+                            <span>
+                                Patient Number: '.$key->patient_id.'
+                            </span>
+                        </div>
+                        <div class="col-md-5 col-sm-6 col-xs-6" style="float:left;" >
+                            <span data-toggle="collapse" data-target="#more_details" class="btn-primary btn-lg" type="button" style="cursor:pointer;color:gray;background-color:white;border:1px solid #bfbdbd;" >
+                                <span class="glyphicon glyphicon-plus" aria-hidden="true" style="color:#ccc;margin-left:5px;" ></span>
+                                More Details
+                            </span>
+                        </div>
+                        <div class="col-md-3 col-sm-3 col-xs-3" style="float:right;" >
+                            <a href="'.route('show_patients_ehr_document_page' , [ 'patient_id' => $key->patient_id ] ).'" class="btn btn-success uiuxtrick" title="Display ' .$key->patient_first_name. ' ' .$key->patient_last_name. ' EHR Document" style="color: white; background-color:#73879C;border:1px solid #5A738E;" >
+                              <i class="fa fa-clone"></i> EHR Document
+                            </a>
+                        </div>
+                        
+                        </center>
+                            
+                        
                     </div>
                 </center>
                 <br>
-        
-                <div id="more_details" class="collapse col-md-12 col-sm-12 col-xs-12">
+            
+                <div id="more_details" class="collapse col-md-12 col-sm-12 col-xs-12" style="margin-top:20px;" >
                 
                     <p class="text-center">
                     This Profile Created at: '.$key->created_at.'

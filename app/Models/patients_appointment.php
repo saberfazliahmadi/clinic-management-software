@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use Database\Factories\PatientsAppointmentFactory;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
@@ -22,4 +23,14 @@ class patients_appointment extends Model
         'appointment_canceling_status'
     ] ;
     use HasFactory;
+
+    /**
+     * Create a new factory instance for the model.
+     *
+     * @return \Illuminate\Database\Eloquent\Factories\Factory
+     */
+    protected static function newFactory()
+    {
+        return new PatientsAppointmentFactory() ;
+    }
 }

@@ -171,14 +171,14 @@ label
                                     <div class="col-md-3 col-sm-3 col-xs-3" style="float:left;" >
                                         <i class="glyphicon glyphicon-file" aria-hidden="true" style="font-size:26px;margin-left: 10px;margin-right: 10px;" ></i>
                                         <br>
-                                        Medical Document Number
+                                        Patient Number
                                     </div>
                                     
                                 </h4>
                                 
                                 <hr style="width:1px;" >
                                 <div class="col-md-12 col-sm-12 col-xs-12" align="center" style="float:none;" >
-                                    <input type="text" name="search_text" style="text-align: left!important;float:none;" min="1" max="60" autocomplete="off" aria-autocomplete="list" aria-expanded="false" aria-haspopup="true" role="combobox" spellcheck="false" class="form-control" placeholder="Type your searching word based on ONE of these types: Name | Family | Mobile Number | Nationality Number | Medical Document Number" align="center" required >
+                                    <input type="text" name="search_text" style="text-align: left!important;float:none;" min="1" max="60" autocomplete="off" aria-autocomplete="list" aria-expanded="false" aria-haspopup="true" role="combobox" spellcheck="false" class="form-control" placeholder="Type your searching word based on ONE of these types: Name | Family | Mobile Number | Nationality Number | Patient Number" align="center" required >
                                 </div>
                                 
                             </center>
@@ -362,7 +362,7 @@ if ( isset($count_of_appointment_in_header) && $count_of_appointment_in_header >
            <br>
            Mobile Number of Patient
            <br>
-           Medical Document Number
+           Patient Number
         </h2>
         <br>
     </div>

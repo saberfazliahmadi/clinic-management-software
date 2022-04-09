@@ -172,12 +172,12 @@ class FinancialTransactionController extends Controller
 
                 $result_save_financial_settings_receiving_money_form = User::
                 select('*')
-                    ->where('id' , '=' , $find_admin_id_from_users_table)
-                    ->where('name' , '=' , Auth::user()->name )
-                    ->update(
-                        [
-                            'financial_management' => $financial_management
-                        ]) ;
+                ->where('id' , '=' , $find_admin_id_from_users_table)
+                ->where('name' , '=' , Auth::user()->name )
+                ->update(
+                [
+                    'financial_management' => $financial_management
+                ]) ;
 
                 \Session::flash('success_message', 'The New Financial Settings of Receiving Money Successfully Updated ');
                 return redirect(route('show_financial_settings_receiving_money_form')) ;
@@ -199,21 +199,21 @@ class FinancialTransactionController extends Controller
     {
         try
         {
-            $find_admin_id_from_users_table = $this->find_admin_id_from_users_table();
+            $find_admin_id_from_users_table   = $this->find_admin_id_from_users_table();
             $result_fetch_last_10_transaction = financial_transaction::
-            join('patients_general_infos', 'patients_general_infos.patient_id', '=', 'financial_transactions.financial_patient_related_id')
-                ->select('*')
-                ->where('financial_transactions.financial_dr_related_id', '=', $find_admin_id_from_users_table)
-                ->orderBy('financial_transactions.financial_transaction_id', 'DESC')
-                ->paginate('10')
-                ;
+            select('*')
+            ->where('financial_dr_related_id'   , '=' , $find_admin_id_from_users_table)
+            ->orderBy('financial_transaction_id', 'DESC')
+            ->paginate('10') ;
 
-            $title_of_page = 'Submit a Financial Transaction';
+            $count_of_result_fetch_last_10_transaction = $result_fetch_last_10_transaction->count();
+
             return view('back.show_submit_financial_transaction_form',
-                [
-                    'title_of_page' => $title_of_page,
-                    'result_fetch_last_10_transaction' => $result_fetch_last_10_transaction
-                ]);
+            [
+                'title_of_page'                             => 'Submit a Financial Transaction' ,
+                'result_fetch_last_10_transaction'          => $result_fetch_last_10_transaction ,
+                'count_of_result_fetch_last_10_transaction' => $count_of_result_fetch_last_10_transaction ,
+            ]);
         }
         catch (\Exception $exception)
         {
@@ -224,69 +224,63 @@ class FinancialTransactionController extends Controller
 
     public function store_show_submit_financial_transaction_form( Request $request )
     {
-        if( request()->post('financial_transaction_type') !== null && request()->post('title_of_payment') !== null && request()->post('amount_of_payment') !== null && request()->post('medical_document_number') !== null )
+        $validation_of_store_show_submit_financial_transaction_form = $request->validate(
+            [
+                'financial_transaction_type' => 'required|min:1' ,
+                'title_of_payment'           => 'required|min:1' ,
+                'amount_of_payment'          => 'required|min:1|integer' ,
+                'financial_transaction_date' => 'required|min:1' ,
+            ]
+        ) ;
+
+        $find_admin_id_from_users_table     = $this->find_admin_id_from_users_table() ;
+        $financial_transaction_type         = request()->post('financial_transaction_type') ;
+        // Remove any character from payment amount except numbers
+        $amount_of_payment                  = preg_replace('/[^0-9]/', '', request()->post('amount_of_payment'));
+        $financial_transaction_date         = request()->post('financial_transaction_date') ;
+        $financial_transaction_time         = request()->post('financial_transaction_time') ;
+        $medical_document_number_of_patient = request()->post('medical_document_number') ;
+        $title_of_payment                   = request()->post('title_of_payment') ;
+
+        if( request()->post('medical_document_number') == '' )
         {
-            $validation_of_store_show_submit_financial_transaction_form = $request->validate(
-                [
-                    'medical_document_number' => 'integer' ,
-                    'financial_transaction_type' => 'required|min:1' ,
-                    'medical_document_number' => 'required|min:1' ,
-                    'title_of_payment' => 'required|min:1' ,
-                    'amount_of_payment' => 'required|min:1|integer' ,
-                    'financial_transaction_date' => 'required|min:1' ,
-                ]
-            ) ;
+            $medical_document_number_of_patient = NULL ;
+        }
 
-            $find_admin_id_from_users_table = $this->find_admin_id_from_users_table() ;
-            $financial_transaction_type = request()->post('financial_transaction_type') ;
-            $financial_transaction_date  = request()->post('financial_transaction_date') ;
-            $financial_transaction_time  = request()->post('financial_transaction_time') ;
-            $title_of_payment = request()->post('title_of_payment') ;
 
-            // Remove any character from payment amount except numbers
-            $amount_of_payment  = preg_replace('/[^0-9]/', '', request()->post('amount_of_payment'));
-
-            $medical_document_number_of_patient = request()->post('medical_document_number') ;
-
-            if( request()->post('financial_transaction_child_dr_related_name') !== null )
-            {
-                $financial_transaction_child_dr_related_name = request()->post('financial_transaction_child_dr_related_name') ;
-            }
-            else
-            {
-                // This value SHOULD NOT BE BULL because we use this value is financial transaction search page
-                // So leave it EMPTY
-                $financial_transaction_child_dr_related_name = '' ;
-            }
-
-            try
-            {
-                $result_store_show_submit_financial_transaction_form = new financial_transaction(
-                    [
-                        'financial_dr_related_id' => $find_admin_id_from_users_table ,
-                        'financial_patient_related_id' => $medical_document_number_of_patient ,
-                        'financial_transaction_type' => $financial_transaction_type ,
-                        'financial_transaction_date' => $financial_transaction_date ,
-                        'financial_transaction_time' => $financial_transaction_time ,
-                        'financial_transaction_title' => $title_of_payment ,
-                        'financial_transaction_amount' => $amount_of_payment ,
-                        'financial_transaction_child_dr_related_name' => $financial_transaction_child_dr_related_name
-                    ]
-                ) ;
-                $result_store_show_submit_financial_transaction_form->save() ;
-
-                \Session::flash('success_message', 'The New Financial Transaction with date: <b>'.$financial_transaction_date.'</b> <br> and title: <b>'.$title_of_payment.'</b> and amount: <b>'.$amount_of_payment.'</b> <br> Successfully Submitted');
-                return redirect(route('show_submit_financial_transaction_form')) ;
-            }
-            catch (\Exception $exception)
-            {
-                \Session::flash('success_message', '<b style="color:blue;" >We have an error to save New Financial Financial Transaction</b>' ) ;
-                return redirect(route('show_submit_financial_transaction_form')) ;
-            }
+        if( request()->post('financial_transaction_child_dr_related_name') !== NULL )
+        {
+            $financial_transaction_child_dr_related_name = request()->post('financial_transaction_child_dr_related_name') ;
         }
         else
         {
-            \Session::flash('success_message', '<b style="color:blue;" >At least type 1 item for title of payment and 1 item for amount of payment and 1 item for Date of payment and finally press the Save button</b>' ) ;
+            // This value SHOULD NOT BE NULL because we use this value in financial transaction reporting page
+            // So leave it EMPTY
+            $financial_transaction_child_dr_related_name = '' ;
+        }
+
+        try
+        {
+            $result_store_show_submit_financial_transaction_form = new financial_transaction(
+                [
+                    'financial_dr_related_id'      => $find_admin_id_from_users_table ,
+                    'financial_patient_related_id' => $medical_document_number_of_patient ,
+                    'financial_transaction_type'   => $financial_transaction_type ,
+                    'financial_transaction_date'   => $financial_transaction_date ,
+                    'financial_transaction_time'   => $financial_transaction_time ,
+                    'financial_transaction_title'  => $title_of_payment ,
+                    'financial_transaction_amount' => $amount_of_payment ,
+                    'financial_transaction_child_dr_related_name' => $financial_transaction_child_dr_related_name
+                ]
+            ) ;
+            $result_store_show_submit_financial_transaction_form->save() ;
+
+            \Session::flash('success_message', 'The New Financial Transaction with date: <b>'.$financial_transaction_date.'</b> <br> and title: <b>'.$title_of_payment.'</b> and amount: <b>'.$amount_of_payment.'</b> <br> Successfully Submitted');
+            return redirect(route('show_submit_financial_transaction_form')) ;
+        }
+        catch (\Exception $exception)
+        {
+            \Session::flash('success_message', '<b style="color:blue;" >We have an error to save New Financial Financial Transaction</b>' ) ;
             return redirect(route('show_submit_financial_transaction_form')) ;
         }
     }
@@ -302,17 +296,17 @@ class FinancialTransactionController extends Controller
         $validation_of_run_financial_transaction_reporting_form = $request->validate(
             [
                 'financial_report_from_date' => 'required|min:1' ,
-                'financial_report_to_date' => 'required|min:1' ,
+                'financial_report_to_date'   => 'required|min:1' ,
             ]
         ) ;
 
         try
         {
-            $financial_report_from_date = $request->financial_report_from_date ;
-            $financial_report_to_date = $request->financial_report_to_date ;
+            $financial_report_from_date     = $request->financial_report_from_date    ;
+            $financial_report_to_date       = $request->financial_report_to_date      ;
             $find_admin_id_from_users_table = $this->find_admin_id_from_users_table() ;
 
-            if( $request->financial_transaction_child_dr_related_name !== null )
+            if( $request->financial_transaction_child_dr_related_name !== NULL )
             {
                 $sign_trick_1 = "=" ;
                 $financial_transaction_child_dr_related_name_text_trick = "$request->financial_transaction_child_dr_related_name" ;
@@ -320,12 +314,12 @@ class FinancialTransactionController extends Controller
             }
             else
             {
-                $sign_trick_1 = "!=" ;
-                $financial_transaction_child_dr_related_name_text_trick = "_" ;
+                $sign_trick_1 = '!=' ;
+                $financial_transaction_child_dr_related_name_text_trick = '_' ;
                 $name_of_financial_transaction_child_dr_related_name    = '' ;
             }
 
-            if( $request->financial_transaction_title !== null )
+            if( $request->financial_transaction_title !== NULL )
             {
                 $sign_trick_2 = "=" ;
                 $financial_transaction_title_text_trick = "$request->financial_transaction_title" ;
@@ -339,27 +333,25 @@ class FinancialTransactionController extends Controller
             }
 
             $result_fetch_receive_transactions_from_date_to_date = financial_transaction::
-            join('patients_general_infos' , 'patients_general_infos.patient_id' , '=' , 'financial_transactions.financial_patient_related_id')
-            ->select('*')
-            ->where('financial_transactions.financial_dr_related_id' , '=' , $find_admin_id_from_users_table )
-            ->where('financial_transactions.financial_transaction_type' , '=' , '+' )
-            ->where('financial_transactions.financial_transaction_child_dr_related_name' , $sign_trick_1 , $financial_transaction_child_dr_related_name_text_trick )
-            ->where('financial_transactions.financial_transaction_title' , $sign_trick_2 , $financial_transaction_title_text_trick )
-            ->whereBetween('financial_transactions.financial_transaction_date', [$financial_report_from_date, $financial_report_to_date])
-            ->orderBy('financial_transactions.financial_transaction_id','DESC')
+            select('*')
+            ->where('financial_dr_related_id' , '=' , $find_admin_id_from_users_table )
+            ->where('financial_transaction_type' , '=' , '+' )
+            ->where('financial_transaction_child_dr_related_name' , $sign_trick_1 , $financial_transaction_child_dr_related_name_text_trick )
+            ->where('financial_transaction_title' , $sign_trick_2 , $financial_transaction_title_text_trick )
+            ->whereBetween('financial_transaction_date', [$financial_report_from_date, $financial_report_to_date])
+            ->orderBy('financial_transaction_id','DESC')
             ->get() ;
 
             $num_of_receive_transactions = $result_fetch_receive_transactions_from_date_to_date->count() ;
 
             $result_fetch_pay_transactions_from_date_to_date = financial_transaction::
-            join('patients_general_infos' , 'patients_general_infos.patient_id' , '=' , 'financial_transactions.financial_patient_related_id')
-            ->select('*')
-            ->where('financial_transactions.financial_dr_related_id' , '=' , $find_admin_id_from_users_table )
-            ->where('financial_transactions.financial_transaction_type' , '=' , '-' )
-            ->where('financial_transactions.financial_transaction_child_dr_related_name' , $sign_trick_1 , $financial_transaction_child_dr_related_name_text_trick )
-            ->where('financial_transactions.financial_transaction_title' , $sign_trick_2 , $financial_transaction_title_text_trick )
-            ->whereBetween('financial_transactions.financial_transaction_date', [$financial_report_from_date, $financial_report_to_date])
-            ->orderBy('financial_transactions.financial_transaction_id','DESC')
+            select('*')
+            ->where('financial_dr_related_id' , '=' , $find_admin_id_from_users_table )
+            ->where('financial_transaction_type' , '=' , '-' )
+            ->where('financial_transaction_child_dr_related_name' , $sign_trick_1 , $financial_transaction_child_dr_related_name_text_trick )
+            ->where('financial_transaction_title' , $sign_trick_2 , $financial_transaction_title_text_trick )
+            ->whereBetween('financial_transaction_date', [$financial_report_from_date, $financial_report_to_date])
+            ->orderBy('financial_transaction_id','DESC')
             ->get() ;
 
             $num_of_pay_transactions = $result_fetch_pay_transactions_from_date_to_date->count() ;

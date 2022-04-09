@@ -2,11 +2,14 @@
 
 namespace App\Models;
 
+use Database\Factories\PatientsGeneralInfoFactory;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
 class patients_general_info extends Model
 {
+    use HasFactory ;
+
     protected $fillable =
     [
         'patient_dr_related_id' ,
@@ -31,10 +34,22 @@ class patients_general_info extends Model
         'patient_from_external_platform_id' ,
         'patient_from_external_platform_step' ,
     ] ;
-    use HasFactory;
 
-//    public function patients_appointments()
-//    {
-//        return $this->hasMany(patients_appointment::class , 'patient_id' , 'appointment_patient_related_id' ) ;
-//    }
+    //public function patients_appointment()
+    //{
+    //    return $this->hasMany(patients_appointment::class , 'appointment_patient_related_id' , 'patient_id') ;
+    //}
+
+    /**
+     * Create a new factory instance for the model.
+     *
+     * @return \Illuminate\Database\Eloquent\Factories\Factory
+     */
+    protected static function newFactory()
+    {
+        for($x = 0; $x <= 100; $x++)
+        {
+            return new PatientsGeneralInfoFactory() ;
+        }
+    }
 }

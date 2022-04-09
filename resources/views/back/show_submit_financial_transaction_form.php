@@ -84,10 +84,33 @@ echo '
 								
 							</label>
 							
-							<label class="control-label col-md-12 col-sm-12 col-xs-12" style="margin-bottom:5px;font-size:19px;font-weight:normal;" >
+							<label class="control-label col-md-12 col-sm-12 col-xs-12" style="margin-top:15px;margin-bottom:0px;font-size:19px;font-weight:normal;" >
+							
+							    <div class="col-md-12 col-sm-12 col-xs-12" style="margin-top:20px;" >
+                                    <div style="float:left;" > * Required: Amount of Transaction (JUST TYPE NUMBERS): </div>
+                                    <div > <input type="text" name="amount_of_payment" min="1" max="25" value="'.old('amount_of_payment').'" title="Amount of transaction * Required Field"  placeholder="Amount of transaction :" data-requiredmsg="Enter Title of transaction :" required="required" class="col-md-4 form-control" autocomplete="off" autocomplete="false" style="height:50px;" > </div>
+                                </div>
+                                    
+                                <div class="col-md-12 col-sm-12 col-xs-12" style="margin-top:20px;" >
+                                    <div style="float:left;" > * Required: Choose Date of Transaction </div>
+                                </div>
+                                
+                                <div class="col-md-12 col-sm-12 col-xs-12" style="margin-top:20px;" >
+                                    <div class="input-group date" style="float:left;" >
+                                        <input type="text" name="financial_transaction_date" value="'.old('financial_transaction_date').'" class="form-control col-md-7 col-xs-12" id="dateMiladi" placeholder="Choose a Date" data-mddatetimepicker="true" data-trigger="click" data-targetselector="#dateMiladi" data-enabletimepicker="false"
+    data-placement="bottom" data-disablebeforetoday="false" data-isgregorian="true" autocomplete="off" aria-autocomplete="list" aria-expanded="false" aria-haspopup="true" role="combobox" spellcheck="false" required />
+                                        <span class="input-group-addon">
+                                            <span class="glyphicon glyphicon-calendar" style="opacity: 0.5;" ></span>
+                                        </span>
+                                    </div>
+                                </div>
+                                    
+                            </label>
+							
+							<label class="control-label col-md-12 col-sm-12 col-xs-12" style="margin-bottom:5px;font-size:19px;font-weight:normal;margin-top:20px;" >
 								 <div class="col-md-12 col-sm-12 col-xs-12" style="float:none;" align="center" >
                                     
-                                    <div class="col-md-12 col-sm-12 col-xs-12" style="margin-bottom:15px;" >
+                                    
                                        <div style="float:left;margin-bottom:7px;" >
                                             * Required: Financial Transaction Type: 
                                        </div>
@@ -104,11 +127,37 @@ echo '
                                             
                                           </div>
                                        </div>
+                                   
+                                    
+                                    <br>
+                                    <div class="col-md-12 col-sm-12 col-xs-12" style="margin-top:30px;" >
+                                       <div style="float:left;"  > * Required: Title of Transaction: </div>
+                                       <div style="margin-top:10px;margin-bottom:30px;margin-top:30px;" class="col-md-12 col-sm-12 col-xs-12" >' ;
+
+                                            // Explode and make array type variable
+                                            $appointment_service_type = explode(",", Auth::user()->financial_management) ;
+                                            // Estimate how many index exist in this variable
+                                            $appointment_service_type_number = count($appointment_service_type);
+                                            // Make end number for loop
+                                            $end = $appointment_service_type_number ;
+                                            for( $start ='0' ; $start < $end ; $start++ )
+                                            {
+                                                if( strlen($appointment_service_type[$start]) > 0 )
+                                                {
+                                                    echo '
+                                                    <label class="btn btn-default well" data-toggle-class="btn-primary" style="font-size:20px;background-color:white;border: 1px solid #ccc;border-radius: 4px!important;margin-top:5px;margin-bottom:5px;" >
+                                                        <input type="radio" name="title_of_payment" value="' . $appointment_service_type[$start] . '" required="required"  > ' . $appointment_service_type[$start] . '
+                                                    </label>';
+                                                }
+                                            }
+
+                                       echo '
+                                       </div>
                                     </div>
                                     
                                     <div class="col-md-12 col-sm-12 col-xs-12" >
-                                       <div style="float:left;" > * Required: Medical Document Number Related to This Transaction (Optional): </div>
-                                       <div > <input type="text" name="medical_document_number" min="1" max="11" value="'.old('medical_document_number').'" title="Medical Document Number related to this transaction" placeholder="Medical Document Number :"  data-requiredmsg="Enter Medical Document Number :" required="required" class="col-md-4 form-control " autocomplete="off" autocomplete="false" style="height:50px;" required="required" > </div>
+                                       <div style="float:left;" > Patient Number of This Transaction (Optional): </div>
+                                       <div> <input type="text" name="medical_document_number" min="1" max="11" value="'.old('medical_document_number').'" title="Patient Number of This Transaction (Optional)" placeholder="Medical Document Number :"  data-requiredmsg="Enter Medical Document Number :" class="col-md-4 form-control" autocomplete="off" autocomplete="false" style="height:50px;" > </div>
                                     </div>
                                     
                                     <label class="control-label col-md-12 col-sm-12 col-xs-12" style="margin-bottom:0px;font-size:19px;font-weight:normal;margin-top:20px;" >
@@ -144,58 +193,10 @@ echo '
                                     echo '	
                                     </div>
                                     
-                                    <div class="col-md-12 col-sm-12 col-xs-12" style="margin-top:15px;" >
-                                       <div style="float:left;" > * Required: Title of Transaction: </div>
-                                       
-                                       <div style="margin-top:10px;margin-bottom:30px;" class="col-md-12 col-sm-12 col-xs-12" >' ;
-
-                                            // Explode and make array type variable
-                                            $appointment_service_type = explode(",", Auth::user()->financial_management) ;
-                                            // Estimate how many index exist in this variable
-                                            $appointment_service_type_number = count($appointment_service_type);
-                                            // Make end number for loop
-                                            $end = $appointment_service_type_number ;
-                                            for( $start ='0' ; $start < $end ; $start++ )
-                                            {
-                                                if( strlen($appointment_service_type[$start]) > 0 )
-                                                {
-                                                    echo '
-                                                    <label class="btn btn-default well" data-toggle-class="btn-primary" style="font-size:20px;background-color:white;border: 1px solid #ccc;border-radius: 4px!important;margin-top:5px;margin-bottom:5px;" >
-                                                        <input type="radio" name="title_of_payment" value="' . $appointment_service_type[$start] . '" required="required"  > ' . $appointment_service_type[$start] . '
-                                                    </label>';
-                                                }
-                                            }
-
-                                       echo '
-                                       </div>
-                                    </div>
                                     
-                                    <div class="col-md-12 col-sm-12 col-xs-12" style="margin-top:20px;" >
-                                        <div style="float:left;" > * Required: Amount of Transaction (JUST TYPE NUMBERS): </div>
-                                        <div > <input type="text" name="amount_of_payment" min="1" max="25" value="'.old('amount_of_payment').'" title="Amount of transaction * Required Field"  placeholder="Amount of transaction :" data-requiredmsg="Enter Title of transaction :" required="required" class="col-md-4 form-control" autocomplete="off" autocomplete="false" style="height:50px;" > </div>
-                                    </div>
                                 </div>
 							</label>
 							
-							<label class="control-label col-md-12 col-sm-12 col-xs-12" style="margin-top:15px;margin-bottom:0px;font-size:19px;font-weight:normal;" >
-                                <div class="col-md-12 col-sm-12 col-xs-12" style="float:none;" align="center" >
-                                    <div style="float:left;" class="col-md-12 col-sm-12 col-xs-12" >
-                                        <div style="float:left;" > * Required: Choose Date of Transaction </div>
-                                    </div>
-                                    
-                                    <div class="col-md-12 col-sm-12 col-xs-12" style="float:none;" >
-                                        <div class="input-group date" style="float:none;" >
-                                            <input type="text" name="financial_transaction_date" value="'.old('financial_transaction_date').'" class="form-control col-md-7 col-xs-12" id="dateMiladi" placeholder="Choose a Date" data-mddatetimepicker="true" data-trigger="click" data-targetselector="#dateMiladi" data-enabletimepicker="false"
-        data-placement="bottom" data-disablebeforetoday="false" data-isgregorian="true" autocomplete="off" aria-autocomplete="list" aria-expanded="false" aria-haspopup="true" role="combobox" spellcheck="false" required />
-                                            <span class="input-group-addon">
-                                                <span class="glyphicon glyphicon-calendar" style="opacity: 0.5;" ></span>
-                                            </span>
-                                        </div>
-                                    </div>
-                                    
-                                </div>
-                            </label>
-                            
                             <label class="control-label col-md-12 col-sm-12 col-xs-12" style="margin-top:0px;margin-bottom:5px;font-size:19px;font-weight:normal;" >
                                 <div class="col-md-12 col-sm-12 col-xs-12" style="float:none;" align="center" >
                                     <div class="col-md-12 col-sm-12 col-xs-12" style="margin-top:20px;" >
@@ -240,7 +241,7 @@ echo '
                                     Patient Name & Family
                                 </div>
                                 <div class="col-md-2 col-sm-2 col-xs-2" style="margin-top:15px;" >
-                                    Transaction Related to
+                                    Transaction Related to name of Doctor
                                     <br>
                                 </div>
                                 <div class="col-md-2 col-sm-2 col-xs-2" style="margin-top:15px;">
@@ -258,7 +259,7 @@ echo '
                             </div>
                             <br>';
 
-                            if( strlen($result_fetch_last_10_transaction) > 2)
+                            if( $count_of_result_fetch_last_10_transaction > 0)
                             {
                                 foreach ( $result_fetch_last_10_transaction as $key_10_transaction )
                                 {

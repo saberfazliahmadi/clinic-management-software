@@ -11,6 +11,8 @@ use App\Models\patients_appointment;
 use Illuminate\Support\Facades\Auth;
 
 use Illuminate\Http\Request;
+use function GuzzleHttp\Promise\all;
+
 // START OF MANUALLY RECEIVING DATA FROM A FORM BY GET OR POST METHOD AND USE IT IN YOUR CUSTOMIZE FUNCTIONS.
     // https://stackoverflow.com/questions/32718870/how-to-get-all-input-of-post-in-laravel
     // step(1) add this use to top of your controller page after the name space.
@@ -234,7 +236,7 @@ class PatientsGeneralInfoController extends Controller
         }
         catch ( \Exception $exception )
         {
-            \Session::flash('success_message', '<span style="color:blue;font-weight:bolder;">We have an error to show this patient information</span>');
+            \Session::flash('success_message', $exception.'<span style="color:blue;font-weight:bolder;">We have an error to show this patient information</span>');
             return redirect(route('home')) ;
         }
 

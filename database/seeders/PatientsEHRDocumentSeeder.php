@@ -2,6 +2,7 @@
 
 namespace Database\Seeders;
 
+use App\Models\patients_EHR_document;
 use Illuminate\Database\Seeder;
 
 class PatientsEHRDocumentSeeder extends Seeder
@@ -13,6 +14,6 @@ class PatientsEHRDocumentSeeder extends Seeder
      */
     public function run()
     {
-        //
+        patients_EHR_document::newFactory('100')->create() ;
     }
 }

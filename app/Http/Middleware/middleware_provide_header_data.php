@@ -98,6 +98,19 @@ class middleware_provide_header_data
                             $appointment_service_type          = $key_fetch_appointment_data->appointment_service_type ;
                         }
 
+                        if(!isset($appointment_child_dr_related_name))
+                        {
+                            // This value SHOULD NOT BE NULL because we use this value in financial transaction reporting page
+                            // So leave it EMPTY
+                            $appointment_child_dr_related_name = '' ;
+                        }
+                        if(!isset($appointment_service_type))
+                        {
+                            // This value SHOULD NOT BE NULL because we use this value in financial transaction reporting page
+                            // So leave it EMPTY
+                            $appointment_service_type = '' ;
+                        }
+
                         $show_all_appointments_on_this_time = date('H:i:s') ;
 
                         $result_store_financial_transaction_from_header = new financial_transaction(

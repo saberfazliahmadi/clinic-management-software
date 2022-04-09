@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use Database\Factories\PatientsEHRDocumentFactory;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
@@ -23,4 +24,14 @@ class patients_EHR_document extends Model
     ] ;
 
     use HasFactory;
+
+    /**
+     * Create a new factory instance for the model.
+     *
+     * @return \Illuminate\Database\Eloquent\Factories\Factory
+     */
+    protected static function newFactory()
+    {
+        return new PatientsEHRDocumentFactory() ;
+    }
 }

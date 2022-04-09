@@ -2,6 +2,7 @@
 
 namespace Database\Seeders;
 
+use App\Models\financial_transaction;
 use Illuminate\Database\Seeder;
 
 class FinancialTransactionSeeder extends Seeder
@@ -13,6 +14,6 @@ class FinancialTransactionSeeder extends Seeder
      */
     public function run()
     {
-        //
+        financial_transaction::newFactory('100')->create() ;
     }
 }

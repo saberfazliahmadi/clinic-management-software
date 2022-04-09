@@ -387,7 +387,7 @@ class PatientsAppointmentController extends Controller
         }
         else
         {
-            // This value SHOULD NOT BE BULL because we use this value is financial transaction search page
+            // This value SHOULD NOT BE NULL because we use this value is financial transaction searching page
             // So leave it EMPTY
             $appointment_child_dr_related_name = '' ;
         }
@@ -403,7 +403,7 @@ class PatientsAppointmentController extends Controller
             }
             else
             {
-                // This value SHOULD NOT BE BULL because we use this value is financial transaction search page
+                // This value SHOULD NOT BE NULL because we use this value is financial transaction searching page
                 // So leave it EMPTY
                 $appointment_service_type = '' ;
             }
