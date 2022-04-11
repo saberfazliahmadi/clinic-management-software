@@ -53,7 +53,11 @@ class UserController extends Controller
             if ($count_result_show_main_settings_of_software_form)
             {
                 $title_of_page = 'Main Settings of Software';
-                return view('back.show_main_settings_of_software_form', ['title_of_page' => $title_of_page, 'result_show_main_settings_of_software_form' => $result_show_main_settings_of_software_form]);
+                return view('back.show_main_settings_of_software_form',
+                [
+                    'title_of_page'                              => $title_of_page,
+                    'result_show_main_settings_of_software_form' => $result_show_main_settings_of_software_form
+                ]);
             }
             else
             {
@@ -236,7 +240,7 @@ class UserController extends Controller
                     $hashed_new_password = Hash::make($request->new_password) ;
 
                     $result_cunt_run_change_password_form = User::
-                    select('*' )
+                    select([ 'id' , 'name' , 'password' ] )
                     ->where('id'  , '=' , Auth::user()->id)
                     ->where('name', '=' , Auth::user()->name)
                     ->update(

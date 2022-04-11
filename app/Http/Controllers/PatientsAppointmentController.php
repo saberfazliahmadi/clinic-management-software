@@ -14,32 +14,6 @@ use Illuminate\Support\Facades\Auth;
 use mysql_xdevapi\Session;
 use phpDocumentor\Reflection\Types\Null_;
 
-// START OF MANUALLY RECEIVING DATA FROM A FORM BY GET OR POST METHOD AND USE IT IN YOUR CUSTOMIZE FUNCTIONS.
-// https://stackoverflow.com/questions/32718870/how-to-get-all-input-of-post-in-laravel
-// step(1) add this use to top of your controller page after the name space.
-// use Illuminate\Http\Request ;
-// step(2) write your function with this structure
-//    public function function_name( Request $request )
-//    {
-//        //
-//    }
-// step(3) use below codes in it.
-//// Show only POST data
-//$request->post(); // DI
-//request()->post(); // global method
-//Request::post(); // facade
-//
-//// Show only GET data
-//$request->query(); // DI
-//request()->query(); // global method
-//Request::query(); // facade
-//
-//// Show all data (i.e. both GET and POST data)
-//$request->all(); // DI
-//request()->all(); // global method
-//Request::all(); // facade
-// END OF MANUALLY RECEIVING DATA FROM A FORM BY GET OR POST METHOD AND USE IT IN YOUR CUSTOMIZE FUNCTIONS.
-
 class PatientsAppointmentController extends Controller
 {
     public function find_admin_id_from_users_table()
@@ -190,7 +164,7 @@ class PatientsAppointmentController extends Controller
         try
         {
             $result_of_delete_oppointment = patients_appointment::
-            select('*')
+            select(['appointment_id' , 'appointment_dr_related_id' ])
             ->where( 'appointment_id'            , '=' , $request->appointment_id )
             ->where( 'appointment_dr_related_id' , '=' , $admin_id_from_users_table )
             ->delete() ;
@@ -378,8 +352,8 @@ class PatientsAppointmentController extends Controller
         ) ;
 
         $choose_time_for_this_patient_id = request()->post('choose_time_for_this_patient_id') ;
-        $choose_time_for_this_date = request()->post('choose_time_for_this_date') ;
-        $appointment_time = request()->post('appointment_time') ;
+        $choose_time_for_this_date       = request()->post('choose_time_for_this_date') ;
+        $appointment_time                = request()->post('appointment_time') ;
 
         if( request()->post('appointment_child_dr_related_name') !== null )
         {
@@ -391,7 +365,6 @@ class PatientsAppointmentController extends Controller
             // So leave it EMPTY
             $appointment_child_dr_related_name = '' ;
         }
-
 
         try
         {
@@ -410,21 +383,22 @@ class PatientsAppointmentController extends Controller
 
             $result_store_patient_time_appointment_table = new patients_appointment(
                 [
-                    'appointment_dr_related_id' => $admin_id_from_users_table ,
-                    'appointment_patient_related_id' => $choose_time_for_this_patient_id ,
-                    'appointment_date' => $choose_time_for_this_date ,
-                    'appointment_time' => $appointment_time ,
+                    'appointment_dr_related_id'         => $admin_id_from_users_table ,
+                    'appointment_patient_related_id'    => $choose_time_for_this_patient_id ,
+                    'appointment_date'                  => $choose_time_for_this_date ,
+                    'appointment_time'                  => $appointment_time ,
                     'appointment_child_dr_related_name' => $appointment_child_dr_related_name ,
-                    'appointment_service_type' => $appointment_service_type ,
+                    'appointment_service_type'          => $appointment_service_type ,
                 ]
             );
+
             $result_store_patient_time_appointment_table->save();
 
             // Update table patients_general_infos items patient_last_appointment_date and patient_last_appointment_time
             $result_update_this_patient_id = patients_general_info::
-            select( 'patient_id' , 'patient_last_appointment_date' , 'patient_last_appointment_time' , 'patient_dr_related_id' )
-            ->where('patient_id', '=', $choose_time_for_this_patient_id )
-            ->where('patient_dr_related_id', '=', $admin_id_from_users_table )
+            select( 'patient_id'            , 'patient_last_appointment_date' , 'patient_last_appointment_time' , 'patient_dr_related_id' )
+            ->where('patient_id'            , '=' , $choose_time_for_this_patient_id )
+            ->where('patient_dr_related_id' , '=' , $admin_id_from_users_table )
             ->update([
                 'patient_last_appointment_date' => $choose_time_for_this_date ,
                 'patient_last_appointment_time' => $appointment_time

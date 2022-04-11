@@ -14,32 +14,6 @@ use App\Models\patients_general_info;
 use Illuminate\Http\Request;
 use Psr\Log\NullLogger;
 
-// START OF MANUALLY RECEIVING DATA FROM A FORM BY GET OR POST METHOD AND USE IT IN YOUR CUSTOMIZE FUNCTIONS.
-// https://stackoverflow.com/questions/32718870/how-to-get-all-input-of-post-in-laravel
-// step(1) add this use to top of your controller page after the name space.
-// use Illuminate\Http\Request ;
-// step(2) write your function with this structure
-//    public function function_name( Request $request )
-//    {
-//        //
-//    }
-// step(3) use below codes in it.
-//// Show only POST data
-//$request->post(); // DI
-//request()->post(); // global method
-//Request::post(); // facade
-//
-//// Show only GET data
-//$request->query(); // DI
-//request()->query(); // global method
-//Request::query(); // facade
-//
-//// Show all data (i.e. both GET and POST data)
-//$request->all(); // DI
-//request()->all(); // global method
-//Request::all(); // facade
-// END OF MANUALLY RECEIVING DATA FROM A FORM BY GET OR POST METHOD AND USE IT IN YOUR CUSTOMIZE FUNCTIONS.
-
 class PatientsEHRDocumentController extends Controller
 {
     public function find_admin_id_from_users_table()
@@ -154,7 +128,7 @@ class PatientsEHRDocumentController extends Controller
 
             $result_of_show_patients_general_infos = patients_general_info::
             where('patient_dr_related_id' , '=' , $admin_id_from_users_table )
-            ->where('patient_id' , '=' , $request->patient_id )
+            ->where('patient_id'          , '=' , $request->patient_id )
             ->get() ;
             $count_number_of_patients_general_infos = $result_of_show_patients_general_infos->count() ;
 
@@ -213,7 +187,7 @@ class PatientsEHRDocumentController extends Controller
             }
 
             $update_patients_ehr_document_page = patients_general_info::
-            select('*')
+            select([ 'patient_dr_related_id' , 'patient_id' , 'patient_more_description' , 'patient_surgery_history' , 'patient_disease_background' , 'patient_medication_history' , 'patient_allergies_history' ] )
             ->where('patient_dr_related_id', '=' , $admin_id_from_users_table)
             ->where('patient_id'           , '=' , $request->patient_id)
             ->update(
@@ -382,8 +356,9 @@ class PatientsEHRDocumentController extends Controller
         {
             $result_show_new_saved_ehr = patients_EHR_document::
             where('EHR_document_dr_related_id' , '=' , $admin_id_from_users_table )
-            ->where('EHR_document_id' , '=' , $request->EHR_document_id )
+            ->where('EHR_document_id'          , '=' , $request->EHR_document_id )
             ->get() ;
+
             foreach ($result_show_new_saved_ehr as $key)
             {
                 return view('back.show_new_saved_ehr' ,

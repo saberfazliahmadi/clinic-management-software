@@ -11,32 +11,6 @@ use Illuminate\Support\Facades\Auth;
 use App\Models\User;
 use function Illuminate\Events\queueable;
 
-// START OF MANUALLY RECEIVING DATA FROM A FORM BY GET OR POST METHOD AND USE IT IN YOUR CUSTOMIZE FUNCTIONS.
-// https://stackoverflow.com/questions/32718870/how-to-get-all-input-of-post-in-laravel
-// step(1) add this use to top of your controller page after the name space.
-// use Illuminate\Http\Request ;
-// step(2) write your function with this structure
-//    public function function_name( Request $request )
-//    {
-//        //
-//    }
-// step(3) use below codes in it.
-//// Show only POST data
-//$request->post(); // DI
-//request()->post(); // global method
-//Request::post(); // facade
-//
-//// Show only GET data
-//$request->query(); // DI
-//request()->query(); // global method
-//Request::query(); // facade
-//
-//// Show all data (i.e. both GET and POST data)
-//$request->all(); // DI
-//request()->all(); // global method
-//Request::all(); // facade
-// END OF MANUALLY RECEIVING DATA FROM A FORM BY GET OR POST METHOD AND USE IT IN YOUR CUSTOMIZE FUNCTIONS.
-
 class FinancialTransactionController extends Controller
 {
     public function find_admin_id_from_users_table()
@@ -127,18 +101,16 @@ class FinancialTransactionController extends Controller
     public function destroy(financial_transaction $financial_transaction , Request $request )
     {
         $find_admin_id_from_users_table = $this->find_admin_id_from_users_table();
-        $delete_this_financial_id = $request->financial_transaction_id ;
+        $delete_this_financial_id       = $request->financial_transaction_id ;
         try
         {
             $result_of_delete_financial_transaction = financial_transaction::
-            select('*')
+            select(['financial_transaction_id'  , 'financial_dr_related_id'])
             ->where( 'financial_transaction_id' , '=' , $delete_this_financial_id )
             ->where( 'financial_dr_related_id'  , '=' , $find_admin_id_from_users_table )
             ->delete() ;
 
-            \Session::flash('success_message', '<span>The Selected Financial Transaction Successfully Deleted</span>');
-            return redirect(route('show_financial_transaction_reporting_form' ));
-
+            return redirect()->back()->with(['success_message' => '<span>The Selected Financial Transaction Successfully Deleted</span>']);
         }
         catch (\Exception $exception)
         {
@@ -165,15 +137,15 @@ class FinancialTransactionController extends Controller
         {
             try
             {
-                $financial_management = request()->post('financial_management') ;
+                $financial_management  = request()->post('financial_management') ;
                 $financial_management  = str_replace( "." , "" , $financial_management ) ;
                 $financial_management  = str_replace( "/" , "" , $financial_management ) ;
                 $find_admin_id_from_users_table = $this->find_admin_id_from_users_table() ;
 
                 $result_save_financial_settings_receiving_money_form = User::
-                select('*')
-                ->where('id' , '=' , $find_admin_id_from_users_table)
-                ->where('name' , '=' , Auth::user()->name )
+                select( 'id'  , 'name' , 'financial_management' )
+                ->where('id'   , '='   , $find_admin_id_from_users_table )
+                ->where('name' , '='   , Auth::user()->name )
                 ->update(
                 [
                     'financial_management' => $financial_management
@@ -202,8 +174,8 @@ class FinancialTransactionController extends Controller
             $find_admin_id_from_users_table   = $this->find_admin_id_from_users_table();
             $result_fetch_last_10_transaction = financial_transaction::
             select('*')
-            ->where('financial_dr_related_id'   , '=' , $find_admin_id_from_users_table)
-            ->orderBy('financial_transaction_id', 'DESC')
+            ->where('financial_dr_related_id'    , '=' , $find_admin_id_from_users_table)
+            ->orderBy('financial_transaction_id' , 'DESC')
             ->paginate('10') ;
 
             $count_of_result_fetch_last_10_transaction = $result_fetch_last_10_transaction->count();
@@ -273,6 +245,7 @@ class FinancialTransactionController extends Controller
                     'financial_transaction_child_dr_related_name' => $financial_transaction_child_dr_related_name
                 ]
             ) ;
+
             $result_store_show_submit_financial_transaction_form->save() ;
 
             \Session::flash('success_message', 'The New Financial Transaction with date: <b>'.$financial_transaction_date.'</b> <br> and title: <b>'.$title_of_payment.'</b> and amount: <b>'.$amount_of_payment.'</b> <br> Successfully Submitted');

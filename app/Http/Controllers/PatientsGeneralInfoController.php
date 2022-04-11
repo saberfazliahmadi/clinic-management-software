@@ -13,32 +13,6 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Http\Request;
 use function GuzzleHttp\Promise\all;
 
-// START OF MANUALLY RECEIVING DATA FROM A FORM BY GET OR POST METHOD AND USE IT IN YOUR CUSTOMIZE FUNCTIONS.
-    // https://stackoverflow.com/questions/32718870/how-to-get-all-input-of-post-in-laravel
-    // step(1) add this use to top of your controller page after the name space.
-        // use Illuminate\Http\Request ;
-    // step(2) write your function with this structure
-        //    public function function_name( Request $request )
-        //    {
-        //        //
-        //    }
-    // step(3) use below codes in it.
-        //// Show only POST data
-            //$request->post(); // DI
-            //request()->post(); // global method
-            //Request::post(); // facade
-            //
-        //// Show only GET data
-            //$request->query(); // DI
-            //request()->query(); // global method
-            //Request::query(); // facade
-            //
-        //// Show all data (i.e. both GET and POST data)
-            //$request->all(); // DI
-            //request()->all(); // global method
-            //Request::all(); // facade
-// END OF MANUALLY RECEIVING DATA FROM A FORM BY GET OR POST METHOD AND USE IT IN YOUR CUSTOMIZE FUNCTIONS.
-
 class PatientsGeneralInfoController extends Controller
 {
     public function find_admin_id_from_users_table()
@@ -100,7 +74,7 @@ class PatientsGeneralInfoController extends Controller
 
         // Check for mobile number duplication.
         $number_of_duplicate_mobile_number = patients_general_info::
-                                             select('patient_mobile_number')
+                                             select(['patient_mobile_number' , 'patient_dr_related_id'])
                                              ->where('patient_mobile_number', '=', $request->patient_mobile_number)
                                              ->where('patient_dr_related_id', '=', $admin_id_from_users_table)
                                              ->count();
@@ -120,23 +94,23 @@ class PatientsGeneralInfoController extends Controller
             {
                 $result_store_new_patient_form = new patients_general_info(
                 [
-                    'patient_dr_related_id'       => $admin_id_from_users_table ,
-                    'patient_first_name'          => $request->get('patient_first_name'),
-                    'patient_last_name'           => $request->get('patient_last_name'),
-                    'patient_mobile_number'       => $request->get('patient_mobile_number'),
-                    'patient_nationality_number'  => $request->get('patient_nationality_number'),
+                    'patient_dr_related_id'         => $admin_id_from_users_table ,
+                    'patient_first_name'            => $request->get('patient_first_name'),
+                    'patient_last_name'             => $request->get('patient_last_name'),
+                    'patient_mobile_number'         => $request->get('patient_mobile_number'),
+                    'patient_nationality_number'    => $request->get('patient_nationality_number'),
                     'patient_last_appointment_date' => $request->get('patient_last_appointment_date'),
-                    'patient_birth_day'           => $request->get('patient_birth_day'),
-                    'patient_address'             => $request->get('patient_address'),
-                    'patient_phone_number'        => $request->get('patient_phone_number'),
-                    'patient_email_address'       => $request->get('patient_email_address'),
-                    'patient_relationship_status' => $request->get('patient_relationship_status'),
-                    'patient_gender'              => $request->get('patient_gender'),
-                    'patient_surgery_history'     => $request->get('patient_surgery_history'),
-                    'patient_disease_background'  => $request->get('patient_disease_background'),
-                    'patient_medication_history'  => $request->get('patient_medication_history'),
-                    'patient_allergies_history'   => $request->get('patient_allergies_history'),
-                    'patient_more_description'    => $request->get('patient_more_description')
+                    'patient_birth_day'             => $request->get('patient_birth_day'),
+                    'patient_address'               => $request->get('patient_address'),
+                    'patient_phone_number'          => $request->get('patient_phone_number'),
+                    'patient_email_address'         => $request->get('patient_email_address'),
+                    'patient_relationship_status'   => $request->get('patient_relationship_status'),
+                    'patient_gender'                => $request->get('patient_gender'),
+                    'patient_surgery_history'       => $request->get('patient_surgery_history'),
+                    'patient_disease_background'    => $request->get('patient_disease_background'),
+                    'patient_medication_history'    => $request->get('patient_medication_history'),
+                    'patient_allergies_history'     => $request->get('patient_allergies_history'),
+                    'patient_more_description'      => $request->get('patient_more_description')
                 ]
                 );
 
@@ -202,7 +176,7 @@ class PatientsGeneralInfoController extends Controller
             ->where('patient_dr_related_id' , '=' , $admin_id_from_users_table)
             ->get() ;
 
-            if( $result_edit_patient_form->count() > 0 )
+            if( $result_edit_patient_form->count() == 1 )
             {
                 $result_total_patients_number = patients_general_info::
                 select('patient_id' , 'patient_dr_related_id')
@@ -253,11 +227,12 @@ class PatientsGeneralInfoController extends Controller
     {
         $admin_id_from_users_table = $this->find_admin_id_from_users_table() ;
 
-        // Check for mobile number duplication.
-        // EXCEPTION condition ( patient_id != $update_this_patient_id)
-        // WE SHOULD NOT HAVE TWO PATIENTS WITH SAME MOBILE NUMBERS IN OUR DATABASE! the mobile numbers should be unique
+        // Check for mobile number duplication
+        // EXCEPTION condition ( patient_id != $update_this_patient_id )
+        // WE SHOULD NOT HAVE TWO PATIENTS WITH SAME MOBILE NUMBERS IN OUR DATABASE!
+        // The mobile numbers should be unique
         $number_of_duplicate_mobile_number = patients_general_info::
-        select('patient_mobile_number'  , 'patient_id' , 'patient_dr_related_id' )
+        select('patient_mobile_number' , 'patient_dr_related_id' , 'patient_id' )
         ->where('patient_mobile_number' , '=' , $request->post('patient_mobile_number') )
         ->where('patient_dr_related_id' , '=' , $admin_id_from_users_table)
         ->where('patient_id'            , '!=', $update_this_patient_id )
@@ -281,22 +256,22 @@ class PatientsGeneralInfoController extends Controller
                 ->where('patient_id', '=', $update_this_patient_id)
                 ->where('patient_dr_related_id', '=', $admin_id_from_users_table)
                 ->update([
-                    'patient_first_name' => $request->post('patient_first_name'),
-                    'patient_last_name' => $request->post('patient_last_name'),
-                    'patient_mobile_number' => $request->post('patient_mobile_number'),
-                    'patient_nationality_number' => $request->post('patient_nationality_number'),
+                    'patient_first_name'            => $request->post('patient_first_name'),
+                    'patient_last_name'             => $request->post('patient_last_name'),
+                    'patient_mobile_number'         => $request->post('patient_mobile_number'),
+                    'patient_nationality_number'    => $request->post('patient_nationality_number'),
                     'patient_last_appointment_date' => $request->post('patient_last_appointment_date'),
-                    'patient_birth_day' => $request->post('patient_birth_day'),
-                    'patient_address' => $request->post('patient_address'),
-                    'patient_phone_number' => $request->post('patient_phone_number'),
-                    'patient_email_address' => $request->post('patient_email_address'),
-                    'patient_relationship_status' => $request->post('patient_relationship_status'),
-                    'patient_gender' => $request->post('patient_gender'),
-                    'patient_surgery_history' => $request->post('patient_surgery_history'),
-                    'patient_disease_background' => $request->post('patient_disease_background'),
-                    'patient_medication_history' => $request->post('patient_medication_history'),
-                    'patient_allergies_history' => $request->post('patient_allergies_history'),
-                    'patient_more_description' => $request->post('patient_more_description')
+                    'patient_birth_day'             => $request->post('patient_birth_day'),
+                    'patient_address'               => $request->post('patient_address'),
+                    'patient_phone_number'          => $request->post('patient_phone_number'),
+                    'patient_email_address'         => $request->post('patient_email_address'),
+                    'patient_relationship_status'   => $request->post('patient_relationship_status'),
+                    'patient_gender'                => $request->post('patient_gender'),
+                    'patient_surgery_history'       => $request->post('patient_surgery_history'),
+                    'patient_disease_background'    => $request->post('patient_disease_background'),
+                    'patient_medication_history'    => $request->post('patient_medication_history'),
+                    'patient_allergies_history'     => $request->post('patient_allergies_history'),
+                    'patient_more_description'      => $request->post('patient_more_description')
                 ]);
 
                 \Session::flash('success_message', '<b>' . $request->post('patient_first_name') . ' ' . $request->post('patient_last_name') . '</b> Information Successfully Updated');
@@ -308,7 +283,7 @@ class PatientsGeneralInfoController extends Controller
                 \Session::flash('success_message', '<span style="color:blue;font-weight:bolder;">' . $request->post('patient_first_name') . ' ' . $request->post('patient_last_name') . ' Information WAS NOT Updated</span>');
                 return redirect(route('edit_patient_form', $update_this_patient_id));
             }
-        } // END of If the Mobile Number was not unique.
+        } // END of If the Mobile Number was not unique
         else
         {
             \Session::flash('success_message', 'The Mobile Number Should be Unique <br>But, There is another Mobile Number Like ' . $request->get('patient_mobile_number') . ' in Database, <br><span style="color:blue;font-weight:bolder;" > So Your New Patient Was NOT Submitted! </span><br> Try a Unique Mobile Number');
@@ -335,43 +310,36 @@ class PatientsGeneralInfoController extends Controller
 
     public function run_patient_search_form( Request $request )
     {
-        // If the search key word is more than 1 character.
-        if( strlen(request()->post('search_text')) >= 1 )
+        // If the search key word is more than 0 character
+        if( strlen(request()->post('search_text')) > 0 )
         {
-            $admin_id_from_users_table = $this->find_admin_id_from_users_table() ;
             try
             {
-                $result_run_search_form = patients_general_info::
-                    select('*')
-                    ->where( 'patient_dr_related_id' , '=' , $admin_id_from_users_table )
-                    ->Where(function($query) {
-                            $query->where( 'patient_mobile_number' , '=' , request()->post('search_text') )
-                            ->orwhere( 'patient_nationality_number' , '=' , request()->post('search_text') )
-                            ->orwhere( 'patient_first_name' , '=' , request()->post('search_text') )
-                            ->orwhere( 'patient_last_name' , '=' , request()->post('search_text') )
-                            ->orwhere( 'patient_id' , '=' , request()->post('search_text') );
-                    })
-                    ->orderBy('patient_id', 'desc')
-                    ->get() ;
+                $patients_general_info_model_obj = new patients_general_info ;
+                $result_of_run_search_form       = $patients_general_info_model_obj->fetch_result_of_search_from() ;
 
-                // calculate how many result exist in database.
-                $number_of_results_from_search = $result_run_search_form->count() ;
+                // Calculate how many result exist in database
+                $number_of_results_from_search = $result_of_run_search_form->count() ;
 
-                // if there are more than 1 result in database.
+                // If there are more than 1 result in database
                 if( $number_of_results_from_search > 0 )
                 {
-                    \Session::flash('success_message', '<b>'.$number_of_results_from_search.'</b> results found for <b>'.request()->post('search_text').'</b></b>' ) ;
+                    \Session::flash('success_message', '<b>'.$number_of_results_from_search.'</b> results found for <b>"'.request()->post('search_text').'"</b></b>' ) ;
                     $title_of_page = 'Search Patients' ;
-                    return view('back.show_patient_search_from', [ 'title_of_page' => $title_of_page , 'result_run_search_form' => $result_run_search_form ] ) ;
+
+                    return view('back.show_patient_search_from',
+                    [ 'title_of_page'          => $title_of_page ,
+                      'result_run_search_form' => $result_of_run_search_form
+                    ] ) ;
                 }
-                // if there is not ANY result in database.
+                // If there is not ANY result in database.
                 else
                 {
                     \Session::flash('success_message', 'There is not any result for <b style="color:blue;" >'.request()->post('search_text').'</b>' ) ;
                     return redirect(route('show_patient_search_from')) ;
                 }
             }
-            catch (\Exception $exception)
+            catch (\Excebackption $exception)
             {
                 \Session::flash('success_message', 'We have an error to search for this word <b style="color:blue;" >'.request()->post('search_text').'</b>' ) ;
                 return redirect(route('show_patient_search_from')) ;

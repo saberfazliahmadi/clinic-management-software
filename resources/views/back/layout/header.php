@@ -713,7 +713,7 @@ else
 
     if( session()->has('success_message') )
     {
-        echo '<div class="alert alert-success" role="alert" > <button type="button" class="close" data-dismiss="alert" aria-label="Close" style="font-size:50px;margin-left:15px!important;" ><span aria-hidden="true">&times;</span></button> <h3 style="text-align:right!important;" >'.Session::get('success_message').'</h3></div>' ;
+        echo '<div class="col-md-12 col-sm-12 col-xs-12" ><div class="col-md-10 col-sm-10 col-xs-10 alert alert-success" role="alert" style="text-align:center!important;overflow-wrap: break-word; word-wrap: break-word; hyphens: auto;float:right;" > <button type="button" class="close" data-dismiss="alert" aria-label="Close" style="font-size:50px;margin-left:15px!important;" ><span aria-hidden="true">&times;</span></button> <h3>'.Session::get('success_message').'</h3></div></div>' ;
         session()->pull('success_message') ;
     }
 

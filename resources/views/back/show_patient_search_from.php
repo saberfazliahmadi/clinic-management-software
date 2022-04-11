@@ -66,7 +66,7 @@ echo '
                 
                 <hr style="width:1px;" >
                 <div class="col-md-12 col-sm-12 col-xs-12" align="center" style="float:none;" >
-                    <input type="text" name="search_text" style="text-align: left!important;float:none;" min="1" max="60" autocomplete="off" aria-autocomplete="list" aria-expanded="false" aria-haspopup="true" role="combobox" spellcheck="false" class="form-control" placeholder="Type your searching word based on ONE of these types: Name | Family | Mobile Number | Nationality Number | Patient Number" align="center" required >
+                    <input type="text" value="'.request()->post('search_text').'" name="search_text" style="font-weight:bolder;font-size:18px;" min="1" max="60" autocomplete="off" aria-autocomplete="list" aria-expanded="false" aria-haspopup="true" role="combobox" spellcheck="false" class="form-control" placeholder="Type your searching word based on ONE of these types: Name | Family | Mobile Number | Nationality Number | Patient Number" align="center" required >
                 </div>
                 
             </center>
