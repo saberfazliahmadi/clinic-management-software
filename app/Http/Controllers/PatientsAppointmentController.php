@@ -94,7 +94,7 @@ class PatientsAppointmentController extends Controller
             join('patients_general_infos' , 'patients_general_infos.patient_id' , '=' , 'patients_appointments.appointment_patient_related_id')
             ->select('*')
             ->where('patients_appointments.appointment_dr_related_id' , '=' , $admin_id_from_users_table )
-            ->where('patients_appointments.appointment_date' , '=' , $show_all_appointments_on_this_date )
+            ->where('patients_appointments.appointment_date'          , '=' , $show_all_appointments_on_this_date )
             ->orderBy('patients_appointments.appointment_time')
             ->get() ;
 
@@ -167,6 +167,7 @@ class PatientsAppointmentController extends Controller
             select(['appointment_id' , 'appointment_dr_related_id' ])
             ->where( 'appointment_id'            , '=' , $request->appointment_id )
             ->where( 'appointment_dr_related_id' , '=' , $admin_id_from_users_table )
+            ->first()
             ->delete() ;
 
             return redirect()->back()->with(['success_message' => '<span>The Selected Appointment Successfully Deleted</span>']);
@@ -280,9 +281,9 @@ class PatientsAppointmentController extends Controller
                 $result_patients_appointment = patients_appointment::
                 join('patients_general_infos' , 'patients_general_infos.patient_id' , '=' , 'patients_appointments.appointment_patient_related_id')
                 ->select('patients_appointments.*' , 'patients_general_infos.patient_id' , 'patients_general_infos.patient_first_name' , 'patients_general_infos.patient_last_name' )
-                ->where('patients_appointments.appointment_dr_related_id', '=', $admin_id_from_users_table)
-                ->where('patients_appointments.appointment_date', '=', $choose_time_for_this_date)
-                ->where('patients_appointments.appointment_time', '=', $appointment_time_trick)
+                ->where('patients_appointments.appointment_dr_related_id' , '=' , $admin_id_from_users_table)
+                ->where('patients_appointments.appointment_date'          , '=' , $choose_time_for_this_date)
+                ->where('patients_appointments.appointment_time'          , '=' , $appointment_time_trick)
                 ->get();
 
                 // How many appointment time equal with $appointment_time_trick exist in database.
@@ -366,20 +367,20 @@ class PatientsAppointmentController extends Controller
             $appointment_child_dr_related_name = '' ;
         }
 
+        if( request()->post('appointment_service_type') !== null )
+        {
+            $appointment_service_type = request()->post('appointment_service_type') ;
+        }
+        else
+        {
+            // This value SHOULD NOT BE NULL because we use this value is financial transaction searching page
+            // So leave it EMPTY
+            $appointment_service_type = '' ;
+        }
+
         try
         {
             $admin_id_from_users_table = $this->find_admin_id_from_users_table() ;
-
-            if( request()->post('appointment_service_type') !== null )
-            {
-                $appointment_service_type = request()->post('appointment_service_type') ;
-            }
-            else
-            {
-                // This value SHOULD NOT BE NULL because we use this value is financial transaction searching page
-                // So leave it EMPTY
-                $appointment_service_type = '' ;
-            }
 
             $result_store_patient_time_appointment_table = new patients_appointment(
                 [
@@ -399,6 +400,7 @@ class PatientsAppointmentController extends Controller
             select( 'patient_id'            , 'patient_last_appointment_date' , 'patient_last_appointment_time' , 'patient_dr_related_id' )
             ->where('patient_id'            , '=' , $choose_time_for_this_patient_id )
             ->where('patient_dr_related_id' , '=' , $admin_id_from_users_table )
+            ->first()
             ->update([
                 'patient_last_appointment_date' => $choose_time_for_this_date ,
                 'patient_last_appointment_time' => $appointment_time

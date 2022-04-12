@@ -8,6 +8,8 @@ use Illuminate\Database\Eloquent\Model;
 
 class patients_EHR_document extends Model
 {
+    protected $primaryKey = 'EHR_document_id' ;
+
     protected $fillable =
     [
         'EHR_document_patient_related_id' ,

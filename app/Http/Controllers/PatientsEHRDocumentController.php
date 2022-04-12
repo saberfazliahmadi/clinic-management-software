@@ -129,10 +129,9 @@ class PatientsEHRDocumentController extends Controller
             $result_of_show_patients_general_infos = patients_general_info::
             where('patient_dr_related_id' , '=' , $admin_id_from_users_table )
             ->where('patient_id'          , '=' , $request->patient_id )
-            ->get() ;
-            $count_number_of_patients_general_infos = $result_of_show_patients_general_infos->count() ;
+            ->first() ;
 
-            if( $count_number_of_patients_general_infos > 0 )
+            if( $result_of_show_patients_general_infos !== null )
             {
                 return view('back.show_patients_ehr_document_page' ,
                 [
@@ -146,7 +145,6 @@ class PatientsEHRDocumentController extends Controller
                     'result_of_patients_ehr_document'           => $result_of_patients_ehr_document ,
                     'count_result_of_patients_ehr_document'     => $count_result_of_patients_ehr_document ,
                     'result_of_patients_general_infos'          => $result_of_show_patients_general_infos ,
-                    'count_result_of_patients_general_infos'    => $count_number_of_patients_general_infos ,
                     'admin_id_from_users_table'                 => $admin_id_from_users_table
                 ]) ;
             }
@@ -190,6 +188,7 @@ class PatientsEHRDocumentController extends Controller
             select([ 'patient_dr_related_id' , 'patient_id' , 'patient_more_description' , 'patient_surgery_history' , 'patient_disease_background' , 'patient_medication_history' , 'patient_allergies_history' ] )
             ->where('patient_dr_related_id', '=' , $admin_id_from_users_table)
             ->where('patient_id'           , '=' , $request->patient_id)
+            ->first()
             ->update(
             [
                 'patient_more_description'   => $patient_more_description ,
@@ -314,7 +313,7 @@ class PatientsEHRDocumentController extends Controller
             ) ;
 
             $result_store_new_ehr_doc->save() ;
-            $EHR_document_id = $result_store_new_ehr_doc->id ;
+            $EHR_document_id = $result_store_new_ehr_doc->EHR_document_id ;
 
             if ($request->hasFile('image'))
             {
@@ -357,26 +356,31 @@ class PatientsEHRDocumentController extends Controller
             $result_show_new_saved_ehr = patients_EHR_document::
             where('EHR_document_dr_related_id' , '=' , $admin_id_from_users_table )
             ->where('EHR_document_id'          , '=' , $request->EHR_document_id )
-            ->get() ;
+            ->first() ;
 
-            foreach ($result_show_new_saved_ehr as $key)
+            if( $result_show_new_saved_ehr !== null )
             {
                 return view('back.show_new_saved_ehr' ,
                 [
-                    'title_of_page'                            => 'a new EHR information of patient <br>with patient number: '.$key->EHR_document_patient_related_id.'<br> successfully saved at date '.date("Y/m/d") ,
+                    'title_of_page'                            => 'a new EHR information of patient <br>with patient number: '.$result_show_new_saved_ehr->EHR_document_patient_related_id.'<br> successfully saved at date '.date("Y/m/d") ,
                     'show_ehr_report'                          => 'true' ,
-                    'EHR_document_patient_related_id'          => $key->EHR_document_patient_related_id ,
-                    'EHR_document_prescribed_common_drug'      => $key->EHR_document_prescribed_common_drug ,
-                    'EHR_document_prescribed_common_diet'      => $key->EHR_document_prescribed_common_diet ,
-                    'EHR_document_prescribed_next_appointment' => $key->EHR_document_prescribed_next_appointment ,
-                    'EHR_document_related_clinic_doctor_name'  => $key->EHR_document_related_clinic_doctor_name ,
+                    'EHR_document_patient_related_id'          => $result_show_new_saved_ehr->EHR_document_patient_related_id ,
+                    'EHR_document_prescribed_common_drug'      => $result_show_new_saved_ehr->EHR_document_prescribed_common_drug ,
+                    'EHR_document_prescribed_common_diet'      => $result_show_new_saved_ehr->EHR_document_prescribed_common_diet ,
+                    'EHR_document_prescribed_next_appointment' => $result_show_new_saved_ehr->EHR_document_prescribed_next_appointment ,
+                    'EHR_document_related_clinic_doctor_name'  => $result_show_new_saved_ehr->EHR_document_related_clinic_doctor_name ,
                     'EHR_document_dr_related_id'               => $admin_id_from_users_table ,
                 ] ) ;
+            }
+            else
+            {
+                \Session::flash('success_message', '<span style="color:blue;">Can not show new saved EHR!</span>');
+                return redirect(route('home'));
             }
         }
         catch (\Exception $exception)
         {
-            \Session::flash('success_message', '<span style="color:blue;">Can not show new EHR!</span>');
+            \Session::flash('success_message', '<span style="color:blue;">Can not show new saved EHR!</span>');
             return redirect(route('home'));
         }
     }

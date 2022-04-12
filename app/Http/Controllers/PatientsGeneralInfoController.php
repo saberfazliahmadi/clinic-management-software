@@ -73,19 +73,20 @@ class PatientsGeneralInfoController extends Controller
         $admin_id_from_users_table = $this->find_admin_id_from_users_table() ;
 
         // Check for mobile number duplication.
-        $number_of_duplicate_mobile_number = patients_general_info::
-                                             select(['patient_mobile_number' , 'patient_dr_related_id'])
-                                             ->where('patient_mobile_number', '=', $request->patient_mobile_number)
-                                             ->where('patient_dr_related_id', '=', $admin_id_from_users_table)
-                                             ->count();
+        $number_of_duplicate_mobile_number =
+        patients_general_info::
+        select([ 'patient_id ' , 'patient_mobile_number' , 'patient_dr_related_id'])
+        ->where('patient_mobile_number', '=' , $request->patient_mobile_number)
+        ->where('patient_dr_related_id', '=' , $admin_id_from_users_table)
+        ->count();
 
         // START of If the mobile number of patient was unique.
         if ( $number_of_duplicate_mobile_number == '0' )
         {
             $validation_of_new_patient_form = $request->validate(
                 [
-                    'patient_first_name' => 'required|min:3' ,
-                    'patient_last_name' => 'required|min:3' ,
+                    'patient_first_name'    => 'required|min:3' ,
+                    'patient_last_name'     => 'required|min:3' ,
                     'patient_mobile_number' => 'required|regex:/^([0-9\s\-\+\(\)]*)$/|min:8' ,
                 ]
             ) ;
@@ -117,7 +118,7 @@ class PatientsGeneralInfoController extends Controller
                 $result_store_new_patient_form->save();
 
                 // Specify last id created here to use in route passing data
-                $choose_time_for_this_patient_id = $result_store_new_patient_form->id ;
+                $choose_time_for_this_patient_id = $result_store_new_patient_form->patient_id ;
 
                 // If this patient has a date appointment then redirect him to route('show_patient_time_appointment_table') to select the free time for this appointment
                 if( strlen($request->get('patient_last_appointment_date')) > 0 )
@@ -135,7 +136,7 @@ class PatientsGeneralInfoController extends Controller
             }
             catch (\Exception $exception)
             {
-                \Session::flash('success_message', '<span style="color:blue;">Your New Patient Was NOT Successfully Submitted!</span>');
+                \Session::flash('success_message', $exception.'<span style="color:blue;">Your New Patient Was NOT Successfully Submitted!</span>');
                 return redirect(route('submit_new_patient_form'));
             }
         }
@@ -174,9 +175,9 @@ class PatientsGeneralInfoController extends Controller
             select('*')
             ->where('patient_id'            , '=' , $edit_this_patient_id)
             ->where('patient_dr_related_id' , '=' , $admin_id_from_users_table)
-            ->get() ;
+            ->first() ;
 
-            if( $result_edit_patient_form->count() == 1 )
+            if( $result_edit_patient_form !== null )
             {
                 $result_total_patients_number = patients_general_info::
                 select('patient_id' , 'patient_dr_related_id')
@@ -206,14 +207,12 @@ class PatientsGeneralInfoController extends Controller
                 \Session::flash('success_message', '<span style="color:blue;font-weight:bolder;">The requested patient is not exist</span>');
                 return redirect(route('home')) ;
             }
-
         }
         catch ( \Exception $exception )
         {
             \Session::flash('success_message', $exception.'<span style="color:blue;font-weight:bolder;">We have an error to show this patient information</span>');
             return redirect(route('home')) ;
         }
-
     }
 
     /**
@@ -232,10 +231,10 @@ class PatientsGeneralInfoController extends Controller
         // WE SHOULD NOT HAVE TWO PATIENTS WITH SAME MOBILE NUMBERS IN OUR DATABASE!
         // The mobile numbers should be unique
         $number_of_duplicate_mobile_number = patients_general_info::
-        select('patient_mobile_number' , 'patient_dr_related_id' , 'patient_id' )
-        ->where('patient_mobile_number' , '=' , $request->post('patient_mobile_number') )
-        ->where('patient_dr_related_id' , '=' , $admin_id_from_users_table)
-        ->where('patient_id'            , '!=', $update_this_patient_id )
+        select('patient_mobile_number'  , 'patient_dr_related_id' , 'patient_id' )
+        ->where('patient_mobile_number' , '='  , $request->post('patient_mobile_number') )
+        ->where('patient_dr_related_id' , '='  , $admin_id_from_users_table)
+        ->where('patient_id'            , '!=' , $update_this_patient_id )
         ->count();
 
         // START of If the mobile number of patient was unique.
@@ -255,6 +254,7 @@ class PatientsGeneralInfoController extends Controller
                 select('*')
                 ->where('patient_id', '=', $update_this_patient_id)
                 ->where('patient_dr_related_id', '=', $admin_id_from_users_table)
+                ->first()
                 ->update([
                     'patient_first_name'            => $request->post('patient_first_name'),
                     'patient_last_name'             => $request->post('patient_last_name'),

@@ -8,6 +8,8 @@ use Illuminate\Database\Eloquent\Model;
 
 class financial_transaction extends Model
 {
+    protected $primaryKey = 'financial_transaction_id';
+
     protected $fillable =
     [
         'financial_dr_related_id' ,

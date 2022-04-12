@@ -8,6 +8,7 @@ use Illuminate\Database\Eloquent\Model;
 
 class patients_photo extends Model
 {
+    protected $primaryKey = 'patients_photos_id' ;
 
     protected $fillable = [
         'patients_photos_file_name' ,

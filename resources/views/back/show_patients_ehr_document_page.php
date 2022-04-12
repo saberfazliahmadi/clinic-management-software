@@ -255,8 +255,7 @@ echo '
 // START of show to Admin user type.
 if( Auth::user()->user_type == 'admin' )
 {
-foreach ( $result_of_patients_general_infos as $key )
-{
+
     $cms_menu_title = explode("," , Auth::user()->cms_menu_title)  ;
 
     // START of content.
@@ -268,7 +267,7 @@ foreach ( $result_of_patients_general_infos as $key )
     
   <div class="col-md-12 col-sm-12 col-xs-12" >
 
-      <form id="medical-file-form" method="POST" action="'.route('store_patients_ehr_document_page' , ['patient_id' => $key->patient_id ]).'" class="controls export-svg" enctype="multipart/form-data" onsubmit="setFormSubmitting()" >
+      <form id="medical-file-form" method="POST" action="'.route('store_patients_ehr_document_page' , ['patient_id' => $result_of_patients_general_infos->patient_id ]).'" class="controls export-svg" enctype="multipart/form-data" onsubmit="setFormSubmitting()" >
             <input type="hidden" name="_token" value="'.csrf_token().'" >
             <input type="hidden" name="_method" value="post" >
           <div class="x_content" >
@@ -346,7 +345,7 @@ foreach ( $result_of_patients_general_infos as $key )
                             </div>';
 
                             // If there was any more description value then show it
-                            if( strlen($key->patient_more_description) > 0 )
+                            if( strlen($result_of_patients_general_infos->patient_more_description) > 0 )
                             {
                                 echo '
                                 <div class="form-group col-md-12 col-sm-12 col-xs-12" style="background-color:white;margin:0px 0px 0px 0px;padding:0px 0px 0px 0px;margin-top:25px;text-align:center;background-color:white;line-height: 40px;font-size:22px; word-break: break-all;" >
@@ -355,7 +354,7 @@ foreach ( $result_of_patients_general_infos as $key )
                                             More Description
                                         </span>
                                         <br>
-                                        <input type="text" name="patient_more_description" class="form-control" value="'.$key->patient_more_description.'" >
+                                        <input type="text" name="patient_more_description" class="form-control" value="'.$result_of_patients_general_infos->patient_more_description.'" >
                                     </center>
                                 </div>';
                             }
@@ -370,7 +369,7 @@ foreach ( $result_of_patients_general_infos as $key )
                                 </h2>
                             
                                 <div class="col-md-12 col-sm-12 col-xs-12" >
-                                    <input type="text" name="patient_surgery_history" class="form-control" value="'.$key->patient_surgery_history.'" >
+                                    <input type="text" name="patient_surgery_history" class="form-control" value="'.$result_of_patients_general_infos->patient_surgery_history.'" >
                                 </div>
                             </center>
                           </div>
@@ -382,7 +381,7 @@ foreach ( $result_of_patients_general_infos as $key )
                                 </h2>
                             
                                 <div class="col-md-12 col-sm-12 col-xs-12" >
-                                    <input type="text" name="patient_disease_background" class="form-control" value="'.$key->patient_disease_background.'" >
+                                    <input type="text" name="patient_disease_background" class="form-control" value="'.$result_of_patients_general_infos->patient_disease_background.'" >
                                 </div>
                             </center>
                           </div>
@@ -394,7 +393,7 @@ foreach ( $result_of_patients_general_infos as $key )
                                 </h2>
                             
                                 <div class="col-md-12 col-sm-12 col-xs-12" >
-                                    <input type="text" name="patient_medication_history" class="form-control" value="'.$key->patient_medication_history.'" >
+                                    <input type="text" name="patient_medication_history" class="form-control" value="'.$result_of_patients_general_infos->patient_medication_history.'" >
                                 </div>
                             </center>
                           </div>
@@ -406,7 +405,7 @@ foreach ( $result_of_patients_general_infos as $key )
                                 </h2>
                             
                                 <div class="col-md-12 col-sm-12 col-xs-12" >
-                                    <input type="text" name="patient_allergies_history" class="form-control" value="'.$key->patient_allergies_history.'" >
+                                    <input type="text" name="patient_allergies_history" class="form-control" value="'.$result_of_patients_general_infos->patient_allergies_history.'" >
                                 </div>
                             </center>
                           </div>
@@ -898,6 +897,7 @@ foreach ( $result_of_patients_general_infos as $key )
                                                         $EHR_document_prescribed_common_diet      = str_replace("_", " ", $key_ehr->EHR_document_prescribed_common_diet );
                                                         $EHR_document_prescribed_common_drug      = str_replace("_", " ", $key_ehr->EHR_document_prescribed_common_drug );
                                                         $EHR_document_prescribed_next_appointment = str_replace("_", " ", $key_ehr->EHR_document_prescribed_next_appointment );
+                                                        $EHR_document_related_clinic_doctor_name  = str_replace("_", " ", $key_ehr->EHR_document_related_clinic_doctor_name );
 
                                                         echo '
                                                         <!-- Button trigger modal -->
@@ -911,9 +911,9 @@ foreach ( $result_of_patients_general_infos as $key )
                                                             <div class="modal-content">
                                                               <div class="modal-header">
                                                                 <center>
-                                                                <h5 class="modal-title" id="exampleModalLabel" style="float:none;">
-                                                                    '.$key_ehr->EHR_document_id.' => '.substr($key_ehr->created_at , '0' , '10').'
-                                                                </h5>
+                                                                    <h5 class="modal-title" id="exampleModalLabel" style="float:none;">
+                                                                        '.$key_ehr->EHR_document_id.' => '.substr($key_ehr->created_at , '0' , '10').'
+                                                                    </h5>
                                                                 </center>
                                                                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                                                                   <span aria-hidden="true">&times;</span>
@@ -926,7 +926,7 @@ foreach ( $result_of_patients_general_infos as $key )
                                                                     echo '
                                                                     <div class="well" style="background-color: inherit;border-bottom:0px;border-left:0px;font-size:17px;margin-bottom:0px;padding-bottom:0px;" >
                                                                         ' . $cms_menu_title[4] . '
-                                                                        <p class="common-drug">'.$key_ehr->EHR_document_prescribed_common_drug.'</p>
+                                                                        <p class="common-drug" style="overflow-wrap: break-word; word-wrap: break-word; hyphens: auto;">'.$EHR_document_prescribed_common_drug.'</p>
                                                                     </div>';
                                                                 }
 
@@ -935,7 +935,7 @@ foreach ( $result_of_patients_general_infos as $key )
                                                                     echo '
                                                                     <div class="well" style="background-color: inherit;border-bottom:0px;border-left:0px;font-size:17px;margin-bottom:0px;padding-bottom:0px;" >
                                                                          ' . $cms_menu_title[3] . '
-                                                                        <p class="common-rejim">'.$key_ehr->EHR_document_prescribed_common_diet.'</p>
+                                                                        <p class="common-rejim" style="overflow-wrap: break-word; word-wrap: break-word; hyphens: auto;" >'.$EHR_document_prescribed_common_diet.'</p>
                                                                     </div>';
                                                                 }
 
@@ -944,24 +944,15 @@ foreach ( $result_of_patients_general_infos as $key )
                                                                     echo '
                                                                     <div class="well" style="background-color: inherit;border-bottom:0px;border-left:0px;font-size:17px;margin-bottom:0px;padding-bottom:0px;" >
                                                                         '.$cms_menu_title[2] .'
-                                                                        <p class="common-return-date">'.$key_ehr->EHR_document_prescribed_next_appointment.'</p>
+                                                                        <p class="common-return-date" style="overflow-wrap: break-word; word-wrap: break-word; hyphens: auto;" >'.$EHR_document_prescribed_next_appointment.'</p>
                                                                     </div>';
                                                                 }
 
                                                                 echo '
                                                                 <div class="well" style="background-color: inherit;border-bottom:0px;border-left:0px;font-size:17px;margin-bottom:0px;padding-bottom:0px;" >
                                                                     Doctor:
-                                                                    <p class="child-dr-name-rel-doc">'.$key_ehr->EHR_document_related_clinic_doctor_name.'</p>
+                                                                    <p class="child-dr-name-rel-doc" style="overflow-wrap: break-word; word-wrap: break-word; hyphens: auto;" >'.$EHR_document_related_clinic_doctor_name.'</p>
                                                                 </div>
-                                                                
-                                                                <div class="modal-body" align="center" style="margin-top:0px;padding-top:0px;">
-                                                                    <img src="" class="img-responsive" />
-                                                                </div>
-                                                                
-                                                                <hr style="width:1px;" >
-                                                                <hr style="width:1px;" >
-                                                                <hr style="width:1px;" >
-                                                                <hr style="width:1px;" >  
                                                                 
                                                               </div>
                                                               <div class="modal-footer">
@@ -1181,18 +1172,18 @@ foreach ( $result_of_patients_general_infos as $key )
 
 <div class="well col-md-12 col-sm-12 col-xs-12" style="min-height:52px;" >
 
-    <div style="float:right;font-size:16px;margin-right:9px;" >Name: '.$key->patient_first_name.' '.$key->patient_last_name.'</div>
+    <div style="float:right;font-size:16px;margin-right:9px;" >Name: '.$result_of_patients_general_infos->patient_first_name.' '.$result_of_patients_general_infos->patient_last_name.'</div>
 
     <div style="float:right;font-size:16px;margin-right:10px;" >' ;
-        if($key->patient_relationship_status == 'single')
+        if($result_of_patients_general_infos->patient_relationship_status == 'single')
         {
             echo 'Marital Status: Single | ' ;
         }
-        elseif($key->patient_relationship_status == 'married')
+        elseif($result_of_patients_general_infos->patient_relationship_status == 'married')
         {
             echo 'Marital Status: Married | ' ;
         }
-        elseif($key->patient_relationship_status == 'divorced')
+        elseif($result_of_patients_general_infos->patient_relationship_status == 'divorced')
         {
             echo 'Marital Status: Divorced | ' ;
         }
@@ -1205,10 +1196,10 @@ if( isset($EHR_document_related_clinic_doctor_name) )
     <div style="float:right;font-size:16px;margin-right:10px;" >Doctor: '.$EHR_document_related_clinic_doctor_name.' | </div>' ;
 }
 
-if( strlen($key->patient_birth_day) > 0 )
+if( strlen($result_of_patients_general_infos->patient_birth_day) > 0 )
 {
     echo '
-    <div style="float:right;font-size:16px;margin-right:10px;" >Birthday : '.$key->patient_birth_day.' | </div>' ;
+    <div style="float:right;font-size:16px;margin-right:10px;" >Birthday : '.$result_of_patients_general_infos->patient_birth_day.' | </div>' ;
 }
 
 $options_for_user = (unserialize(Auth::user()->options_for_user)) ;
@@ -1234,7 +1225,7 @@ $options_for_user = (unserialize(Auth::user()->options_for_user)) ;
 // START OF IF DR TELEGRAM ACTIVATED
 if( Auth::user()->telegram == 'true' )
 {
-    if( strlen($key->patient_from_external_platform_id) > 0  )
+    if( strlen($result_of_patients_general_infos->patient_from_external_platform_id) > 0  )
     {
         echo '
         <div style="float:right;font-size:16px;margin-right:10px;" ><span class="glyphicon glyphicon-ok" aria-hidden="true" ></span> Connected to Bot | </div>' ;
@@ -1357,7 +1348,6 @@ else
   <!-- END of page content -->';
 // END of content.
 
-}
 }
 // END of show to Admin user type.
 else

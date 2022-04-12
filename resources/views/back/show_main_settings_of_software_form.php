@@ -1,14 +1,12 @@
 <?php
 
 // Add your custom css files here. (will located in header)
-$extra_links_header = '
-' ;
+$extra_links_header = '' ;
 
 // Add your custom js files here. (will located in footer)
 $extra_links_footer = '
 <!-- jQuery Tags Input -->
-<script src="'.url('back/vendors/jquery.tagsinput/src/jquery.tagsinput.js').'"></script>
-' ;
+<script src="'.url('back/vendors/jquery.tagsinput/src/jquery.tagsinput.js').'"></script>' ;
 
 // Call the header include.
 include 'layout/header.php' ;
@@ -17,7 +15,7 @@ include 'layout/header.php' ;
 <style>
     span.tag
     {
-    font-size:23px;
+        font-size:23px;
     }
 </style>
 
@@ -44,10 +42,7 @@ echo '
 			  <hr style="width:1px;">
 			  <div class="form-group col-md-12 col-sm-12 col-xs-12" > ' ;
 
-				foreach ( $result_show_main_settings_of_software_form as $key_settings )
-				{
-
-                $cms_menu_title_trick = explode(",", $key_settings->cms_menu_title) ;
+                $cms_menu_title_trick = explode(",", $result_show_main_settings_of_software_form->cms_menu_title) ;
 
                 echo '
 			    <form method="post" action="'.route('update_show_main_settings_of_software_form').'" id="medical-file-form" >
@@ -61,7 +56,7 @@ echo '
                         </label>
                     </center>
                     <div class="col-md-12 col-sm-12 col-xs-12" >
-                      <input id="tags_00" type="text" name="clinic_doctors_name" class="tags form-control" value="' . $key_settings->clinic_doctors_name . '" > 
+                      <input id="tags_00" type="text" name="clinic_doctors_name" class="tags form-control" value="' . $result_show_main_settings_of_software_form->clinic_doctors_name . '" > 
                       <div id="suggestions-container" ></div>
                     </div>
                   </div>
@@ -75,7 +70,7 @@ echo '
                         </label>
                     </center>
                     <div class="col-md-12 col-sm-12 col-xs-12" >
-                      <input id="tags_0" type="text" name="common_hypersensitivity" class="tags form-control" value="' . $key_settings->common_hypersensitivity . '" > 
+                      <input id="tags_0" type="text" name="common_hypersensitivity" class="tags form-control" value="' . $result_show_main_settings_of_software_form->common_hypersensitivity . '" > 
                       <div id="suggestions-container" ></div>
                     </div>
                   </div>
@@ -89,7 +84,7 @@ echo '
                         </label>
                     </center>
                     <div class="col-md-12 col-sm-12 col-xs-12"  >
-                      <input id="tags_1" type="text" name="common_drug" class="tags form-control" value="' . $key_settings->common_drug . '" > 
+                      <input id="tags_1" type="text" name="common_drug" class="tags form-control" value="' . $result_show_main_settings_of_software_form->common_drug . '" > 
                       <div id="suggestions-container" ></div>
                     </div>
                   </div>
@@ -103,7 +98,7 @@ echo '
                         </label>
                     </center>
                     <div class="col-md-12 col-sm-12 col-xs-12" >
-                      <input id="tags_2" type="text" name="common_diet" class="tags form-control" value="' . $key_settings->common_diet . '" > 
+                      <input id="tags_2" type="text" name="common_diet" class="tags form-control" value="' . $result_show_main_settings_of_software_form->common_diet . '" > 
                       <div id="suggestions-container" ></div>
                     </div>
                   </div>
@@ -116,7 +111,7 @@ echo '
                              Predefined time periods for the patient\'s next visit
                         </label></center>
                     <div class="col-md-12 col-sm-12 col-xs-12">
-                      <input id="tags_3" type="text" name="common_return_date" class="tags form-control" value="' . $key_settings->common_return_date . '" > 
+                      <input id="tags_3" type="text" name="common_return_date" class="tags form-control" value="' . $result_show_main_settings_of_software_form->common_return_date . '" > 
                       <div id="suggestions-container" ></div>
                     </div>
                   </div>
@@ -128,7 +123,7 @@ echo '
                         </label>
                     </center>
                     <div class="col-md-12 col-sm-12 col-xs-12">
-                      <input type="text" name="gap_time_between_appointments" class="form-control col-md-7 col-xs-12" value="' . $key_settings->gap_time_between_appointments . '" autocomplete="off" aria-autocomplete="list" aria-expanded="false" aria-haspopup="true" role="combobox" spellcheck="false"  >
+                      <input type="text" name="gap_time_between_appointments" class="form-control col-md-7 col-xs-12" value="' . $result_show_main_settings_of_software_form->gap_time_between_appointments . '" autocomplete="off" aria-autocomplete="list" aria-expanded="false" aria-haspopup="true" role="combobox" spellcheck="false"  >
                     </div>
                   </div>
     
@@ -139,7 +134,7 @@ echo '
                         </label>
                     </center>
                     <div class="col-md-12 col-sm-12 col-xs-12">
-                      <input type="text" name="phone_number" class="form-control col-md-7 col-xs-12 has-feedback-right" value="' . $key_settings->phone_number . '" autocomplete="off" aria-autocomplete="list" aria-expanded="false" aria-haspopup="true" role="combobox" spellcheck="false" >
+                      <input type="text" name="phone_number" class="form-control col-md-7 col-xs-12 has-feedback-right" value="' . $result_show_main_settings_of_software_form->phone_number . '" autocomplete="off" aria-autocomplete="list" aria-expanded="false" aria-haspopup="true" role="combobox" spellcheck="false" >
                       <span class="fa fa-phone form-control-feedback right" aria-hidden="true"></span>
                     </div>
                   </div>
@@ -151,7 +146,7 @@ echo '
                         </label>
                     </center>
                     <div lass="col-md-12 col-sm-12 col-xs-12">
-                      <input type="text" name="college_branch" class="form-control col-md-7 col-xs-12" value="' . $key_settings->college_branch . '" autocomplete="off" aria-autocomplete="list" aria-expanded="false" aria-haspopup="true" role="combobox" spellcheck="false"  >
+                      <input type="text" name="college_branch" class="form-control col-md-7 col-xs-12" value="' . $result_show_main_settings_of_software_form->college_branch . '" autocomplete="off" aria-autocomplete="list" aria-expanded="false" aria-haspopup="true" role="combobox" spellcheck="false"  >
                     </div>
                   </div>
                   
@@ -162,11 +157,11 @@ echo '
                         </label>
                     </center>
                     <div lass="col-md-12 col-sm-12 col-xs-12">
-                      <input type="text" name="contact_address" class="form-control col-md-7 col-xs-12" value="' . $key_settings->contact_address . '" autocomplete="off" aria-autocomplete="list" aria-expanded="false" aria-haspopup="true" role="combobox" spellcheck="false"  >
+                      <input type="text" name="contact_address" class="form-control col-md-7 col-xs-12" value="' . $result_show_main_settings_of_software_form->contact_address . '" autocomplete="off" aria-autocomplete="list" aria-expanded="false" aria-haspopup="true" role="combobox" spellcheck="false"  >
                     </div>
                   </div>';
 
-                    $options_for_user = (unserialize($key_settings->options_for_user));
+                    $options_for_user = (unserialize($result_show_main_settings_of_software_form->options_for_user));
 
                     if ($options_for_user[0] == 't')
                     {
@@ -189,7 +184,7 @@ echo '
                     </div>';
 
                     // Explode and array these cms_menu_title.
-                    $cms_menu_title = explode(",", $key_settings->cms_menu_title);
+                    $cms_menu_title = explode(",", $result_show_main_settings_of_software_form->cms_menu_title);
 
                     echo '
                     <div class="form-group col-md-12 col-sm-12 col-xs-12" style="border-top:1px solid #aba5a5;padding-top:50px;" >
@@ -497,7 +492,7 @@ echo '
     
                         <center>
                             <label class="control-label col-md-12 col-sm-12 col-xs-12" style="margin-bottom:5px;margin-top:5px;font-size:19px;font-weight:normal;" >
-                                 Remaining SMS credit: ' . $key_settings->notif_sms_credit . '
+                                 Remaining SMS credit: ' . $result_show_main_settings_of_software_form->notif_sms_credit . '
                             </label>
                         </center>
                         <div lass="col-md-12 col-sm-12 col-xs-12">
@@ -515,11 +510,8 @@ echo '
                         Update Settings of Software
                   </button>	
     
-                </form>';
-
-                }
-
-                echo '
+                </form>
+                
 			  </div>
 		  </div>
 		</div>

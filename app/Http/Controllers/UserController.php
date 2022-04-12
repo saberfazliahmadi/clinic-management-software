@@ -46,11 +46,9 @@ class UserController extends Controller
             select('*')
             ->where('id'  , '=' , Auth::user()->id)
             ->where('name', '=' , Auth::user()->name)
-            ->get();
+            ->first();
 
-            $count_result_show_main_settings_of_software_form = $result_show_main_settings_of_software_form->count();
-
-            if ($count_result_show_main_settings_of_software_form)
+            if ( $result_show_main_settings_of_software_form !== null )
             {
                 $title_of_page = 'Main Settings of Software';
                 return view('back.show_main_settings_of_software_form',
@@ -188,6 +186,7 @@ class UserController extends Controller
             select('*')
             ->where('id'  , '=' , Auth::user()->id)
             ->where('name', '=' , Auth::user()->name)
+            ->first()
             ->update(
             [
                 'common_drug'             => $common_drug,

@@ -108,6 +108,7 @@ class FinancialTransactionController extends Controller
             select(['financial_transaction_id'  , 'financial_dr_related_id'])
             ->where( 'financial_transaction_id' , '=' , $delete_this_financial_id )
             ->where( 'financial_dr_related_id'  , '=' , $find_admin_id_from_users_table )
+            ->first()
             ->delete() ;
 
             return redirect()->back()->with(['success_message' => '<span>The Selected Financial Transaction Successfully Deleted</span>']);

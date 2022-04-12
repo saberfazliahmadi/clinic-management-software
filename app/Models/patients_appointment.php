@@ -8,6 +8,8 @@ use Illuminate\Database\Eloquent\Model;
 
 class patients_appointment extends Model
 {
+    protected $primaryKey = 'appointment_id' ;
+
     protected $fillable =
     [
         'appointment_dr_related_id' ,

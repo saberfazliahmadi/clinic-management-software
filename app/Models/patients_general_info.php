@@ -11,6 +11,8 @@ class patients_general_info extends Model
 {
     use HasFactory ;
 
+    protected $primaryKey = 'patient_id' ;
+
     protected $fillable =
     [
         'patient_dr_related_id' ,
