@@ -44,8 +44,9 @@ class UserController extends Controller
         {
             $result_show_main_settings_of_software_form = User::
             select('*')
-            ->where('id'  , '=' , Auth::user()->id)
-            ->where('name', '=' , Auth::user()->name)
+            ->where('id'   , '=' , Auth::user()->id)
+            ->where('name' , '=' , Auth::user()->name)
+            ->limit('1')
             ->first();
 
             if ( $result_show_main_settings_of_software_form !== null )
@@ -133,8 +134,8 @@ class UserController extends Controller
         $cms_menu_title_0 = $request->cms_menu_title_0;
 
         // Make cms_menu_title variable
-        $cms_menu_title = $cms_menu_title_0 .
-            ',' . $cms_menu_title_1
+        $cms_menu_title = $cms_menu_title_0
+            . ',' . $cms_menu_title_1
             . ',' . $cms_menu_title_2
             . ',' . $cms_menu_title_3
             . ',' . $cms_menu_title_4
@@ -186,7 +187,7 @@ class UserController extends Controller
             select('*')
             ->where('id'  , '=' , Auth::user()->id)
             ->where('name', '=' , Auth::user()->name)
-            ->first()
+            ->limit('1')
             ->update(
             [
                 'common_drug'             => $common_drug,
@@ -242,6 +243,7 @@ class UserController extends Controller
                     select([ 'id' , 'name' , 'password' ] )
                     ->where('id'  , '=' , Auth::user()->id)
                     ->where('name', '=' , Auth::user()->name)
+                    ->limit('1')
                     ->update(
                     [
                         'password' => $hashed_new_password

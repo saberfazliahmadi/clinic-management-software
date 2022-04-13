@@ -78,6 +78,7 @@ class PatientsGeneralInfoController extends Controller
         select([ 'patient_id ' , 'patient_mobile_number' , 'patient_dr_related_id'])
         ->where('patient_mobile_number', '=' , $request->patient_mobile_number)
         ->where('patient_dr_related_id', '=' , $admin_id_from_users_table)
+        ->limit('1')
         ->count();
 
         // START of If the mobile number of patient was unique.
@@ -175,6 +176,7 @@ class PatientsGeneralInfoController extends Controller
             select('*')
             ->where('patient_id'            , '=' , $edit_this_patient_id)
             ->where('patient_dr_related_id' , '=' , $admin_id_from_users_table)
+            ->limit('1')
             ->first() ;
 
             if( $result_edit_patient_form !== null )
@@ -235,6 +237,7 @@ class PatientsGeneralInfoController extends Controller
         ->where('patient_mobile_number' , '='  , $request->post('patient_mobile_number') )
         ->where('patient_dr_related_id' , '='  , $admin_id_from_users_table)
         ->where('patient_id'            , '!=' , $update_this_patient_id )
+        ->limit('1')
         ->count();
 
         // START of If the mobile number of patient was unique.
@@ -254,7 +257,7 @@ class PatientsGeneralInfoController extends Controller
                 select('*')
                 ->where('patient_id', '=', $update_this_patient_id)
                 ->where('patient_dr_related_id', '=', $admin_id_from_users_table)
-                ->first()
+                ->limit('1')
                 ->update([
                     'patient_first_name'            => $request->post('patient_first_name'),
                     'patient_last_name'             => $request->post('patient_last_name'),

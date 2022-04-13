@@ -167,7 +167,7 @@ class PatientsAppointmentController extends Controller
             select(['appointment_id' , 'appointment_dr_related_id' ])
             ->where( 'appointment_id'            , '=' , $request->appointment_id )
             ->where( 'appointment_dr_related_id' , '=' , $admin_id_from_users_table )
-            ->first()
+            ->limit('1')
             ->delete() ;
 
             return redirect()->back()->with(['success_message' => '<span>The Selected Appointment Successfully Deleted</span>']);
@@ -400,7 +400,7 @@ class PatientsAppointmentController extends Controller
             select( 'patient_id'            , 'patient_last_appointment_date' , 'patient_last_appointment_time' , 'patient_dr_related_id' )
             ->where('patient_id'            , '=' , $choose_time_for_this_patient_id )
             ->where('patient_dr_related_id' , '=' , $admin_id_from_users_table )
-            ->first()
+            ->limit('1')
             ->update([
                 'patient_last_appointment_date' => $choose_time_for_this_date ,
                 'patient_last_appointment_time' => $appointment_time

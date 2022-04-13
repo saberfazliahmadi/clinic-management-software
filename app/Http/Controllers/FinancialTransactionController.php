@@ -108,7 +108,7 @@ class FinancialTransactionController extends Controller
             select(['financial_transaction_id'  , 'financial_dr_related_id'])
             ->where( 'financial_transaction_id' , '=' , $delete_this_financial_id )
             ->where( 'financial_dr_related_id'  , '=' , $find_admin_id_from_users_table )
-            ->first()
+            ->limit('1')
             ->delete() ;
 
             return redirect()->back()->with(['success_message' => '<span>The Selected Financial Transaction Successfully Deleted</span>']);
@@ -147,6 +147,7 @@ class FinancialTransactionController extends Controller
                 select( 'id'  , 'name' , 'financial_management' )
                 ->where('id'   , '='   , $find_admin_id_from_users_table )
                 ->where('name' , '='   , Auth::user()->name )
+                ->limit('1')
                 ->update(
                 [
                     'financial_management' => $financial_management
@@ -199,10 +200,10 @@ class FinancialTransactionController extends Controller
     {
         $validation_of_store_show_submit_financial_transaction_form = $request->validate(
             [
-                'financial_transaction_type' => 'required|min:1' ,
-                'title_of_payment'           => 'required|min:1' ,
+                'financial_transaction_type' => 'required|min:1'         ,
+                'title_of_payment'           => 'required|min:1'         ,
                 'amount_of_payment'          => 'required|min:1|integer' ,
-                'financial_transaction_date' => 'required|min:1' ,
+                'financial_transaction_date' => 'required|min:1'         ,
             ]
         ) ;
 

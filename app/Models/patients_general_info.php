@@ -38,10 +38,10 @@ class patients_general_info extends Model
         'patient_from_external_platform_step' ,
     ] ;
 
-    //public function patients_appointment()
-    //{
-    //    return $this->hasMany(patients_appointment::class , 'appointment_patient_related_id' , 'patient_id') ;
-    //}
+    public function patients_appointment()
+    {
+        return $this->hasMany(patients_appointment::class , 'appointment_patient_related_id' , 'patient_id') ;
+    }
 
     /**
      * Create a new factory instance for the model.

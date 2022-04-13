@@ -129,6 +129,7 @@ class PatientsEHRDocumentController extends Controller
             $result_of_show_patients_general_infos = patients_general_info::
             where('patient_dr_related_id' , '=' , $admin_id_from_users_table )
             ->where('patient_id'          , '=' , $request->patient_id )
+            ->limit('1')
             ->first() ;
 
             if( $result_of_show_patients_general_infos !== null )
@@ -188,7 +189,7 @@ class PatientsEHRDocumentController extends Controller
             select([ 'patient_dr_related_id' , 'patient_id' , 'patient_more_description' , 'patient_surgery_history' , 'patient_disease_background' , 'patient_medication_history' , 'patient_allergies_history' ] )
             ->where('patient_dr_related_id', '=' , $admin_id_from_users_table)
             ->where('patient_id'           , '=' , $request->patient_id)
-            ->first()
+            ->limit('1')
             ->update(
             [
                 'patient_more_description'   => $patient_more_description ,
@@ -356,6 +357,7 @@ class PatientsEHRDocumentController extends Controller
             $result_show_new_saved_ehr = patients_EHR_document::
             where('EHR_document_dr_related_id' , '=' , $admin_id_from_users_table )
             ->where('EHR_document_id'          , '=' , $request->EHR_document_id )
+            ->limit('1')
             ->first() ;
 
             if( $result_show_new_saved_ehr !== null )
