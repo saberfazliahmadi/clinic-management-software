@@ -104,7 +104,7 @@ class FinancialTransactionController extends Controller
         $delete_this_financial_id       = $request->financial_transaction_id ;
         try
         {
-            $result_of_delete_financial_transaction = financial_transaction::
+            financial_transaction::
             select(['financial_transaction_id'  , 'financial_dr_related_id'])
             ->where( 'financial_transaction_id' , '=' , $delete_this_financial_id )
             ->where( 'financial_dr_related_id'  , '=' , $find_admin_id_from_users_table )
@@ -143,7 +143,7 @@ class FinancialTransactionController extends Controller
                 $financial_management  = str_replace( "/" , "" , $financial_management ) ;
                 $find_admin_id_from_users_table = $this->find_admin_id_from_users_table() ;
 
-                $result_save_financial_settings_receiving_money_form = User::
+                User::
                 select( 'id'  , 'name' , 'financial_management' )
                 ->where('id'   , '='   , $find_admin_id_from_users_table )
                 ->where('name' , '='   , Auth::user()->name )
@@ -198,7 +198,7 @@ class FinancialTransactionController extends Controller
 
     public function store_show_submit_financial_transaction_form( Request $request )
     {
-        $validation_of_store_show_submit_financial_transaction_form = $request->validate(
+        $request->validate(
             [
                 'financial_transaction_type' => 'required|min:1'         ,
                 'title_of_payment'           => 'required|min:1'         ,
@@ -268,7 +268,7 @@ class FinancialTransactionController extends Controller
 
     public function run_financial_transaction_reporting_form( Request $request )
     {
-        $validation_of_run_financial_transaction_reporting_form = $request->validate(
+        $request->validate(
             [
                 'financial_report_from_date' => 'required|min:1' ,
                 'financial_report_to_date'   => 'required|min:1' ,

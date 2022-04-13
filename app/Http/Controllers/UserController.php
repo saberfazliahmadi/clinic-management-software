@@ -183,7 +183,7 @@ class UserController extends Controller
 
         try
         {
-            $result_update_show_main_settings_of_software_form = User::
+            User::
             select('*')
             ->where('id'  , '=' , Auth::user()->id)
             ->where('name', '=' , Auth::user()->name)
@@ -228,7 +228,7 @@ class UserController extends Controller
 
             if( $new_password == $retype_new_password )
             {
-                $validate_run_change_password_form = $request->validate(
+                $request->validate(
                 [
                     'current_password'    => 'required|min:8|max:50' ,
                     'new_password'        => 'required|min:8|max:50' ,
@@ -239,7 +239,7 @@ class UserController extends Controller
                 {
                     $hashed_new_password = Hash::make($request->new_password) ;
 
-                    $result_cunt_run_change_password_form = User::
+                    User::
                     select([ 'id' , 'name' , 'password' ] )
                     ->where('id'  , '=' , Auth::user()->id)
                     ->where('name', '=' , Auth::user()->name)

@@ -185,10 +185,10 @@ class PatientsEHRDocumentController extends Controller
                 $patient_more_description .= ','.$request->typed_keyboard_savabegh;
             }
 
-            $update_patients_ehr_document_page = patients_general_info::
+            patients_general_info::
             select([ 'patient_dr_related_id' , 'patient_id' , 'patient_more_description' , 'patient_surgery_history' , 'patient_disease_background' , 'patient_medication_history' , 'patient_allergies_history' ] )
-            ->where('patient_dr_related_id', '=' , $admin_id_from_users_table)
-            ->where('patient_id'           , '=' , $request->patient_id)
+            ->where('patient_dr_related_id'  , '=' , $admin_id_from_users_table)
+            ->where('patient_id'             , '=' , $request->patient_id)
             ->limit('1')
             ->update(
             [

@@ -243,7 +243,7 @@ class PatientsGeneralInfoController extends Controller
         // START of If the mobile number of patient was unique.
         if ( $number_of_duplicate_mobile_number == '0' )
         {
-            $validation_of_update_this_patient_id = $request->validate(
+            $request->validate(
                 [
                     'patient_first_name'    => 'required|min:3' ,
                     'patient_last_name'     => 'required|min:3' ,
@@ -253,7 +253,7 @@ class PatientsGeneralInfoController extends Controller
 
             try
             {
-                $result_update_this_patient_id = patients_general_info::
+                patients_general_info::
                 select('*')
                 ->where('patient_id', '=', $update_this_patient_id)
                 ->where('patient_dr_related_id', '=', $admin_id_from_users_table)
@@ -308,7 +308,7 @@ class PatientsGeneralInfoController extends Controller
     public function show_patient_search_from()
     {
         $title_of_page = 'Search Patients' ;
-        return view('back.show_patient_search_from', ['title_of_page' => $title_of_page]);
+        return view('back.show_patient_search_from' , ['title_of_page' => $title_of_page] );
     }
 
     public function run_patient_search_form( Request $request )

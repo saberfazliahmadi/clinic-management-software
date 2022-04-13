@@ -163,7 +163,7 @@ class PatientsAppointmentController extends Controller
 
         try
         {
-            $result_of_delete_oppointment = patients_appointment::
+            patients_appointment::
             select(['appointment_id' , 'appointment_dr_related_id' ])
             ->where( 'appointment_id'            , '=' , $request->appointment_id )
             ->where( 'appointment_dr_related_id' , '=' , $admin_id_from_users_table )
