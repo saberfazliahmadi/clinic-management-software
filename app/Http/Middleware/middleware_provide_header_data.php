@@ -70,10 +70,9 @@ class middleware_provide_header_data
                     }
 
                     // Update this appointment from Waiting status to Done status
-                    $result_update_send_patient_to_doctors_room = patients_appointment::
-                    select('*')
-                    ->where( 'appointment_id'           , '=' , $request->appointment_id )
-                    ->where( 'appointment_dr_related_id', '=' , $admin_id_from_users_table )
+                    patients_appointment::
+                    where( 'appointment_id'              , '=' , $request->appointment_id )
+                    ->where( 'appointment_dr_related_id' , '=' , $admin_id_from_users_table )
                     ->update([
                         'appointment_status'                    => '0' ,
                         'appointment_status_unique'             => '1' ,
@@ -133,7 +132,7 @@ class middleware_provide_header_data
                 }
                 catch (\Exception $exception)
                 {
-                    \Session::flash('success_message', $exception.'<span style="color:blue;">We have an error to send this patient to doctors room</span>');
+                    \Session::flash('success_message', '<span style="color:blue;">We have an error to send this patient to doctors room</span>');
                 }
             }
             else
@@ -147,7 +146,6 @@ class middleware_provide_header_data
             // Create mysql query to extract all of appointments that record in patients_appointment table on TODAY date (JOIN TYPE)
             $result_middleware_provide_header_appointments_data_on_today = patients_appointment::
             join('patients_general_infos' , 'patients_general_infos.patient_id' , '=' , 'patients_appointments.appointment_patient_related_id')
-            ->select('*')
             ->where('patients_appointments.appointment_dr_related_id' , '=' , $admin_id_from_users_table )
             ->where('patients_appointments.appointment_date'          , '=' , $show_all_appointments_on_this_date )
             ->orderBy('patients_appointments.appointment_time')

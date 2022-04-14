@@ -13,7 +13,7 @@ include 'layout/header.php' ;
 echo '
 <!-- page content -->
 <div class="right_col" role="main">
-   
+   <hr>
     <div style="width: 100%;height: 80px;padding: 10px 0;margin-bottom:100px;" >
       <center>
          <h3 style="text-align:center;">

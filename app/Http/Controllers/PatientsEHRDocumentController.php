@@ -151,15 +151,15 @@ class PatientsEHRDocumentController extends Controller
             }
             else
             {
-                \Session::flash('success_message', '<span style="color:blue;">This Patient Does Not Exist!</span>');
-                return redirect(route('home'));
+                return redirect(route('home'))
+                ->with( [ 'success_message' => '<span style="color:blue;">This Patient Does Not Exist!</span>' ] );
             }
 
         }
         catch (\Exception $exception)
         {
-            \Session::flash('success_message', '<span style="color:blue;">Can not display this EHR!</span>');
-            return redirect(route('home'));
+            return redirect(route('home'))
+            ->with( [ 'success_message' => '<span style="color:blue;">Can not display this EHR!</span>' ] );
         }
     }
 
@@ -318,13 +318,13 @@ class PatientsEHRDocumentController extends Controller
 
             if ($request->hasFile('image'))
             {
-                $validatedData = $request->validate([
+                $request->validate([
                     'image' => 'image|mimes:jpeg,png,jpg,gif,svg|max:10048',
                 ]);
 
-                $file = $request->file('image');
-                $extension = $request->file('image')->extension();
-                $fileName = rand(11111, 99999) . time() . rand() . '.'.$extension ;
+                $file            = $request->file('image');
+                $extension       = $request->file('image')->extension();
+                $fileName        = rand(11111, 99999) . time() . rand() . '.'.$extension ;
                 $destinationPath = public_path() . '/storage/images/' . $admin_id_from_users_table . '/' . $request->patient_id . '/para';
                 $file->move($destinationPath, $fileName);
                 //$path = $request->file('image')->sotre('public/images/'.Auth::user()->name.'/'.$request->patient_id.'/para' , $name );
@@ -344,8 +344,8 @@ class PatientsEHRDocumentController extends Controller
         }
         catch (\Exception $exception)
         {
-            \Session::flash('success_message', '<span style="color:blue;">Can not Save new EHR!</span>') ;
-            return redirect(route('home'));
+            return redirect(route('home'))
+            ->with( [ 'success_message' => '<span style="color:blue;">Can not Save new EHR!</span>' ] );
         }
     }
 
@@ -376,14 +376,14 @@ class PatientsEHRDocumentController extends Controller
             }
             else
             {
-                \Session::flash('success_message', '<span style="color:blue;">Can not show new saved EHR!</span>');
-                return redirect(route('home'));
+                return redirect(route('home'))
+                ->with( [ 'success_message' => '<span style="color:blue;">Can not show new saved EHR!</span>' ] );
             }
         }
         catch (\Exception $exception)
         {
-            \Session::flash('success_message', '<span style="color:blue;">Can not show new saved EHR!</span>');
-            return redirect(route('home'));
+            return redirect(route('home'))
+            ->with( [ 'success_message' => '<span style="color:blue;">Can not show new saved EHR!</span>' ] );
         }
     }
 

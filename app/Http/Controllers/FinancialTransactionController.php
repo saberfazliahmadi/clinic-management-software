@@ -111,12 +111,13 @@ class FinancialTransactionController extends Controller
             ->limit('1')
             ->delete() ;
 
-            return redirect()->back()->with(['success_message' => '<span>The Selected Financial Transaction Successfully Deleted</span>']);
+            return redirect()->back()
+            ->with(['success_message' => '<span>The Selected Financial Transaction Successfully Deleted</span>']);
         }
         catch (\Exception $exception)
         {
-            \Session::flash('success_message', '<b style="color:blue;" >We have an error to destroy this Financial Transaction</b>' ) ;
-            return redirect(route('show_financial_transaction_reporting_form')) ;
+            return redirect(route('show_financial_transaction_reporting_form'))
+            ->with(['success_message' => '<b style="color:blue;" >We have an error to destroy this Financial Transaction</b>']);
         }
     }
 
@@ -144,28 +145,28 @@ class FinancialTransactionController extends Controller
                 $find_admin_id_from_users_table = $this->find_admin_id_from_users_table() ;
 
                 User::
-                select( 'id'  , 'name' , 'financial_management' )
-                ->where('id'   , '='   , $find_admin_id_from_users_table )
-                ->where('name' , '='   , Auth::user()->name )
+                select( 'id'   , 'name' , 'financial_management' )
+                ->where('id'   , '='    , $find_admin_id_from_users_table )
+                ->where('name' , '='    , Auth::user()->name )
                 ->limit('1')
                 ->update(
                 [
                     'financial_management' => $financial_management
                 ]) ;
 
-                \Session::flash('success_message', 'The New Financial Settings of Receiving Money Successfully Updated ');
-                return redirect(route('show_financial_settings_receiving_money_form')) ;
+                return redirect(route('show_financial_settings_receiving_money_form'))
+                ->with(['success_message' => 'The New Financial Settings of Receiving Money Successfully Updated' ]);
             }
             catch (\Exception $exception)
             {
-                \Session::flash('success_message', '<b style="color:blue;" >We have an error to update these financial settings</b>' ) ;
-                return redirect(route('show_financial_settings_receiving_money_form')) ;
+                return redirect(route('show_financial_settings_receiving_money_form'))
+                ->with(['success_message' => '<b style="color:blue;" >We have an error to update these financial settings</b>' ]);
             }
         }
         else
         {
-            \Session::flash('success_message', '<b style="color:blue;" >At least type 1 item by this type <br> "Service name: Amount of your desire money of this service"<br> and save it </b>' ) ;
-            return redirect(route('show_financial_settings_receiving_money_form')) ;
+            return redirect(route('show_financial_settings_receiving_money_form'))
+            ->with(['success_message' => '<b style="color:blue;" >At least type 1 item by this type <br> "Service name: Amount of your desire money of this service"<br> and save it </b>' ]);
         }
     }
 
@@ -175,8 +176,7 @@ class FinancialTransactionController extends Controller
         {
             $find_admin_id_from_users_table   = $this->find_admin_id_from_users_table();
             $result_fetch_last_10_transaction = financial_transaction::
-            select('*')
-            ->where('financial_dr_related_id'    , '=' , $find_admin_id_from_users_table)
+            where('financial_dr_related_id'    , '=' , $find_admin_id_from_users_table)
             ->orderBy('financial_transaction_id' , 'DESC')
             ->paginate('10') ;
 
@@ -191,8 +191,8 @@ class FinancialTransactionController extends Controller
         }
         catch (\Exception $exception)
         {
-            \Session::flash('success_message', '<b style="color:blue;" >We have an error to show_submit_financial_transaction_form</b>' ) ;
-            return redirect(route('show_submit_financial_transaction_form')) ;
+            return redirect(route('show_submit_financial_transaction_form'))
+            ->with(['success_message' => '<b style="color:blue;" >We have an error to show_submit_financial_transaction_form</b>' ]);
         }
     }
 
@@ -250,13 +250,13 @@ class FinancialTransactionController extends Controller
 
             $result_store_show_submit_financial_transaction_form->save() ;
 
-            \Session::flash('success_message', 'The New Financial Transaction with date: <b>'.$financial_transaction_date.'</b> <br> and title: <b>'.$title_of_payment.'</b> and amount: <b>'.$amount_of_payment.'</b> <br> Successfully Submitted');
-            return redirect(route('show_submit_financial_transaction_form')) ;
+            return redirect(route('show_submit_financial_transaction_form'))
+            ->with(['success_message' => 'The New Financial Transaction with date: <b>'.$financial_transaction_date.'</b> <br> and title: <b>'.$title_of_payment.'</b> and amount: <b>'.$amount_of_payment.'</b> <br> Successfully Submitted' ]);
         }
         catch (\Exception $exception)
         {
-            \Session::flash('success_message', '<b style="color:blue;" >We have an error to save New Financial Financial Transaction</b>' ) ;
-            return redirect(route('show_submit_financial_transaction_form')) ;
+            return redirect(route('show_submit_financial_transaction_form'))
+            ->with(['success_message' => '<b style="color:blue;" >We have an error to Save This New Financial Financial Transaction</b>' ]);
         }
     }
 
@@ -308,8 +308,7 @@ class FinancialTransactionController extends Controller
             }
 
             $result_fetch_receive_transactions_from_date_to_date = financial_transaction::
-            select('*')
-            ->where('financial_dr_related_id' , '=' , $find_admin_id_from_users_table )
+            where('financial_dr_related_id' , '=' , $find_admin_id_from_users_table )
             ->where('financial_transaction_type' , '=' , '+' )
             ->where('financial_transaction_child_dr_related_name' , $sign_trick_1 , $financial_transaction_child_dr_related_name_text_trick )
             ->where('financial_transaction_title' , $sign_trick_2 , $financial_transaction_title_text_trick )
@@ -320,8 +319,7 @@ class FinancialTransactionController extends Controller
             $num_of_receive_transactions = $result_fetch_receive_transactions_from_date_to_date->count() ;
 
             $result_fetch_pay_transactions_from_date_to_date = financial_transaction::
-            select('*')
-            ->where('financial_dr_related_id' , '=' , $find_admin_id_from_users_table )
+            where('financial_dr_related_id' , '=' , $find_admin_id_from_users_table )
             ->where('financial_transaction_type' , '=' , '-' )
             ->where('financial_transaction_child_dr_related_name' , $sign_trick_1 , $financial_transaction_child_dr_related_name_text_trick )
             ->where('financial_transaction_title' , $sign_trick_2 , $financial_transaction_title_text_trick )
@@ -347,8 +345,8 @@ class FinancialTransactionController extends Controller
         }
         catch (\Exception $exception)
         {
-            \Session::flash('success_message', '<b style="color:blue;" >We have an error to show_submit_financial_transaction_form</b>' ) ;
-            return redirect(route('show_financial_transaction_reporting_form')) ;
+            return redirect(route('show_financial_transaction_reporting_form'))
+            ->with(['success_message' => '<b style="color:blue;" >We have an error to run_financial_transaction_reporting_form</b>' ]);
         }
     }
 }

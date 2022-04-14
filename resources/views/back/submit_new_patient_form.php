@@ -432,6 +432,12 @@ echo '
                     <center>
                     <div class="col-md-4 col-sm-3 col-xs-3" style="float:left;font-size:13px;" >
                         <span>
+                            <a href="'.route('delete_this_patient_id' , [ 'delete_this_patient_id' => $result_edit_patient_form->patient_id ] ).'" style="float:left;color: white; font-size: 13px; float: left;background-color:#5A738E;border:1px solid #5A738E; " class="btn btn-success" ' ; ?> onclick="return confirm('Are you sure to delete this patient?') <?php echo '" title="Delete This Patient" >
+                                <i class="fa fa-trash-o" aria-hidden="true" ></i>
+                                Delete this Patient
+                            </a>
+                        </span>
+                        <span>
                             Patient Number: '.$result_edit_patient_form->patient_id.'
                         </span>
                     </div>

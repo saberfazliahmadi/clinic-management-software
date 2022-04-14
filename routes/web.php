@@ -31,6 +31,7 @@ Route::group( [ 'middleware' => ['protected_page_accessible_for_user_and_admin' 
     Route::put('store_new_patient_form','PatientsGeneralInfoController@store')->name('store_new_patient_form');
     Route::get('show_patient_search_from','PatientsGeneralInfoController@show_patient_search_from' )->name('show_patient_search_from') ;
     Route::post('run_patient_search_form' , 'PatientsGeneralInfoController@run_patient_search_form')->name('run_patient_search_form') ;
+    Route::get('delete_this_patient_id/{delete_this_patient_id}', 'PatientsGeneralInfoController@destroy' )->name('delete_this_patient_id')->where(['delete_this_patient_id' => '[0-9]+']);
 
     // All Routes related to patients_appointments table
     Route::get('show_patient_time_appointment_table/{choose_time_for_this_date}/{choose_time_for_this_patient_id}' , 'PatientsAppointmentController@show_patient_time_appointment_table' )->name('show_patient_time_appointment_table')->where(['choose_time_for_this_date' => '[0-9--]+' , 'choose_time_for_this_patient_id' => '[0-9]+' ]);
@@ -64,7 +65,7 @@ Route::group( [ 'middleware' => ['protected_page_accessible_for_admin'] ] , func
     Route::get('show_main_settings_of_software_form' , 'UserController@show_main_settings_of_software_form')->name('show_main_settings_of_software_form') ;
     Route::post('update_show_main_settings_of_software_form' , 'UserController@update_show_main_settings_of_software_form')->name('update_show_main_settings_of_software_form') ;
 
-    // All Routes related to ehr table
+    // All Routes related to EHR table
     Route::get('show_patients_ehr_document_page/{patient_id}/{related_appointment_id?}/{child_dr_related_name?}' ,'PatientsEHRDocumentController@show_patients_ehr_document_page')->name('show_patients_ehr_document_page')->where(['patient_id' => '[0-9]+' , 'related_appointment_id' => '[0-9]+' , 'child_dr_related_name' => '[0-z--- ]+']);
     Route::post('store_patients_ehr_document_page/{patient_id}' , 'PatientsEHRDocumentController@store_patients_ehr_document_page')->name('store_patients_ehr_document_page')->where(['patient_id' => '[0-9]+']) ;
     Route::get('show_new_saved_ehr/{EHR_document_id}' , 'PatientsEHRDocumentController@show_new_saved_ehr' )->name('show_new_saved_ehr')->where(['EHR_document_id' => '[0-9]+']) ;

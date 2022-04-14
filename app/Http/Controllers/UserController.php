@@ -43,8 +43,7 @@ class UserController extends Controller
         try
         {
             $result_show_main_settings_of_software_form = User::
-            select('*')
-            ->where('id'   , '=' , Auth::user()->id)
+            where('id'     , '=' , Auth::user()->id)
             ->where('name' , '=' , Auth::user()->name)
             ->limit('1')
             ->first();
@@ -60,15 +59,15 @@ class UserController extends Controller
             }
             else
             {
-                \Session::flash('success_message', '<b style="color:blue;" >We have an error to show main settings of software</b>');
-                return redirect(route('home'));
+                return redirect(route('home'))
+                ->with(['success_message' => '<b style="color:blue;" >We have an error to show main settings of software</b>']);
             }
 
         }
         catch (\Exception $exception)
         {
-            \Session::flash('success_message', '<b style="color:blue;" >We have an error to show main settings of software</b>');
-            return redirect(route('home'));
+            return redirect(route('home'))
+            ->with(['success_message' => '<b style="color:blue;" >We have an error to show main settings of software</b>']);
         }
     }
 
@@ -88,11 +87,11 @@ class UserController extends Controller
         // $gap_time_between_appointments should be an amount between 5 and 60 seconds
         if ($gap_time_between_appointments < 10 && is_numeric($gap_time_between_appointments))
         {
-            $gap_time_between_appointments = 10;
+            $gap_time_between_appointments = 10 ;
         }
         elseif ($gap_time_between_appointments > 60 && is_numeric($gap_time_between_appointments))
         {
-            $gap_time_between_appointments = 60;
+            $gap_time_between_appointments = 60 ;
         }
         elseif ($gap_time_between_appointments > 9 && $gap_time_between_appointments < 61 && is_numeric($gap_time_between_appointments))
         {
@@ -100,7 +99,7 @@ class UserController extends Controller
         }
         else
         {
-            $gap_time_between_appointments = 30;
+            $gap_time_between_appointments = 30 ;
         }
 
         $cms_menu_title_28 = $request->cms_menu_title_28;
@@ -167,7 +166,6 @@ class UserController extends Controller
         // START of processing to unserialize an array variable and add new value at the end of it and then serialize that variable again. a:1:{i:0;s:1:"f";}
         $options_for_user   = Auth::user()->options_for_user;
         $options_for_user   = (unserialize($options_for_user));
-        $num_of_index_array = count($options_for_user);
 
         if ($money_console_status == 'true')
         {
@@ -184,8 +182,7 @@ class UserController extends Controller
         try
         {
             User::
-            select('*')
-            ->where('id'  , '=' , Auth::user()->id)
+            where('id'  , '=' , Auth::user()->id)
             ->where('name', '=' , Auth::user()->name)
             ->limit('1')
             ->update(
@@ -203,13 +200,13 @@ class UserController extends Controller
                 'clinic_doctors_name'     => $clinic_doctors_name
             ]);
 
-            \Session::flash('success_message', 'The New Settings of Software Successfully Updated') ;
-            return redirect(route('show_main_settings_of_software_form'));
+            return redirect(route('show_main_settings_of_software_form'))
+            ->with(['success_message' => 'The New Settings of Software Successfully Updated']);
         }
         catch (\Exception $exception)
         {
-            \Session::flash('success_message', '<b style="color:blue;" >We have an error to update New Settings of Software</b>');
-            return redirect(route('show_main_settings_of_software_form'));
+            return redirect(route('show_main_settings_of_software_form'))
+            ->with(['success_message' => '<b style="color:blue;" >We have an error to update New Settings of Software</b>']);
         }
     }
 
@@ -240,7 +237,7 @@ class UserController extends Controller
                     $hashed_new_password = Hash::make($request->new_password) ;
 
                     User::
-                    select([ 'id' , 'name' , 'password' ] )
+                    select( [ 'id' , 'name' , 'password' ] )
                     ->where('id'  , '=' , Auth::user()->id)
                     ->where('name', '=' , Auth::user()->name)
                     ->limit('1')
@@ -250,27 +247,27 @@ class UserController extends Controller
                     ]
                     );
 
-                    \Session::flash('success_message', 'Your Password Successfully Updated');
-                    return redirect(route('show_change_password_form'));
+                    return redirect(route('show_change_password_form'))
+                    ->with(['success_message' => 'Your Password Successfully Updated']);
 
                 }
                 catch ( \Exception $exception )
                 {
-                    \Session::flash('success_message', '<b style="color:blue;" >We have an error to update this password <br> Try it again</b>');
-                    return redirect(route('show_change_password_form'));
+                    return redirect(route('show_change_password_form'))
+                    ->with(['success_message' => '<b style="color:blue;" >We have an error to update this password <br> Try it again</b>']);
                 }
             }
             else
             {
-                \Session::flash('success_message', '<b style="color:blue;" >Your News Password is NOT EQUAL to Re-Type the New Password <br> Try it again</b>');
-                return redirect(route('show_change_password_form'));
+                return redirect(route('show_change_password_form'))
+                ->with(['success_message' => '<b style="color:blue;" >Your News Password is NOT EQUAL to Re-Type the New Password <br> Try it again</b>']);
             }
         }
+        // The passwords matches error
         else
         {
-            // The passwords matches error
-            \Session::flash('success_message', '<b style="color:blue;" >The current password you entered does not matches with your password <br> Try it again</b>');
-            return redirect(route('show_change_password_form'));
+            return redirect(route('show_change_password_form'))
+            ->with(['success_message' => '<b style="color:blue;" >The current password you entered does not matches with your password <br> Try it again</b>']);
         }
     }
 }
