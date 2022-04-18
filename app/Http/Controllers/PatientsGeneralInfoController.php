@@ -9,25 +9,10 @@ use App\Http\Requests\Updatepatients_general_infoRequest;
 // I added the below lines manually.
 use App\Models\patients_appointment;
 use Illuminate\Routing\Route;
-use Illuminate\Support\Facades\Auth;
-
 use Illuminate\Http\Request;
-use function GuzzleHttp\Promise\all;
 
 class PatientsGeneralInfoController extends Controller
-{public function find_admin_id_from_users_table()
 {
-    // If the user has a parent_id so user_type='user' and we use Auth::user()->parent_id
-    if( strlen(Auth::user()->parent_id) > 0 )
-    {
-        return $admin_id_from_users_table = Auth::user()->parent_id ;
-    }
-    // If the user DOES NOT have parent_id so user_type='admin' and we use Auth::user()->id
-    else
-    {
-        return $admin_id_from_users_table = Auth::user()->id ;
-    }
-}
     /**
      * Display a listing of the resource.
      *
@@ -50,7 +35,8 @@ class PatientsGeneralInfoController extends Controller
             $number_of_total_clinic_patients = patients_general_info::number_of_total_clinic_patients() ;
 
             $title_of_page = 'Submit a New Patient';
-            return view('back.submit_new_patient_form' , [
+            return view('back.submit_new_patient_form' ,
+            [
                 'title_of_page'                   => $title_of_page ,
                 'number_of_total_clinic_patients' => $number_of_total_clinic_patients
             ] );
@@ -69,11 +55,10 @@ class PatientsGeneralInfoController extends Controller
      */
     public function store(Storepatients_general_infoRequest $request)
     {
-        $request_patient_mobile_number = $request->post('patient_mobile_number') ;
         // Check for mobile number duplication
         // WE SHOULD NOT HAVE TWO PATIENTS WITH SAME MOBILE NUMBERS IN OUR DATABASE!
         // The mobile numbers should be unique
-        $number_of_duplicate_mobile_number = patients_general_info::number_of_duplicate_mobile_number(null , $request_patient_mobile_number) ;
+        $number_of_duplicate_mobile_number = patients_general_info::number_of_duplicate_mobile_number(null , $request->post('patient_mobile_number')) ;
 
         // START of If the mobile number of patient was unique then store its information
         if ( $number_of_duplicate_mobile_number == '0' )
@@ -89,9 +74,8 @@ class PatientsGeneralInfoController extends Controller
             try
             {
                 $result_store_new_patient_form = patients_general_info::store_new_patient_form($request->all()) ;
-                $result_store_new_patient_form->save() ;
 
-                // Specify last id created here to use in route passing data
+                // Specify last id created in database to use it in route passing data
                 $choose_time_for_this_patient_id = $result_store_new_patient_form->patient_id ;
 
                 // If this patient has a date appointment then redirect him to route('show_patient_time_appointment_table') to select desired time for this appointment
@@ -142,9 +126,9 @@ class PatientsGeneralInfoController extends Controller
     {
         try
         {
-            $result_edit_patient_form = patients_general_info::result_edit_patient_form($edit_this_patient_id) ;
+            $result_edit_patient_form = patients_general_info::fetch_info_of_this_patient_id($edit_this_patient_id) ;
 
-            if( $result_edit_patient_form !== null )
+            if($result_edit_patient_form)
             {
                 $number_of_total_clinic_patients = patients_general_info::number_of_total_clinic_patients() ;
                 $result_show_all_appointments_of_this_id = patients_appointment::result_show_all_appointments_of_this_id($edit_this_patient_id) ;
@@ -246,13 +230,13 @@ class PatientsGeneralInfoController extends Controller
             else
             {
                 return redirect(route('submit_new_patient_form'))
-                ->with(['success_message' => 'We have an error to delete this patient Number: <b style="color:blue;" >'.$request->delete_this_patient_id.'</b><br> Maybe there is an appointment or financial transaction related to this patient,<br> So if you want to delete this patient, at first you need to<br> delete all relative appointments and financial transactions <br> related to him']);
+                ->with(['success_message' => 'We have an error to delete this patient Number: <b style="color:blue;" >'.$request->delete_this_patient_id.'</b><br> Maybe there is an appointment or a financial transaction related to this patient,<br> So if you want to delete this patient<br> at first, you need to delete all appointments and financial transactions related to him']);
             }
         }
         catch (\Exception $exception)
         {
             return redirect()->back()
-            ->with(['success_message' => 'We have an error to delete this patient Number: <b style="color:blue;" >'.$request->delete_this_patient_id.'</b><br> Maybe there is an appointment or financial transaction related to this patient,<br> So if you want to delete this patient, at first you need to<br> delete all relative appointments and financial transactions <br> related to him']);
+            ->with(['success_message' => 'We have an error to delete this patient Number: <b style="color:blue;" >'.$request->delete_this_patient_id.'</b><br> Maybe there is an appointment or a financial transaction related to this patient,<br> So if you want to delete this patient<br> at first, you need to delete all appointments and financial transactions related to him']);
         }
     }
 

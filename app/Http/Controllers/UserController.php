@@ -42,18 +42,14 @@ class UserController extends Controller
     {
         try
         {
-            $result_show_main_settings_of_software_form = User::
-            where('id'     , '=' , Auth::user()->id)
-            ->where('name' , '=' , Auth::user()->name)
-            ->limit('1')
-            ->first();
+            $result_show_main_settings_of_software_form = User::show_main_settings_of_software_form(Auth::user()->id, Auth::user()->name) ;
 
-            if ( $result_show_main_settings_of_software_form !== null )
+            if ($result_show_main_settings_of_software_form)
             {
                 $title_of_page = 'Main Settings of Software';
-                return view('back.show_main_settings_of_software_form',
+                return view('back.show_main_settings_of_software_form' ,
                 [
-                    'title_of_page'                              => $title_of_page,
+                    'title_of_page'                              => $title_of_page ,
                     'result_show_main_settings_of_software_form' => $result_show_main_settings_of_software_form
                 ]);
             }
@@ -181,27 +177,18 @@ class UserController extends Controller
 
         try
         {
-            User::
-            where('id'  , '=' , Auth::user()->id)
-            ->where('name', '=' , Auth::user()->name)
-            ->limit('1')
-            ->update(
-            [
-                'common_drug'             => $common_drug,
-                'common_diet'             => $common_diet,
-                'common_return_date'      => $common_return_date,
-                'phone_number'            => $phone_number,
-                'college_branch'          => $college_branch,
-                'contact_address'         => $contact_address,
-                'common_hypersensitivity' => $common_hypersensitivity,
-                'options_for_user'        => $options_for_user,
-                'cms_menu_title'          => $cms_menu_title,
-                'gap_time_between_appointments' => $gap_time_between_appointments,
-                'clinic_doctors_name'     => $clinic_doctors_name
-            ]);
+            $result_update_main_settings_of_software_form = User::update_main_settings_of_software_form(Auth::user()->id, Auth::user()->name,$common_drug,$common_diet,$common_return_date,$phone_number,$college_branch,$contact_address,$common_hypersensitivity,$options_for_user,$cms_menu_title,$gap_time_between_appointments,$clinic_doctors_name) ;
 
-            return redirect(route('show_main_settings_of_software_form'))
-            ->with(['success_message' => 'The New Settings of Software Successfully Updated']);
+            if($result_update_main_settings_of_software_form)
+            {
+                return redirect(route('show_main_settings_of_software_form'))
+                ->with(['success_message' => 'The New Settings of Software Successfully Updated']);
+            }
+            else
+            {
+                return redirect(route('show_main_settings_of_software_form'))
+                ->with(['success_message' => '<b style="color:blue;" >We have an error to update New Settings of Software</b>']);
+            }
         }
         catch (\Exception $exception)
         {
@@ -235,21 +222,18 @@ class UserController extends Controller
                 try
                 {
                     $hashed_new_password = Hash::make($request->new_password) ;
+                    $result_run_change_password_form = user::run_change_password_form(Auth::user()->id, Auth::user()->name,$hashed_new_password) ;
 
-                    User::
-                    select( [ 'id' , 'name' , 'password' ] )
-                    ->where('id'  , '=' , Auth::user()->id)
-                    ->where('name', '=' , Auth::user()->name)
-                    ->limit('1')
-                    ->update(
-                    [
-                        'password' => $hashed_new_password
-                    ]
-                    );
-
-                    return redirect(route('show_change_password_form'))
-                    ->with(['success_message' => 'Your Password Successfully Updated']);
-
+                    if($result_run_change_password_form)
+                    {
+                        return redirect(route('show_change_password_form'))
+                        ->with(['success_message' => 'Your Password Successfully Updated']);
+                    }
+                    else
+                    {
+                        return redirect(route('show_change_password_form'))
+                        ->with(['success_message' => '<b style="color:blue;" >We have an error to update this password <br> Try it again</b>']);
+                    }
                 }
                 catch ( \Exception $exception )
                 {

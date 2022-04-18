@@ -6,8 +6,6 @@ use Closure;
 use Illuminate\Http\Request;
 
 // I added this model to this page manually.
-// use App\Models\patients_general_info;
-// use App\Models\User ;
 use App\Models\patients_appointment;
 use Illuminate\Support\Facades\View;
 use Illuminate\Support\Facades\Auth;

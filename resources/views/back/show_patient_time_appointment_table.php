@@ -1,12 +1,9 @@
 <?php
-
+use Illuminate\Support\Facades\Auth;
 // Add your custom css files here. (will located in header)
-$extra_links_header = '
-' ;
-
+$extra_links_header = '' ;
 // Add your custom js files here. (will located in footer)
-$extra_links_footer = '
-' ;
+$extra_links_footer = '' ;
 
 // Call the header include.
 include 'layout/header.php' ;
@@ -85,7 +82,86 @@ echo '
             <input type="hidden" name="_token" value="'.csrf_token().'" >
             <input type="hidden" name="_method" value="put" >
             <input type="hidden" name="choose_time_for_this_patient_id" value="'.$choose_time_for_this_patient_id.'" >
-            <input type="hidden" name="choose_time_for_this_date" value="'.$choose_time_for_this_date.'" >
+            <input type="hidden" name="choose_time_for_this_date" value="'.$choose_time_for_this_date.'" >' ;
+
+            $clinic_doctors_name = Auth::user()->clinic_doctors_name;
+
+            // START of show doctors of clinic
+            if( strlen($clinic_doctors_name) > 0 )
+            {
+                echo '
+                <div class="form-group col-md-12 col-sm-12 col-xs-12" style="margin-bottom:25px;" >
+                
+                    <center>
+                        <label class="control-label col-md-12 col-sm-12 col-xs-12" style="font-size:22px;font-weight:normal;text-align: center!important;margin-bottom:15px;" >
+                            Choose Doctor of Patient
+                        </label>
+                    
+                        <div class="col-md-12 col-sm-12 col-xs-12" >
+                          <div class="form-group" >
+                            <div class="col-md-12 col-sm-12 col-xs-12" >
+                                <div class="col-md-12 col-sm-12 col-xs-12" >';
+
+                                // Explode and make array type variable
+                                $common_clinic_dr_1      = explode(",",$clinic_doctors_name);
+                                // Estimate how many index exist in this variable
+                                $common_clinic_dr_number = count($common_clinic_dr_1);
+                                // Make end number for loop
+                                $end 					 = $common_clinic_dr_number;
+                                for( $start='0' ; $start < $end ; $start++ )
+                                {
+                                    if(strlen($common_clinic_dr_1[$start])>'0')
+                                    {
+                                        echo '
+                                        <label class="btn btn-default well" data-toggle-class="btn-primary" style="font-size:20px;background-color:white;" >
+                                            <input type="radio" name="appointment_child_dr_related_name" value="'.$common_clinic_dr_1[$start].'" > '.$common_clinic_dr_1[$start].'
+                                        </label>';
+                                    }
+                                }
+
+                                echo '
+                                </div>
+                             </div>
+                         </div>
+                        </div>
+                    </center>
+                </div>' ;
+            }
+            // END of show doctors of clinic
+
+            // START of select service type of appointment
+            if( strlen(Auth::user()->financial_management) > 0 )
+            {
+                echo '
+                <center>
+                    <label class="control-label col-md-12 col-sm-12 col-xs-12" style="font-size:22px;font-weight:normal;text-align: center!important;margin-bottom:15px;margin-top:5px;" >
+                        Choose Type Service of This Appointment
+                    </label>
+                    
+                    <div style="margin-top:10px;margin-bottom:30px;" class="col-md-12 col-sm-12 col-xs-12" >' ;
+                        // Explode and make array type variable
+                        $appointment_service_type = explode(",", Auth::user()->financial_management) ;
+                        // Estimate how many index exist in this variable
+                        $appointment_service_type_number = count($appointment_service_type);
+                        // Make end number for loop
+                        $end = $appointment_service_type_number ;
+                        for( $start ='0' ; $start < $end ; $start++ )
+                        {
+                            if( strlen($appointment_service_type[$start]) > 0 )
+                            {
+                                echo '
+                                <label class="btn btn-default well" data-toggle-class="btn-primary" style="font-size:20px;background-color:white;border: 1px solid #ccc;border-radius: 4px!important;margin-top:5px;margin-bottom:5px;" >
+                                    <input type="radio" name="appointment_service_type" value="' . $appointment_service_type[$start] . '" > ' . $appointment_service_type[$start] . '
+                                </label>';
+                            }
+                        }
+                    echo '
+                   </div>
+                </center>';
+            }
+            // END of select service type of appointment
+
+            echo '
             <center>
                 '.$text_trick.'
             </center>

@@ -93,7 +93,7 @@ echo '
                     
                     <div class="col-md-2 col-sm-2 col-xs-2" style="font-size:15pt;float:right;text-align:center;" >
                         <h2 style="line-height: inherit;text-align:center;" >
-                            Send Group Message on Bale Robot
+                            Send Group Message by Bot
                             <br>
                             <a id="various222" href="#submit_send_sms_notif_turn_to_all_sicker" style="line-height: inherit;text-align:center;" >
                                 ...+

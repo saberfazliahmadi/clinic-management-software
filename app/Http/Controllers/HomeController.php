@@ -2,8 +2,6 @@
 
 namespace App\Http\Controllers;
 
-use Illuminate\Http\Request;
-
 class HomeController extends Controller
 {
     /**
@@ -23,7 +21,9 @@ class HomeController extends Controller
      */
     public function index()
     {
-        $title_of_page = 'Welcome to MatabeOnline Clinic Management Software' ;
-        return view('back.home', [ 'title_of_page' => $title_of_page ] ) ;
+        return view('back.home',
+        [
+            'title_of_page' => __('general.Welcome to MatabeOnline Clinic Management Software')
+        ] ) ;
     }
 }

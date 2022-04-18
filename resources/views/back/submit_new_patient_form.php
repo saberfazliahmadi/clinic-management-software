@@ -333,7 +333,7 @@ echo '
                     <center>
                         <span data-toggle="collapse" data-target="#more_appointment" title="The last appointment date and time you submitted for this patient" class="btn-primary btn-lg" type="button" style="cursor:pointer;color:gray;background-color:white;border:1px solid #bfbdbd;" >
                             <span class="glyphicon glyphicon-plus" aria-hidden="true" style="color:#ccc;margin-left:5px;" ></span>
-                            Last Appointments
+                            Last Appointments ('.$result_show_all_appointments_of_this_id->count().')
                         </span>
                     </center>
                     <br>
@@ -385,6 +385,15 @@ echo '
                                             echo '&nbsp;' ;
                                         }
                                         echo '
+                                    </span>
+                                    
+                                    <span>
+                                        <div >
+                                            <a href="'.route('delete_this_appointment_by_this_id' , [ 'appointment_id' => $key_2->appointment_id , 'show_all_appointments_this_date' => $key_2->appointment_date ] ).'" style="color: white; font-size: 13px; background-color:#5A738E;border:1px solid #5A738E; " class="btn btn-success" ' ; ?> onclick="return confirm('Are you sure to delete this appointment?') <?php echo '" title="Delete This Appointment" >
+                                                <i class="fa fa-trash-o" aria-hidden="true" ></i>
+                                                Delete
+                                            </a>
+                                        </div>
                                     </span>
                                     
                                 </label>&nbsp;';

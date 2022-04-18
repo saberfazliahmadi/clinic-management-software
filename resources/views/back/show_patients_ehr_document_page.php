@@ -755,7 +755,7 @@ if( Auth::user()->user_type == 'admin' )
                                         <div class="col-md-12 col-sm-12 col-xs-12" >
                             
                                             <a id="various222" href="#help_photo_upload" class="btn-primary btn-lg" type="button" style="cursor:pointer;color:black!important;background-color:#F7F7F7!important;border:1px solid #bfbdbd;font-size:14px;" >
-                                                Guide - Must Read
+                                                Guide - Must be Read
                                             </a>
                             
                                         </div>
@@ -771,19 +771,19 @@ if( Auth::user()->user_type == 'admin' )
                         
                                         <center>
                                             <h4 class="col-md-12 col-sm-12 col-xs-12 text-center" style="margin-top:70px;" >
-                                                می توانید تصاویر جراحی, سی تی اسکن, سونوگرافی, رادیولوژی و جواب آزمایشات بیمار را در این قسمت اضافه و در انتها ذخیره نمایید
+                                                You can add images of surgery, CT scan, ultrasound, radiology and test results of the patient in this section and save them at the end
                                             </h4>
                                             <h4 class="col-md-12 col-sm-12 col-xs-12 text-center" >
-                                                جهت ذخیره صحیح تصاویر باید موارد زیر را رعایت بفرمایید
+                                                In order to save the images correctly, you must observe the following items
                                             </h4>
                                             <h4 class="col-md-12 col-sm-12 col-xs-12 text-center" >
-                                                اگر با گوشی موبایل یا تبلت خود عکس می گیرید ابتدا کیفیت دوربین موبایل یا تبلت تان را روی 4 مگاپیکسل تنظیم نمایید و سپس عکس بگیرید
+                                                If you are taking a photo with your mobile phone or tablet, first set the quality of your mobile phone or tablet to 4 megapixels and then take a photo. If you save the photo with a scanner device
                                             </h4>
                                             <h4 class="col-md-12 col-sm-12 col-xs-12 text-center" >
-                                                اگر با دستگاه اسکنر عکس را ذخیره می کنید حجم عکس باید کمتر از 700 کیلو بایت باشد
+                                                Photo size must be less than 700 KB
                                             </h4>
                                             <h4 class="col-md-12 col-sm-12 col-xs-12 text-center" >
-                                                در انتهای ویزیت بیمار حتما روی دکمه ذخیره کلیک نمایید
+                                                At the end of the patient\'s visit, be sure to click the save button
                                             </h4>
                                          <center>
                         

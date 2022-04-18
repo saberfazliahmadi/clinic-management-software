@@ -29,4 +29,28 @@ class patients_photo extends Model
         return new PatientsPhotoFactory() ;
     }
 
+    static function result_of_patient_ehr_photo($request_patient_id)
+    {
+        $result_of_patients_photo = self::
+        equal_this_to_admin_id_from_user_table('patients_photos_dr_related_id')
+        ->where('patients_photos_patient_related_id' , '=' , $request_patient_id )
+        ->orderBy('patients_photos_id', 'DESC')
+        ->get() ;
+
+        return $result_of_patients_photo ;
+    }
+
+    static function store_patient_photo_from_ehr_page($fileName, $request_keyboard_paraclinic_file_title, $request_patient_id )
+    {
+        $result_store_patient_photo_from_ehr_page = new self(
+            [
+                'patients_photos_file_name'          => $fileName,
+                'patients_photos_file_description'   => $request_keyboard_paraclinic_file_title,
+                'patients_photos_patient_related_id' => $request_patient_id,
+                'patients_photos_dr_related_id'      => Model::find_admin_id_from_users_table()
+            ]
+        );
+        $result_store_patient_photo_from_ehr_page->save();
+    }
+
 }

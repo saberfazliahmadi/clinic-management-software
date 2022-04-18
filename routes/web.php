@@ -22,7 +22,7 @@ Route::get('/', function () {
 // protected page accessible for user and admin
 Route::group( [ 'middleware' => ['protected_page_accessible_for_user_and_admin' ] ] , function()
 {
-    Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
+    Route::get('/home', 'HomeController@index')->name('home');
 
     // All Routes related to patients_general_infos table.
     Route::put('update_this_patient/{update_this_patient_id}' , 'PatientsGeneralInfoController@update' )->name('update_this_patient')->where(['update_this_patient_id' => '[0-9]+']);

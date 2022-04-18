@@ -1,8 +1,5 @@
 <?php
-
 // Add your custom css files here.
-use Illuminate\Support\Facades\Auth;
-
 $extra_links_header = '' ;
 // Add your custom js files here.
 $extra_links_footer = '' ;
@@ -14,10 +11,10 @@ echo '
 <!-- page content -->
 <div class="right_col" role="main">
    <hr>
-    <div style="width: 100%;height: 80px;padding: 10px 0;margin-bottom:100px;" >
+    <div style="width: 100%;height: 80px;padding: 10px 0;margin-bottom:80px!important;" >
       <center>
          <h3 style="text-align:center;">
-             '.__('general.Welcome to MatabeOnline Clinic Management Software').'
+             '.$title_of_page.'
              <br>
          </h3>
       </center>
@@ -113,7 +110,6 @@ echo '
           </div>
         </div>
     </div>	
-    
     
 </div>
 <!-- /page content -->';
