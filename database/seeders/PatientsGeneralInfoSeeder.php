@@ -2,6 +2,7 @@
 
 namespace Database\Seeders;
 
+use App\Models\patients_general_info;
 use Illuminate\Database\Seeder;
 
 class PatientsGeneralInfoSeeder extends Seeder
@@ -13,6 +14,6 @@ class PatientsGeneralInfoSeeder extends Seeder
      */
     public function run()
     {
-        //
+        patients_general_info::newFactory('100')->create() ;
     }
 }

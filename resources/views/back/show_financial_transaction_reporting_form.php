@@ -223,7 +223,6 @@ echo '
                     $label_chart_money_receive = '';
                     $data_chart_money_receive = '';
 
-
                     if (isset($num_of_receive_transactions))
                     {
                         if ($num_of_receive_transactions > 0)

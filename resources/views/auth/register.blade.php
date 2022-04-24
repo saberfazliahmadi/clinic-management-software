@@ -10,8 +10,9 @@
 
                         <center>
                         <div class="col-md-6 col-sm-12 col-xs-12" style="float:none;">
+
                             <div for="name" class="col-md-12 col-sm-12 col-xs-12" style="font-size: 22px;text-align: left;" >
-                                {{ __('Name') }}
+                                * {{ __('Name') }}
                             </div>
 
                             <div class="col-md-12 col-sm-12 col-xs-12">
@@ -27,7 +28,7 @@
 
                         <div class="col-md-6 col-sm-12 col-xs-12" style="float:none;">
                             <div for="email" class="col-md-12 col-sm-12 col-xs-12" style="font-size: 22px;text-align: left;" >
-                                {{ __('E-Mail Address') }}
+                                * {{ __('E-Mail Address') }}
                             </div>
 
                             <div class="col-md-12 col-sm-12 col-xs-12">
@@ -43,7 +44,7 @@
 
                         <div class="col-md-6 col-sm-12 col-xs-12" style="float:none;">
                             <div for="password" class="col-md-12 col-sm-12 col-xs-12" style="font-size: 22px;text-align: left;" >
-                                {{ __('Password') }}
+                                * {{ __('Password') }}
                             </div>
 
                             <div class="col-md-12 col-sm-12 col-xs-12">
@@ -59,7 +60,7 @@
 
                         <div class="col-md-6 col-sm-12 col-xs-12" style="float:none;">
                             <div for="password-confirm" class="col-md-12 col-sm-12 col-xs-12" style="font-size: 22px;text-align: left;" >
-                                {{ __('Confirm Password') }}
+                                * {{ __('Confirm Password') }}
                             </div>
 
                             <div class="col-md-12 col-sm-12 col-xs-12" style="margin-bottom: 30px;">
@@ -89,7 +90,7 @@
 
                         <div class="col-md-6 col-sm-12 col-xs-12" style="float:none;">
                             <div class="col-md-12 col-sm-12 col-xs-12" style="font-size: 22px;text-align: left;margin-top:30px;" >
-                                <input id="datepicker" type="text"
+                                * <input id="datepicker" type="text"
                                        class="date form-control @error('dob') is-invalid @enderror" name="dob"
                                        value="{{ old('dob') }}" required autofocus
                                        placeholder="Date of Birth">
@@ -108,7 +109,7 @@
 
                         <div class="col-md-6 col-sm-12 col-xs-12" style="float:none;">
                             <div class="col-md-12 col-sm-12 col-xs-12" style="font-size: 22px;text-align: left;margin-top:30px;" >
-                                <input id="phone" type="text"
+                                * <input id="phone" type="text"
                                        class="form-control @error('phone') is-invalid @enderror" name="phone"
                                        value="{{ old('phone') }}" required autocomplete="phone" autofocus
                                        placeholder="Phone Number">
@@ -122,6 +123,8 @@
                                     <strong>{{ $message }}</strong>
                                 </span>
                                 @enderror
+                                <br>
+                                * Required Fields
                             </div>
                         </div>
 

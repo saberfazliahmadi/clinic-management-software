@@ -18,6 +18,7 @@ use Illuminate\Database\Eloquent\Relations\HasManyThrough;
 use Illuminate\Database\Eloquent\Relations\Pivot;
 use Illuminate\Support\Arr;
 use Illuminate\Support\Collection as BaseCollection;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Str;
 use Illuminate\Support\Traits\ForwardsCalls;
 use JsonSerializable;
@@ -2178,5 +2179,24 @@ abstract class Model implements Arrayable, ArrayAccess, CanBeEscapedWhenCastToSt
         $this->bootIfNotBooted();
 
         $this->initializeTraits();
+    }
+
+    static function find_admin_id_from_users_table()
+    {
+        // If the user has a parent_id so user_type='user' and we use Auth::user()->parent_id
+        if( strlen(Auth::user()->parent_id) > 0 )
+        {
+            return $admin_id_from_users_table = Auth::user()->parent_id ;
+        }
+        // If the user DOES NOT have parent_id so user_type='admin' and we use Auth::user()->id
+        else
+        {
+            return $admin_id_from_users_table = Auth::user()->id ;
+        }
+    }
+
+    public function scopeequal_this_to_admin_id_from_user_table($query,$equal_this)
+    {
+        return $query->where($equal_this, '=', self::find_admin_id_from_users_table()) ;
     }
 }

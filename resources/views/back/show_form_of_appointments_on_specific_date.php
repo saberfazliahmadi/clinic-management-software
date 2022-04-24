@@ -29,7 +29,7 @@ echo '
 	</div>
     
     <div class="col-md-12 col-sm-12 col-xs-12">  
-        <form method="post" action="'.route('run_show_form_of_appointments_on_specific_date').'" id="medical-file-form" data-parsley-validate  >
+        <form method="get" action="'.route('run_show_form_of_appointments_on_specific_date').'" id="medical-file-form" data-parsley-validate  >
         
             <input type="hidden" name="_token" value="'.csrf_token().'" >
             
@@ -93,7 +93,7 @@ echo '
                     
                     <div class="col-md-2 col-sm-2 col-xs-2" style="font-size:15pt;float:right;text-align:center;" >
                         <h2 style="line-height: inherit;text-align:center;" >
-                            Send Group Message on Bale Robot
+                            Send Group Message by Bot
                             <br>
                             <a id="various222" href="#submit_send_sms_notif_turn_to_all_sicker" style="line-height: inherit;text-align:center;" >
                                 ...+
@@ -291,14 +291,14 @@ echo '
                         </div>
                             
                         <div class="col-md-2" style="padding-right:0px;padding-left:0px;margin-right:0px;margin-left:0px;margin-top:10px;" >
-                            <div class="col-md-12" style="'.$opacity_appointment_trick.'" >
-                                <a href="'.route('delete_this_appointment_by_this_id' , [ 'appointment_id' => $key->appointment_id , 'show_all_appointments_this_date' => $show_all_appointments_on_this_date ] ).'" style="float:left;color: white; font-size: 13px; float: left;background-color:#5A738E;border:1px solid #5A738E; " class="uiuxtrick btn btn-success" ' ; ?> onclick="return confirm('Are you sure to delete this appointment?') <?php echo '" >
-                                    <i class="fa fa-trash-o" aria-hidden="true" ></i>
-                                    Delete
+                            
+                            <div class="col-md-12" style="'.$opacity_appointment_trick.';" >
+                                <a title="Display EHR Document" href="'.route('show_patients_ehr_document_page' , [ 'patient_id' => $key->patient_id ] ).'" style="float:left;color: white; font-size: 13px; float: left;background-color:#5A738E;border:1px solid #5A738E; " class="uiuxtrick btn btn-success" >
+                                    <i class="fa fa-clone"></i>
+                                    EHR Document
                                 </a>
                             </div>
-                            
-                            <div class="col-md-12" style="'.$opacity_appointment_trick.';margin-top:12px;" > ';
+                            <div class="col-md-12" style="'.$opacity_appointment_trick.';" > ';
                                 // If the patient has mobile number and active ROBOT then make link of send message by BOT.
                                 if( strlen($key->patient_mobile_number) > 0  && strlen($key->patient_from_external_platform_id) > 0)
                                 {
@@ -315,7 +315,7 @@ echo '
                                 </a>
                             </div>
                             
-                            <div class="col-md-12" style="'.$opacity_appointment_trick.';margin-top:12px;" >
+                            <div class="col-md-12" style="'.$opacity_appointment_trick.';" >
                                 <a id="various222" href="#a'.$count_trick.'" title="Quick Show Patient Profile" style="float:left;color: white; font-size: 13px; float: left;background-color:#5A738E;border:1px solid #5A738E;" class="btn btn-success" type="button" >
                                     <span class="glyphicon glyphicon-user" aria-hidden="true"></span>
                                     Profile
@@ -364,14 +364,21 @@ echo '
                                     </div>
                                 </div>
                             </div>
+                            
+                            <div class="col-md-12" style="'.$opacity_appointment_trick.'" >
+                                <a href="'.route('delete_this_appointment_by_this_id' , [ 'appointment_id' => $key->appointment_id , 'show_all_appointments_this_date' => $show_all_appointments_on_this_date ] ).'" style="float:left;color: white; font-size: 13px; float: left;background-color:#5A738E;border:1px solid #5A738E; " class="uiuxtrick btn btn-success" ' ; ?> onclick="return confirm('Are you sure to delete this appointment?') <?php echo '" title="Delete This Appointment" >
+                                    <i class="fa fa-trash-o" aria-hidden="true" ></i>
+                                    Delete
+                                </a>
+                            </div>
                       </div>
                       </div>' ;
 
                     } // END of foreach.
 
                     // Put this piece of code to make a gap between search button and the last result for better UX
-                    echo '<hr style="width:1px;" >';
                     echo '
+                    <hr style="width:1px;" >
                     <button type="submit" name="Search" class="btn btn-success btn-group-justified uiuxtrick" style="font-size:28px;position: fixed;bottom: 0px;right: 0px;z-index: 1;margin-bottom:0px;margin-right:0px;" onclick="this.disabled=true;this.form.submit();" >
                         Display All Appointments on This Date
                     </button>' ;

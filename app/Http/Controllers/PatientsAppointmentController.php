@@ -8,54 +8,13 @@ use App\Http\Requests\Updatepatients_appointmentRequest;
 
 // I added this Model to this page manually.
 use App\Models\patients_general_info;
-
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use mysql_xdevapi\Session;
 use phpDocumentor\Reflection\Types\Null_;
 
-// START OF MANUALLY RECEIVING DATA FROM A FORM BY GET OR POST METHOD AND USE IT IN YOUR CUSTOMIZE FUNCTIONS.
-// https://stackoverflow.com/questions/32718870/how-to-get-all-input-of-post-in-laravel
-// step(1) add this use to top of your controller page after the name space.
-// use Illuminate\Http\Request ;
-// step(2) write your function with this structure
-//    public function function_name( Request $request )
-//    {
-//        //
-//    }
-// step(3) use below codes in it.
-//// Show only POST data
-//$request->post(); // DI
-//request()->post(); // global method
-//Request::post(); // facade
-//
-//// Show only GET data
-//$request->query(); // DI
-//request()->query(); // global method
-//Request::query(); // facade
-//
-//// Show all data (i.e. both GET and POST data)
-//$request->all(); // DI
-//request()->all(); // global method
-//Request::all(); // facade
-// END OF MANUALLY RECEIVING DATA FROM A FORM BY GET OR POST METHOD AND USE IT IN YOUR CUSTOMIZE FUNCTIONS.
-
 class PatientsAppointmentController extends Controller
 {
-    public function find_admin_id_from_users_table()
-    {
-        // If the user has a parent_id so user_type='user' and we use Auth::user()->parent_id
-        if( strlen(Auth::user()->parent_id) > 0 )
-        {
-            return $admin_id_from_users_table = Auth::user()->parent_id ;
-        }
-        // If the user DOES NOT have parent_id so user_type='admin' and we use Auth::user()->id
-        else
-        {
-            return $admin_id_from_users_table = Auth::user()->id ;
-        }
-    }
-
     /**
      * Display a listing of the resource.
      *
@@ -113,16 +72,8 @@ class PatientsAppointmentController extends Controller
 
         try
         {
-            $admin_id_from_users_table = $this->find_admin_id_from_users_table() ;
-
             // Create mysql query to extract all of appointments that record in database on this specific date (JOIN TYPE)
-            $result_show_form_of_appointments_on_specific_date = patients_appointment::
-            join('patients_general_infos' , 'patients_general_infos.patient_id' , '=' , 'patients_appointments.appointment_patient_related_id')
-            ->select('*')
-            ->where('patients_appointments.appointment_dr_related_id' , '=' , $admin_id_from_users_table )
-            ->where('patients_appointments.appointment_date' , '=' , $show_all_appointments_on_this_date )
-            ->orderBy('patients_appointments.appointment_time')
-            ->get() ;
+            $result_show_form_of_appointments_on_specific_date = patients_appointment::result_show_form_of_appointments_on_specific_date($show_all_appointments_on_this_date) ;
 
             // How many appointment found
             $count_of_appointment = $result_show_form_of_appointments_on_specific_date->count() ;
@@ -138,19 +89,23 @@ class PatientsAppointmentController extends Controller
                 {
                     $financial_management_data = '' ;
                 }
-
-                return view('back.show_form_of_appointments_on_specific_date' , [ 'title_of_page' => $title_of_page , 'result_show_form_of_appointments_on_specific_date' => $result_show_form_of_appointments_on_specific_date , 'count_of_appointment' => $count_of_appointment , 'show_all_appointments_on_this_date' => $show_all_appointments_on_this_date , 'financial_management_data' => $financial_management_data ] ) ;
+                return view('back.show_form_of_appointments_on_specific_date' ,
+                [
+                    'title_of_page' => $title_of_page ,
+                    'result_show_form_of_appointments_on_specific_date' => $result_show_form_of_appointments_on_specific_date , 'count_of_appointment' => $count_of_appointment , 'show_all_appointments_on_this_date' => $show_all_appointments_on_this_date , 'financial_management_data' => $financial_management_data
+                ] ) ;
             }
             else
             {
-                \Session::flash('success_message' , '<span style="color:blue;" >There are not any Appointment on Date '.$show_all_appointments_on_this_date.'</span> <br> Choose another Date to Show Appointments') ;
-                return view('back.show_form_of_appointments_on_specific_date' , [ 'title_of_page' => $title_of_page ] ) ;
+                $title_of_page = '<b style="color:blue" >There is no Appointment on Date '.$show_all_appointments_on_this_date.'</b>' ;
+                return view('back.show_form_of_appointments_on_specific_date' , [ 'title_of_page' => $title_of_page ] )
+                ->with(['success_message' => '<span style="color:blue;" >There are not any Appointment on Date '.$show_all_appointments_on_this_date.'</span> <br> Please, Choose a Date to Show Appointments']) ;
             }
         }
         catch ( \Exception $exception )
         {
-            \Session::flash('success_message', '<b style="color:blue;" >We have an Error to show appointments on Date '.$show_all_appointments_on_this_date.'</b>' ) ;
-            return view('back.show_form_of_appointments_on_specific_date' , [ 'title_of_page' => $title_of_page ]) ;
+            return view('back.show_form_of_appointments_on_specific_date' , [ 'title_of_page' => $title_of_page ])
+            ->with(['success_message' => '<b style="color:blue;" >We have an Error to show appointments on Date '.$show_all_appointments_on_this_date.'</b>']) ;
         }
     }
 
@@ -185,24 +140,25 @@ class PatientsAppointmentController extends Controller
      */
     public function destroy(patients_appointment $patients_appointment , Request $request  )
     {
-        $admin_id_from_users_table = $this->find_admin_id_from_users_table() ;
-        $show_all_appointments_this_date = $request->show_all_appointments_this_date ;
-
         try
         {
-            $result_of_delete_oppointment = patients_appointment::
-            select('*')
-            ->where( 'appointment_id' , '=' , $request->appointment_id )
-            ->where( 'appointment_dr_related_id' , '=' , $admin_id_from_users_table )
-            ->delete() ;
+            $result_of_delete_this_appointment_id = patients_appointment::delete_this_appointment_id($request->appointment_id) ;
 
-            \Session::flash('success_message', '<span>The Selected Appointment Successfully Deleted</span>');
-            return redirect(route('run_show_form_of_appointments_on_specific_date_by_get_method' , $show_all_appointments_this_date ));
+            if($result_of_delete_this_appointment_id)
+            {
+                return redirect()->back()
+                ->with(['success_message' => '<span>The Selected Appointment Successfully Deleted</span>']);
+            }
+            else
+            {
+                return redirect()->back()
+                ->with(['success_message' => '<span style="color:blue;">The Selected Appointment WAS NOT Deleted!</span><br>You may have a related financial transaction to this appointment<br>So, first of all you should delete related financial transaction']);
+            }
         }
         catch (\Exception $exception)
         {
-            \Session::flash('success_message', '<span style="color:blue;">The Selected Appointment WAS NOT Deleted!</span>');
-            return redirect(route('show_form_of_appointments_on_specific_date'));
+            return redirect()->back()
+            ->with(['success_message' => '<span style="color:blue;">The Selected Appointment WAS NOT Deleted!</span><br>You may have a related financial transaction to this appointment<br>So, first of all you should delete related financial transaction']);
         }
     }
 
@@ -213,117 +169,30 @@ class PatientsAppointmentController extends Controller
             // All of HTML codes will be added to this variable and at the end of this function, this variable will be passed to view page.
             $text_trick = '';
 
-            $clinic_doctors_name = Auth::user()->clinic_doctors_name;
-
-            // START of show doctors of clinic
-            if( strlen($clinic_doctors_name) > 0 )
-            {
-                $text_trick .= '
-                <div class="form-group col-md-12 col-sm-12 col-xs-12" style="margin-bottom:25px;" >
-                
-                    <center>
-                        <label class="control-label col-md-12 col-sm-12 col-xs-12" style="font-size:22px;font-weight:normal;text-align: center!important;margin-bottom:15px;" >
-                            Choose Doctor of Patient
-                        </label>
-                    </center>
-                    
-                    <div class="col-md-12 col-sm-12 col-xs-12" >
-                      <div class="form-group" >
-                        <div class="col-md-12 col-sm-12 col-xs-12" >
-                            <div class="col-md-12 col-sm-12 col-xs-12" >';
-
-                                // Explode and make array type variable
-                                $common_clinic_dr_1      = explode(",",$clinic_doctors_name);
-                                // Estimate how many index exist in this variable
-                                $common_clinic_dr_number = count($common_clinic_dr_1);
-                                // Make end number for loop
-                                $end 					 = $common_clinic_dr_number;
-                                for( $start='0' ; $start < $end ; $start++ )
-                                {
-                                    if(strlen($common_clinic_dr_1[$start])>'0')
-                                    {
-                                        $text_trick .= '
-                                        <label class="btn btn-default well" data-toggle-class="btn-primary" style="font-size:20px;background-color:white;" >
-                                            <input type="radio" name="appointment_child_dr_related_name" value="'.$common_clinic_dr_1[$start].'" > '.$common_clinic_dr_1[$start].'
-                                        </label>';
-                                    }
-                                }
-
-                            $text_trick .= '
-                            </div>
-                         </div>
-                     </div>
-                    </div>
-                    
-                </div>' ;
-            }
-            // END of show doctors of clinic
-
-            // START of select service type of appointment
-            if( strlen(Auth::user()->financial_management) > 0 )
-            {
-                $text_trick .= '
-                <center>
-                    <label class="control-label col-md-12 col-sm-12 col-xs-12" style="font-size:22px;font-weight:normal;text-align: center!important;margin-bottom:15px;margin-top:5px;" >
-                        Choose Type Service of This Appointment
-                    </label>
-                    <div style="margin-top:10px;margin-bottom:30px;" class="col-md-12 col-sm-12 col-xs-12" >' ;
-
-                        // Explode and make array type variable
-                        $appointment_service_type = explode(",", Auth::user()->financial_management) ;
-                        // Estimate how many index exist in this variable
-                        $appointment_service_type_number = count($appointment_service_type);
-                        // Make end number for loop
-                        $end = $appointment_service_type_number ;
-                        for( $start ='0' ; $start < $end ; $start++ )
-                        {
-                            if( strlen($appointment_service_type[$start]) > 0 )
-                            {
-                                $text_trick .= '
-                                <label class="btn btn-default well" data-toggle-class="btn-primary" style="font-size:20px;background-color:white;border: 1px solid #ccc;border-radius: 4px!important;margin-top:5px;margin-bottom:5px;" >
-                                    <input type="radio" name="appointment_service_type" value="' . $appointment_service_type[$start] . '" > ' . $appointment_service_type[$start] . '
-                                </label>';
-                            }
-                        }
-
-                   $text_trick .= '
-                   </div>
-                </center>';
-            }
-            // END of select service type of appointment
-
-            $appointment_gap_time = Auth::user()->gap_time_between_appointments;
-
             $start_of_day = strtotime('00:00');
-            $end_end_day = strtotime('24:00');
+            $end_end_day  = strtotime('24:00');
 
+            // In here, the Algorithm is Chunk 1 day to small pieces of minutes
             // START of time appointment counter creator.
-            for ( $index_counter = $start_of_day ; $index_counter <= $end_end_day ; $index_counter = $index_counter + $appointment_gap_time * 60 )
+            for ( $index_counter = $start_of_day ; $index_counter <= $end_end_day ; $index_counter = $index_counter + Auth::user()->gap_time_between_appointments * 60 )
             {
-                $admin_id_from_users_table = $this->find_admin_id_from_users_table();
-
+                // The date function will change N minutes to HH:MM format
                 // Make an appointment time trick
                 $appointment_time_trick = date('H:i', $index_counter);
 
-                // Create mysql query to extract all of appointments that record in database on this specific time by (JOIN TYPE)
-                $result_patients_appointment = patients_appointment::
-                join('patients_general_infos' , 'patients_general_infos.patient_id' , '=' , 'patients_appointments.appointment_patient_related_id')
-                ->select('patients_appointments.*' , 'patients_general_infos.patient_id' , 'patients_general_infos.patient_first_name' , 'patients_general_infos.patient_last_name' )
-                ->where('patients_appointments.appointment_dr_related_id', '=', $admin_id_from_users_table)
-                ->where('patients_appointments.appointment_date', '=', $choose_time_for_this_date)
-                ->where('patients_appointments.appointment_time', '=', $appointment_time_trick)
-                ->get();
+                // Create mysql query to extract all of appointments data on this specific time and date by (JOIN TYPE)
+                $result_appointments_of_patients_on_this_time_and_date = patients_appointment::result_appointments_of_patients_on_this_time_and_date($choose_time_for_this_date, $appointment_time_trick) ;
 
                 // How many appointment time equal with $appointment_time_trick exist in database.
-                $num_of_res_time_trick = $result_patients_appointment->count();
+                $num_of_res_time_trick = $result_appointments_of_patients_on_this_time_and_date->count();
 
                 $trick_of_title = '' ;
-                foreach ( $result_patients_appointment as $key_3 )
+                foreach ( $result_appointments_of_patients_on_this_time_and_date as $key_3 )
                 {
                     $trick_of_title .= '( '.$key_3->patient_first_name.' '.$key_3->patient_last_name.' -> '.$key_3->patient_id.' ) ' ;
                 }
 
-                // Show Free time OR Busy time by RED and ORANGE div colour.
+                // Show Free time OR Busy time by RED and ORANGE div color.
                 if ($num_of_res_time_trick > '0' && $num_of_res_time_trick <= '3')
                 {
                     $appointment_div_trick = 'alert alert-warning well';
@@ -362,27 +231,33 @@ class PatientsAppointmentController extends Controller
 
             } // END of time appointment counter creator.
 
-            $title_of_page = 'List of Appointments Time on Date: ' . $choose_time_for_this_date;
-            return view('back.show_patient_time_appointment_table', ['title_of_page' => $title_of_page, 'choose_time_for_this_date' => $choose_time_for_this_date, 'choose_time_for_this_patient_id' => $choose_time_for_this_patient_id, 'text_trick' => $text_trick]);
+            $title_of_page = 'List of Appointments Time on Date: ' . $choose_time_for_this_date ;
+            return view('back.show_patient_time_appointment_table',
+            [
+                'title_of_page'                   => $title_of_page,
+                'choose_time_for_this_date'       => $choose_time_for_this_date,
+                'choose_time_for_this_patient_id' => $choose_time_for_this_patient_id,
+                'text_trick' => $text_trick
+            ]);
         }
         catch (\Exception $exception)
         {
-            \Session::flash('success_message', '<span style="color:blue;">We have an error to show List of Appointments time on this Specific Date </span>');
-            return redirect(route('home'));
+            return redirect(route('home'))
+            ->with( [ 'success_message' => '<span style="color:blue;">We Have an Error to Show List of Appointments Time on This Specific Date</span>' ] );
         }
     }
 
     public function store_patient_time_appointment_table( Request $request )
     {
-        $validation_of_store_patient_time_appointment_table = $request->validate(
+        $request->validate(
             [
                 'choose_time_for_this_patient_id' => 'required|min:1' ,
             ]
         ) ;
 
         $choose_time_for_this_patient_id = request()->post('choose_time_for_this_patient_id') ;
-        $choose_time_for_this_date = request()->post('choose_time_for_this_date') ;
-        $appointment_time = request()->post('appointment_time') ;
+        $choose_time_for_this_date       = request()->post('choose_time_for_this_date') ;
+        $appointment_time                = request()->post('appointment_time') ;
 
         if( request()->post('appointment_child_dr_related_name') !== null )
         {
@@ -390,57 +265,42 @@ class PatientsAppointmentController extends Controller
         }
         else
         {
-            // This value SHOULD NOT BE BULL because we use this value is financial transaction search page
+            // This value SHOULD NOT BE NULL because we use this value is financial transaction searching page
             // So leave it EMPTY
             $appointment_child_dr_related_name = '' ;
         }
 
+        if( request()->post('appointment_service_type') !== null )
+        {
+            $appointment_service_type = request()->post('appointment_service_type') ;
+        }
+        else
+        {
+            // This value SHOULD NOT BE NULL because we use this value is financial transaction searching page
+            // So leave it EMPTY
+            $appointment_service_type = '' ;
+        }
 
         try
         {
-            $admin_id_from_users_table = $this->find_admin_id_from_users_table() ;
+            $result_store_new_patient_appointment_time              = patients_appointment::store_new_patient_appointment_time($choose_time_for_this_patient_id,$choose_time_for_this_date,$appointment_time,$appointment_child_dr_related_name,$appointment_service_type) ;
+            $update_patient_general_info_last_appointment_data_time = patients_general_info::update_patient_general_info_last_appointment_data_time($choose_time_for_this_patient_id,$choose_time_for_this_date,$appointment_time) ;
 
-            if( request()->post('appointment_service_type') !== null )
+            if($result_store_new_patient_appointment_time && $update_patient_general_info_last_appointment_data_time)
             {
-                $appointment_service_type = request()->post('appointment_service_type') ;
+                return redirect(route('submit_new_patient_form'))
+                ->with( [ 'success_message' => 'The Appointment Time= '.$appointment_time.' On Date= '.$choose_time_for_this_date.' <br> of <a href="'.route('edit_patient_form', $choose_time_for_this_patient_id ).'" ><b>Patient</b></a> Were Successfully Submitted' ] );
             }
             else
             {
-                // This value SHOULD NOT BE BULL because we use this value is financial transaction search page
-                // So leave it EMPTY
-                $appointment_service_type = '' ;
+                return redirect(route('submit_new_patient_form'))
+                ->with( [ 'success_message' => '<span style="color:blue;">The Time and Date Appointment Were NOT Successfully Submitted!</span>' ] );
             }
-
-            $result_store_patient_time_appointment_table = new patients_appointment(
-                [
-                    'appointment_dr_related_id' => $admin_id_from_users_table ,
-                    'appointment_patient_related_id' => $choose_time_for_this_patient_id ,
-                    'appointment_date' => $choose_time_for_this_date ,
-                    'appointment_time' => $appointment_time ,
-                    'appointment_child_dr_related_name' => $appointment_child_dr_related_name ,
-                    'appointment_service_type' => $appointment_service_type ,
-                ]
-            );
-            $result_store_patient_time_appointment_table->save();
-
-            // Update table patients_general_infos items patient_last_appointment_date and patient_last_appointment_time
-            $result_update_this_patient_id = patients_general_info::
-            select( 'patient_id' , 'patient_last_appointment_date' , 'patient_last_appointment_time' , 'patient_dr_related_id' )
-            ->where('patient_id', '=', $choose_time_for_this_patient_id )
-            ->where('patient_dr_related_id', '=', $admin_id_from_users_table )
-            ->update([
-                'patient_last_appointment_date' => $choose_time_for_this_date ,
-                'patient_last_appointment_time' => $appointment_time
-            ]);
-
-            \Session::flash('success_message', 'The Appointment Time= '.$appointment_time.' On Date= '.$choose_time_for_this_date.' <br> of <a href="'.route('edit_patient_form', $choose_time_for_this_patient_id ).'" ><b>Patient</b></a> Were Successfully Submitted');
-            return redirect(route('submit_new_patient_form'));
-
         }
         catch (\Exception $exception)
         {
-            \Session::flash('success_message', '<span style="color:blue;">The Time and Date Appointment Were NOT Successfully Submitted!</span>');
-            return redirect(route('submit_new_patient_form'));
+            return redirect(route('submit_new_patient_form'))
+            ->with( [ 'success_message' => '<span style="color:blue;">The Time and Date Appointment Were NOT Successfully Submitted!</span>' ] );
         }
     }
 

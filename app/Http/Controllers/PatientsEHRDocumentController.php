@@ -7,53 +7,16 @@ use App\Http\Requests\Storepatients_EHR_documentRequest;
 use App\Http\Requests\Updatepatients_EHR_documentRequest;
 
 // I added the below lines manually
+use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\Auth;
 use App\Models\patients_photo;
 use App\Models\patients_general_info;
 
 use Illuminate\Http\Request;
-// START OF MANUALLY RECEIVING DATA FROM A FORM BY GET OR POST METHOD AND USE IT IN YOUR CUSTOMIZE FUNCTIONS.
-// https://stackoverflow.com/questions/32718870/how-to-get-all-input-of-post-in-laravel
-// step(1) add this use to top of your controller page after the name space.
-// use Illuminate\Http\Request ;
-// step(2) write your function with this structure
-//    public function function_name( Request $request )
-//    {
-//        //
-//    }
-// step(3) use below codes in it.
-//// Show only POST data
-//$request->post(); // DI
-//request()->post(); // global method
-//Request::post(); // facade
-//
-//// Show only GET data
-//$request->query(); // DI
-//request()->query(); // global method
-//Request::query(); // facade
-//
-//// Show all data (i.e. both GET and POST data)
-//$request->all(); // DI
-//request()->all(); // global method
-//Request::all(); // facade
-// END OF MANUALLY RECEIVING DATA FROM A FORM BY GET OR POST METHOD AND USE IT IN YOUR CUSTOMIZE FUNCTIONS.
+use Psr\Log\NullLogger;
 
 class PatientsEHRDocumentController extends Controller
 {
-    public function find_admin_id_from_users_table()
-    {
-        // If the user has a parent_id so user_type='user' and we use Auth::user()->parent_id
-        if( strlen(Auth::user()->parent_id) > 0 )
-        {
-            return $admin_id_from_users_table = Auth::user()->parent_id ;
-        }
-        // If the user DOES NOT have parent_id so user_type='admin' and we use Auth::user()->id
-        else
-        {
-            return $admin_id_from_users_table = Auth::user()->id ;
-        }
-    }
-
     /**
      * Display a listing of the resource.
      *
@@ -134,35 +97,21 @@ class PatientsEHRDocumentController extends Controller
     {
         try
         {
-            $admin_id_from_users_table = $this->find_admin_id_from_users_table() ;
-
-            $result_of_patients_photo = patients_photo::
-            where('patients_photos_dr_related_id'        , '=' , $admin_id_from_users_table )
-            ->where('patients_photos_patient_related_id' , '=' , $request->patient_id )
-            ->orderBy('patients_photos_id', 'DESC')
-            ->get() ;
+            $result_of_patients_photo = patients_photo::result_of_patient_ehr_photo($request->patient_id) ;
             $count_result_of_patients_photo = $result_of_patients_photo->count() ;
 
-            $result_of_patients_ehr_document = patients_EHR_document::
-            where('EHR_document_dr_related_id'        , '=' , $admin_id_from_users_table )
-            ->where('EHR_document_patient_related_id' , '=' , $request->patient_id )
-            ->orderBy('EHR_document_id', 'DESC')
-            ->get() ;
+            $result_of_patients_ehr_document = patients_EHR_document::result_of_patients_ehr_document($request->patient_id) ;
             $count_result_of_patients_ehr_document = $result_of_patients_ehr_document->count() ;
 
-            $result_of_show_patients_general_infos = patients_general_info::
-            where('patient_dr_related_id' , '=' , $admin_id_from_users_table )
-            ->where('patient_id' , '=' , $request->patient_id )
-            ->get() ;
-            $count_number_of_patients_general_infos = $result_of_show_patients_general_infos->count() ;
+            $result_of_show_patients_general_infos = patients_general_info::fetch_info_of_this_patient_id($request->patient_id) ;
 
-            if( $count_number_of_patients_general_infos > 0 )
+            if($result_of_show_patients_general_infos)
             {
                 return view('back.show_patients_ehr_document_page' ,
                 [
                     'title_of_page'                             => 'EHR of '.$request->patient_id ,
                     'EHR_document_patient_related_id'           => $request->patient_id ,
-                    'EHR_document_dr_related_id'                => $admin_id_from_users_table ,
+                    'EHR_document_dr_related_id'                => Model::find_admin_id_from_users_table() ,
                     'EHR_document_related_appointment_id'       => $request->related_appointment_id ,
                     'EHR_document_related_clinic_doctor_name'   => $request->child_dr_related_name ,
                     'result_of_patients_photo'                  => $result_of_patients_photo ,
@@ -170,27 +119,24 @@ class PatientsEHRDocumentController extends Controller
                     'result_of_patients_ehr_document'           => $result_of_patients_ehr_document ,
                     'count_result_of_patients_ehr_document'     => $count_result_of_patients_ehr_document ,
                     'result_of_patients_general_infos'          => $result_of_show_patients_general_infos ,
-                    'count_result_of_patients_general_infos'    => $count_number_of_patients_general_infos
+                    'admin_id_from_users_table'                 => Model::find_admin_id_from_users_table()
                 ]) ;
             }
             else
             {
-                \Session::flash('success_message', '<span style="color:blue;">This Patient Does Not Exist!</span>');
-                return redirect(route('home'));
+                return redirect(route('home'))
+                ->with( [ 'success_message' => '<span style="color:blue;">This Patient Does Not Exist!</span>' ] );
             }
-
         }
         catch (\Exception $exception)
         {
-            \Session::flash('success_message', '<span style="color:blue;">Can not display this EHR!</span>');
-            return redirect(route('home'));
+            return redirect(route('home'))
+            ->with( [ 'success_message' => '<span style="color:blue;">Can not display this EHR!</span>' ] );
         }
     }
 
     public function store_patients_ehr_document_page( Request $request )
     {
-        $admin_id_from_users_table = $this->find_admin_id_from_users_table() ;
-
         try
         {
             $patient_more_description  = '' ;
@@ -209,19 +155,7 @@ class PatientsEHRDocumentController extends Controller
                 $patient_more_description .= ','.$request->typed_keyboard_savabegh;
             }
 
-            $update_patients_ehr_document_page = patients_general_info::
-            select('*')
-            ->where('patient_dr_related_id', '=' , $admin_id_from_users_table)
-            ->where('patient_id'           , '=' , $request->patient_id)
-            ->update(
-            [
-                'patient_more_description'   => $patient_more_description ,
-                'patient_surgery_history'    => $request->post('patient_surgery_history') ,
-                'patient_disease_background' => $request->post('patient_disease_background') ,
-                'patient_medication_history' => $request->post('patient_medication_history') ,
-                'patient_allergies_history'  => $request->post('patient_allergies_history')
-            ]
-            );
+            patients_general_info::update_this_patient_general_info_from_ehr_page($request->patient_id, $patient_more_description, $request->post('patient_surgery_history'), $request->post('patient_disease_background'), $request->post('patient_medication_history'), $request->post('patient_allergies_history') ) ;
 
             if(strlen(Auth::user()->common_drug))
             {
@@ -233,7 +167,7 @@ class PatientsEHRDocumentController extends Controller
                 // Estimate how many drug this variable has to use of for loop
                 $end                = $common_drug_number ;
                 // Define a new variable
-                $common_drug_2 = '' ;
+                $common_drug_2 = NUll ;
 
                 // Make a for loop to check all drugs validation
                 for( $start='0' ; $start < $end ; $start++ )
@@ -257,13 +191,13 @@ class PatientsEHRDocumentController extends Controller
             }
             else
             {
-                $common_drug_2 = '' ;
+                $common_drug_2 = NULL ;
             }
 
             if( strlen(Auth::user()->common_diet) )
             {
                 // Define a new variable
-                $common_diet_2 = '' ;
+                $common_diet_2 = NULL ;
 
                 if(is_array($request->common_diet))
                 {
@@ -280,13 +214,13 @@ class PatientsEHRDocumentController extends Controller
             }
             else
             {
-                $common_diet_2 = '' ;
+                $common_diet_2 = NULL ;
             }
 
             if( strlen(Auth::user()->common_return_date) )
             {
                 // Define a new variable
-                $common_return_date_2 = '' ;
+                $common_return_date_2 = NULL ;
 
                 if(is_array($request->common_return_date))
                 {
@@ -303,84 +237,84 @@ class PatientsEHRDocumentController extends Controller
             }
             else
             {
-                $common_return_date_2 = '' ;
+                $common_return_date_2 = NULL ;
             }
 
-            $result_store_new_ehr_doc = new patients_EHR_document(
-                [
-                    'EHR_document_prescribed_common_drug'      => $common_drug_2 ,
-                    'EHR_document_prescribed_common_diet'      => $common_diet_2 ,
-                    'EHR_document_prescribed_next_appointment' => $common_return_date_2 ,
-                    'EHR_document_patient_related_id'          => $request->post('patient_id') ,
-                    'EHR_document_dr_related_id'               => $admin_id_from_users_table ,
-                    'EHR_document_related_appointment_id'      => $request->post('EHR_document_related_appointment_id') ,
-                    'EHR_document_related_clinic_doctor_name'  => $request->post('EHR_document_related_clinic_doctor_name')
-                ]
-            ) ;
+            if( strlen($request->post('EHR_document_related_appointment_id')) > 0 )
+            {
+                $EHR_document_related_appointment_id_trick = $request->post('EHR_document_related_appointment_id') ;
+            }
+            else
+            {
+                $EHR_document_related_appointment_id_trick = NULL ;
+            }
 
-            $result_store_new_ehr_doc->save() ;
-            $EHR_document_id = $result_store_new_ehr_doc->id ;
+            if( strlen($request->post('EHR_document_related_clinic_doctor_name')) > 0 )
+            {
+                $EHR_document_related_clinic_doctor_name_trick = $request->post('EHR_document_related_clinic_doctor_name') ;
+            }
+            else
+            {
+                $EHR_document_related_clinic_doctor_name_trick = NULL ;
+            }
+
+            $result_store_new_ehr_doc = patients_EHR_document::store_new_ehr_doc($common_drug_2, $common_diet_2, $common_return_date_2, $request->post('patient_id'), $EHR_document_related_appointment_id_trick, $EHR_document_related_clinic_doctor_name_trick ) ;
 
             if ($request->hasFile('image'))
             {
-                $validatedData = $request->validate([
-                    'image' => 'image|mimes:jpg|max:2048',
+                $request->validate([
+                    'image' => 'image|mimes:jpeg,png,jpg,gif,svg|max:10048',
                 ]);
 
-                $file = $request->file('image');
-                $fileName = rand(11111, 99999) . time() . rand() . '.jpg';
-                $destinationPath = public_path() . '/storage/images/' . Auth::user()->name . '/' . $request->patient_id . '/para';
+                $file            = $request->file('image');
+                $extension       = $request->file('image')->extension();
+                $fileName        = rand(11111, 99999) . time() . rand() . '.'.$extension ;
+                $destinationPath = public_path() . '/storage/images/' . Model::find_admin_id_from_users_table() . '/' . $request->patient_id . '/para';
                 $file->move($destinationPath, $fileName);
                 //$path = $request->file('image')->sotre('public/images/'.Auth::user()->name.'/'.$request->patient_id.'/para' , $name );
 
-                $result_store_patient_photo = new patients_photo(
-                    [
-                        'patients_photos_file_name' => $fileName,
-                        'patients_photos_file_description' => $request->keyboard_paraclinic_file_title,
-                        'patients_photos_patient_related_id' => $request->patient_id,
-                        'patients_photos_dr_related_id' => $admin_id_from_users_table
-                    ]
-                );
-                $result_store_patient_photo->save();
+                patients_photo::store_patient_photo_from_ehr_page($fileName, $request->keyboard_paraclinic_file_title, $request->patient_id ) ;
             }
 
-            return redirect(route('show_new_saved_ehr', $EHR_document_id)) ;
+            return redirect(route('show_new_saved_ehr', $result_store_new_ehr_doc->EHR_document_id)) ;
         }
         catch (\Exception $exception)
         {
-            \Session::flash('success_message', '<span style="color:blue;">Can not Save new EHR!</span>') ;
-            return redirect(route('home'));
+            return redirect(route('home'))
+            ->with( [ 'success_message' => '<span style="color:blue;">Can not Save new EHR!</span>' ] );
         }
     }
 
     public function show_new_saved_ehr( Request $request )
     {
-        $admin_id_from_users_table = $this->find_admin_id_from_users_table() ;
         try
         {
-            $result_show_new_saved_ehr = patients_EHR_document::
-            where('EHR_document_dr_related_id' , '=' , $admin_id_from_users_table )
-            ->where('EHR_document_id' , '=' , $request->EHR_document_id )
-            ->get() ;
-            foreach ($result_show_new_saved_ehr as $key)
+            $result_show_new_saved_ehr = patients_EHR_document::show_new_saved_ehr($request->EHR_document_id) ;
+
+            if($result_show_new_saved_ehr)
             {
                 return view('back.show_new_saved_ehr' ,
                 [
-                    'title_of_page'                            => 'a new EHR information of patient <br> with document id: '.$key->EHR_document_patient_related_id.'<br> successfully saved at date '.date("Y/m/d") ,
+                    'title_of_page'                            => 'a new EHR information of patient <br>with patient number: '.$result_show_new_saved_ehr->EHR_document_patient_related_id.'<br> successfully saved at date '.date("Y/m/d") ,
                     'show_ehr_report'                          => 'true' ,
-                    'EHR_document_patient_related_id'          => $key->EHR_document_patient_related_id ,
-                    'EHR_document_prescribed_common_drug'      => $key->EHR_document_prescribed_common_drug ,
-                    'EHR_document_prescribed_common_diet'      => $key->EHR_document_prescribed_common_diet ,
-                    'EHR_document_prescribed_next_appointment' => $key->EHR_document_prescribed_next_appointment ,
-                    'EHR_document_related_clinic_doctor_name'  => $key->EHR_document_related_clinic_doctor_name ,
-                    'EHR_document_dr_related_id'               => $admin_id_from_users_table ,
+                    'EHR_document_patient_related_id'          => $result_show_new_saved_ehr->EHR_document_patient_related_id ,
+                    'EHR_document_prescribed_common_drug'      => $result_show_new_saved_ehr->EHR_document_prescribed_common_drug ,
+                    'EHR_document_prescribed_common_diet'      => $result_show_new_saved_ehr->EHR_document_prescribed_common_diet ,
+                    'EHR_document_prescribed_next_appointment' => $result_show_new_saved_ehr->EHR_document_prescribed_next_appointment ,
+                    'EHR_document_related_clinic_doctor_name'  => $result_show_new_saved_ehr->EHR_document_related_clinic_doctor_name ,
+                    'EHR_document_dr_related_id'               => Model::find_admin_id_from_users_table() ,
                 ] ) ;
+            }
+            else
+            {
+                return redirect(route('home'))
+                ->with( [ 'success_message' => '<span style="color:blue;">Can not show new saved EHR!</span>' ] );
             }
         }
         catch (\Exception $exception)
         {
-            \Session::flash('success_message', '<span style="color:blue;">Can not show new EHR!</span>');
-            return redirect(route('home'));
+            return redirect(route('home'))
+            ->with( [ 'success_message' => '<span style="color:blue;">Can not show new saved EHR!</span>' ] );
         }
     }
 

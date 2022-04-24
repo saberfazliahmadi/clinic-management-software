@@ -16,7 +16,7 @@ class CreatePatientsGeneralInfosTable extends Migration
     {
         Schema::create('patients_general_infos', function (Blueprint $table) {
             $table->id('patient_id');
-            $table->integer('patient_dr_related_id')->nullable() ;
+            $table->foreignId('patient_dr_related_id')->references('id')->on('users') ;
             $table->string('patient_first_name','35')->collation('utf8_general_ci') ;
             $table->string('patient_last_name','35')->collation('utf8_general_ci') ;
             $table->string('patient_last_appointment_date','20')->collation('utf8_general_ci')->nullable() ;

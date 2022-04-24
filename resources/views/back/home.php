@@ -1,8 +1,5 @@
 <?php
-
 // Add your custom css files here.
-use Illuminate\Support\Facades\Auth;
-
 $extra_links_header = '' ;
 // Add your custom js files here.
 $extra_links_footer = '' ;
@@ -13,11 +10,11 @@ include 'layout/header.php' ;
 echo '
 <!-- page content -->
 <div class="right_col" role="main">
-   
-    <div style="width: 100%;height: 80px;padding: 10px 0;margin-bottom:100px;" >
+   <hr>
+    <div style="width: 100%;height: 80px;padding: 10px 0;margin-bottom:80px!important;" >
       <center>
          <h3 style="text-align:center;">
-             Welcome to Clinic Management Software
+             '.$title_of_page.'
              <br>
          </h3>
       </center>
@@ -31,8 +28,8 @@ echo '
             <span class="step_no">1</span>
             <span class="step_descr">
                 <center>
-                    <i class="glyphicon glyphicon-plus"></i>
-                   Submit New Patient 
+                   <i class="glyphicon glyphicon-plus"></i>
+                   ' . $cms_menu_title_data_from_middleware[15] . '
                 </center>
               </span>
           </a>
@@ -44,7 +41,7 @@ echo '
             <span class="step_descr">
                 <center>
                     <i class="fa fa-list"></i>
-                   Booking an Appointment 
+                   '.__('general.Booking an Appointment').' 
                 </center>
             </span>
           </a>
@@ -56,7 +53,7 @@ echo '
             <span class="step_descr">
                 <center>
                     <i class="fa fa-clone"></i>
-                   Send Patient to Doctors Room by <br> Patient Medical EHR 
+                    '.__('general.Send Patient to Doctors Room by <br> Patient Medical EHR').' 
                 </center>
               </span>
           </a>
@@ -68,7 +65,7 @@ echo '
             <span class="step_descr">
                 <center>
                     <i class="glyphicon glyphicon-phone"></i>
-                     Automatically SMS Reminder 
+                    '.__('general.Automatically SMS Reminder').'
                 </center>
               </span>
           </a>
@@ -81,7 +78,7 @@ echo '
         <div class="col-md-12 col-sm-12 col-xs-12" style="margin-top:40px;" >
             <div data-toggle="collapse" data-target="#more_details" class="btn btn-primary col-md-6 col-sm-6 col-xs-6" type="button" style="color:gray;background-color:white;border:1px solid #bfbdbd;float:none;font-size:21px;" >
                 <span class="glyphicon glyphicon-plus" aria-hidden="true" style="color:#ccc;margin-left:5px;"></span>
-                More Description
+                '.__('general.More Description').'
             </div>
         </div>
     </center>
@@ -94,26 +91,25 @@ echo '
                 <div id="wizard" class="form_wizard wizard_horizontal">
                   <br>
                   <div id="step-1" style="border:0px;">
-                    <center><h1 class="StepTitle well" style="text-align:center;border:0px solid white;margin-right:40px;margin-left:40px;    background: #F7F7F7;" >Step 1: the patient will be submitted by the secretary</h1></center>
+                    <center><h1 class="StepTitle well" style="text-align:center;border:0px solid white;margin-right:40px;margin-left:40px;    background: #F7F7F7;" >'.__('general.step1').'</h1></center>
                   </div>
         
                   <div id="step-2" style="border:0px;">
-                    <center><h1 class="StepTitle well" style="text-align:center;border:0px solid white;margin-right:40px;margin-left:40px;    background: #F7F7F7;" >Step 2: the secretary gives the patient an appointment</h1></center>
+                    <center><h1 class="StepTitle well" style="text-align:center;border:0px solid white;margin-right:40px;margin-left:40px;    background: #F7F7F7;" >'.__('general.step2').'</h1></center>
                   </div>
                     
                   <div id="step-3" style="border:0px;">
-                    <center><h1 class="StepTitle well" style="text-align:center;border:0px solid white;margin-right:40px;margin-left:40px;    background: #F7F7F7;" >Step 3: the patient enters the doctor\'s room and the patient\'s EHR is displayed on the doctor\'s screen</h1></center>
+                    <center><h1 class="StepTitle well" style="text-align:center;border:0px solid white;margin-right:40px;margin-left:40px;    background: #F7F7F7;" >'.__('general.step3').'</h1></center>
                   </div>
                 
                   <div id="step-4" style="border:0px;">
-                    <center><h1 class="StepTitle well" style="text-align:center;border:0px solid white;margin-right:40px;margin-left:40px;    background: #F7F7F7;" >Step 4: an SMS containing recommendations and prescribed medications will automatically sent to the patient mobile number</h1></center>
+                    <center><h1 class="StepTitle well" style="text-align:center;border:0px solid white;margin-right:40px;margin-left:40px;    background: #F7F7F7;" >'.__('general.step4').'</h1></center>
                   </div>
                 </div>
                 <!-- End SmartWizard Content -->
           </div>
         </div>
     </div>	
-    
     
 </div>
 <!-- /page content -->';

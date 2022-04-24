@@ -25,7 +25,34 @@ echo '
     '.$extra_links_header.'
 </head>
 
-<style  type="text/css" >
+<style  type="text/css" >' ;
+
+/*
+    If the language set to 'locale' => 'fa'
+    in config/app.php then add persian font-family: 'IRANSansNums'
+*/
+if( app()->getLocale() == 'fa' )
+{
+    echo '
+    @font-face 
+    {
+        font-family: \'IRANSansNums\';
+        font-style: normal;
+        font-weight: normal;
+        src: url(\''.url('back/font/ir/iransans/IRANSansWeb(FaNum).eot').'\');
+        src: url(\''.url('back/font/ir/iransans/IRANSansWeb(FaNum).eot?#iefix').'\') format(\'embedded-opentype\'),  /* IE6-8 */
+        url(\''.url('back/font/ir/iransans/IRANSansWeb(FaNum).woff2').'\') format(\'woff2\'),  /* FF39+,Chrome36+, Opera24+*/
+        url(\''.url('back/font/ir/iransans/IRANSansWeb(FaNum).woff').'\') format(\'woff\'),  /* FF3.6+, IE9, Chrome6+, Saf5.1+*/
+        url(\''.url('back/cdn/font/ir/iransans/IRANSansWeb(FaNum).ttf').'\') format(\'truetype\');
+    }
+    
+    body,h1,h2,h3,h4,h5,h6,p,a,li
+    {
+        font-family: IRANSansNums, Tahoma, Roboto, Arial, "Droid Sans", sans-serif!important;
+    }' ;
+}
+
+echo '
 button, .buttons, .modal-footer .btn+.btn
 {
     margin-bottom: 0px!important;
@@ -144,14 +171,14 @@ label
                                     <div class="col-md-3 col-sm-3 col-xs-3" style="float:left;" >
                                         <i class="glyphicon glyphicon-file" aria-hidden="true" style="font-size:26px;margin-left: 10px;margin-right: 10px;" ></i>
                                         <br>
-                                        Medical Document Number
+                                        Patient Number
                                     </div>
                                     
                                 </h4>
                                 
                                 <hr style="width:1px;" >
                                 <div class="col-md-12 col-sm-12 col-xs-12" align="center" style="float:none;" >
-                                    <input type="text" name="search_text" style="text-align: left!important;float:none;" min="1" max="60" autocomplete="off" aria-autocomplete="list" aria-expanded="false" aria-haspopup="true" role="combobox" spellcheck="false" class="form-control" placeholder="Type your searching word based on ONE of these types: Name | Family | Mobile Number | Nationality Number | Medical Document Number" align="center" required >
+                                    <input type="text" name="search_text" style="text-align: left!important;float:none;" min="1" max="60" autocomplete="off" aria-autocomplete="list" aria-expanded="false" aria-haspopup="true" role="combobox" spellcheck="false" class="form-control" placeholder="Type your searching word based on ONE of these types: Name | Family | Mobile Number | Nationality Number | Patient Number" align="center" required >
                                 </div>
                                 
                             </center>
@@ -166,20 +193,6 @@ label
                     </div>
                     <!-- END of login fancy console panel search_form -->
                     
-                    
-                    
-                    
-                    
-                    
-                    
-                    
-                    
-                    
-                    
-                    
-                    
-                    
-    
                 </div>
             </div>
     
@@ -244,6 +257,7 @@ label
                                         </span>
                                     </li>' ;
 
+                                    // If the user has admin type then show_main_settings_of_software_form
                                     if( Auth::user()->user_type == 'admin' )
                                     {
                                         echo '
@@ -278,13 +292,11 @@ label
                                     <br>
                                     
                                     <li style="margin-top:15px;" >
-                                        
                                         <span class="fa fa-sign-out pull-left" aria-hidden="true" style="float:left;font-size:26px;margin-left:0px;padding-left:15px;padding-right:19px;"></span>
                                         <form method="post" action="'.route('logout').'" >
                                             <input type="hidden" name="_token" value="'.csrf_token().'" >
                                             <input type="submit" name="logout" value="' . $cms_menu_title_data_from_middleware[28] . '" class="btn btn-success" >
                                         </form>
-                                        
                                     </li>
                                     
                                 </ul>
@@ -350,7 +362,7 @@ if ( isset($count_of_appointment_in_header) && $count_of_appointment_in_header >
            <br>
            Mobile Number of Patient
            <br>
-           Medical Document Number
+           Patient Number
         </h2>
         <br>
     </div>
@@ -634,7 +646,7 @@ if ( isset($count_of_appointment_in_header) && $count_of_appointment_in_header >
                     </div>
                 </div>
                 
-                <div  style="'.$opacity_appointment_trick.'" >
+                <div style="'.$opacity_appointment_trick.'" >
                     <a href="'.route('delete_this_appointment_by_this_id' , [ 'appointment_id' => $key_appointment->appointment_id , 'show_all_appointments_this_date' => $key_appointment->appointment_date ] ).'" style="float:left;color: white; font-size: 13px; float: left;background-color:#5A738E;border:1px solid #5A738E; " class="btn btn-success" ' ; ?> onclick="return confirm('Are you sure to delete this appointment?') <?php echo '" title="Delete This Appointment" >
                         <i class="fa fa-trash-o" aria-hidden="true" ></i>
                         Delete
@@ -672,12 +684,6 @@ else
     </center>' ;
 }
 
-
-
-
-
-
-
                                     echo '
                                     </div>
                                     </div>
@@ -698,13 +704,17 @@ else
     {
         foreach($errors->all() as $error)
         {
-            echo '<div class="alert alert-danger" role="alert" > <button type="button" class="close" data-dismiss="alert" aria-label="Close" style="font-size:50px;" ><span aria-hidden="true">&times;</span></button> <h4 style="text-align:right!important;" >'.$error.'</h4></div>' ;
+            echo '
+            <p><strong>Opps Something went wrong</strong></p>
+            <br>
+            <div class="alert alert-danger" role="alert" > <button type="button" class="close" data-dismiss="alert" aria-label="Close" style="font-size:50px;" ><span aria-hidden="true">&times;</span></button> <h4 style="text-align:right!important;" >'.$error.'</h4></div>' ;
         }
     }
 
-    if(strlen(Session::get('success_message')) > 0 )
+    if( session()->has('success_message') )
     {
-        echo '<div class="alert alert-success" role="alert" > <button type="button" class="close" data-dismiss="alert" aria-label="Close" style="font-size:50px;margin-left:15px!important;" ><span aria-hidden="true">&times;</span></button> <h3 style="text-align:right!important;" >'.Session::get('success_message').'</h3></div>' ;
+        echo '<div class="col-md-12 col-sm-12 col-xs-12" ><div class="col-md-10 col-sm-10 col-xs-10 alert alert-success" role="alert" style="text-align:center!important;overflow-wrap: break-word; word-wrap: break-word; hyphens: auto;float:right;" > <button type="button" class="close" data-dismiss="alert" aria-label="Close" style="font-size:50px;margin-left:15px!important;" ><span aria-hidden="true">&times;</span></button> <h3>'.Session::get('success_message').'</h3></div></div>' ;
+        session()->pull('success_message') ;
     }
 
 ?>

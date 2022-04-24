@@ -20,7 +20,7 @@ class CreateUsersTable extends Migration
             $table->string('phone')->collation('utf8_general_ci')->nullable();
             $table->string('gender')->collation('utf8_general_ci')->nullable();
             $table->string('dob')->collation('utf8_general_ci')->nullable();
-            $table->string('user_type')->collation('utf8_general_ci')->nullable()->comment('The "user_type" should be "admin" or "user" and by default is "NULL" , You can change it Manually');
+            $table->string('user_type')->collation('utf8_general_ci')->default('admin')->comment('The "user_type" should be "admin" or "user" and by default is "NULL" , You can change it Manually');
             $table->string('email')->collation('utf8_general_ci')->unique();
             $table->timestamp('email_verified_at')->collation('utf8_general_ci')->nullable();
             $table->string('password');

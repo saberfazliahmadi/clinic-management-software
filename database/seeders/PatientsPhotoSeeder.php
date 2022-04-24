@@ -2,6 +2,7 @@
 
 namespace Database\Seeders;
 
+use App\Models\patients_photo;
 use Illuminate\Database\Seeder;
 
 class PatientsPhotoSeeder extends Seeder
@@ -13,6 +14,6 @@ class PatientsPhotoSeeder extends Seeder
      */
     public function run()
     {
-        //
+        patients_photo::newFactory('100')->create() ;
     }
 }
