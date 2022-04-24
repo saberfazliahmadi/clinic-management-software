@@ -1250,10 +1250,9 @@ echo '
 </div>
 
 <input type="hidden" name="patient_id" value="'.$EHR_document_patient_related_id.'" >
-<input  type="hidden" name="dr_visit_stat" value="dr_visited" >
 <input  type="hidden" name="EHR_document_related_appointment_id" value="'.$EHR_document_related_appointment_id.'">
 <input  type="hidden" name="EHR_document_related_clinic_doctor_name" value="'.$EHR_document_related_clinic_doctor_name.'" >' ;
-//<input  type="hidden" name="svg_post"              value="" id="svg"  						  >
+//<input  type="hidden" name="svg_post" value="" id="svg" >
 
 echo '
 <button type="submit" name="final" class="btn btn-success btn-lg btn-block col-md-12 col-sm-12 col-xs-12 uiuxtrick" data-action="export-as-svg" value="Export as SVG" style="font-size:25px;position: fixed;bottom: 0px;right: 0px;z-index: 1;" onclick="this.disabled=true;this.form.submit();formSubmitting=true;" >Save</button>';

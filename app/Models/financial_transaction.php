@@ -39,7 +39,7 @@ class financial_transaction extends Model
     {
         $result_destroy_this_financial_transaction = self::
         select(['financial_transaction_id', 'financial_dr_related_id'])
-            ->where('financial_transaction_id', '=', $delete_this_financial_id)
+            ->where('financial_transaction_id', $delete_this_financial_id)
             ->equal_this_to_admin_id_from_user_table('financial_dr_related_id')
             ->limit('1')
             ->delete();
@@ -53,7 +53,7 @@ class financial_transaction extends Model
             User::
             select('id', 'name', 'financial_management')
                 ->equal_this_to_admin_id_from_user_table('id')
-                ->where('name', '=', $Auth_user_name)
+                ->where('name', $Auth_user_name)
                 ->limit('1')
                 ->update(
                     [
@@ -67,7 +67,7 @@ class financial_transaction extends Model
     {
         $result_fetch_last_10_transaction = self::
         equal_this_to_admin_id_from_user_table('financial_dr_related_id')
-            ->orderBy('financial_transaction_id', 'DESC')
+            ->latest('financial_transaction_id')
             ->paginate('10');
 
         return $result_fetch_last_10_transaction;
@@ -95,12 +95,12 @@ class financial_transaction extends Model
     static function result_fetch_receive_or_pay_transactions_from_date_to_date($financial_transaction_type = '+' , $sign_trick_1 , $financial_transaction_child_dr_related_name_text_trick , $sign_trick_2 , $financial_transaction_title_text_trick , $financial_report_from_date , $financial_report_to_date )
     {
         $result_fetch_receive_or_pay_transactions_from_date_to_date = financial_transaction::
-        where('financial_dr_related_id'      , '=' , Model::find_admin_id_from_users_table() )
-        ->where('financial_transaction_type' , '=' , $financial_transaction_type )
+        where('financial_dr_related_id'      , Model::find_admin_id_from_users_table() )
+        ->where('financial_transaction_type' , $financial_transaction_type )
         ->where('financial_transaction_child_dr_related_name' , $sign_trick_1 , $financial_transaction_child_dr_related_name_text_trick )
         ->where('financial_transaction_title' , $sign_trick_2 , $financial_transaction_title_text_trick )
         ->whereBetween('financial_transaction_date', [$financial_report_from_date, $financial_report_to_date])
-        ->orderBy('financial_transaction_id','DESC')
+        ->latest('financial_transaction_id')
         ->get() ;
 
         return $result_fetch_receive_or_pay_transactions_from_date_to_date ;

@@ -57,27 +57,21 @@ class patients_general_info extends Model
 
     public function scopepatient_id($query,$update_this_patient_id)
     {
-        return $query->where('patient_id' , '=' , $update_this_patient_id) ;
+        return $query->where('patient_id' , $update_this_patient_id) ;
     }
 
     static function store_new_patient_form($request_all)
     {
+        $trick_patient_relationship_status = '' ;
         if( isset($request_all['patient_relationship_status']) )
         {
             $trick_patient_relationship_status = $request_all['patient_relationship_status'] ;
         }
-        else
-        {
-            $trick_patient_relationship_status = '' ;
-        }
 
+        $trick_patient_gender = '' ;
         if( isset($request_all['patient_gender']) )
         {
             $trick_patient_gender = $request_all['patient_gender'] ;
-        }
-        else
-        {
-            $trick_patient_gender = '' ;
         }
 
         $result_store_new_patient_form= new self(
@@ -108,22 +102,16 @@ class patients_general_info extends Model
 
     static function result_update_this_patient_id($update_this_patient_id,$request_all)
     {
+        $trick_patient_relationship_status = '' ;
         if( isset($request_all['patient_relationship_status']) )
         {
             $trick_patient_relationship_status = $request_all['patient_relationship_status'] ;
         }
-        else
-        {
-            $trick_patient_relationship_status = '' ;
-        }
 
+        $trick_patient_gender = '' ;
         if( isset($request_all['patient_gender']) )
         {
             $trick_patient_gender = $request_all['patient_gender'] ;
-        }
-        else
-        {
-            $trick_patient_gender = '' ;
         }
 
         $result_update_this_patient_id = self::
@@ -172,7 +160,7 @@ class patients_general_info extends Model
         $number_of_duplicate_mobile_number = self::
         select('patient_mobile_number'  , 'patient_dr_related_id' , 'patient_id' )
         ->equal_this_to_admin_id_from_user_table('patient_dr_related_id')
-        ->where('patient_mobile_number' , '='  , $request_patient_mobile_number )
+        ->where('patient_mobile_number' , $request_patient_mobile_number )
         ->where('patient_id'            , '!=' , $update_this_patient_id )
         ->limit('1')
         ->count();
@@ -191,19 +179,18 @@ class patients_general_info extends Model
 
     static function fetch_result_of_search_from()
     {
-        $admin_id_from_users_table = self::find_admin_id_from_users_table() ;
-
-        $result_of_run_search_form =
-        self::query()
-        ->where( 'patient_dr_related_id' , '=' , $admin_id_from_users_table )
+        $result_of_run_search_form = self::query()
+        ->where( 'patient_dr_related_id' , self::find_admin_id_from_users_table() )
         ->Where(function($query) {
-        $query->where( 'patient_mobile_number'  , '=' , request()->post('search_text') )
-        ->orwhere( 'patient_nationality_number' , '=' , request()->post('search_text') )
-        ->orwhere( 'patient_first_name'         , '=' , request()->post('search_text') )
-        ->orwhere( 'patient_last_name'          , '=' , request()->post('search_text') )
-        ->orwhere( 'patient_id'                 , '=' , request()->post('search_text') ) ;
+        $query->where( 'patient_mobile_number' , request()->post('search_text') )
+        ->orwhere( [
+            'patient_nationality_number' => request()->post('search_text') ,
+            'patient_first_name'         => request()->post('search_text') ,
+            'patient_last_name'          => request()->post('search_text') ,
+            'patient_id'                 => request()->post('search_text')
+                   ]  ) ;
         })
-        ->orderBy('patient_id', 'desc')
+        ->latest('patient_id')
         ->get() ;
 
         return $result_of_run_search_form ;

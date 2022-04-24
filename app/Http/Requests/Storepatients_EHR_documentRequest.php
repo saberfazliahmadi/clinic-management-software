@@ -13,7 +13,7 @@ class Storepatients_EHR_documentRequest extends FormRequest
      */
     public function authorize()
     {
-        return false;
+        return true;
     }
 
     /**

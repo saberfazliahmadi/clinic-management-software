@@ -2,14 +2,13 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\run_financial_transaction_reporting_formRequest;
 use App\Models\financial_transaction;
 use App\Http\Requests\Storefinancial_transactionRequest;
 use App\Http\Requests\Updatefinancial_transactionRequest;
 
-use Illuminate\Database\Eloquent\Model;
 use Illuminate\Http\Request ;
 use Illuminate\Support\Facades\Auth;
-use App\Models\User;
 use function Illuminate\Events\queueable;
 
 class FinancialTransactionController extends Controller
@@ -87,21 +86,16 @@ class FinancialTransactionController extends Controller
      */
     public function destroy(financial_transaction $financial_transaction , Request $request )
     {
-        $delete_this_financial_id = $request->financial_transaction_id ;
         try
         {
-            $result_destroy_this_financial_transaction = financial_transaction::destroy_this_financial_transaction($delete_this_financial_id) ;
-
-            if($result_destroy_this_financial_transaction)
-            {
-                return redirect()->back()
-                ->with(['success_message' => '<span>The Selected Financial Transaction Successfully Deleted</span>']);
-            }
-            else
+            $result_destroy_this_financial_transaction = financial_transaction::destroy_this_financial_transaction($request->financial_transaction_id) ;
+            if(!$result_destroy_this_financial_transaction)
             {
                 return redirect(route('show_financial_transaction_reporting_form'))
                 ->with(['success_message' => '<b style="color:blue;" >We have an error to destroy this Financial Transaction</b>']);
             }
+            return redirect()->back()
+            ->with(['success_message' => '<span>The Selected Financial Transaction Successfully Deleted</span>']);
         }
         catch (\Exception $exception)
         {
@@ -122,37 +116,38 @@ class FinancialTransactionController extends Controller
 
     public function store_financial_settings_receiving_money_form( Request $request )
     {
-        if( request()->post('financial_management') != '' )
+        // Check all financial items to be eligible
+        // Each of financial transaction items should have number and character and ':'
+        $all_financial_items = explode(',' , request()->post('financial_management')) ;
+        foreach($all_financial_items as $financial_items)
         {
-            try
+            if(!strpos( $financial_items,':') || strlen($financial_items) < 3 || !preg_replace('/[^0-9]/', '', $financial_items) || !preg_replace('/[^a-zA-Z]/', '', $financial_items) )
             {
-                $financial_management  = request()->post('financial_management') ;
-                $financial_management  = str_replace( "." , "" , $financial_management ) ;
-                $financial_management  = str_replace( "/" , "" , $financial_management ) ;
-
-                $store_financial_settings_receiving_money_form = financial_transaction::store_financial_settings_receiving_money_form($financial_management,Auth::user()->name);
-
-                if($store_financial_settings_receiving_money_form)
-                {
-                    return redirect(route('show_financial_settings_receiving_money_form'))
-                    ->with(['success_message' => 'The New Financial Settings of Receiving Money Successfully Updated']);
-                }
-                else
-                {
-                    return redirect(route('show_financial_settings_receiving_money_form'))
-                    ->with(['success_message' => '<b style="color:blue;" >We have an error to update these financial settings</b>' ]);
-                }
+                return redirect(route('show_financial_settings_receiving_money_form'))
+                ->with(['success_message' => '<b style="color:red;">'.$financial_items.' is wrong</b><br><b style="color:blue;" >At least type 3 characters followed by this type <br> Service Name : Service Amount</b><br> and at the end press Save button<br>Remember, each service type should have this character <b style="color:blue;" >:</b>' ]);
             }
-            catch (\Exception $exception)
+        }
+
+        try
+        {
+            $financial_management  = request()->post('financial_management') ;
+            $financial_management  = str_replace( "." , "" , $financial_management ) ;
+            $financial_management  = str_replace( "/" , "" , $financial_management ) ;
+
+            $store_financial_settings_receiving_money_form = financial_transaction::store_financial_settings_receiving_money_form($financial_management,Auth::user()->name);
+
+            if(!$store_financial_settings_receiving_money_form)
             {
                 return redirect(route('show_financial_settings_receiving_money_form'))
                 ->with(['success_message' => '<b style="color:blue;" >We have an error to update these financial settings</b>' ]);
             }
+            return redirect(route('show_financial_settings_receiving_money_form'))
+            ->with(['success_message' => 'The New Financial Settings of Receiving Money Successfully Updated']);
         }
-        else
+        catch (\Exception $exception)
         {
             return redirect(route('show_financial_settings_receiving_money_form'))
-            ->with(['success_message' => '<b style="color:blue;" >At least type 1 item by this type <br> "Service name: Amount of your desire money of this service"<br> and save it </b>' ]);
+            ->with(['success_message' => '<b style="color:blue;" >We have an error to update these financial settings</b>' ]);
         }
     }
 
@@ -161,12 +156,11 @@ class FinancialTransactionController extends Controller
         try
         {
             $result_fetch_last_10_transaction = financial_transaction::result_fetch_last_10_transaction() ;
-            $count_of_result_fetch_last_10_transaction = $result_fetch_last_10_transaction->count();
             return view('back.show_submit_financial_transaction_form',
             [
-                'title_of_page'                             => 'Submit a Financial Transaction' ,
+                'title_of_page'                             => 'Submit a Financial Transaction'  ,
                 'result_fetch_last_10_transaction'          => $result_fetch_last_10_transaction ,
-                'count_of_result_fetch_last_10_transaction' => $count_of_result_fetch_last_10_transaction ,
+                'count_of_result_fetch_last_10_transaction' => $result_fetch_last_10_transaction->count() ,
             ]);
         }
         catch (\Exception $exception)
@@ -176,35 +170,23 @@ class FinancialTransactionController extends Controller
         }
     }
 
-    public function store_show_submit_financial_transaction_form( Request $request )
+    public function store_show_submit_financial_transaction_form( Storefinancial_transactionRequest $request )
     {
-        $request->validate(
-            [
-                'financial_transaction_type' => 'required|min:1'         ,
-                'title_of_payment'           => 'required|min:1'         ,
-                'amount_of_payment'          => 'required|min:1|integer' ,
-                'financial_transaction_date' => 'required|min:1'         ,
-            ]
-        ) ;
-
-        $financial_transaction_type         = request()->post('financial_transaction_type') ;
+        $financial_transaction_type = request()->post('financial_transaction_type') ;
         // Remove any character from payment amount except numbers
-        $amount_of_payment                  = preg_replace('/[^0-9]/', '', request()->post('amount_of_payment'));
-        $financial_transaction_date         = request()->post('financial_transaction_date') ;
-        $financial_transaction_time         = request()->post('financial_transaction_time') ;
-        $medical_document_number_of_patient = request()->post('medical_document_number') ;
-        $title_of_payment                   = request()->post('title_of_payment') ;
+        $amount_of_payment  = preg_replace('/[^0-9]/', '', request()->post('amount_of_payment'));
+        $financial_transaction_date  = request()->post('financial_transaction_date') ;
+        $financial_transaction_time  = request()->post('financial_transaction_time') ;
+        $title_of_payment = request()->post('title_of_payment') ;
 
-        if( request()->post('medical_document_number') == '' )
+        $medical_document_number_of_patient = request()->post('medical_document_number') ;
+        if( $medical_document_number_of_patient == '' )
         {
             $medical_document_number_of_patient = NULL ;
         }
 
-        if( request()->post('financial_transaction_child_dr_related_name') !== NULL )
-        {
-            $financial_transaction_child_dr_related_name = request()->post('financial_transaction_child_dr_related_name') ;
-        }
-        else
+        $financial_transaction_child_dr_related_name = request()->post('financial_transaction_child_dr_related_name') ;
+        if( request()->post('financial_transaction_child_dr_related_name') == NULL )
         {
             // This value SHOULD NOT BE NULL because we use this value in financial transaction reporting page
             // So leave it EMPTY
@@ -215,16 +197,13 @@ class FinancialTransactionController extends Controller
         {
             $result_store_show_submit_financial_transaction_form = financial_transaction::store_show_submit_financial_transaction_form($medical_document_number_of_patient, $financial_transaction_type, $financial_transaction_date, $financial_transaction_time, $title_of_payment, $amount_of_payment, $financial_transaction_child_dr_related_name ) ;
 
-            if($result_store_show_submit_financial_transaction_form)
-            {
-                return redirect(route('show_submit_financial_transaction_form'))
-                ->with(['success_message' => 'The New Financial Transaction with date: <b>'.$financial_transaction_date.'</b> <br> and title: <b>'.$title_of_payment.'</b> and amount: <b>'.$amount_of_payment.'</b> <br> Successfully Submitted']);
-            }
-            else
+            if(!$result_store_show_submit_financial_transaction_form)
             {
                 return redirect(route('show_submit_financial_transaction_form'))
                 ->with(['success_message' => '<b style="color:blue;" >We have an error to Save This New Financial Financial Transaction</b>' ]);
             }
+            return redirect(route('show_submit_financial_transaction_form'))
+            ->with(['success_message' => 'The New Financial Transaction with date: <b>'.$financial_transaction_date.'</b> <br> and title: <b>'.$title_of_payment.'</b> and amount: <b>'.$amount_of_payment.'</b> <br> Successfully Submitted']);
         }
         catch (\Exception $exception)
         {
@@ -238,15 +217,8 @@ class FinancialTransactionController extends Controller
         return view('back.show_financial_transaction_reporting_form' , [ 'title_of_page' => 'Report Financial Transactions' ]) ;
     }
 
-    public function run_financial_transaction_reporting_form( Request $request )
+    public function run_financial_transaction_reporting_form( run_financial_transaction_reporting_formRequest $request )
     {
-        $request->validate(
-            [
-                'financial_report_from_date' => 'required|min:1' ,
-                'financial_report_to_date'   => 'required|min:1' ,
-            ]
-        ) ;
-
         try
         {
             $financial_report_from_date     = $request->financial_report_from_date    ;

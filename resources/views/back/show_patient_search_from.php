@@ -146,7 +146,7 @@ echo '
                                 {
                                     echo '
                                     <div style="float:left;font-size:13px;margin-left:10px;" class="col-md-12 col-sm-12 col-xs-12" >
-                                        This patient is connected to Telegram
+                                        This patient was connect to Telegram
                                         <span class="glyphicon glyphicon-ok" aria-hidden="true" ></span>
                                     </div>' ;
                                 }
@@ -154,7 +154,7 @@ echo '
                                 {
                                     echo '
                                     <div style="float:left;font-size:13px;margin-left:10px;color:red" class="col-md-12 col-sm-12 col-xs-12" >
-                                        This patient is NOT connected to Telegram
+                                        This patient does NOT connected to Telegram
                                         <span class="glyphicon glyphicon-remove" aria-hidden="true" ></span>
                                     </div>' ;
                                 }
