@@ -125,7 +125,7 @@ echo '
                 <br>
                 
                 <div class="smartphone">
-                    <div class="contentphone">
+                    <div class="contentphone" style="overflow-wrap: break-word; word-wrap: break-word; hyphens: auto;" >
                         <br>
                         In the name of God
                         <br>

@@ -42,7 +42,7 @@ class patients_appointment extends Model
         $result_show_form_of_appointments_on_specific_date = self::
         join('patients_general_infos' , 'patients_general_infos.patient_id' , '=' , 'patients_appointments.appointment_patient_related_id')
         ->equal_this_to_admin_id_from_user_table('patients_appointments.appointment_dr_related_id')
-        ->where('patients_appointments.appointment_date' , '=' , $show_all_appointments_on_this_date )
+        ->where('patients_appointments.appointment_date' , $show_all_appointments_on_this_date )
         ->orderBy('patients_appointments.appointment_time')
         ->get() ;
 
@@ -52,9 +52,9 @@ class patients_appointment extends Model
     static function result_show_all_appointments_of_this_id($edit_this_patient_id)
     {
         $result_show_all_appointments_of_this_id = self::
-        where('appointment_patient_related_id'   , '=' , $edit_this_patient_id)
+        where('appointment_patient_related_id' , $edit_this_patient_id)
         ->equal_this_to_admin_id_from_user_table('appointment_dr_related_id')
-        ->orderBy('appointment_id', 'desc')
+        ->latest('appointment_id')
         ->get() ;
 
         return $result_show_all_appointments_of_this_id ;
@@ -63,8 +63,8 @@ class patients_appointment extends Model
     static function delete_this_appointment_id($request_appointment_id)
     {
         $result_of_delete_this_appointment_id = self::
-        select(['appointment_id'  , 'appointment_dr_related_idd' ])
-        ->where( 'appointment_id' , '=' , $request_appointment_id )
+        select( 'appointment_id'  , 'appointment_dr_related_id' )
+        ->where( 'appointment_id' , $request_appointment_id )
         ->equal_this_to_admin_id_from_user_table('appointment_dr_related_id')
         ->limit('1')
         ->delete() ;
@@ -78,8 +78,9 @@ class patients_appointment extends Model
         join('patients_general_infos' , 'patients_general_infos.patient_id' , '=' , 'patients_appointments.appointment_patient_related_id')
         ->select('patients_appointments.*' , 'patients_general_infos.patient_id' , 'patients_general_infos.patient_first_name' , 'patients_general_infos.patient_last_name' )
         ->equal_this_to_admin_id_from_user_table('patients_appointments.appointment_dr_related_id')
-        ->where('patients_appointments.appointment_date' , '=' , $choose_time_for_this_date)
-        ->where('patients_appointments.appointment_time' , '=' , $appointment_time_trick)
+        ->where( [
+            'patients_appointments.appointment_date' => $choose_time_for_this_date ,
+            'patients_appointments.appointment_time' => $appointment_time_trick ] )
         ->get();
 
         return $result_appointments_of_patients_on_this_time_and_date ;

@@ -33,8 +33,8 @@ class patients_photo extends Model
     {
         $result_of_patients_photo = self::
         equal_this_to_admin_id_from_user_table('patients_photos_dr_related_id')
-        ->where('patients_photos_patient_related_id' , '=' , $request_patient_id )
-        ->orderBy('patients_photos_id', 'DESC')
+        ->where('patients_photos_patient_related_id' , $request_patient_id )
+        ->latest('patients_photos_id')
         ->get() ;
 
         return $result_of_patients_photo ;

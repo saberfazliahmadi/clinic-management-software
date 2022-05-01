@@ -81,7 +81,7 @@ echo '
                                         Select the dr related name of financial transaction
                                     </h2>
                                     
-                                    <div class="col-md-12 col-sm-12 col-xs-12" >';
+                                    <div class="col-md-12 col-sm-12 col-xs-12" >' ;
 
                                     if( strlen(Auth::user()->clinic_doctors_name) > 0 )
                                     {
@@ -403,24 +403,32 @@ echo '
                     // Estimate NET INCOME of clinic.
                     $net_income = $sum_of_received_transactions - $sum_of_paid_transactions;
 
-                    echo '
+                            echo '
                             <center>
                                 <div class="col-md-6 col-sm-12 col-xs-12" style="float:none;" >
-                                    <font size="+4" class="col-md-12 col-sm-12 col-xs-12 text-center" style="margin-top:35px;border:2px solid blue;border-radius:50px;" >
-                                        Net Income in the Selected Period of Date:
+                                    <font size="+2" class="col-md-12 col-sm-12 col-xs-12 text-center" style="margin-top:35px;border:2px solid blue;border-radius:50px;" >
+                                        Net Income <br> ';
+                                            if (isset($financial_report_from_date))
+                                            {
+                                                echo 'from ' . $financial_report_from_date;
+                                            }
+
+                                            if (isset($financial_report_to_date))
+                                            {
+                                                echo ' to ' . $financial_report_to_date;
+                                            }
+                                        echo '
                                         <br>
-                                        ' . $net_income . '
+                                        <font size="+4" style="color:blue" >
+                                            ' . $net_income . '
+                                        </font>
                                     </font>
                                 </div>
                             </center>
                             
-                            
-                            
                             <hr style="width:1px;">
                             <hr style="width:1px;">
                             <hr style="width:1px;">
-                            
-                            
                             
                             <div class="col-md-6 col-sm-12 col-xs-12" style="margin-top:40px;" >
                                 <center>

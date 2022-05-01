@@ -69,8 +69,8 @@ class middleware_provide_header_data
 
                     // Update this appointment from Waiting status to Done status
                     patients_appointment::
-                    where( 'appointment_id'              , '=' , $request->appointment_id )
-                    ->where( 'appointment_dr_related_id' , '=' , $admin_id_from_users_table )
+                    where( 'appointment_id'              , $request->appointment_id )
+                    ->where( 'appointment_dr_related_id' , $admin_id_from_users_table )
                     ->update([
                         'appointment_status'                    => '0' ,
                         'appointment_status_unique'             => '1' ,
@@ -83,8 +83,8 @@ class middleware_provide_header_data
                     {
                         $result_fetch_appointment_data = patients_appointment::
                         select('appointment_id' , 'appointment_dr_related_id' , 'appointment_patient_related_id' , 'appointment_child_dr_related_name' , 'appointment_service_type' )
-                        ->where('appointment_id',            '='              , $request->appointment_id)
-                        ->where('appointment_dr_related_id', '='              , $admin_id_from_users_table)
+                        ->where('appointment_id'            , $request->appointment_id)
+                        ->where('appointment_dr_related_id' , $admin_id_from_users_table)
                         ->limit('1')
                         ->get() ;
 
@@ -144,17 +144,17 @@ class middleware_provide_header_data
             // Create mysql query to extract all of appointments that record in patients_appointment table on TODAY date (JOIN TYPE)
             $result_middleware_provide_header_appointments_data_on_today = patients_appointment::
             join('patients_general_infos' , 'patients_general_infos.patient_id' , '=' , 'patients_appointments.appointment_patient_related_id')
-            ->where('patients_appointments.appointment_dr_related_id' , '=' , $admin_id_from_users_table )
-            ->where('patients_appointments.appointment_date'          , '=' , $show_all_appointments_on_this_date )
+            ->where('patients_appointments.appointment_dr_related_id' , $admin_id_from_users_table )
+            ->where('patients_appointments.appointment_date'          , $show_all_appointments_on_this_date )
             ->orderBy('patients_appointments.appointment_time')
             ->get() ;
 
             $result_middleware_provide_count_of_appointment_on_waiting_on_header = patients_appointment::
             select('appointment_dr_related_id' , 'appointment_date' , 'appointment_status_unique' , 'appointment_status' , 'appointment_time')
-            ->where('patients_appointments.appointment_dr_related_id' , '=' , $admin_id_from_users_table )
-            ->where('patients_appointments.appointment_date'          , '=' , $show_all_appointments_on_this_date )
-            ->where('patients_appointments.appointment_status_unique' , '=' , '0' )
-            ->where('patients_appointments.appointment_status'        , '=' , '1' )
+            ->where('patients_appointments.appointment_dr_related_id' , $admin_id_from_users_table )
+            ->where('patients_appointments.appointment_date'          , $show_all_appointments_on_this_date )
+            ->where('patients_appointments.appointment_status_unique' , '0' )
+            ->where('patients_appointments.appointment_status'        , '1' )
             ->orderBy('patients_appointments.appointment_time')
             ->get() ;
 

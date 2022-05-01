@@ -41,8 +41,8 @@ class patients_EHR_document extends Model
     {
         $result_of_patients_ehr_document = patients_EHR_document::
         equal_this_to_admin_id_from_user_table('EHR_document_dr_related_id')
-        ->where('EHR_document_patient_related_id' , '=' , $request_patient_id )
-        ->orderBy('EHR_document_id', 'DESC')
+        ->where('EHR_document_patient_related_id' , $request_patient_id )
+        ->latest('EHR_document_id')
         ->get() ;
 
         return $result_of_patients_ehr_document ;
@@ -70,7 +70,7 @@ class patients_EHR_document extends Model
     {
         $result_show_new_saved_ehr = self::
         equal_this_to_admin_id_from_user_table('EHR_document_dr_related_id')
-        ->where('EHR_document_id'          , '=' , $request_EHR_document_id )
+        ->where('EHR_document_id' , $request_EHR_document_id )
         ->limit('1')
         ->first() ;
 

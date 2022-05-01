@@ -13,7 +13,7 @@ class Updateclinic_financial_detailRequest extends FormRequest
      */
     public function authorize()
     {
-        return false;
+        return true;
     }
 
     /**

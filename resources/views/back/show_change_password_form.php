@@ -1,12 +1,10 @@
 <?php
 
 // Add your custom css files here. (will located in header)
-$extra_links_header = '
-' ;
+$extra_links_header = '' ;
 
 // Add your custom js files here. (will located in footer)
-$extra_links_footer = '
-' ;
+$extra_links_footer = '' ;
 
 // call the header include.
 include 'layout/header.php' ;
@@ -119,9 +117,4 @@ echo '
 // Call the footer include.
 include 'layout/footer.php' ;
 ?>
-
-<script>
-
-</script>
-
 

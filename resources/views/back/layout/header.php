@@ -604,7 +604,7 @@ if ( isset($count_of_appointment_in_header) && $count_of_appointment_in_header >
                     <div style="display:none;" >
                         <div id="a'.$count_trick.'" style="overflow:scroll;width:900px;height:600px;overflow-x: hidden;padding-left:20px;padding-right:20px;padding-top:15px;" >
                         
-                        <h3 style="line-height: inherit;" >
+                        <h3 style="line-height: inherit;overflow-wrap: break-word; word-wrap: break-word; hyphens: auto;" >
                             ID: '.$key_appointment->patient_id.' 
                             <hr>
                             Full Name: '.$key_appointment->patient_first_name.' '.$key_appointment->patient_last_name.'
@@ -705,15 +705,13 @@ else
         foreach($errors->all() as $error)
         {
             echo '
-            <p><strong>Opps Something went wrong</strong></p>
-            <br>
-            <div class="alert alert-danger" role="alert" > <button type="button" class="close" data-dismiss="alert" aria-label="Close" style="font-size:50px;" ><span aria-hidden="true">&times;</span></button> <h4 style="text-align:right!important;" >'.$error.'</h4></div>' ;
+            <div class="col-md-10 col-sm-10 col-xs-10 alert alert-danger" role="alert" style="float:right;" > <button type="button" class="close" data-dismiss="alert" aria-label="Close"  ><span aria-hidden="true">&times;</span></button> <h4 style="font-size:25px;text-align:center!important;overflow-wrap: break-word; word-wrap: break-word; hyphens: auto;" >'.$error.'</h4></div>' ;
         }
     }
 
     if( session()->has('success_message') )
     {
-        echo '<div class="col-md-12 col-sm-12 col-xs-12" ><div class="col-md-10 col-sm-10 col-xs-10 alert alert-success" role="alert" style="text-align:center!important;overflow-wrap: break-word; word-wrap: break-word; hyphens: auto;float:right;" > <button type="button" class="close" data-dismiss="alert" aria-label="Close" style="font-size:50px;margin-left:15px!important;" ><span aria-hidden="true">&times;</span></button> <h3>'.Session::get('success_message').'</h3></div></div>' ;
+        echo '<div class="col-md-12 col-sm-12 col-xs-12" style="float:right!important;"  ><div class="col-md-10 col-sm-10 col-xs-10 alert alert-success" role="alert" style="text-align:center!important;overflow-wrap: break-word; word-wrap: break-word; hyphens: auto;float:right!important;" > <button type="button" class="close" data-dismiss="alert" aria-label="Close" style="font-size:50px;margin-left:15px!important;" ><span aria-hidden="true">&times;</span></button> <h3>'.Session::get('success_message').'</h3></div></div>' ;
         session()->pull('success_message') ;
     }
 

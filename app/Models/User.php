@@ -73,12 +73,12 @@ class User extends Authenticatable
 
     static function scopename($query,$this_user_name)
     {
-        return $query->where('name' , '=' , $this_user_name) ;
+        return $query->where('name' , $this_user_name) ;
     }
 
     static function scopeid($query,$Auth_user_id)
     {
-        return $query->where('id' , '=' , $Auth_user_id) ;
+        return $query->where('id' , $Auth_user_id) ;
     }
 
     static function show_main_settings_of_software_form($Auth_user_id, $Auth_user_name)
@@ -88,7 +88,6 @@ class User extends Authenticatable
         ->id($Auth_user_id)
         ->limit('1')
         ->first();
-
         return $result_show_main_settings_of_software_form;
     }
 
@@ -112,7 +111,6 @@ class User extends Authenticatable
             'gap_time_between_appointments' => $gap_time_between_appointments,
             'clinic_doctors_name' => $clinic_doctors_name
         ]);
-
         return $result_update_main_settings_of_software_form ;
     }
 
@@ -123,12 +121,7 @@ class User extends Authenticatable
         ->name($Auth_user_name)
         ->id($Auth_user_id)
         ->limit('1')
-        ->update(
-        [
-            'password' => $hashed_new_password
-        ]
-        );
-
+        ->update( ['password' => $hashed_new_password ]);
         return $result_run_change_password_form ;
     }
 }

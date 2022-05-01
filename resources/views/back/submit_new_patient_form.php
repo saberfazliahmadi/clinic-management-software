@@ -39,7 +39,7 @@ echo '
     if( $title_of_page == 'Submit a New Patient' )
     {
         echo '
-        <form method="POST" action="' . route('store_new_patient_form') . '" data-parsley-validate class="form-horizontal form-label-left" style="text-align:left!important;direction:ltr!important;font-size:15pt;margin-top:40px!important;" id="medical-file-form" >
+        <form method="POST" action="' . route('store_new_patient_form') . '" data-parsley-validate class="form-horizontal form-label-left" style="text-align:left!important;direction:ltr!important;font-size:15pt;" id="medical-file-form" >
             
             <input type="hidden" name="_token" value="' . csrf_token() . '" >
             <input type="hidden" name="_method" value="put" >
@@ -274,12 +274,16 @@ echo '
     else
     {
         echo '
-        <form method="POST" action="'.route('update_this_patient' , $result_edit_patient_form->patient_id ).'" data-parsley-validate class="form-horizontal form-label-left" style="text-align:left!important;direction:ltr!important;font-size:15pt;margin-top:40px!important;" id="medical-file-form" >
+        <form method="POST" action="'.route('update_this_patient' , $result_edit_patient_form->patient_id ).'" data-parsley-validate class="form-horizontal form-label-left" style="text-align:left!important;direction:ltr!important;font-size:15pt;" id="medical-file-form" >
             
             <input type="hidden" name="_token" value="' . csrf_token() . '" >
             <input type="hidden" name="_method" value="put" >
-            
               <div class="form-group">
+                <center>
+                    <span>
+                            Patient Number: '.$result_edit_patient_form->patient_id.'
+                    </span>
+                </center>
                 <label class="control-label col-md-3 col-sm-3 col-xs-12" for="first-name" title="Maximum 35 words">
                     Name
                 <span class="required">*</span>
@@ -439,32 +443,26 @@ echo '
             <center>
                 <div class="col-md-12 col-sm-12 col-xs-12">
                     <center>
-                    <div class="col-md-4 col-sm-3 col-xs-3" style="float:left;font-size:13px;" >
-                        <span>
-                            <a href="'.route('delete_this_patient_id' , [ 'delete_this_patient_id' => $result_edit_patient_form->patient_id ] ).'" style="float:left;color: white; font-size: 13px; float: left;background-color:#5A738E;border:1px solid #5A738E; " class="btn btn-success" ' ; ?> onclick="return confirm('Are you sure to delete this patient?') <?php echo '" title="Delete This Patient" >
-                                <i class="fa fa-trash-o" aria-hidden="true" ></i>
-                                Delete this Patient
+                        <div class="col-md-4 col-sm-3 col-xs-3" style="float:left;font-size:13px;" >
+                            <span>
+                                <a href="'.route('delete_this_patient_id' , [ 'delete_this_patient_id' => $result_edit_patient_form->patient_id ] ).'" style="float:left;color: white; font-size: 13px; float: left;background-color:#5A738E;border:1px solid #5A738E; " class="btn btn-success" ' ; ?> onclick="return confirm('Are you sure to delete this patient?') <?php echo '" title="Delete This Patient" >
+                                    <i class="fa fa-trash-o" aria-hidden="true" ></i>
+                                    Delete this Patient
+                                </a>
+                            </span>
+                        </div>
+                        <div class="col-md-5 col-sm-6 col-xs-6" style="float:left;" >
+                            <span data-toggle="collapse" data-target="#more_details" class="btn-primary btn-lg" type="button" style="cursor:pointer;color:gray;background-color:white;border:1px solid #bfbdbd;" >
+                                <span class="glyphicon glyphicon-plus" aria-hidden="true" style="color:#ccc;margin-left:5px;" ></span>
+                                More Details
+                            </span>
+                        </div>
+                        <div class="col-md-3 col-sm-3 col-xs-3" style="float:right;" >
+                            <a href="'.route('show_patients_ehr_document_page' , [ 'patient_id' => $result_edit_patient_form->patient_id ] ).'" class="btn btn-success uiuxtrick" title="Display ' .$result_edit_patient_form->patient_first_name. ' ' .$result_edit_patient_form->patient_last_name. ' EHR Document" style="color: white; background-color:#73879C;border:1px solid #5A738E;" >
+                              <i class="fa fa-clone"></i> EHR Document
                             </a>
-                        </span>
-                        <span>
-                            Patient Number: '.$result_edit_patient_form->patient_id.'
-                        </span>
-                    </div>
-                    <div class="col-md-5 col-sm-6 col-xs-6" style="float:left;" >
-                        <span data-toggle="collapse" data-target="#more_details" class="btn-primary btn-lg" type="button" style="cursor:pointer;color:gray;background-color:white;border:1px solid #bfbdbd;" >
-                            <span class="glyphicon glyphicon-plus" aria-hidden="true" style="color:#ccc;margin-left:5px;" ></span>
-                            More Details
-                        </span>
-                    </div>
-                    <div class="col-md-3 col-sm-3 col-xs-3" style="float:right;" >
-                        <a href="'.route('show_patients_ehr_document_page' , [ 'patient_id' => $result_edit_patient_form->patient_id ] ).'" class="btn btn-success uiuxtrick" title="Display ' .$result_edit_patient_form->patient_first_name. ' ' .$result_edit_patient_form->patient_last_name. ' EHR Document" style="color: white; background-color:#73879C;border:1px solid #5A738E;" >
-                          <i class="fa fa-clone"></i> EHR Document
-                        </a>
-                    </div>
-                    
+                        </div>
                     </center>
-                        
-                    
                 </div>
             </center>
             <br>
