@@ -138,26 +138,23 @@ echo '
                         '.$key->patient_mobile_number ;
 
                         // START OF IF DR TELEGRAM ACTIVATED.
-                        if( isset($key->telegram) )
+                        if( isset($key->telegram) && $key->telegram === 'true' )
                         {
-                            if( $key->telegram == 'true' )
+                            if( strlen($key->sicker_from_external_platform_id) > 0  )
                             {
-                                if( strlen($key->sicker_from_external_platform_id) > 0  )
-                                {
-                                    echo '
-                                    <div style="float:left;font-size:13px;margin-left:10px;" class="col-md-12 col-sm-12 col-xs-12" >
-                                        This patient was connect to Telegram
-                                        <span class="glyphicon glyphicon-ok" aria-hidden="true" ></span>
-                                    </div>' ;
-                                }
-                                else
-                                {
-                                    echo '
-                                    <div style="float:left;font-size:13px;margin-left:10px;color:red" class="col-md-12 col-sm-12 col-xs-12" >
-                                        This patient does NOT connected to Telegram
-                                        <span class="glyphicon glyphicon-remove" aria-hidden="true" ></span>
-                                    </div>' ;
-                                }
+                                echo '
+                                <div style="float:left;font-size:13px;margin-left:10px;" class="col-md-12 col-sm-12 col-xs-12" >
+                                    This patient was connect to Telegram
+                                    <span class="glyphicon glyphicon-ok" aria-hidden="true" ></span>
+                                </div>' ;
+                            }
+                            else
+                            {
+                                echo '
+                                <div style="float:left;font-size:13px;margin-left:10px;color:red" class="col-md-12 col-sm-12 col-xs-12" >
+                                    This patient does NOT connected to Telegram
+                                    <span class="glyphicon glyphicon-remove" aria-hidden="true" ></span>
+                                </div>' ;
                             }
                         } // END OF IF DR TELEGRAM ACTIVATED.
 

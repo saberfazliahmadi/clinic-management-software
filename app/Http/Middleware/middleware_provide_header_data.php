@@ -30,10 +30,7 @@ class middleware_provide_header_data
             return $admin_id_from_users_table = Auth::user()->parent_id ;
         }
         // If the user DOES NOT have parent_id so user_type='admin' and we use Auth::user()->id
-        else
-        {
-            return $admin_id_from_users_table = Auth::user()->id ;
-        }
+        return $admin_id_from_users_table = Auth::user()->id ;
     }
 
     public function handle(Request $request, Closure $next)
@@ -203,7 +200,6 @@ class middleware_provide_header_data
         {
             \Session::flash('success_message', '<span style="color:blue;">We have an error to show List of Appointments time on Date '.$show_all_appointments_on_this_date.'</span>');
         }
-
         return $next($request);
     }
 }
