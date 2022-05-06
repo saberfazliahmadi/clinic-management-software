@@ -5,11 +5,11 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Database\Factories\PatientsGeneralInfoFactory;
+use Illuminate\Database\Eloquent\SoftDeletes;
 
 class patients_general_info extends Model
 {
-    use HasFactory ;
-
+    use HasFactory , SoftDeletes ;
     protected $primaryKey = 'patient_id' ;
 
     protected $fillable =
@@ -74,7 +74,7 @@ class patients_general_info extends Model
             $trick_patient_gender = $request_all['patient_gender'] ;
         }
 
-        $result_store_new_patient_form= new self(
+        $result_store_new_patient_form= self::create(
         [
             'patient_dr_related_id'         => self::find_admin_id_from_users_table() ,
             'patient_first_name'            => $request_all['patient_first_name'] ,
@@ -95,7 +95,6 @@ class patients_general_info extends Model
             'patient_more_description'      => $request_all['patient_more_description']
         ]
         );
-        $result_store_new_patient_form->save() ;
 
         return $result_store_new_patient_form ;
     }
@@ -118,7 +117,8 @@ class patients_general_info extends Model
         patient_id($update_this_patient_id)
         ->equal_this_to_admin_id_from_user_table('patient_dr_related_id')
         ->limit('1')
-        ->update([
+        ->update(
+        [
          'patient_first_name'            => $request_all['patient_first_name'] ,
          'patient_last_name'             => $request_all['patient_last_name'] ,
          'patient_mobile_number'         => $request_all['patient_mobile_number'] ,

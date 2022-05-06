@@ -5,9 +5,12 @@ namespace App\Models;
 use Database\Factories\PatientsEHRDocumentFactory;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\SoftDeletes;
 
 class patients_EHR_document extends Model
 {
+    use SoftDeletes , HasFactory ;
+
     protected $primaryKey = 'EHR_document_id' ;
 
     protected $fillable =
@@ -25,8 +28,6 @@ class patients_EHR_document extends Model
         'EHR_document_chart_4'
     ] ;
 
-    use HasFactory;
-
     /**
      * Create a new factory instance for the model.
      *
@@ -39,7 +40,7 @@ class patients_EHR_document extends Model
 
     static function result_of_patients_ehr_document($request_patient_id)
     {
-        $result_of_patients_ehr_document = patients_EHR_document::
+        $result_of_patients_ehr_document = self::
         equal_this_to_admin_id_from_user_table('EHR_document_dr_related_id')
         ->where('EHR_document_patient_related_id' , $request_patient_id )
         ->latest('EHR_document_id')
@@ -50,7 +51,7 @@ class patients_EHR_document extends Model
 
     static function store_new_ehr_doc($common_drug_2, $common_diet_2, $common_return_date_2, $request_post_patient_id , $EHR_document_related_appointment_id_trick, $EHR_document_related_clinic_doctor_name_trick )
     {
-        $result_store_new_ehr_doc = new self(
+        $result_store_new_ehr_doc = self::create(
             [
                 'EHR_document_prescribed_common_drug'      => $common_drug_2 ,
                 'EHR_document_prescribed_common_diet'      => $common_diet_2 ,
@@ -61,7 +62,6 @@ class patients_EHR_document extends Model
                 'EHR_document_related_clinic_doctor_name'  => $EHR_document_related_clinic_doctor_name_trick
             ]
         ) ;
-        $result_store_new_ehr_doc->save() ;
 
         return $result_store_new_ehr_doc ;
     }

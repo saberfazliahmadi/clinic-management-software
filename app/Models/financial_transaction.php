@@ -5,11 +5,12 @@ namespace App\Models;
 use Database\Factories\FinancialTransactionFactory;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\SoftDeletes;
 
 class financial_transaction extends Model
 {
+    use SoftDeletes , HasFactory ;
     protected $primaryKey = 'financial_transaction_id';
-
     protected $fillable =
         [
             'financial_dr_related_id',
@@ -22,8 +23,6 @@ class financial_transaction extends Model
             'financial_transaction_amount',
             'financial_transaction_child_dr_related_name'
         ];
-
-    use HasFactory;
 
     /**
      * Create a new factory instance for the model.

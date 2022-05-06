@@ -5,11 +5,12 @@ namespace App\Models;
 use Database\Factories\PatientsAppointmentFactory;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\SoftDeletes;
 
 class patients_appointment extends Model
 {
+    use SoftDeletes, HasFactory ;
     protected $primaryKey = 'appointment_id' ;
-
     protected $fillable =
     [
         'appointment_dr_related_id' ,
@@ -24,7 +25,6 @@ class patients_appointment extends Model
         'appointment_from_where' ,
         'appointment_canceling_status'
     ] ;
-    use HasFactory;
 
     /**
      * Create a new factory instance for the model.
