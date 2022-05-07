@@ -57,7 +57,7 @@ class patients_EHR_document extends Model
                 'EHR_document_prescribed_common_diet'      => $common_diet_2 ,
                 'EHR_document_prescribed_next_appointment' => $common_return_date_2 ,
                 'EHR_document_patient_related_id'          => $request_post_patient_id ,
-                'EHR_document_dr_related_id'               => Model::find_admin_id_from_users_table() ,
+                'EHR_document_dr_related_id'               => find_admin_id_from_users_table() ,
                 'EHR_document_related_appointment_id'      => $EHR_document_related_appointment_id_trick ,
                 'EHR_document_related_clinic_doctor_name'  => $EHR_document_related_clinic_doctor_name_trick
             ]

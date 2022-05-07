@@ -112,7 +112,7 @@ class PatientsEHRDocumentController extends Controller
             [
                 'title_of_page'                             => 'EHR of '.$request->patient_id ,
                 'EHR_document_patient_related_id'           => $request->patient_id ,
-                'EHR_document_dr_related_id'                => Model::find_admin_id_from_users_table() ,
+                'EHR_document_dr_related_id'                => find_admin_id_from_users_table() ,
                 'EHR_document_related_appointment_id'       => $request->related_appointment_id ,
                 'EHR_document_related_clinic_doctor_name'   => $request->child_dr_related_name ,
                 'result_of_patients_photo'                  => $result_of_patients_photo ,
@@ -120,7 +120,7 @@ class PatientsEHRDocumentController extends Controller
                 'result_of_patients_ehr_document'           => $result_of_patients_ehr_document ,
                 'count_result_of_patients_ehr_document'     => $count_result_of_patients_ehr_document ,
                 'result_of_patients_general_infos'          => $result_of_show_patients_general_infos ,
-                'admin_id_from_users_table'                 => Model::find_admin_id_from_users_table()
+                'admin_id_from_users_table'                 => find_admin_id_from_users_table()
             ]) ;
         }
         catch (\Exception $exception)
@@ -241,7 +241,7 @@ class PatientsEHRDocumentController extends Controller
                 $file            = $request->file('image');
                 $extension       = $request->file('image')->extension();
                 $fileName        = rand(11111, 99999) . time() . rand() . '.'.$extension ;
-                $destinationPath = public_path() . '/storage/images/' . Model::find_admin_id_from_users_table() . '/' . $request->patient_id . '/para';
+                $destinationPath = public_path() . '/storage/images/' . find_admin_id_from_users_table() . '/' . $request->patient_id . '/para';
                 $file->move($destinationPath, $fileName);
                 //$path = $request->file('image')->sotre('public/images/'.Auth::user()->name.'/'.$request->patient_id.'/para' , $name );
 
@@ -281,7 +281,7 @@ class PatientsEHRDocumentController extends Controller
                 'EHR_document_prescribed_common_diet'      => $result_show_new_saved_ehr->EHR_document_prescribed_common_diet ,
                 'EHR_document_prescribed_next_appointment' => $result_show_new_saved_ehr->EHR_document_prescribed_next_appointment ,
                 'EHR_document_related_clinic_doctor_name'  => $result_show_new_saved_ehr->EHR_document_related_clinic_doctor_name ,
-                'EHR_document_dr_related_id'               => Model::find_admin_id_from_users_table() ,
+                'EHR_document_dr_related_id'               => find_admin_id_from_users_table() ,
             ] ) ;
         }
         catch (\Exception $exception)

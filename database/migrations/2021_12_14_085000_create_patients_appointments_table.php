@@ -26,6 +26,7 @@ class CreatePatientsAppointmentsTable extends Migration
         $table->string('appointment_received_financial_status','20')->collation('utf8_general_ci')->default('0')->comment('did patient pay money of his appointment? 0=did not pay , 1=paid') ;
         $table->string('appointment_from_where','20')->collation('utf8_general_ci')->default('w')->comment('from which platform this appointment come? w=website , t=telegram_bot') ;
         $table->string('appointment_canceling_status','20')->collation('utf8_general_ci')->nullable()->comment('in some cases admin can cancel patient appointment') ;
+        $table->softDeletes() ;
         $table->timestamps();
         });
     }

@@ -36,6 +36,7 @@ class CreateFinancialTransactionsTable extends Migration
         $table->string('financial_transaction_child_dr_related_name', '255')
         ->collation('utf8_general_ci')
         ->nullable();
+        $table->softDeletes() ;
         $table->timestamps();
         });
     }

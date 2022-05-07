@@ -2181,22 +2181,9 @@ abstract class Model implements Arrayable, ArrayAccess, CanBeEscapedWhenCastToSt
         $this->initializeTraits();
     }
 
-    static function find_admin_id_from_users_table()
-    {
-        // If the user has a parent_id so user_type='user' and we use Auth::user()->parent_id
-        if( strlen(Auth::user()->parent_id) > 0 )
-        {
-            return $admin_id_from_users_table = Auth::user()->parent_id ;
-        }
-        // If the user DOES NOT have parent_id so user_type='admin' and we use Auth::user()->id
-        else
-        {
-            return $admin_id_from_users_table = Auth::user()->id ;
-        }
-    }
-
+    // We have to put scope here because the scope methods just work on MODEL (DO NOT WORK ON HELPER CLASS)
     public function scopeequal_this_to_admin_id_from_user_table($query,$equal_this)
     {
-        return $query->where($equal_this, '=', self::find_admin_id_from_users_table()) ;
+        return $query->where($equal_this, find_admin_id_from_users_table()) ;
     }
 }

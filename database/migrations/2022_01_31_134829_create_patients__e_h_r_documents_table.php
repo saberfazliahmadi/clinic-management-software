@@ -28,6 +28,7 @@ class CreatePatientsEHRDocumentsTable extends Migration
             //$table->string('EHR_document_chart_2')->collation('utf8_general_ci')->nullable();
             //$table->string('EHR_document_chart_3')->collation('utf8_general_ci')->nullable();
             //$table->string('EHR_document_chart_4')->collation('utf8_general_ci')->nullable();
+            $table->softDeletes() ;
             $table->timestamps();
         });
     }

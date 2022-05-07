@@ -11,6 +11,7 @@ use Illuminate\Support\Facades\View;
 use Illuminate\Support\Facades\Auth;
 use App\Models\financial_transaction;
 use phpDocumentor\Reflection\Types\Null_;
+use App\Helpers ;
 
 class middleware_provide_header_data
 {
@@ -22,21 +23,10 @@ class middleware_provide_header_data
      * @return mixed
      */
 
-    public function find_admin_id_from_users_table()
-    {
-        // If the user has a parent_id so user_type='user' and we use Auth::user()->parent_id
-        if( strlen(Auth::user()->parent_id) > 0 )
-        {
-            return $admin_id_from_users_table = Auth::user()->parent_id ;
-        }
-        // If the user DOES NOT have parent_id so user_type='admin' and we use Auth::user()->id
-        return $admin_id_from_users_table = Auth::user()->id ;
-    }
-
     public function handle(Request $request, Closure $next)
     {
         $show_all_appointments_on_this_date  = date('Y-m-d');
-        $admin_id_from_users_table           = $this->find_admin_id_from_users_table() ;
+        $admin_id_from_users_table           = find_admin_id_from_users_table() ;
         $admin_accessibility_to_telegram     = Auth::user()->telegram ;
         $admin_full_name                     = Auth::user()->name ;
         $cms_menu_title_data_from_middleware = explode(",", Auth::user()->cms_menu_title) ;
@@ -51,6 +41,7 @@ class middleware_provide_header_data
                     // If user activated money section from admin panel
                     $options_for_user = Auth::user()->options_for_user ;
 
+                    $money_receive_header_console = '' ;
                     if( $options_for_user[14] == 't' && $request->money_receive !== null )
                     {
                         $money_receive_header_console = '0' ;
@@ -58,10 +49,6 @@ class middleware_provide_header_data
                         {
                             $money_receive_header_console += $item ;
                         }
-                    }
-                    else
-                    {
-                        $money_receive_header_console = '' ;
                     }
 
                     // Update this appointment from Waiting status to Done status
@@ -107,7 +94,7 @@ class middleware_provide_header_data
 
                         $show_all_appointments_on_this_time = date('H:i:s') ;
 
-                        $result_store_financial_transaction_from_header = new financial_transaction(
+                        financial_transaction::create(
                         [
                             'financial_dr_related_id'          => $admin_id_from_users_table ,
                             'financial_patient_related_id'     => $appointment_patient_related_id ,
@@ -120,7 +107,6 @@ class middleware_provide_header_data
                             'financial_transaction_child_dr_related_name' => $appointment_child_dr_related_name
                         ]
                         ) ;
-                        $result_store_financial_transaction_from_header->save() ;
                     }
 
                     \Session::flash('success_message', '<b>The Patient Successfully Sent to Doctors Room');
@@ -164,13 +150,10 @@ class middleware_provide_header_data
             // If more than 0 appointment exist on patients_appointments table for TODAY date.
             if( $count_of_appointment_in_header > 0 )
             {
+                $financial_management_data_in_header = '' ;
                 if( strlen(Auth::user()->financial_management) > 0 )
                 {
                     $financial_management_data_in_header = Auth::user()->financial_management ;
-                }
-                else
-                {
-                    $financial_management_data_in_header = '' ;
                 }
 
                 View::share([

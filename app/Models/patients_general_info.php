@@ -76,7 +76,7 @@ class patients_general_info extends Model
 
         $result_store_new_patient_form= self::create(
         [
-            'patient_dr_related_id'         => self::find_admin_id_from_users_table() ,
+            'patient_dr_related_id'         => find_admin_id_from_users_table() ,
             'patient_first_name'            => $request_all['patient_first_name'] ,
             'patient_last_name'             => $request_all['patient_last_name'] ,
             'patient_mobile_number'         => $request_all['patient_mobile_number'] ,
@@ -180,7 +180,7 @@ class patients_general_info extends Model
     static function fetch_result_of_search_from()
     {
         $result_of_run_search_form = self::query()
-        ->where( 'patient_dr_related_id' , self::find_admin_id_from_users_table() )
+        ->where( 'patient_dr_related_id' , find_admin_id_from_users_table() )
         ->Where(function($query) {
         $query->where( 'patient_mobile_number' , request()->post('search_text') )
         ->orwhere( [

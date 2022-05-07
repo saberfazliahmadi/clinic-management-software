@@ -47,6 +47,7 @@ class CreateUsersTable extends Migration
             $table->string('financial_management', '1000' )->collation('utf8_general_ci')->default('Visit Patient 1: 5000,Visit Type 2: 0,Treatment Type 1: 100000,Treatment Type 2: 80000,Treatment Type 3: 70000,Treatment Type 4: 30000,Treatment Type 5: 0,Packages Treatment: 18000000,Laser: 40000');
             $table->string('options_for_user' , '1000' )->collation('utf8_general_ci')->default('a:1:{i:0;s:1:"t";}');
             $table->rememberToken();
+            $table->softDeletes() ;
             $table->timestamps();
         });
     }

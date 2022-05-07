@@ -88,9 +88,9 @@ class patients_appointment extends Model
 
     static function store_new_patient_appointment_time($choose_time_for_this_patient_id,$choose_time_for_this_date,$appointment_time,$appointment_child_dr_related_name,$appointment_service_type)
     {
-        $result_store_new_patient_appointment_time = new self(
+        $result_store_new_patient_appointment_time = self::create(
             [
-                'appointment_dr_related_id'         => self::find_admin_id_from_users_table() ,
+                'appointment_dr_related_id'         => find_admin_id_from_users_table() ,
                 'appointment_patient_related_id'    => $choose_time_for_this_patient_id ,
                 'appointment_date'                  => $choose_time_for_this_date ,
                 'appointment_time'                  => $appointment_time ,
@@ -98,8 +98,6 @@ class patients_appointment extends Model
                 'appointment_service_type'          => $appointment_service_type ,
             ]
         );
-
-        $result_store_new_patient_appointment_time->save();
         return $result_store_new_patient_appointment_time ;
     }
 }

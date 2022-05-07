@@ -1,5 +1,7 @@
 <?php
 
+use Illuminate\Support\Facades\Auth;
+
 function encrypt_decrypt($action, $string)
 {
     $output = false;
@@ -18,4 +20,15 @@ function encrypt_decrypt($action, $string)
         $output = openssl_decrypt(base64_decode($string), $encrypt_method, $key, 0, $iv);
     }
     return $output;
+}
+
+function find_admin_id_from_users_table()
+{
+    // If the user has a parent_id so user_type='user' and we use Auth::user()->parent_id
+    if( strlen(Auth::user()->parent_id) > 0 )
+    {
+        return $admin_id_from_users_table = Auth::user()->parent_id ;
+    }
+    // If the user DOES NOT have parent_id so user_type='admin' and we use Auth::user()->id
+    return $admin_id_from_users_table = Auth::user()->id ;
 }
