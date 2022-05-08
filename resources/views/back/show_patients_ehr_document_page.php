@@ -460,63 +460,63 @@ if( Auth::user()->user_type == 'admin' )
                                                   <div class="btn-group btn-group-justified" data-toggle="buttons" style="height:60px;" >
                                     
                                                     <label class="btn btn-default" data-toggle-class="btn-primary" >
-                                                      <input type="radio" name="'.$common_drug_1[$start].'" value="روزانه_یک_عدد" > Daily
+                                                      <input type="radio" name="'.$common_drug_1[$start].'" value="روزانه یک عدد" > Daily
                                                     </label>
                                     
                                                     <label class="btn btn-default" data-toggle-class="btn-primary" >
-                                                      <input type="radio" name="'.$common_drug_1[$start].'" value="هر_شب_یک_عدد" > Qhs
+                                                      <input type="radio" name="'.$common_drug_1[$start].'" value="هر شب یک عدد" > Qhs
                                                     </label>
                                     
                                                     <label class="btn btn-default" data-toggle-class="btn-primary" >
-                                                      <input type="radio" name="'.$common_drug_1[$start].'" value="مصرف_موضعی_سه_بار_در_روز" > TOP.TDS
+                                                      <input type="radio" name="'.$common_drug_1[$start].'" value="مصرف موضعی سه بار در روز" > TOP.TDS
                                                     </label>
                                     
                                                     <label class="btn btn-default" data-toggle-class="btn-primary" >
-                                                      <input type="radio" name="'.$common_drug_1[$start].'" value="مصرف_موضعی_دو_بار_در_روز" > TOP.BD
+                                                      <input type="radio" name="'.$common_drug_1[$start].'" value="مصرف موضعی دو بار در روز" > TOP.BD
                                                     </label>
                                     
                                                     <label class="btn btn-default" data-toggle-class="btn-primary" >
-                                                      <input type="radio" name="'.$common_drug_1[$start].'" value="هم_اکنون_همین_یک_بار" > Stat
+                                                      <input type="radio" name="'.$common_drug_1[$start].'" value="هم اکنون همین یک بار" > Stat
                                                     </label>
                                     
                                                     <label class="btn btn-default" data-toggle-class="btn-primary" >
-                                                      <input type="radio" name="'.$common_drug_1[$start].'" value="صبح_ها_قبل_از_صبحانه" > Fasting
+                                                      <input type="radio" name="'.$common_drug_1[$start].'" value="صبح ها قبل از صبحانه" > Fasting
                                                     </label>
                                     
                                                     <label class="btn btn-default" data-toggle-class="btn-primary" >
-                                                      <input type="radio" name="'.$common_drug_1[$start].'" value="بعد_از_نهار" > Lunch
+                                                      <input type="radio" name="'.$common_drug_1[$start].'" value="بعد از نهار" > Lunch
                                                     </label>
                                     
                                                     <label class="btn btn-default" data-toggle-class="btn-primary" >
-                                                      <input type="radio" name="'.$common_drug_1[$start].'" value="بعد_از_شام" > Dinner
+                                                      <input type="radio" name="'.$common_drug_1[$start].'" value="بعد از شام" > Dinner
                                                     </label>
                                     
                                                     <label class="btn btn-default" data-toggle-class="btn-primary" >
-                                                      <input type="radio" name="'.$common_drug_1[$start].'" value="بعد_صبحانه_و_بعد_از_شام" > BD
+                                                      <input type="radio" name="'.$common_drug_1[$start].'" value="بعد صبحانه و بعد از شام" > BD
                                                     </label>
                                     
                                                     <label class="btn btn-default" data-toggle-class="btn-primary" >
-                                                      <input type="radio" name="'.$common_drug_1[$start].'" value="بعد_از_صبحانه_بعد_از_نهار_بعد_از_شام" > TDS
+                                                      <input type="radio" name="'.$common_drug_1[$start].'" value="بعد از صبحانه بعد از نهار بعد از شام" > TDS
                                                     </label>
                                     
                                                     <label class="btn btn-default" data-toggle-class="btn-primary" >
-                                                      <input type="radio" name="'.$common_drug_1[$start].'" value="هر_چهار_ساعت" > Q4H
+                                                      <input type="radio" name="'.$common_drug_1[$start].'" value="هر چهار ساعت" > Q4H
                                                     </label>
                                     
                                                     <label class="btn btn-default" data-toggle-class="btn-primary" >
-                                                      <input type="radio" name="'.$common_drug_1[$start].'" value="هر_شش_ساعت" > Q6H
+                                                      <input type="radio" name="'.$common_drug_1[$start].'" value="هر شش ساعت" > Q6H
                                                     </label>
                                     
                                                     <label class="btn btn-default" data-toggle-class="btn-primary" >
-                                                      <input type="radio" name="'.$common_drug_1[$start].'" value="بعد_از_صبحانه_و_بعد_از_نهار" > F/L
+                                                      <input type="radio" name="'.$common_drug_1[$start].'" value="بعد از صبحانه و بعد از نهار" > F/L
                                                     </label>
                                     
                                                     <label class="btn btn-default" data-toggle-class="btn-primary" >
-                                                      <input type="radio" name="'.$common_drug_1[$start].'" value="به_هنگام_نیاز_یا_به_هنگام_درد" > PRN
+                                                      <input type="radio" name="'.$common_drug_1[$start].'" value="به هنگام نیاز یا به هنگام درد" > PRN
                                                     </label>
                                     
                                                     <label class="btn btn-default" data-toggle-class="btn-primary" >
-                                                      <input type="radio" name="'.$common_drug_1[$start].'" value="یک_روز_در_میان" > qod
+                                                      <input type="radio" name="'.$common_drug_1[$start].'" value="یک روز در میان" > qod
                                                     </label>
                                     
                                                     <label class="btn btn-default" data-toggle-class="btn-primary" >
@@ -535,17 +535,17 @@ if( Auth::user()->user_type == 'admin' )
                                                     </label>
                                     
                                                     <label class="btn btn-default" data-toggle-class="btn-primary" >
-                                                      <input type="radio" name="'.$common_drug_1[$start].'" value="هر_شش_ماه" >
+                                                      <input type="radio" name="'.$common_drug_1[$start].'" value="هر شش ماه" >
                                                       6m
                                                     </label>
                                     
                                                     <label class="btn btn-default" data-toggle-class="btn-primary" >
-                                                      <input type="radio" name="'.$common_drug_1[$start].'" value="45_روز_یک_بار" >
+                                                      <input type="radio" name="'.$common_drug_1[$start].'" value="45 روز یک بار" >
                                                       45d
                                                     </label>
                                     
                                                     <label class="btn btn-default" data-toggle-class="btn-primary" >
-                                                      <input type="radio" name="'.$common_drug_1[$start].'" value="هر_دو_ماه_یک_بار" >
+                                                      <input type="radio" name="'.$common_drug_1[$start].'" value="هر دو ماه یک بار" >
                                                       2m
                                                     </label>
                                     
@@ -590,13 +590,10 @@ if( Auth::user()->user_type == 'admin' )
 
                             if( strlen(Auth::user()->common_diet) > 0 )
                             {
-                                // Make a trick to prevent from POST method error (post method should'nt have Space in content)
-                                $common_rejim_1 = str_replace( " " , "_" , Auth::user()->common_diet ) ;
                                 // Explode and array these title
-                                $common_rejim_1 = explode("," , $common_rejim_1) ;
+                                $common_rejim_1 = explode("," , Auth::user()->common_diet) ;
                                 // Estimate how many title this text have
                                 $common_rejim_number = count($common_rejim_1) ;
-
                                 // Estimate how many title exist on this text record to use of for loop
                                 $end = $common_rejim_number;
 
@@ -609,7 +606,6 @@ if( Auth::user()->user_type == 'admin' )
 
                                 <div class="col-md-12 col-sm-12 col-xs-12" style="margin-top: 15px;border:1px solid #CCC;" >
                                     <select name="common_diet[]" id="dates-field211" class="col-md-12 col-sm-12 col-xs-12 multiselect-ui" multiple="multiple" >' ;
-                                        // START of make a for loop to access all common_rejim_1
                                         for( $start='0' ; $start < $end ; $start++ )
                                         {
                                             if(strlen($common_rejim_1[$start])>'0')
@@ -619,7 +615,7 @@ if( Auth::user()->user_type == 'admin' )
                                                     '.$common_rejim_1[$start].'
                                                 </option>';
                                             }
-                                        } // END of make a for loop to access all common_rejim_1
+                                        }
                                     echo '
                                     </select>
                                 </div>';
@@ -628,8 +624,7 @@ if( Auth::user()->user_type == 'admin' )
                             {
                                 echo '
                                 <center>
-                                    <a href="setting.php" class="btn btn-default" style="font-size:18px;margin-top:50px;border-radius: 4px 4px 0 0; border: 1px solid #e3e3e3;" >
-                            
+                                    <a href="setting.php" class="btn btn-default" style="font-size:18px;margin-top:50px;border-radius: 4px 4px 0 0; border: 1px solid #e3e3e3;" >                      
                                          <i class="fa fa-plus text-center col-md-12 col-sm-12 col-xs-12" style="font-size:46px;padding: 19px;" ></i>
                                          <div class="col-md-12 col-sm-12 col-md-12 col-sm-12 col-xs-12" style="padding-top:17px;padding-bottom:17px;" >
                                              + Add predefined '.$cms_menu_title[3].' to prescribe to patients 
@@ -664,10 +659,8 @@ if( Auth::user()->user_type == 'admin' )
 
                                 if(strlen(Auth::user()->common_return_date))
                                 {
-                                    // Make a trick to prevent from POST method error (post method should'nt have Space in content)
-                                    $common_return_date = str_replace( " " , "_" , Auth::user()->common_return_date ) ;
                                     // Explode and array these title.
-                                    $common_return_date_1 = explode(",",$common_return_date);
+                                    $common_return_date_1 = explode(",", Auth::user()->common_return_date);
 
                                     // Estimate how many title this text have.
                                     $common_return_date_number = count($common_return_date_1);
@@ -684,7 +677,7 @@ if( Auth::user()->user_type == 'admin' )
                                     
                                     <div class="col-md-12 col-sm-12 col-xs-12" style="margin-top: 15px;border:1px solid #CCC;" >
                                       <select name="common_return_date[]" id="dates-field222" class="col-md-12 col-sm-12 col-xs-12 multiselect-ui" multiple="multiple"  >' ;
-                                        // START of make a for loop to access all common_return_date_1 .
+
                                         for( $start='0' ; $start < $end ; $start++ )
                                         {
                                             if(strlen($common_return_date_1[$start])>'0')
@@ -694,7 +687,7 @@ if( Auth::user()->user_type == 'admin' )
                                                     '.$common_return_date_1[$start].'
                                                 </option>';
                                             }
-                                        } // END of make a for loop to access all common_return_date_1 .
+                                        }
                                         echo '
                                           </select>
                                       </div>';
@@ -894,8 +887,8 @@ if( Auth::user()->user_type == 'admin' )
                                                     foreach ( $result_of_patients_ehr_document as $key_ehr )
                                                     {
                                                         // Make a trick to prevent from POST method error (post method should'nt have Space in him content)
-                                                        $EHR_document_prescribed_common_diet      = str_replace("_", " ", $key_ehr->EHR_document_prescribed_common_diet );
-                                                        $EHR_document_prescribed_common_drug      = str_replace("_", " ", $key_ehr->EHR_document_prescribed_common_drug );
+                                                        $EHR_document_prescribed_common_diet      = encrypt_decrypt('decrypt', $key_ehr->EHR_document_prescribed_common_diet) ;
+                                                        $EHR_document_prescribed_common_drug      = encrypt_decrypt('decrypt', $key_ehr->EHR_document_prescribed_common_drug) ;
                                                         $EHR_document_prescribed_next_appointment = str_replace("_", " ", $key_ehr->EHR_document_prescribed_next_appointment );
                                                         $EHR_document_related_clinic_doctor_name  = str_replace("_", " ", $key_ehr->EHR_document_related_clinic_doctor_name );
 

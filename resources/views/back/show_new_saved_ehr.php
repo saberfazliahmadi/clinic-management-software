@@ -72,26 +72,21 @@ $cms_menu_title = explode("," , Auth::user()->cms_menu_title)  ;
 
 if( strlen($EHR_document_prescribed_common_drug) > 0 )
 {
-    // Make a trick to prevent from POST method error (post method should'nt have Space in him content)
-    $common_drug 			= str_replace( "_" , " " , $EHR_document_prescribed_common_drug ) 		;
-    $common_drug 			= str_replace( "," , "<br>" , $common_drug )   ;
+    $common_drug = encrypt_decrypt('decrypt', $EHR_document_prescribed_common_drug) ;
+    $common_drug 			= str_replace( "," , "<br>" , $common_drug ) ;
     $telegram_text_content .= $cms_menu_title[4].':<br>'.$common_drug ;
 }
 
 if( strlen($EHR_document_prescribed_common_diet) > 0 )
 {
-    // Make a trick to prevent from POST method error (post method should'nt have Space in him content)
-    $common_diet 		   = str_replace( "_" , " " , $EHR_document_prescribed_common_diet )        ;
-    $common_diet 		   = str_replace( "," , "<br>" , $common_diet )   ;
+    $common_drug = encrypt_decrypt('decrypt', $EHR_document_prescribed_common_diet) ;
+    $common_diet 		    = str_replace( "," , "<br>" , $common_drug ) ;
     $telegram_text_content .= '<br>'.$cms_menu_title[3].':<br>'.$common_diet ;
 }
 
 if( strlen($EHR_document_prescribed_next_appointment) > 0 )
 {
-    // Make a trick to prevent from POST method error (post method should'nt have Space in him content)
-    $common_return_date_text = str_replace( "_" , " " , $EHR_document_prescribed_next_appointment ) ;
-    $common_return_date_text = str_replace( "," , "<br>" , $common_return_date_text ) 			 ;
-    // Make a trick to prevent from POST method error (post method should'nt have Space in him content)
+    $common_return_date_text = str_replace( "," , "<br>" , $EHR_document_prescribed_next_appointment ) 			 ;
     $telegram_text_content  .= '<br>'.$cms_menu_title[2].':<br>'.$common_return_date_text ;
 }
 

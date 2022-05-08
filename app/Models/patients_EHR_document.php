@@ -53,8 +53,8 @@ class patients_EHR_document extends Model
     {
         $result_store_new_ehr_doc = self::create(
             [
-                'EHR_document_prescribed_common_drug'      => $common_drug_2 ,
-                'EHR_document_prescribed_common_diet'      => $common_diet_2 ,
+                'EHR_document_prescribed_common_drug'      => encrypt_decrypt('encrypt', $common_drug_2) ,
+                'EHR_document_prescribed_common_diet'      => encrypt_decrypt('encrypt', $common_diet_2) ,
                 'EHR_document_prescribed_next_appointment' => $common_return_date_2 ,
                 'EHR_document_patient_related_id'          => $request_post_patient_id ,
                 'EHR_document_dr_related_id'               => find_admin_id_from_users_table() ,
@@ -62,7 +62,6 @@ class patients_EHR_document extends Model
                 'EHR_document_related_clinic_doctor_name'  => $EHR_document_related_clinic_doctor_name_trick
             ]
         ) ;
-
         return $result_store_new_ehr_doc ;
     }
 
