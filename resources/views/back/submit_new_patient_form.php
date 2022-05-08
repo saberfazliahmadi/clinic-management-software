@@ -1,5 +1,4 @@
 <?php
-
 // Add your custom css files here. (will located in header)
 $extra_links_header = '
 <!-- MD.BootstrapPersianDateTimePicker css -->
@@ -458,7 +457,7 @@ echo '
                             </span>
                         </div>
                         <div class="col-md-3 col-sm-3 col-xs-3" style="float:right;" >
-                            <a href="'.route('show_patients_ehr_document_page' , [ 'patient_id' => $result_edit_patient_form->patient_id ] ).'" class="btn btn-success uiuxtrick" title="Display ' .$result_edit_patient_form->patient_first_name. ' ' .$result_edit_patient_form->patient_last_name. ' EHR Document" style="color: white; background-color:#73879C;border:1px solid #5A738E;" >
+                            <a href="'.route('show_patients_ehr_document_page' , [ 'patient_id' => encrypt_decrypt('encrypt', $result_edit_patient_form->patient_id ) ] ).'" class="btn btn-success uiuxtrick" title="Display ' .$result_edit_patient_form->patient_first_name. ' ' .$result_edit_patient_form->patient_last_name. ' EHR Document" style="color: white; background-color:#73879C;border:1px solid #5A738E;" >
                               <i class="fa fa-clone"></i> EHR Document
                             </a>
                         </div>

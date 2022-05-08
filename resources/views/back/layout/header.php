@@ -1,4 +1,7 @@
 <?php
+
+use Illuminate\Support\Facades\Auth;
+
 echo '
 <!DOCTYPE html>
 <html lang="en">
@@ -573,7 +576,7 @@ if ( isset($count_of_appointment_in_header) && $count_of_appointment_in_header >
 
                 echo '
                 <div style="'.$opacity_appointment_trick.';margin-top:12px;" >
-                    <a title="Display EHR Document" href="'.route('show_patients_ehr_document_page' , [ 'patient_id' => $key_appointment->patient_id , 'related_appointment_id' => $key_appointment->appointment_id , 'child_dr_related_name' => $trick_of_variable_appointment_child_dr_related_name ] ).'" style="float:left;color: white; font-size: 13px; float: left;background-color:#5A738E;border:1px solid #5A738E; " class="uiuxtrick btn btn-success" >
+                    <a title="Display EHR Document" href="'.route('show_patients_ehr_document_page' , [ 'patient_id' => encrypt_decrypt('encrypt', $key_appointment->patient_id ) , 'related_appointment_id' => $key_appointment->appointment_id , 'child_dr_related_name' => $trick_of_variable_appointment_child_dr_related_name ] ).'" style="float:left;color: white; font-size: 13px; float: left;background-color:#5A738E;border:1px solid #5A738E; " class="uiuxtrick btn btn-success" >
                         <i class="fa fa-clone"></i>
                         EHR Doc
                     </a>

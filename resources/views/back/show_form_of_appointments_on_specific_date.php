@@ -1,5 +1,4 @@
 <?php
-
 // Add your custom css files here. (will located in header)
 $extra_links_header = '
 <!-- MD.BootstrapPersianDateTimePicker css -->
@@ -9,8 +8,7 @@ $extra_links_header = '
 // <script src="'.url('back/vendors/MD.BootstrapPersianDateTimePicker/Scripts/MdBootstrapPersianDateTimePicker/jalaali.js').'"></script>
 $extra_links_footer = '
 <!-- MD.BootstrapPersianDateTimePicker js -->
-<script src="'.url('back/vendors/MD.BootstrapPersianDateTimePicker/Scripts/MdBootstrapPersianDateTimePicker/jquery.Bootstrap-PersianDateTimePicker.js').'"></script>
-' ;
+<script src="'.url('back/vendors/MD.BootstrapPersianDateTimePicker/Scripts/MdBootstrapPersianDateTimePicker/jquery.Bootstrap-PersianDateTimePicker.js').'"></script>' ;
 
 // Call the header include.
 include 'layout/header.php' ;
@@ -293,7 +291,7 @@ echo '
                         <div class="col-md-2" style="padding-right:0px;padding-left:0px;margin-right:0px;margin-left:0px;margin-top:10px;" >
                             
                             <div class="col-md-12" style="'.$opacity_appointment_trick.';" >
-                                <a title="Display EHR Document" href="'.route('show_patients_ehr_document_page' , [ 'patient_id' => $key->patient_id ] ).'" style="float:left;color: white; font-size: 13px; float: left;background-color:#5A738E;border:1px solid #5A738E; " class="uiuxtrick btn btn-success" >
+                                <a title="Display EHR Document" href="'.route('show_patients_ehr_document_page' , [ 'patient_id' => encrypt_decrypt('encrypt', $key->patient_id ) ] ).'" style="float:left;color: white; font-size: 13px; float: left;background-color:#5A738E;border:1px solid #5A738E; " class="uiuxtrick btn btn-success" >
                                     <i class="fa fa-clone"></i>
                                     EHR Document
                                 </a>

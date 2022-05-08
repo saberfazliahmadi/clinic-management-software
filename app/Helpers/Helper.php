@@ -2,12 +2,12 @@
 
 use Illuminate\Support\Facades\Auth;
 
-function encrypt_decrypt($action, $string)
+function encrypt_decrypt($action, $string )
 {
     $output = false;
     $encrypt_method = "AES-256-CBC";
-    $secret_key = 'This is my secret key';
-    $secret_iv = 'This is my secret iv';
+    $secret_key = Auth::user()->created_at ;
+    $secret_iv = Auth::user()->id ;
     // hash
     $key = hash('sha256', $secret_key);
 

@@ -9,7 +9,6 @@ use App\Http\Requests\Updatepatients_EHR_documentRequest;
 // I added the below lines manually
 use App\Models\patients_photo;
 use App\Models\patients_general_info;
-use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Http\Request;
 
@@ -95,13 +94,14 @@ class PatientsEHRDocumentController extends Controller
     {
         try
         {
-            $result_of_patients_photo = patients_photo::result_of_patient_ehr_photo($request->patient_id) ;
+            $decrypted_request_patient_id = encrypt_decrypt('decrypt', $request->patient_id ) ;
+            $result_of_patients_photo = patients_photo::result_of_patient_ehr_photo( $decrypted_request_patient_id ) ;
             $count_result_of_patients_photo = $result_of_patients_photo->count() ;
 
-            $result_of_patients_ehr_document = patients_EHR_document::result_of_patients_ehr_document($request->patient_id) ;
+            $result_of_patients_ehr_document = patients_EHR_document::result_of_patients_ehr_document( $decrypted_request_patient_id ) ;
             $count_result_of_patients_ehr_document = $result_of_patients_ehr_document->count() ;
 
-            $result_of_show_patients_general_infos = patients_general_info::fetch_info_of_this_patient_id($request->patient_id) ;
+            $result_of_show_patients_general_infos = patients_general_info::fetch_info_of_this_patient_id( $decrypted_request_patient_id ) ;
 
             if(!$result_of_show_patients_general_infos)
             {
@@ -110,8 +110,8 @@ class PatientsEHRDocumentController extends Controller
             }
             return view('back.show_patients_ehr_document_page' ,
             [
-                'title_of_page'                             => 'EHR of '.$request->patient_id ,
-                'EHR_document_patient_related_id'           => $request->patient_id ,
+                'title_of_page'                             => 'EHR of '.$decrypted_request_patient_id ,
+                'EHR_document_patient_related_id'           => $decrypted_request_patient_id ,
                 'EHR_document_dr_related_id'                => find_admin_id_from_users_table() ,
                 'EHR_document_related_appointment_id'       => $request->related_appointment_id ,
                 'EHR_document_related_clinic_doctor_name'   => $request->child_dr_related_name ,

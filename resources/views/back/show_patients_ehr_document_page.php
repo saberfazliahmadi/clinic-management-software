@@ -1,14 +1,10 @@
 <?php
-
 // Add your custom css files here. (will located in header)
 use Illuminate\Support\Facades\Auth;
 
-$extra_links_header = '
-' ;
-
+$extra_links_header = '' ;
 // Add your custom js files here. (will located in footer)
-$extra_links_footer = '
-' ;
+$extra_links_footer = '' ;
 
 // Call the header include.
 include 'layout/header.php' ;
@@ -255,10 +251,8 @@ echo '
 // START of show to Admin user type.
 if( Auth::user()->user_type == 'admin' )
 {
-
     $cms_menu_title = explode("," , Auth::user()->cms_menu_title)  ;
-
-    // START of content.
+    // START of page content
     echo '
     <!-- display a loading icon until the page loads completely -->
     <div id="load"></div>
@@ -289,11 +283,9 @@ if( Auth::user()->user_type == 'admin' )
                     
                           <div class="form-group col-md-12 col-sm-12 col-xs-12" >' ;
 
-                            // Make a trick to prevent from POST method error (post method should'nt have Space in content)
-                            $common_hypersensitivity = str_replace( " " , "_" , Auth::user()->common_hypersensitivity ) ;
-                            // Explode and array these title.
-                            $common_hypersensitivity = explode(",",$common_hypersensitivity)  ;
-                            // Estimate how many title this text have.
+                            // Explode and array these title
+                            $common_hypersensitivity = explode(",",Auth::user()->common_hypersensitivity)  ;
+                            // Estimate how many title this text has
                             $common_hypersensitivity_number = count($common_hypersensitivity) ;
 
                             // Estimate how many title exist on this text record to use of for loop.
@@ -435,13 +427,10 @@ if( Auth::user()->user_type == 'admin' )
                                 // START of common drug predefined
                                 if(strlen(Auth::user()->common_drug))
                                 {
-                                    // Make a trick to prevent from POST method error (post method should not have Space in its content)
-                                    $common_drug = str_replace( " " , "_" , Auth::user()->common_drug ) ;
-                                    // Explode and array these title.
-                                    $common_drug_1 = explode("," , $common_drug);
-                                    // Estimate how many title this text have.
+                                    // Explode and array these title
+                                    $common_drug_1 = explode("," , Auth::user()->common_drug);
+                                    // Estimate how many title this text have
                                     $common_drug_number = count($common_drug_1);
-
                                     // Estimate how many title exist on this text record to use of for loop.
                                     $end = $common_drug_number;
 
@@ -887,8 +876,8 @@ if( Auth::user()->user_type == 'admin' )
                                                     foreach ( $result_of_patients_ehr_document as $key_ehr )
                                                     {
                                                         // Make a trick to prevent from POST method error (post method should'nt have Space in him content)
-                                                        $EHR_document_prescribed_common_diet      = encrypt_decrypt('decrypt', $key_ehr->EHR_document_prescribed_common_diet) ;
-                                                        $EHR_document_prescribed_common_drug      = encrypt_decrypt('decrypt', $key_ehr->EHR_document_prescribed_common_drug) ;
+                                                        $EHR_document_prescribed_common_diet      = encrypt_decrypt('decrypt', $key_ehr->EHR_document_prescribed_common_diet ) ;
+                                                        $EHR_document_prescribed_common_drug      = encrypt_decrypt('decrypt', $key_ehr->EHR_document_prescribed_common_drug ) ;
                                                         $EHR_document_prescribed_next_appointment = str_replace("_", " ", $key_ehr->EHR_document_prescribed_next_appointment );
                                                         $EHR_document_related_clinic_doctor_name  = str_replace("_", " ", $key_ehr->EHR_document_related_clinic_doctor_name );
 
@@ -1192,30 +1181,27 @@ if( isset($EHR_document_related_clinic_doctor_name) )
 if( strlen($result_of_patients_general_infos->patient_birth_day) > 0 )
 {
     echo '
-    <div style="float:right;font-size:16px;margin-right:10px;" >Birthday : '.$result_of_patients_general_infos->patient_birth_day.' | </div>' ;
+    <div style="float:right;font-size:16px;margin-right:10px;" >Birthday: '.$result_of_patients_general_infos->patient_birth_day.' | </div>' ;
 }
 
 $options_for_user = (unserialize(Auth::user()->options_for_user)) ;
 
 //// START of if admin activated money section
-//if( $options_for_user[0] == 't' )
+//if( $options_for_user[0] == 't' && isset($_GET['money_receive']) )
 //{
-//    if( isset($_GET['money_receive']) )
+//    if( $_GET['money_receive'] == '0' )
 //    {
-//        if( $_GET['money_receive'] == '0' )
-//        {
-//            echo '
-//            <div style="float:right;font-size:16px;margin-right:10px;" title="The fee did not receive" ><span class="glyphicon glyphicon-remove" aria-hidden="true" style="color:red;" ></span> Pay | </div>';
-//        }
-//        else
-//        {
-//            echo '
-//            <div style="float:right;font-size:16px;margin-right:10px;" title="The fee received '.$_GET['money_receive'].'" ><span class="glyphicon glyphicon-ok" aria-hidden="true" ></span> Paid &nbsp; | </div>';
-//        }
+//        echo '
+//        <div style="float:right;font-size:16px;margin-right:10px;" title="The fee did not receive" ><span class="glyphicon glyphicon-remove" aria-hidden="true" style="color:red;" ></span> Pay | </div>';
 //    }
+//    else
+//    {
+//        echo '
+//        <div style="float:right;font-size:16px;margin-right:10px;" title="The fee received '.$_GET['money_receive'].'" ><span class="glyphicon glyphicon-ok" aria-hidden="true" ></span> Paid &nbsp; | </div>';
+//    }
+//
 //} // END of if admin activated money section
 
-// START OF IF DR TELEGRAM ACTIVATED
 if( Auth::user()->telegram == 'true' )
 {
     if( strlen($result_of_patients_general_infos->patient_from_external_platform_id) > 0  )
@@ -1229,7 +1215,6 @@ if( Auth::user()->telegram == 'true' )
         <div style="float:right;font-size:16px;margin-right:10px;" ><span class="glyphicon glyphicon-remove" aria-hidden="true" style="color:red;opacity:50%;" ></span> Dose not Connected to Bot | </div>' ;
     }
 }
-// END OF IF DR TELEGRAM ACTIVATED
 
 echo '
 </div>

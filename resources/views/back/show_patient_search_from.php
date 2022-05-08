@@ -1,13 +1,8 @@
 <?php
-
 // Add your custom css files here. (will located in header)
-$extra_links_header = '
-' ;
-
+$extra_links_header = '' ;
 // Add your custom js files here. (will located in footer)
-$extra_links_footer = '
-' ;
-
+$extra_links_footer = '' ;
 // Call the header include.
 include 'layout/header.php' ;
 
@@ -171,8 +166,8 @@ echo '
                 <br>
                 <hr style="width:1px;" >
 
-                <div class="col-md-12 col-sm-12 col-xs-12" >
-                    <a href="'.route('show_patients_ehr_document_page' , [ 'patient_id' => $key->patient_id ] ).'" class="text-center uiuxtrick" >
+                <div class="col-md-12 col-sm-12 col-xs-12" > 
+                    <a href="'.route('show_patients_ehr_document_page' , [ 'patient_id' => encrypt_decrypt('encrypt', $key->patient_id ) ] ).'" class="text-center uiuxtrick" >
                         <div class="col-md-4 col-sm-4 col-xs-12 btn btn-default" style="border:1px solid #e3e3e3;float:right;color:#337ab7;padding-top: 15px;padding-bottom: 15px;" >
                              <i class="fa fa-clone"></i>
                              EHR Document
