@@ -223,7 +223,7 @@ class PatientsAppointmentController extends Controller
             [
                 'title_of_page'                   => 'List of Appointments Time on Date: ' . $choose_time_for_this_date,
                 'choose_time_for_this_date'       => $choose_time_for_this_date,
-                'choose_time_for_this_patient_id' => $choose_time_for_this_patient_id,
+                'choose_time_for_this_patient_id' => $choose_time_for_this_patient_id ,
                 'text_trick'                      => $text_trick
             ]);
         }
@@ -236,7 +236,9 @@ class PatientsAppointmentController extends Controller
 
     public function store_patient_time_appointment_table( store_patient_time_appointment_tableRequest $request )
     {
-        $choose_time_for_this_patient_id = request()->post('choose_time_for_this_patient_id') ;
+        // we did nothing with it because its already encrypted
+        $encrypted_choose_time_for_this_patient_id = request()->post('choose_time_for_this_patient_id') ;
+        $decrypted_choose_time_for_this_patient_id = encrypt_decrypt('decrypt', request()->post('choose_time_for_this_patient_id') ) ;
         $choose_time_for_this_date       = request()->post('choose_time_for_this_date') ;
         $appointment_time                = request()->post('appointment_time') ;
 
@@ -264,8 +266,8 @@ class PatientsAppointmentController extends Controller
 
         try
         {
-            $result_store_new_patient_appointment_time              = patients_appointment::store_new_patient_appointment_time($choose_time_for_this_patient_id,$choose_time_for_this_date,$appointment_time,$appointment_child_dr_related_name,$appointment_service_type) ;
-            $update_patient_general_info_last_appointment_data_time = patients_general_info::update_patient_general_info_last_appointment_data_time($choose_time_for_this_patient_id,$choose_time_for_this_date,$appointment_time) ;
+            $result_store_new_patient_appointment_time              = patients_appointment::store_new_patient_appointment_time($decrypted_choose_time_for_this_patient_id,$choose_time_for_this_date,$appointment_time,$appointment_child_dr_related_name,$appointment_service_type) ;
+            $update_patient_general_info_last_appointment_data_time = patients_general_info::update_patient_general_info_last_appointment_data_time($decrypted_choose_time_for_this_patient_id,$choose_time_for_this_date,$appointment_time) ;
 
             if(!$result_store_new_patient_appointment_time || !$update_patient_general_info_last_appointment_data_time)
             {
@@ -273,7 +275,7 @@ class PatientsAppointmentController extends Controller
                 ->with( [ 'success_message' => '<span style="color:blue;">The Time and Date Appointment Were NOT Successfully Submitted!</span>' ] );
             }
             return redirect(route('submit_new_patient_form'))
-            ->with( [ 'success_message' => 'The Appointment Time= '.$appointment_time.' On Date= '.$choose_time_for_this_date.' <br> of <a href="'.route('edit_patient_form', $choose_time_for_this_patient_id ).'" ><b>Patient</b></a> Were Successfully Submitted' ] );
+            ->with( [ 'success_message' => 'The Appointment Time= '.$appointment_time.' On Date= '.$choose_time_for_this_date.' <br> of <a href="'.route('edit_patient_form', $encrypted_choose_time_for_this_patient_id ).'" ><b>Patient</b></a> Were Successfully Submitted' ] );
         }
         catch (\Exception $exception)
         {

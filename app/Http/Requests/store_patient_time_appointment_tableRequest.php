@@ -24,7 +24,7 @@ class store_patient_time_appointment_tableRequest extends FormRequest
     public function rules()
     {
         return [
-            'choose_time_for_this_patient_id'   => 'integer|required|min:1' ,
+            'choose_time_for_this_patient_id'   => 'required|min:1' ,
             'choose_time_for_this_date'         => 'required|min:1|max:10|date_format:Y-m-d' ,
             'appointment_time'                  => 'required|min:1' ,
             'appointment_child_dr_related_name' => 'max:100' ,

@@ -95,6 +95,7 @@ class PatientsEHRDocumentController extends Controller
         try
         {
             $decrypted_request_patient_id = encrypt_decrypt('decrypt', $request->patient_id ) ;
+            $encrypted_request_patient_id = $request->patient_id ;
             $result_of_patients_photo = patients_photo::result_of_patient_ehr_photo( $decrypted_request_patient_id ) ;
             $count_result_of_patients_photo = $result_of_patients_photo->count() ;
 
@@ -110,8 +111,8 @@ class PatientsEHRDocumentController extends Controller
             }
             return view('back.show_patients_ehr_document_page' ,
             [
-                'title_of_page'                             => 'EHR of '.$decrypted_request_patient_id ,
-                'EHR_document_patient_related_id'           => $decrypted_request_patient_id ,
+                'title_of_page'                             => 'EHR of Patient' ,
+                'EHR_document_patient_related_id'           => $encrypted_request_patient_id ,
                 'EHR_document_dr_related_id'                => find_admin_id_from_users_table() ,
                 'EHR_document_related_appointment_id'       => $request->related_appointment_id ,
                 'EHR_document_related_clinic_doctor_name'   => $request->child_dr_related_name ,
@@ -132,6 +133,7 @@ class PatientsEHRDocumentController extends Controller
 
     public function store_patients_ehr_document_page( Request $request )
     {
+        $decrypted_request_patient_id = encrypt_decrypt('decrypt', $request->patient_id ) ;
         try
         {
             $patient_more_description  = '' ;
@@ -145,15 +147,15 @@ class PatientsEHRDocumentController extends Controller
                 }
             }
 
-            if( $request->typed_keyboard_savabegh != "" )
+            if( $request->typed_keyboard_savabegh !== "" )
             {
                 $patient_more_description .= ','.$request->typed_keyboard_savabegh;
             }
 
-            patients_general_info::update_this_patient_general_info_from_ehr_page($request->patient_id, $patient_more_description, $request->post('patient_surgery_history'), $request->post('patient_disease_background'), $request->post('patient_medication_history'), $request->post('patient_allergies_history') ) ;
+            patients_general_info::update_this_patient_general_info_from_ehr_page($decrypted_request_patient_id, $patient_more_description, $request->post('patient_surgery_history'), $request->post('patient_disease_background'), $request->post('patient_medication_history'), $request->post('patient_allergies_history') ) ;
 
             $common_drug_2 = NULL ;
-            if( Auth::user()->common_drug != "" )
+            if( Auth::user()->common_drug !== "" )
             {
                 $common_drug        = Auth::user()->common_drug ;
                 // Explode and make an array of this variable
@@ -178,14 +180,14 @@ class PatientsEHRDocumentController extends Controller
                 }
 
                 // Get keyboard_medications_picker
-                if( $request->keyboard_medications_picker != "" )
+                if( $request->keyboard_medications_picker !== "" )
                 {
                     $common_drug_2 .= $request->post('keyboard_medications_picker').','     ;
                 }
             }
 
             $common_diet_2 = NULL ;
-            if( Auth::user()->common_diet != "" )
+            if( Auth::user()->common_diet !== "" )
             {
                 if(is_array($request->common_diet))
                 {
@@ -195,14 +197,14 @@ class PatientsEHRDocumentController extends Controller
                     }
                 }
 
-                if( $request->keyboard_common_diet != "" )
+                if( $request->keyboard_common_diet !== "" )
                 {
                     $common_diet_2 .= $request->post('keyboard_common_diet').',' ;
                 }
             }
 
             $common_return_date_2 = NULL ;
-            if( Auth::user()->common_return_date != "" )
+            if( Auth::user()->common_return_date !== "" )
             {
                 if(is_array($request->common_return_date))
                 {
@@ -212,7 +214,7 @@ class PatientsEHRDocumentController extends Controller
                     }
                 }
 
-                if( $request->keyboard_common_return_date != "" )
+                if( $request->keyboard_common_return_date !== "" )
                 {
                     $common_return_date_2 .= $request->post('keyboard_common_return_date').',' ;
                 }
@@ -230,7 +232,7 @@ class PatientsEHRDocumentController extends Controller
                 $EHR_document_related_clinic_doctor_name_trick = $request->post('EHR_document_related_clinic_doctor_name') ;
             }
 
-            $result_store_new_ehr_doc = patients_EHR_document::store_new_ehr_doc($common_drug_2, $common_diet_2, $common_return_date_2, $request->post('patient_id'), $EHR_document_related_appointment_id_trick, $EHR_document_related_clinic_doctor_name_trick ) ;
+            $result_store_new_ehr_doc = patients_EHR_document::store_new_ehr_doc($common_drug_2, $common_diet_2, $common_return_date_2, $decrypted_request_patient_id , $EHR_document_related_appointment_id_trick, $EHR_document_related_clinic_doctor_name_trick ) ;
 
             if ($request->hasFile('image'))
             {
@@ -241,11 +243,11 @@ class PatientsEHRDocumentController extends Controller
                 $file            = $request->file('image');
                 $extension       = $request->file('image')->extension();
                 $fileName        = rand(11111, 99999) . time() . rand() . '.'.$extension ;
-                $destinationPath = public_path() . '/storage/images/' . find_admin_id_from_users_table() . '/' . $request->patient_id . '/para';
+                $destinationPath = public_path() . '/storage/images/' . find_admin_id_from_users_table() . '/' . $decrypted_request_patient_id . '/para';
                 $file->move($destinationPath, $fileName);
                 //$path = $request->file('image')->sotre('public/images/'.Auth::user()->name.'/'.$request->patient_id.'/para' , $name );
 
-                patients_photo::store_patient_photo_from_ehr_page($fileName, $request->keyboard_paraclinic_file_title, $request->patient_id ) ;
+                patients_photo::store_patient_photo_from_ehr_page($fileName, $request->keyboard_paraclinic_file_title, $decrypted_request_patient_id ) ;
             }
             if(!$result_store_new_ehr_doc)
             {

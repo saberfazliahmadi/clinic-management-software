@@ -272,17 +272,15 @@ echo '
     // START of If user came to this page from route('update_this_patient').
     else
     {
+        // Encrypt patient_id for 1 time and use it for several time on below code
+        $encrypted_patient_id = encrypt_decrypt('encrypt', $result_edit_patient_form->patient_id );
+
         echo '
-        <form method="POST" action="'.route('update_this_patient' , $result_edit_patient_form->patient_id ).'" data-parsley-validate class="form-horizontal form-label-left" style="text-align:left!important;direction:ltr!important;font-size:15pt;" id="medical-file-form" >
+        <form method="POST" action="'.route('update_this_patient' , $encrypted_patient_id ).'" data-parsley-validate class="form-horizontal form-label-left" style="text-align:left!important;direction:ltr!important;font-size:15pt;" id="medical-file-form" >
             
             <input type="hidden" name="_token" value="' . csrf_token() . '" >
             <input type="hidden" name="_method" value="put" >
               <div class="form-group">
-                <center>
-                    <span>
-                            Patient Number: '.$result_edit_patient_form->patient_id.'
-                    </span>
-                </center>
                 <label class="control-label col-md-3 col-sm-3 col-xs-12" for="first-name" title="Maximum 35 words">
                     Name
                 <span class="required">*</span>
@@ -444,7 +442,7 @@ echo '
                     <center>
                         <div class="col-md-4 col-sm-3 col-xs-3" style="float:left;font-size:13px;" >
                             <span>
-                                <a href="'.route('delete_this_patient_id' , [ 'delete_this_patient_id' => $result_edit_patient_form->patient_id ] ).'" style="float:left;color: white; font-size: 13px; float: left;background-color:#5A738E;border:1px solid #5A738E; " class="btn btn-success" ' ; ?> onclick="return confirm('Are you sure to delete this patient?') <?php echo '" title="Delete This Patient" >
+                                <a href="'.route('delete_this_patient_id' , [ 'delete_this_patient_id' => $encrypted_patient_id ] ).'" style="float:left;color: white; font-size: 13px; float: left;background-color:#5A738E;border:1px solid #5A738E; " class="btn btn-success" ' ; ?> onclick="return confirm('Are you sure to delete this patient?') <?php echo '" title="Delete This Patient" >
                                     <i class="fa fa-trash-o" aria-hidden="true" ></i>
                                     Delete this Patient
                                 </a>
@@ -457,7 +455,7 @@ echo '
                             </span>
                         </div>
                         <div class="col-md-3 col-sm-3 col-xs-3" style="float:right;" >
-                            <a href="'.route('show_patients_ehr_document_page' , [ 'patient_id' => encrypt_decrypt('encrypt', $result_edit_patient_form->patient_id ) ] ).'" class="btn btn-success uiuxtrick" title="Display ' .$result_edit_patient_form->patient_first_name. ' ' .$result_edit_patient_form->patient_last_name. ' EHR Document" style="color: white; background-color:#73879C;border:1px solid #5A738E;" >
+                            <a href="'.route('show_patients_ehr_document_page' , [ 'patient_id' => $encrypted_patient_id ] ).'" class="btn btn-success uiuxtrick" title="Display ' .$result_edit_patient_form->patient_first_name. ' ' .$result_edit_patient_form->patient_last_name. ' EHR Document" style="color: white; background-color:#73879C;border:1px solid #5A738E;" >
                               <i class="fa fa-clone"></i> EHR Document
                             </a>
                         </div>
@@ -716,7 +714,7 @@ include 'layout/footer.php' ;
 
 <?php
 // If user came to this page from route('update_this_patient')
-if( $title_of_page == 'Edit Patient Information' )
+if( $title_of_page === 'Edit Patient Information' )
 {
 ?>
     <!-- Script related to redirect user if click on "Set time of Appointment" button -->
@@ -724,7 +722,7 @@ if( $title_of_page == 'Edit Patient Information' )
     $('[data-name="getValue1"]').on('click', function ()
     {
     var getValueResult = $('[data-name="datepicker1"]').MdPersianDateTimePicker('getValue');
-    window.location.href = "../show_patient_time_appointment_table/" + getValueResult + "/<?php echo $result_edit_patient_form->patient_id; ?>" ;
+    window.location.href = "../show_patient_time_appointment_table/" + getValueResult + "/<?php echo $encrypted_patient_id ; ?>" ;
     });
     </script>
 <?php

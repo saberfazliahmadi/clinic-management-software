@@ -68,19 +68,19 @@ class PatientsGeneralInfoController extends Controller
         {
             $result_store_new_patient_form = patients_general_info::store_new_patient_form($request->all()) ;
 
-            // Specify last id created in database to use it in route passing data
-            $choose_time_for_this_patient_id = $result_store_new_patient_form->patient_id ;
+            // Specify last id created in database and encrypt it to use it in route passing data
+            $encrypted_choose_time_for_this_patient_id = encrypt_decrypt('encrypt', $result_store_new_patient_form->patient_id ) ;
 
             // If this patient has a date appointment then redirect him to route('show_patient_time_appointment_table') to select desired time for this appointment
-            if( $request->get('patient_last_appointment_date') != '' )
+            if( $request->get('patient_last_appointment_date') !== '' )
             {
-                return redirect(route('show_patient_time_appointment_table', [ 'choose_time_for_this_date' => $request->get('patient_last_appointment_date') , 'choose_time_for_this_patient_id' => $choose_time_for_this_patient_id ] ))
-                ->with(['success_message' => 'Your New Patient with Name <br><a href="'.route('edit_patient_form', $choose_time_for_this_patient_id ).'" ><b>'.$request->get('patient_first_name').' ' . $request->get('patient_last_name').'</b></a> Successfully Submitted <br>Now choose an appointment time on date '.$request->get('patient_last_appointment_date') ]);
+                return redirect(route('show_patient_time_appointment_table', [ 'choose_time_for_this_date' => $request->get('patient_last_appointment_date') , 'choose_time_for_this_patient_id' => $encrypted_choose_time_for_this_patient_id ] ))
+                ->with(['success_message' => 'Your New Patient with Name <br><a href="'.route('edit_patient_form', $encrypted_choose_time_for_this_patient_id ).'" ><b>'.$request->get('patient_first_name').' ' . $request->get('patient_last_name').'</b></a> Successfully Submitted <br>Now choose an appointment time on date '.$request->get('patient_last_appointment_date') ]);
             }
 
             // If this patient DOES NOT have a date appointment then redirect him to route('submit_new_patient_form')
             return redirect(route('submit_new_patient_form'))
-            ->with(['success_message' => 'Your New Patient with Name <br><a href="'.route('edit_patient_form', $choose_time_for_this_patient_id ).'" ><b>'.$request->get('patient_first_name').' ' . $request->get('patient_last_name').'</b></a> Successfully Submitted']) ;
+            ->with(['success_message' => 'Your New Patient with Name <br><a href="'.route('edit_patient_form', $encrypted_choose_time_for_this_patient_id ).'" ><b>'.$request->get('patient_first_name').' ' . $request->get('patient_last_name').'</b></a> Successfully Submitted']) ;
         }
         catch (\Exception $exception)
         {
@@ -110,7 +110,8 @@ class PatientsGeneralInfoController extends Controller
     {
         try
         {
-            $result_edit_patient_form = patients_general_info::fetch_info_of_this_patient_id($edit_this_patient_id) ;
+            $decrypted_edit_this_patient_id = encrypt_decrypt('decrypt', $edit_this_patient_id ) ;
+            $result_edit_patient_form = patients_general_info::fetch_info_of_this_patient_id($decrypted_edit_this_patient_id) ;
 
             // If the requested patient does not exist
             if(!$result_edit_patient_form)
@@ -120,7 +121,7 @@ class PatientsGeneralInfoController extends Controller
             }
 
             $number_of_total_clinic_patients = patients_general_info::number_of_total_clinic_patients() ;
-            $result_show_all_appointments_of_this_id = patients_appointment::result_show_all_appointments_of_this_id($edit_this_patient_id) ;
+            $result_show_all_appointments_of_this_id = patients_appointment::result_show_all_appointments_of_this_id($decrypted_edit_this_patient_id) ;
 
             return view('back.submit_new_patient_form' ,
             [
@@ -146,35 +147,38 @@ class PatientsGeneralInfoController extends Controller
      */
     public function update(Updatepatients_general_infoRequest $request, patients_general_info $patients_general_info , $update_this_patient_id )
     {
+        $decrypted_update_this_patient_id = encrypt_decrypt('decrypt', $update_this_patient_id );
+        $encrypted_update_this_patient_id = $update_this_patient_id ;
+
         $request_patient_mobile_number = $request->post('patient_mobile_number') ;
         // Check for mobile number duplication
         // WE SHOULD NOT HAVE TWO PATIENTS WITH SAME MOBILE NUMBERS IN OUR DATABASE!
         // The mobile numbers should be unique
-        $number_of_duplicate_mobile_number = patients_general_info::number_of_duplicate_mobile_number($update_this_patient_id , $request_patient_mobile_number) ;
+        $number_of_duplicate_mobile_number = patients_general_info::number_of_duplicate_mobile_number($decrypted_update_this_patient_id , $request_patient_mobile_number) ;
 
         // If the Mobile Number was not unique then redirect
         if ( $number_of_duplicate_mobile_number !== 0 )
         {
-            return redirect(route('edit_patient_form', $update_this_patient_id))
+            return redirect(route('edit_patient_form', $encrypted_update_this_patient_id))
             ->with([ 'success_message' => 'The Mobile Number Should be Unique <br>But, There is another Mobile Number Like ' . $request->get('patient_mobile_number') . ' in Database, <br><span style="color:blue;font-weight:bolder;" > So Your New Patient Was NOT Submitted! </span><br> Try a Unique Mobile Number' ]);
         }
         // If the Mobile Number was unique
         try
         {
             $request_all = $request->all() ;
-            $result_update_this_patient_id = patients_general_info::result_update_this_patient_id($update_this_patient_id,$request_all) ;
+            $result_update_this_patient_id = patients_general_info::result_update_this_patient_id($decrypted_update_this_patient_id,$request_all) ;
 
             if($result_update_this_patient_id)
             {
-                return redirect(route('edit_patient_form', $update_this_patient_id))
+                return redirect(route('edit_patient_form', $encrypted_update_this_patient_id))
                 ->with(['success_message' => '<b>' . $request->post('patient_first_name') . ' ' . $request->post('patient_last_name') . '</b> Information Successfully Updated' ]) ;
             }
-            return redirect(route('edit_patient_form', $update_this_patient_id))
+            return redirect(route('edit_patient_form', $encrypted_update_this_patient_id))
             ->with(['success_message' => '<span style="color:blue;font-weight:bolder;">' . $request->post('patient_first_name') . ' ' . $request->post('patient_last_name') . ' Information WAS NOT Updated</span>']) ;
         }
         catch (\Exception $exception)
         {
-            return redirect(route('edit_patient_form', $update_this_patient_id))
+            return redirect(route('edit_patient_form', $encrypted_update_this_patient_id))
             ->with(['success_message' => '<span style="color:blue;font-weight:bolder;">' . $request->post('patient_first_name') . ' ' . $request->post('patient_last_name') . ' Information WAS NOT Updated</span>']) ;
         }
     }
@@ -189,20 +193,21 @@ class PatientsGeneralInfoController extends Controller
     {
         try
         {
-            $result_delete_this_patient_id = patients_general_info::delete_this_patient_id($request->delete_this_patient_id) ;
+            $decrypted_request_delete_this_patient_id = encrypt_decrypt('decrypt', $request->delete_this_patient_id ) ;
+            $result_delete_this_patient_id = patients_general_info::delete_this_patient_id($decrypted_request_delete_this_patient_id) ;
             // If we found this patient id in database and successfully deleted it
             if($result_delete_this_patient_id)
             {
                 return redirect(route('submit_new_patient_form'))
-                ->with(['success_message' => 'The requested patient Number: '.$request->delete_this_patient_id.' successfully deleted']);
+                ->with(['success_message' => 'The requested patient Number successfully deleted']);
             }
             return redirect(route('submit_new_patient_form'))
-            ->with(['success_message' => 'We have an error to delete this patient Number: <b style="color:blue;" >'.$request->delete_this_patient_id.'</b><br> Maybe there is an appointment or a financial transaction related to this patient,<br> So if you want to delete this patient<br> at first, you need to delete all appointments and financial transactions related to him']);
+            ->with(['success_message' => 'We have an error to delete this patient Number<br> Maybe there is an appointment or a financial transaction related to this patient,<br> So if you want to delete this patient<br> at first, you need to delete all appointments and financial transactions related to him']);
         }
         catch (\Exception $exception)
         {
             return redirect()->back()
-            ->with(['success_message' => 'We have an error to delete this patient Number: <b style="color:blue;" >'.$request->delete_this_patient_id.'</b><br> Maybe there is an appointment or a financial transaction related to this patient,<br> So if you want to delete this patient<br> at first, you need to delete all appointments and financial transactions related to him']);
+            ->with(['success_message' => 'We have an error to delete this patient Number<br> Maybe there is an appointment or a financial transaction related to this patient,<br> So if you want to delete this patient<br> at first, you need to delete all appointments and financial transactions related to him']);
         }
     }
 

@@ -249,7 +249,7 @@ echo '
     <div class="form-group col-md-12 col-sm-12 col-xs-12" > ' ;
 
 // START of show to Admin user type.
-if( Auth::user()->user_type == 'admin' )
+if( Auth::user()->user_type === 'admin' )
 {
     $cms_menu_title = explode("," , Auth::user()->cms_menu_title)  ;
     // START of page content
@@ -261,7 +261,7 @@ if( Auth::user()->user_type == 'admin' )
     
   <div class="col-md-12 col-sm-12 col-xs-12" >
 
-      <form id="medical-file-form" method="POST" action="'.route('store_patients_ehr_document_page' , ['patient_id' => $result_of_patients_general_infos->patient_id ]).'" class="controls export-svg" enctype="multipart/form-data" onsubmit="setFormSubmitting()" >
+      <form id="medical-file-form" method="POST" action="'.route('store_patients_ehr_document_page' , [ 'patient_id' => $EHR_document_patient_related_id ]).'" class="controls export-svg" enctype="multipart/form-data" onsubmit="setFormSubmitting()" >
             <input type="hidden" name="_token" value="'.csrf_token().'" >
             <input type="hidden" name="_method" value="post" >
           <div class="x_content" >

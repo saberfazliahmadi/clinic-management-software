@@ -364,8 +364,6 @@ if ( isset($count_of_appointment_in_header) && $count_of_appointment_in_header >
            Name
            <br>
            Mobile Number of Patient
-           <br>
-           Patient Number
         </h2>
         <br>
     </div>
@@ -392,6 +390,7 @@ if ( isset($count_of_appointment_in_header) && $count_of_appointment_in_header >
     // START of foreach.
     foreach ($result_middleware_provide_header_appointments_data_on_today as $key_appointment)
     {
+        $encrypted_patient_id_header = encrypt_decrypt('encrypt', $key_appointment->patient_id) ;
         // Add 1 to previous value
         ++$count_trick;
 
@@ -476,13 +475,11 @@ if ( isset($count_of_appointment_in_header) && $count_of_appointment_in_header >
                     <div style="float:right;margin-top:12px;" >
                         '.$key_appointment->patient_first_name.' '.$key_appointment->patient_last_name.'
                         <br>
-                        '.$key_appointment->patient_mobile_number.'
-                        <br>
-                        '.$key_appointment->patient_id ;
+                        '.$key_appointment->patient_mobile_number ;
 
                         if( $admin_accessibility_to_telegram === 'true')
                         {
-                            if( strlen($key_appointment->patient_from_external_platform_id) > 0  )
+                            if( $key_appointment->patient_from_external_platform_id )
                             {
                                 echo '
                                 <div style="float:left;font-size:13px;text-align:left;" class="col-md-12 col-sm-12 col-xs-12" >
@@ -493,7 +490,7 @@ if ( isset($count_of_appointment_in_header) && $count_of_appointment_in_header >
                             else
                             {
                                 echo '
-                                <a href="'.route('edit_patient_form', $key_appointment->patient_id ).'" >
+                                <a href="'.route('edit_patient_form', $encrypted_patient_id_header ).'" >
                                     <div style="float:left;font-size:13px;text-align:left;" class="col-md-12 col-sm-12 col-xs-12" >
                                         <span class="glyphicon glyphicon-remove" aria-hidden="true" ></span>
                                         NOT Connected to Bot
@@ -576,7 +573,7 @@ if ( isset($count_of_appointment_in_header) && $count_of_appointment_in_header >
 
                 echo '
                 <div style="'.$opacity_appointment_trick.';margin-top:12px;" >
-                    <a title="Display EHR Document" href="'.route('show_patients_ehr_document_page' , [ 'patient_id' => encrypt_decrypt('encrypt', $key_appointment->patient_id ) , 'related_appointment_id' => $key_appointment->appointment_id , 'child_dr_related_name' => $trick_of_variable_appointment_child_dr_related_name ] ).'" style="float:left;color: white; font-size: 13px; float: left;background-color:#5A738E;border:1px solid #5A738E; " class="uiuxtrick btn btn-success" >
+                    <a title="Display EHR Document" href="'.route('show_patients_ehr_document_page' , [ 'patient_id' => $encrypted_patient_id_header , 'related_appointment_id' => $key_appointment->appointment_id , 'child_dr_related_name' => $trick_of_variable_appointment_child_dr_related_name ] ).'" style="float:left;color: white; font-size: 13px; float: left;background-color:#5A738E;border:1px solid #5A738E; " class="uiuxtrick btn btn-success" >
                         <i class="fa fa-clone"></i>
                         EHR Doc
                     </a>
@@ -593,7 +590,7 @@ if ( isset($count_of_appointment_in_header) && $count_of_appointment_in_header >
                     }
 
                     echo '
-                    <a href="'.route('edit_patient_form', $key_appointment->patient_id ).'" title="Edit Patient Information" style="float:left;color: white; font-size: 13px; float: left;background-color:#5A738E;border:1px solid #5A738E; " class="uiuxtrick btn btn-success" >
+                    <a href="'.route('edit_patient_form', $encrypted_patient_id_header ).'" title="Edit Patient Information" style="float:left;color: white; font-size: 13px; float: left;background-color:#5A738E;border:1px solid #5A738E; " class="uiuxtrick btn btn-success" >
                          <i class="fa fa-edit" aria-hidden="true" ></i>
                          Edit
                     </a>
@@ -608,8 +605,7 @@ if ( isset($count_of_appointment_in_header) && $count_of_appointment_in_header >
                         <div id="a'.$count_trick.'" style="overflow:scroll;width:900px;height:600px;overflow-x: hidden;padding-left:20px;padding-right:20px;padding-top:15px;" >
                         
                         <h3 style="line-height: inherit;overflow-wrap: break-word; word-wrap: break-word; hyphens: auto;" >
-                            ID: '.$key_appointment->patient_id.' 
-                            <hr>
+                            
                             Full Name: '.$key_appointment->patient_first_name.' '.$key_appointment->patient_last_name.'
                             <hr>
                             Mobile Number: '.$key_appointment->patient_mobile_number.'

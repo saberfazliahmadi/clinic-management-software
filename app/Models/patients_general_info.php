@@ -187,7 +187,6 @@ class patients_general_info extends Model
             'patient_nationality_number' => request()->post('search_text') ,
             'patient_first_name'         => request()->post('search_text') ,
             'patient_last_name'          => request()->post('search_text') ,
-            'patient_id'                 => request()->post('search_text')
                    ]  ) ;
         })
         ->latest('patient_id')

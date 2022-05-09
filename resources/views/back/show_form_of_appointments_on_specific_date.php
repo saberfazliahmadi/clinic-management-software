@@ -75,8 +75,6 @@ echo '
                            Name
                            <br>
                            Mobile Number of Patient
-                           <br>
-                           Medical Document Number
                         </h2>
                         <br>
                     </div>
@@ -130,6 +128,7 @@ echo '
                     // START of foreach.
                     foreach ($result_show_form_of_appointments_on_specific_date as $key)
                     {
+                        $encrypted_patient_id = encrypt_decrypt('encrypt', $key->patient_id) ;
                         // Add 1 to previous value
                         ++$count_trick;
 
@@ -214,9 +213,7 @@ echo '
                                     <div style="float:right;margin-top:12px;text-align:left;" >
                                         '.$key->patient_first_name.' '.$key->patient_last_name.'
                                         <br>
-                                        '.$key->patient_mobile_number.'
-                                        <br>
-                                        '.$key->patient_id  ;
+                                        '.$key->patient_mobile_number ;
 
                                         if( $admin_accessibility_to_telegram === 'true')
                                         {
@@ -231,7 +228,7 @@ echo '
                                             else
                                             {
                                                 echo '
-                                                <a href="' . route('update_this_patient', $key->patient_id) . '" >
+                                                <a href="' . route('edit_patient_form', $encrypted_patient_id ) . '" >
                                                     <div style="float:left;font-size:13px;" class="col-md-12 col-sm-12 col-xs-12" >
                                                         NOT Connected to BALE Bot
                                                         <span class="glyphicon glyphicon-remove" aria-hidden="true" ></span>
@@ -291,7 +288,7 @@ echo '
                         <div class="col-md-2" style="padding-right:0px;padding-left:0px;margin-right:0px;margin-left:0px;margin-top:10px;" >
                             
                             <div class="col-md-12" style="'.$opacity_appointment_trick.';" >
-                                <a title="Display EHR Document" href="'.route('show_patients_ehr_document_page' , [ 'patient_id' => encrypt_decrypt('encrypt', $key->patient_id ) ] ).'" style="float:left;color: white; font-size: 13px; float: left;background-color:#5A738E;border:1px solid #5A738E; " class="uiuxtrick btn btn-success" >
+                                <a title="Display EHR Document" href="'.route('show_patients_ehr_document_page' , [ 'patient_id' => $encrypted_patient_id ] ).'" style="float:left;color: white; font-size: 13px; float: left;background-color:#5A738E;border:1px solid #5A738E; " class="uiuxtrick btn btn-success" >
                                     <i class="fa fa-clone"></i>
                                     EHR Document
                                 </a>
@@ -307,7 +304,7 @@ echo '
                                 }
 
                                 echo '
-                                <a href="'.route('edit_patient_form', $key->patient_id ).'" style="float:left;color: white; font-size: 13px; float: left;background-color:#5A738E;border:1px solid #5A738E; " class="uiuxtrick btn btn-success" >
+                                <a href="'.route('edit_patient_form', $encrypted_patient_id ).'" style="float:left;color: white; font-size: 13px; float: left;background-color:#5A738E;border:1px solid #5A738E; " class="uiuxtrick btn btn-success" >
                                      <i class="fa fa-edit" aria-hidden="true" ></i>
                                      Edit Patient Info
                                 </a>
@@ -322,8 +319,6 @@ echo '
                                     <div id="a'.$count_trick.'" style="overflow:scroll;width:900px;height:600px;overflow-x: hidden;padding-left:20px;padding-right:20px;padding-top:15px;" >
                                     
                                     <h3 style="line-height: inherit;" >
-                                        ID: '.$key->patient_id.' 
-                                        <hr>
                                         Full Name: '.$key->patient_first_name.' '.$key->patient_last_name.'
                                         <hr>
                                         Mobile Number: '.$key->patient_mobile_number.'

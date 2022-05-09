@@ -40,7 +40,7 @@ class store_patients_ehr_document_pageRequest extends FormRequest
             'keyboard_chart_3'               => 'string' ,
             'keyboard_chart_4'               => 'string' ,
             'doc_date_created'               => 'max:10|date_format:Y-m-d' ,
-            'patient_id'                     => 'integer|required' ,
+            'patient_id'                     => 'required' ,
             'EHR_document_related_appointment_id' => 'integer' ,
             'EHR_document_related_clinic_doctor_name' => 'string' ,
         ];

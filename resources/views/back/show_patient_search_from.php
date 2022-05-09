@@ -30,17 +30,17 @@ echo '
                     </div>
                     <hr style="width:1px;" >
                     
-                    <div class="col-md-2 col-sm-2 col-xs-2" style="float:left;" >
+                    <div class="col-md-3 col-sm-3 col-xs-3" style="float:left;" >
                         <i class="glyphicon glyphicon-user" aria-hidden="true" style="font-size:26px;margin-left: 10px;margin-right: 10px;" ></i>
                         <br>
                         Name
                     </div>
-                    <div class="col-md-2 col-sm-2 col-xs-2" style="float:left;" >
+                    <div class="col-md-3 col-sm-3 col-xs-3" style="float:left;" >
                         <i class="glyphicon glyphicon-user" aria-hidden="true" style="font-size:26px;margin-left: 10px;margin-right: 10px;" ></i>
                         <br>
                         Family
                     </div>
-                    <div class="col-md-2 col-sm-2 col-xs-2" style="float:left;" >
+                    <div class="col-md-3 col-sm-3 col-xs-3" style="float:left;" >
                         <i class="glyphicon glyphicon-phone" aria-hidden="true" style="font-size:26px;margin-left: 10px;margin-right: 10px;" ></i>
                         <br>
                         Mobile Number
@@ -51,17 +51,11 @@ echo '
                         Nationality Number
                     </div>
                     
-                    <div class="col-md-3 col-sm-3 col-xs-3" style="float:left;" >
-                        <i class="glyphicon glyphicon-file" aria-hidden="true" style="font-size:26px;margin-left: 10px;margin-right: 10px;" ></i>
-                        <br>
-                        Patient Number
-                    </div>
-                    
                 </h4>
                 
                 <hr style="width:1px;" >
                 <div class="col-md-12 col-sm-12 col-xs-12" align="center" style="float:none;" >
-                    <input type="text" value="'.request()->post('search_text').'" name="search_text" style="font-weight:bolder;font-size:18px;" min="1" max="60" autocomplete="off" aria-autocomplete="list" aria-expanded="false" aria-haspopup="true" role="combobox" spellcheck="false" class="form-control" placeholder="Type your searching word based on ONE of these types: Name | Family | Mobile Number | Nationality Number | Patient Number" align="center" required >
+                    <input type="text" value="'.request()->post('search_text').'" name="search_text" style="font-weight:bolder;font-size:18px;" min="1" max="60" autocomplete="off" aria-autocomplete="list" aria-expanded="false" aria-haspopup="true" role="combobox" spellcheck="false" class="form-control" placeholder="Type your searching word based on ONE of these types: Name | Family | Mobile Number | Nationality Number" align="center" required >
                 </div>
                 
             </center>
@@ -78,35 +72,27 @@ echo '
     {
         echo '
         <div class="col-md-12 col-sm-12 col-xs-12" style="margin-bottom:20px;margin-top:40px;">
-            <div class="col-md-3 col-sm-3 col-xs-3">
+            <div class="col-md-4 col-sm-4 col-xs-4">
                 <h4>
                     <span style="font-weight:bolder;color:gray;" class="btn-link">
                         Name and Family
                     </span>
                 </h4>
             </div>
-            <div class="col-md-3 col-sm-3 col-xs-3">
+            <div class="col-md-4 col-sm-4 col-xs-4">
                 <h4>
                     <span style="font-weight:bolder;color:gray;" class="btn-link">
                         Nationality Number 
                     </span>
                 </h4>
             </div>
-            <div class="col-md-3 col-sm-3 col-xs-3">
+            <div class="col-md-4 col-sm-4 col-xs-4">
                 <h4>
                     <span style="font-weight:bolder;color:gray;" class="btn-link">
                         Mobile Number 
                     </span>
                 </h4>
             </div>
-            <div class="col-md-3 col-sm-3 col-xs-3">
-                <h4>
-                    <span style="font-weight:bolder;color:gray;" class="btn-link">
-                        Patient Number
-                    </span>
-                </h4>
-            </div>
-            
         </div>
         <br>';
 
@@ -116,19 +102,19 @@ echo '
             echo '
             <div class="col-md-12 col-sm-12 col-xs-12 well" >
                 
-                <div class="col-md-3 col-sm-3 col-xs-3 btn-link">
+                <div class="col-md-4 col-sm-4 col-xs-4 btn-link">
                     <h3 style="color:gray;" >
                         '.$key->patient_first_name.' '.$key->patient_last_name.'
                     </h3>
                 </div>
                 
-                <div class="col-md-3 col-sm-3 col-xs-3 btn-link">
+                <div class="col-md-4 col-sm-4 col-xs-4 btn-link">
                     <h3 style="color:gray;" >
                         '.$key->patient_nationality_number.'
                     </h3>
                 </div>
                 
-                <div class="col-md-3 col-sm-3 col-xs-3 btn-link">
+                <div class="col-md-4 col-sm-4 col-xs-4 btn-link">
                     <h3 style="color:gray;" >
                         '.$key->patient_mobile_number ;
 
@@ -156,13 +142,6 @@ echo '
                     echo '
                     </h3>
                 </div>
-                
-                <div class="col-md-3 col-sm-3 col-xs-3 btn-link">
-                    <h3 style="color:gray;text-align:center;" >
-                        '.$key->patient_id.'
-                    </h3>
-                </div>
-
                 <br>
                 <hr style="width:1px;" >
 
@@ -179,7 +158,7 @@ echo '
                              Medical Prescriptions
                         </div>
                     </a>
-                    <a href="'.route('edit_patient_form', $key->patient_id ).'" class="text-center uiuxtrick" >
+                    <a href="'.route('edit_patient_form', encrypt_decrypt('encrypt', $key->patient_id ) ).'" class="text-center uiuxtrick" >
                         <div class="col-md-3 col-sm-3 col-xs-12 btn btn-default" style="border:1px solid #e3e3e3;float:right;color:#337ab7;padding-top: 15px;padding-bottom: 15px;" >
                               <i class="fa fa-edit"></i>
                              Book Appointment | Edit Info
