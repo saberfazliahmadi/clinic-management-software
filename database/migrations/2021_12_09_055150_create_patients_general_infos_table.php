@@ -15,8 +15,8 @@ class CreatePatientsGeneralInfosTable extends Migration
     public function up()
     {
         Schema::create('patients_general_infos', function (Blueprint $table) {
-            $table->id('patient_id');
-            $table->foreignId('patient_dr_related_id')->references('id')->on('users') ;
+            $table->id('patient_id')->autoIncrement()->unsigned();
+            $table->foreignId('patient_dr_related_id')->references('id')->on('users');
             $table->string('patient_first_name','35')->collation('utf8_general_ci') ;
             $table->string('patient_last_name','35')->collation('utf8_general_ci') ;
             $table->string('patient_last_appointment_date','20')->collation('utf8_general_ci')->nullable() ;
@@ -35,8 +35,8 @@ class CreatePatientsGeneralInfosTable extends Migration
             $table->string('patient_medication_history','2000')->collation('utf8_general_ci')->nullable() ;
             $table->string('patient_allergies_history','2000')->collation('utf8_general_ci')->nullable() ;
             $table->text('patient_more_description')->collation('utf8_general_ci')->nullable() ;
-            $table->integer('patient_from_external_platform_id')->nullable() ;
-            $table->integer('patient_from_external_platform_step')->nullable() ;
+            $table->integer('patient_from_external_platform_id')->nullable()->unsigned();
+            $table->integer('patient_from_external_platform_step')->nullable()->unsigned();
             $table->softDeletes() ;
             $table->timestamps();
         });

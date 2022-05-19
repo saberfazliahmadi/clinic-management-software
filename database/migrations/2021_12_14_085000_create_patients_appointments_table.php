@@ -14,7 +14,7 @@ class CreatePatientsAppointmentsTable extends Migration
     public function up()
     {
         Schema::create('patients_appointments', function (Blueprint $table) {
-        $table->id('appointment_id');
+        $table->id('appointment_id')->autoIncrement()->unsigned();
         $table->foreignId('appointment_dr_related_id')->references('id')->on('users')->comment('this id related to main clinic manager who own this software which came from table users.id') ;
         $table->foreignId('appointment_patient_related_id')->references('patient_id')->on('patients_general_infos')->comment('this id related to patient id which came from table patients_general_infos.patient_id') ;
         $table->string('appointment_date','20')->collation('utf8_general_ci') ;

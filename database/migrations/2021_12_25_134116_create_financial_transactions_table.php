@@ -14,7 +14,7 @@ class CreateFinancialTransactionsTable extends Migration
     public function up()
     {
         Schema::create('financial_transactions', function (Blueprint $table) {
-        $table->id('financial_transaction_id');
+        $table->id('financial_transaction_id')->autoIncrement()->unsigned();
         $table->foreignId('financial_dr_related_id')->references('id')->on('users');
         $table->foreignId('financial_patient_related_id')
         ->nullable()
@@ -32,7 +32,7 @@ class CreateFinancialTransactionsTable extends Migration
         $table->string('financial_transaction_date', '20')->collation('utf8_general_ci');
         $table->string('financial_transaction_time', '20')->collation('utf8_general_ci')->nullable();
         $table->string('financial_transaction_title')->collation('utf8_general_ci')->nullable();
-        $table->integer('financial_transaction_amount')->collation('utf8_general_ci')->default('0');
+        $table->integer('financial_transaction_amount')->collation('utf8_general_ci')->default('0')->unsigned();
         $table->string('financial_transaction_child_dr_related_name', '255')
         ->collation('utf8_general_ci')
         ->nullable();

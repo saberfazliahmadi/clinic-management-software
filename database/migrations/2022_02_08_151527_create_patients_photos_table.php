@@ -14,7 +14,7 @@ class CreatePatientsPhotosTable extends Migration
     public function up()
     {
         Schema::create('patients_photos', function (Blueprint $table) {
-        $table->id('patients_photos_id');
+        $table->id('patients_photos_id')->autoIncrement()->unsigned();
         $table->string('patients_photos_file_name')->collation('utf8_general_ci');
         $table->string('patients_photos_file_description')->collation('utf8_general_ci')->nullable();
         $table->foreignId('patients_photos_patient_related_id')->references('patient_id')->on('patients_general_infos') ;

@@ -14,8 +14,8 @@ class CreateUsersTable extends Migration
     public function up()
     {
         Schema::create('users', function (Blueprint $table) {
-            $table->id();
-            $table->integer('parent_id')->nullable()->comment('The "parent_id" should be extended from "id", in addition when a user have a "parent_id" , its "user_type" should be "user" . But if the "parent_id" was "NULL" then "user_type should be "admin" , remember that the "parent_id" by default is "NULL" , You can change it Manually');
+            $table->id()->autoIncrement()->unsigned();
+            $table->integer('parent_id')->nullable()->comment('The "parent_id" should be extended from "id", in addition when a user have a "parent_id" , its "user_type" should be "user" . But if the "parent_id" was "NULL" then "user_type should be "admin" , remember that the "parent_id" by default is "NULL" , You can change it Manually')->unsigned();
             $table->string('name')->collation('utf8_general_ci')->unique();
             $table->string('phone')->collation('utf8_general_ci')->nullable();
             $table->string('gender')->collation('utf8_general_ci')->nullable();
