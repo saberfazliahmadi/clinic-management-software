@@ -20,7 +20,7 @@ Route::get('/', function () {
 });
 
 // protected page accessible for user and admin
-Route::group( [ 'middleware' => ['protected_page_accessible_for_user_and_admin' ] ] , function()
+Route::group( [ 'middleware' => ['protected_page_accessible_for_user_and_admin' , 'throttle:10,1' ] ] , function()
 {
     Route::get('/home', 'HomeController@index')->name('home');
 
@@ -55,7 +55,7 @@ Route::group( [ 'middleware' => ['protected_page_accessible_for_user_and_admin' 
 }) ;
 
 // protected page accessible for admin
-Route::group( [ 'middleware' => ['protected_page_accessible_for_admin'] ] , function()
+Route::group( [ 'middleware' => ['protected_page_accessible_for_admin' , 'throttle:10,1' ] ] , function()
 {
     // All Routes related to financial_transactions table
     Route::get('show_financial_settings_receiving_money_form','FinancialTransactionController@show_financial_settings_receiving_money_form')->name('show_financial_settings_receiving_money_form') ;

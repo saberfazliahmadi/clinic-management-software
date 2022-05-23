@@ -95,7 +95,6 @@ class patients_general_info extends Model
             'patient_more_description'      => $request_all['patient_more_description']
         ]
         );
-
         return $result_store_new_patient_form ;
     }
 
@@ -136,7 +135,6 @@ class patients_general_info extends Model
          'patient_allergies_history'     => $request_all['patient_allergies_history'] ,
          'patient_more_description'      => $request_all['patient_more_description']
          ]);
-
         return $result_update_this_patient_id ;
     }
 
@@ -147,7 +145,6 @@ class patients_general_info extends Model
         ->equal_this_to_admin_id_from_user_table('patient_dr_related_id')
         ->limit('1')
         ->first() ;
-
         return $result_fetch_info_of_this_patient_id ;
     }
 
@@ -164,7 +161,6 @@ class patients_general_info extends Model
         ->where('patient_id'            , '!=' , $update_this_patient_id )
         ->limit('1')
         ->count();
-
         return $number_of_duplicate_mobile_number ;
     }
 
@@ -180,6 +176,7 @@ class patients_general_info extends Model
     static function fetch_result_of_search_from()
     {
         $result_of_run_search_form = self::query()
+        ->select( 'patient_id' , 'patient_dr_related_id' , 'patient_mobile_number' , 'patient_nationality_number' , 'patient_first_name' , 'patient_last_name' )
         ->where( 'patient_dr_related_id' , find_admin_id_from_users_table() )
         ->Where(function($query) {
         $query->where( 'patient_mobile_number' , request()->post('search_text') )
@@ -190,20 +187,20 @@ class patients_general_info extends Model
                    ]  ) ;
         })
         ->latest('patient_id')
-        ->get() ;
-
+        ->get()
+        ->chunk(10) ;
+        // We use chunk(10) for situations that we want to show 10000 result of our search which chunk breaks a big result to small peaces and can handle Servers Ram resource
         return $result_of_run_search_form ;
     }
 
     static function delete_this_patient_id($request_delete_this_patient_id)
     {
         $result_delete_this_patient_id = self::
-        select('patient_id'   , 'patient_dr_related_id')
+        select('patient_id' , 'patient_dr_related_id')
         ->patient_id($request_delete_this_patient_id)
         ->equal_this_to_admin_id_from_user_table('patient_dr_related_id')
         ->limit('1')
         ->delete();
-
         return $result_delete_this_patient_id ;
     }
 
@@ -218,7 +215,6 @@ class patients_general_info extends Model
                      'patient_last_appointment_date' => $choose_time_for_this_date ,
                      'patient_last_appointment_time' => $appointment_time
                  ]);
-
         return $update_patient_general_info_last_appointment_data_time ;
     }
 
@@ -238,7 +234,6 @@ class patients_general_info extends Model
                 'patient_allergies_history'  => $request_post_patient_allergies_history
             ]
         );
-
         return $result_update_this_patient_general_info ;
     }
 }

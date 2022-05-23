@@ -776,7 +776,7 @@ if( Auth::user()->user_type === 'admin' )
                         
                                 <div class="col-md-12 col-sm-12 col-xs-12" >' ;
 
-                                    // START of if there was paraclinic data for this sicker.
+                                    // START of if there was paraclinic data for this patient.
                                     if( $count_result_of_patients_photo > 0)
                                     {
                                         // Make a count variable trick
@@ -818,7 +818,7 @@ if( Auth::user()->user_type === 'admin' )
                                             </a>';
                                         }
                                     }
-                                    // END of if there was paraclinic data for this sicker
+                                    // END of if there was paraclinic data for this patient
                                     else
                                     {
                                         echo '
@@ -945,7 +945,7 @@ if( Auth::user()->user_type === 'admin' )
                                                         </div>
                                                         <!-- END Modal --> ';
                                                     } // END of foreach EHR
-                                                } // END  of if there was more than 1 document for this sicker then show it on document time line.
+                                                } // END  of if there was more than 1 document for this patient then show it on document time line.
                                                 else
                                                 {
                                                     echo '
@@ -1036,7 +1036,7 @@ if( Auth::user()->user_type === 'admin' )
 
                                     //// Create mysql query for extract chart data.
                                     //$res_sik_doc_chart = mysql_query( " SELECT sic_rel_id , doc_rel_id , doc_id , doc_date_created , chart_1 , chart_2 ,chart_3 , chart_4 FROM $DB_NAME_LOGIN.sik_doc
-                                    //                                        WHERE sic_rel_id     = '".filter($sicker_id)."'
+                                    //                                        WHERE sic_rel_id     = '".filter($patient_id)."'
                                     //                                        AND   doc_rel_id     = '".filter($_SESSION['user_id'])."'
                                     //                                        ORDER BY doc_id ASC
                                     //                                      " , $database_connection) or die( " Error : Connection section res_sik_doc_time_line . " .mysql_error() ) ;
@@ -1105,14 +1105,14 @@ if( Auth::user()->user_type === 'admin' )
                         //
                         //    echo '
                         //    <li role="presentation" >
-                        //        <a id="various222" href="#new_sicker_uniqe_doc_paper_plz_console" type="button" aria-controls="profile" role="tab" data-toggle="tab" >
+                        //        <a id="various222" href="#new_patient_uniqe_doc_paper_plz_console" type="button" aria-controls="profile" role="tab" data-toggle="tab" >
                         //            New Paper
                         //        </a>
                         //    </li>
                         //
-                        //    <!-- START of login fancy console panel new_sicker_uniqe_doc_paper_plz_console -->
+                        //    <!-- START of login fancy console panel new_patient_uniqe_doc_paper_plz_console -->
                         //    <div style="display:none;" >
-                        //        <div id="new_sicker_uniqe_doc_paper_plz_console" style="height:550px;width:900px!important;overflow-x: hidden!important;padding-bottom:30px;padding-top:35px;" >
+                        //        <div id="new_patient_uniqe_doc_paper_plz_console" style="height:550px;width:900px!important;overflow-x: hidden!important;padding-bottom:30px;padding-top:35px;" >
                         //            <div class="col-md-12 col-sm-12 col-xs-12 text-center" >
                         //                <center>
                         //
@@ -1127,7 +1127,7 @@ if( Auth::user()->user_type === 'admin' )
                         //                        <hr style="width:1px;" >
                         //                        <br>
                         //                        <hr style="width:1px;" >
-                        //                        <a id="various222" href="#new_sicker_uniqe_doc_paper_plz" type="button" aria-controls="profile" role="tab" data-toggle="tab" class="btn btn-success btn-group col-md-10 col-sm-10 col-xs-10" style="float:none;font-size:25px;" >
+                        //                        <a id="various222" href="#new_patient_uniqe_doc_paper_plz" type="button" aria-controls="profile" role="tab" data-toggle="tab" class="btn btn-success btn-group col-md-10 col-sm-10 col-xs-10" style="float:none;font-size:25px;" >
                         //                            Add New '.$cms_menu_title[7].' Paper
                         //                        </a>
                         //                        <br>
@@ -1136,7 +1136,7 @@ if( Auth::user()->user_type === 'admin' )
                         //                    if ( strlen($cms_menu_title[8]) > 0 )
                         //                    {
                         //                        echo '
-                        //                        <a id="various222" href="#new_sicker_uniqe_doc_paper_plz_3" type="button" aria-controls="profile" role="tab" data-toggle="tab" class="btn btn-success btn-group col-md-10 col-sm-10 col-xs-10" style="float:none;font-size:25px;" >
+                        //                        <a id="various222" href="#new_patient_uniqe_doc_paper_plz_3" type="button" aria-controls="profile" role="tab" data-toggle="tab" class="btn btn-success btn-group col-md-10 col-sm-10 col-xs-10" style="float:none;font-size:25px;" >
                         //                             Add New '.$cms_menu_title[8].' Paper
                         //                        </a>' ;
                         //                    }
@@ -1146,7 +1146,7 @@ if( Auth::user()->user_type === 'admin' )
                         //            </div>
                         //        </div>
                         //    </div>
-                        //    <!-- END of login fancy console panel new_sicker_uniqe_doc_paper_plz_console -->';
+                        //    <!-- END of login fancy console panel new_patient_uniqe_doc_paper_plz_console -->';
                         //}
 
                 echo '

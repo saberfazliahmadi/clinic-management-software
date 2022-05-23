@@ -32,9 +32,9 @@ class middleware_provide_header_data
         $cms_menu_title_data_from_middleware = explode(",", Auth::user()->cms_menu_title) ;
 
         // If user click on send patient to doctors room from header
-        if($request->send_patient_to_doctors_room === 'true' )
+        if($request->send_patient_to_doctors_room === 'true')
         {
-            if( strlen($request->appointment_id) > 0 )
+            if($request->appointment_id)
             {
                 try
                 {
@@ -147,7 +147,7 @@ class middleware_provide_header_data
             // How many appointments found for those of patients who have appointment on TODAY
             $count_of_appointment_in_header = $result_middleware_provide_header_appointments_data_on_today->count() ;
 
-            // If more than 0 appointment exist on patients_appointments table for TODAY date.
+            // If more than 0 appointment exist on patients_appointments table for TODAY date
             if( $count_of_appointment_in_header > 0 )
             {
                 $financial_management_data_in_header = '' ;

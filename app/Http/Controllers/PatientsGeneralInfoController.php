@@ -219,7 +219,7 @@ class PatientsGeneralInfoController extends Controller
     public function run_patient_search_form( Request $request )
     {
         // If the search keyword was empty
-        if( request()->post('search_text') == '' )
+        if( request()->post('search_text') === '' )
         {
             return redirect(route('show_patient_search_from'))
             ->with(['success_message' => '<span style="color:blue;" > The word you entered to search the patient must be more than 1 letters </span> <br>Suggestion: You can search based on the patient\'s mobile number,<br> <span style="font-weight:bolder;" > which should be more than 1 letters</span> <br>Please re-enter the correct type of information and press the Search button again' ]);

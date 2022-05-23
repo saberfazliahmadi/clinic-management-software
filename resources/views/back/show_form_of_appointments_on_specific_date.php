@@ -91,7 +91,7 @@ echo '
                         <h2 style="line-height: inherit;text-align:center;" >
                             Send Group Message by Bot
                             <br>
-                            <a id="various222" href="#submit_send_sms_notif_turn_to_all_sicker" style="line-height: inherit;text-align:center;" >
+                            <a id="various222" href="#submit_send_sms_notif_turn_to_all_patient" style="line-height: inherit;text-align:center;" >
                                 ...+
                                 <i class="glyphicon glyphicon-envelope" aria-hidden="true" style="font-size:28px;" title="Send Group Message By Bale Bot"></i>
                                 +<i class="glyphicon glyphicon-envelope" aria-hidden="true" style="font-size:28px;" title="Send Group Message By Bale Bot"></i>
@@ -101,9 +101,9 @@ echo '
                         <br>
                     </div>
                     
-                    <!-- START of login fancy console panel submit_send_sms_notification_turn_to_all_sicker -->
+                    <!-- START of login fancy console panel submit_send_sms_notification_turn_to_all_patient -->
                     <div style="display:none;" >
-                        <div id="submit_send_sms_notif_turn_to_all_sicker" style="overflow:scroll;overflow-x: hidden;background-color:white;" class="well" >
+                        <div id="submit_send_sms_notif_turn_to_all_patient" style="overflow:scroll;overflow-x: hidden;background-color:white;" class="well" >
                             <div class="row">
                                 <div class="col-md-12 col-sm-12 col-xs-12">
                                     <center>
@@ -120,7 +120,7 @@ echo '
                             </div>
                         </div>
                     </div>
-                    <!-- END of login fancy console panel submit_send_sms_notification_turn_to_all_sicker -->';
+                    <!-- END of login fancy console panel submit_send_sms_notification_turn_to_all_patient -->';
 
                     // Create a variable to use on counting number of all appointments.
                     $count_trick = '' ;

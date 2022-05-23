@@ -50,12 +50,14 @@ class Kernel extends HttpKernel
         [
             \App\Http\Middleware\middleware_check_page_access_for_user_level::class,
             \App\Http\Middleware\middleware_provide_header_data::class,
+            \App\Http\Middleware\Authenticate::class,
         ],
 
         'protected_page_accessible_for_admin' =>
         [
             \App\Http\Middleware\middleware_check_page_access_for_admin_level::class,
             \App\Http\Middleware\middleware_provide_header_data::class,
+            \App\Http\Middleware\Authenticate::class,
         ],
 
     ];
