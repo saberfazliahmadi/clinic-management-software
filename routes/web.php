@@ -15,12 +15,12 @@ use Monolog\Handler\RotatingFileHandler;
 */
 Auth::routes();
 
-Route::get('/', function () {
+Route::match(array('GET', 'POST'),'/', function () {
     return view('auth.login');
 });
 
 // protected page accessible for user and admin
-Route::group( [ 'middleware' => ['protected_page_accessible_for_user_and_admin' , 'throttle:10,1' ] ] , function()
+Route::group( [ 'middleware' => ['protected_page_accessible_for_user_and_admin' , 'throttle:100,1' ] ] , function()
 {
     Route::get('/home', 'HomeController@index')->name('home');
 
@@ -55,10 +55,10 @@ Route::group( [ 'middleware' => ['protected_page_accessible_for_user_and_admin' 
 }) ;
 
 // protected page accessible for admin
-Route::group( [ 'middleware' => ['protected_page_accessible_for_admin' , 'throttle:10,1' ] ] , function()
+Route::group( [ 'middleware' => ['protected_page_accessible_for_admin' , 'throttle:100,1' ] ] , function()
 {
     // All Routes related to financial_transactions table
-    Route::get('show_financial_settings_receiving_money_form','FinancialTransactionController@show_financial_settings_receiving_money_form')->name('show_financial_settings_receiving_money_form') ;
+    Route::get('show_financial_settings_receiving_money_form' ,'FinancialTransactionController@show_financial_settings_receiving_money_form')->name('show_financial_settings_receiving_money_form') ;
     Route::post('store_financial_settings_receiving_money_form' , 'FinancialTransactionController@store_financial_settings_receiving_money_form')->name('store_financial_settings_receiving_money_form') ;
 
     // All Routes related to users table

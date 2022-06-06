@@ -171,7 +171,7 @@ class PatientsGeneralInfoController extends Controller
             if($result_update_this_patient_id)
             {
                 return redirect(route('edit_patient_form', $encrypted_update_this_patient_id))
-                ->with(['success_message' => '<b>' . $request->post('patient_first_name') . ' ' . $request->post('patient_last_name') . '</b> Information Successfully Updated' ]) ;
+                ->with(['success_message' => '<b>' . $request->post('patient_first_name') . ' ' . $request->post('patient_last_name') . '</b> Information of Successfully Updated' ]) ;
             }
             return redirect(route('edit_patient_form', $encrypted_update_this_patient_id))
             ->with(['success_message' => '<span style="color:blue;font-weight:bolder;">' . $request->post('patient_first_name') . ' ' . $request->post('patient_last_name') . ' Information WAS NOT Updated</span>']) ;
@@ -218,11 +218,11 @@ class PatientsGeneralInfoController extends Controller
 
     public function run_patient_search_form( Request $request )
     {
-        // If the search keyword was empty
+        // If the search keyword field was empty
         if( request()->post('search_text') === '' )
         {
             return redirect(route('show_patient_search_from'))
-            ->with(['success_message' => '<span style="color:blue;" > The word you entered to search the patient must be more than 1 letters </span> <br>Suggestion: You can search based on the patient\'s mobile number,<br> <span style="font-weight:bolder;" > which should be more than 1 letters</span> <br>Please re-enter the correct type of information and press the Search button again' ]);
+            ->with(['success_message' => '<span style="color:blue;" >The word you entered to search the patient must be more than 1 letters </span> <br>Suggestion: You can search based on the patient\'s mobile number,<br> <span style="font-weight:bolder;" > which should be more than 1 letters</span> <br>Please re-enter the correct type of information and press the Search button again' ]);
         }
         // If the searched keyword has more than 0 character
         try

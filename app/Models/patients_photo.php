@@ -49,6 +49,7 @@ class patients_photo extends Model
                 'patients_photos_dr_related_id'      => find_admin_id_from_users_table()
             ]
         );
+        return $result_store_patient_photo_from_ehr_page ;
     }
 
 }

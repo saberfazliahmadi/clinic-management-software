@@ -149,17 +149,17 @@ echo '
                     </div>
 				</form>';
 
-                // For situation that user did not chose any date and came to this page for first time
+                // For situation that user did not choose any date and came to this page for first time
                 // These variable should be defined
                 // Because they will use in next steps, even there is no financial transaction result
-                if( !isset($num_of_pay_transactions) && !isset($num_of_receive_transactions) )
+                if( !isset($num_of_pay_transactions , $num_of_receive_transactions) )
                 {
-                    $num_of_pay_transactions = '';
+                    $num_of_pay_transactions     = '';
                     $num_of_receive_transactions = '';
-                    $label_chart_money_receive = '';
-                    $label_chart_money_paid = '';
-                    $data_chart_money_receive = '';
-                    $data_chart_money_paid = '';
+                    $label_chart_money_receive   = '';
+                    $label_chart_money_paid      = '';
+                    $data_chart_money_receive    = '';
+                    $data_chart_money_paid       = '';
                 }
 
                 if( strlen($num_of_pay_transactions) > 0 || strlen($num_of_receive_transactions) > 0 )

@@ -52,13 +52,13 @@ class PatientsAppointmentController extends Controller
      */
     public function show(patients_appointment $patients_appointment , show_form_of_appointments_on_specific_dateRequest $request )
     {
+        // Define and Specify a variable of date of appointments by GET or POST method
         $show_all_appointments_on_this_date = '' ;
-        // Specify date of appointments by GET or POST method
-        if( strlen($request->post('show_all_appointments_on_this_date')) > 0 )
+        if( $request->post('show_all_appointments_on_this_date') !== "" )
         {
             $show_all_appointments_on_this_date = $request->post('show_all_appointments_on_this_date') ;
         }
-        elseif( strlen($request->show_all_appointments_this_date) > 0 )
+        elseif( $request->show_all_appointments_this_date !== "" )
         {
             $show_all_appointments_on_this_date = $request->show_all_appointments_this_date ;
         }
@@ -129,7 +129,7 @@ class PatientsAppointmentController extends Controller
      * @param  \App\Models\patients_appointment  $patients_appointment
      * @return \Illuminate\Http\Response
      */
-    public function destroy(patients_appointment $patients_appointment , delete_this_appointment_idRequest $request  )
+    public function destroy(patients_appointment $patients_appointment , delete_this_appointment_idRequest $request )
     {
         try
         {
@@ -236,32 +236,23 @@ class PatientsAppointmentController extends Controller
 
     public function store_patient_time_appointment_table( store_patient_time_appointment_tableRequest $request )
     {
-        // we did nothing with it because its already encrypted
         $encrypted_choose_time_for_this_patient_id = request()->post('choose_time_for_this_patient_id') ;
         $decrypted_choose_time_for_this_patient_id = encrypt_decrypt('decrypt', request()->post('choose_time_for_this_patient_id') ) ;
         $choose_time_for_this_date       = request()->post('choose_time_for_this_date') ;
         $appointment_time                = request()->post('appointment_time') ;
 
+        // This value SHOULD NOT BE NULL because we use this value is financial transaction searching pag
+        $appointment_child_dr_related_name = '' ;
         if( request()->post('appointment_child_dr_related_name') !== null )
         {
             $appointment_child_dr_related_name = request()->post('appointment_child_dr_related_name') ;
         }
-        else
-        {
-            // This value SHOULD NOT BE NULL because we use this value is financial transaction searching page
-            // So leave it EMPTY
-            $appointment_child_dr_related_name = '' ;
-        }
 
+        // This value SHOULD NOT BE NULL because we use this value is financial transaction searching pag
+        $appointment_service_type = '' ;
         if( request()->post('appointment_service_type') !== null )
         {
             $appointment_service_type = request()->post('appointment_service_type') ;
-        }
-        else
-        {
-            // This value SHOULD NOT BE NULL because we use this value is financial transaction searching page
-            // So leave it EMPTY
-            $appointment_service_type = '' ;
         }
 
         try

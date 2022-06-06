@@ -776,26 +776,21 @@ if( Auth::user()->user_type === 'admin' )
                         
                                 <div class="col-md-12 col-sm-12 col-xs-12" >' ;
 
-                                    // START of if there was paraclinic data for this patient.
+                                    // If there was para-clinic data for this patient
                                     if( $count_result_of_patients_photo > 0)
                                     {
-                                        // Make a count variable trick
-                                        $count_trick_paraclinic_photo = 0 ;
-
                                         foreach ( $result_of_patients_photo as $key_patient_photo )
                                         {
-                                            $count_trick_paraclinic_photo  = $key_patient_photo->patients_photos_id ;
-                                            // let to sum patients_photos_id with 17 to prevent hack calculation
-                                            $count_trick_paraclinic_photo += 17		     ;
-
-                                            // Let to make a variable trick for show file title in all situation
+                                            // show file title in all situations
                                             if( strlen($key_patient_photo->patients_photos_file_description) > 0 )
                                             {
                                                 $patients_photos_file_description = $key_patient_photo->patients_photos_file_description ;
                                             }
                                             else
                                             {
-                                                $patients_photos_file_description = 'Without title '.$count_trick_paraclinic_photo ;
+                                                // let to SUM patients_photos_id with 17 to prevent hacking database
+                                                $without_title_trick = 17+$key_patient_photo->patients_photos_id ;
+                                                $patients_photos_file_description = 'Without title '.$without_title_trick ;
                                             }
 
                                             echo '
@@ -818,7 +813,7 @@ if( Auth::user()->user_type === 'admin' )
                                             </a>';
                                         }
                                     }
-                                    // END of if there was paraclinic data for this patient
+                                    // END of if there was para-clinic data for this patient
                                     else
                                     {
                                         echo '
@@ -849,7 +844,7 @@ if( Auth::user()->user_type === 'admin' )
                             </a>
                         </li>
                         
-                        <!-- START of login fancy console panel sharhe_hal_haye_pishin_category -->
+                        <!-- START of login fancy console panel previous_patient_history_category -->
                         <div style="display:none;" >
                             <div id="previous_patient_history_category" style="height:450px!important;width:900px!important;overflow-x: hidden!important;padding-bottom:30px;padding-top:35px;" >
                                 <div class="col-md-12 col-sm-12 col-xs-12 text-center" >
@@ -969,7 +964,7 @@ if( Auth::user()->user_type === 'admin' )
                                 </div>
                             </div>
                         </div>' ;
-                        // <!-- END of login fancy console panel sharhe_hal_haye_pishin_category -->';
+                        // END of login fancy console panel previous_patient_history_category
                     } // END of if $cms_menu_title[0] exist
 
                     if( strlen($cms_menu_title[9]) > 0 )

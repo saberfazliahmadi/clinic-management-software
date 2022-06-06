@@ -2,6 +2,31 @@
 
 return [
 
+    // I added this section manually
+    // To hide important data from hackers when APP_DEBUG=true in .env file
+    'debug_hide' =>
+    [
+        '_ENV' => [
+            'APP_KEY',
+            'DB_PASSWORD',
+        ],
+
+        '_SERVER' => [
+            'APP_KEY',
+            'DB_PASSWORD',
+        ],
+
+        '_POST' => [
+            'password',
+        ],
+    ],
+    // To hide everything from hackers on debug mode use below code
+    //'debug_hide' => [
+    //    '_COOKIE' => array_keys($_COOKIE),
+    //    '_SERVER' => array_keys($_SERVER),
+    //    '_ENV' => array_keys($_ENV),
+    //],
+
     /*
     |--------------------------------------------------------------------------
     | Application Name

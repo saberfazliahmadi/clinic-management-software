@@ -12,6 +12,9 @@ use App\Models\patients_general_info;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Http\Request;
 
+
+use DB;
+
 class PatientsEHRDocumentController extends Controller
 {
     /**
@@ -232,34 +235,39 @@ class PatientsEHRDocumentController extends Controller
                 $EHR_document_related_clinic_doctor_name_trick = $request->post('EHR_document_related_clinic_doctor_name') ;
             }
 
-            $result_store_new_ehr_doc = patients_EHR_document::store_new_ehr_doc($common_drug_2, $common_diet_2, $common_return_date_2, $decrypted_request_patient_id , $EHR_document_related_appointment_id_trick, $EHR_document_related_clinic_doctor_name_trick ) ;
+            $result_store_new_ehr_doc = patients_EHR_document::store_new_ehr_doc($common_drug_2, $common_diet_2, $common_return_date_2, $decrypted_request_patient_id, $EHR_document_related_appointment_id_trick, $EHR_document_related_clinic_doctor_name_trick);
+            if ( !$result_store_new_ehr_doc )
+            {
+                return redirect(route('home'))
+                ->with(['success_message' => '<span style="color:blue;">Can not Save new EHR!</span>']);
+            }
 
-            if ($request->hasFile('image'))
+            if ( $request->hasFile('image') )
             {
                 $request->validate([
-                    'image' => 'image|mimes:jpeg,png,jpg,gif,svg|max:10048',
-                ]);
-
+                                       'image' => 'image|mimes:jpeg,png,jpg,gif,svg|max:10048',
+                                   ]);
                 $file            = $request->file('image');
                 $extension       = $request->file('image')->extension();
-                $fileName        = rand(11111, 99999) . time() . rand() . '.'.$extension ;
-                $destinationPath = public_path() . '/storage/images/' . find_admin_id_from_users_table() . '/' . $decrypted_request_patient_id . '/para';
+                $fileName        = rand(11111, 99999).time().rand().'.'.$extension;
+                $destinationPath = public_path().'/storage/images/'.find_admin_id_from_users_table().'/'.$decrypted_request_patient_id.'/para';
                 $file->move($destinationPath, $fileName);
                 //$path = $request->file('image')->sotre('public/images/'.Auth::user()->name.'/'.$request->patient_id.'/para' , $name );
 
-                patients_photo::store_patient_photo_from_ehr_page($fileName, $request->keyboard_paraclinic_file_title, $decrypted_request_patient_id ) ;
+                $store_patient_photo_from_ehr_page = patients_photo::store_patient_photo_from_ehr_page($fileName, $request->keyboard_paraclinic_file_title, $decrypted_request_patient_id);
+                if ( ! $store_patient_photo_from_ehr_page )
+                {
+                    return redirect(route('home'))
+                    ->with(['success_message' => '<span style="color:blue;">We could not Save the Photo of patient but the other EHR info have saved successfully!</span>']);
+                }
             }
-            if(!$result_store_new_ehr_doc)
-            {
-                return redirect(route('home'))
-                ->with( [ 'success_message' => '<span style="color:blue;">Can not Save new EHR!</span>' ] );
-            }
-            return redirect(route('show_new_saved_ehr', $result_store_new_ehr_doc->EHR_document_id)) ;
+
+            return redirect(route('show_new_saved_ehr', $result_store_new_ehr_doc->EHR_document_id));
         }
         catch (\Exception $exception)
         {
             return redirect(route('home'))
-            ->with( [ 'success_message' => '<span style="color:blue;">Can not Save new EHR!</span>' ] );
+            ->with( [ 'success_message' => $exception.'<span style="color:blue;">Can not Save new EHR!</span>' ] );
         }
     }
 
