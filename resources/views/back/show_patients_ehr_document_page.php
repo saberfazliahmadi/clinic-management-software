@@ -871,8 +871,8 @@ if( Auth::user()->user_type === 'admin' )
                                                     foreach ( $result_of_patients_ehr_document as $key_ehr )
                                                     {
                                                         // Make a trick to prevent from POST method error (post method should'nt have Space in him content)
-                                                        $EHR_document_prescribed_common_diet      = encrypt_decrypt('decrypt', $key_ehr->EHR_document_prescribed_common_diet ) ;
-                                                        $EHR_document_prescribed_common_drug      = encrypt_decrypt('decrypt', $key_ehr->EHR_document_prescribed_common_drug ) ;
+                                                        // $EHR_document_prescribed_common_diet      = $key_ehr->EHR_document_prescribed_common_diet ;
+                                                        // $EHR_document_prescribed_common_drug      = $key_ehr->EHR_document_prescribed_common_drug ;
                                                         $EHR_document_prescribed_next_appointment = str_replace("_", " ", $key_ehr->EHR_document_prescribed_next_appointment );
                                                         $EHR_document_related_clinic_doctor_name  = str_replace("_", " ", $key_ehr->EHR_document_related_clinic_doctor_name );
 
@@ -903,7 +903,7 @@ if( Auth::user()->user_type === 'admin' )
                                                                     echo '
                                                                     <div class="well" style="background-color: inherit;border-bottom:0px;border-left:0px;font-size:17px;margin-bottom:0px;padding-bottom:0px;" >
                                                                         ' . $cms_menu_title[4] . '
-                                                                        <p class="common-drug" style="overflow-wrap: break-word; word-wrap: break-word; hyphens: auto;">'.$EHR_document_prescribed_common_drug.'</p>
+                                                                        <p class="common-drug" style="overflow-wrap: break-word; word-wrap: break-word; hyphens: auto;">'.$key_ehr->EHR_document_prescribed_common_drug.'</p>
                                                                     </div>';
                                                                 }
 
@@ -912,7 +912,7 @@ if( Auth::user()->user_type === 'admin' )
                                                                     echo '
                                                                     <div class="well" style="background-color: inherit;border-bottom:0px;border-left:0px;font-size:17px;margin-bottom:0px;padding-bottom:0px;" >
                                                                          ' . $cms_menu_title[3] . '
-                                                                        <p class="common-rejim" style="overflow-wrap: break-word; word-wrap: break-word; hyphens: auto;" >'.$EHR_document_prescribed_common_diet.'</p>
+                                                                        <p class="common-rejim" style="overflow-wrap: break-word; word-wrap: break-word; hyphens: auto;" >'.$key_ehr->EHR_document_prescribed_common_diet.'</p>
                                                                     </div>';
                                                                 }
 
