@@ -2,12 +2,11 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\patients_general_info;
 use App\Http\Requests\Storepatients_general_infoRequest;
 use App\Http\Requests\Updatepatients_general_infoRequest;
 
 // I added the below lines manually.
-use App\Models\patients_appointment;
+use App\Models\{patients_general_info , patients_appointment } ;
 use Illuminate\Http\Request;
 
 class PatientsGeneralInfoController extends Controller

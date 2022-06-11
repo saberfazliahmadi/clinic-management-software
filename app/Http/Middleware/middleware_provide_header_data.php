@@ -129,7 +129,7 @@ class middleware_provide_header_data
             join('patients_general_infos' , 'patients_general_infos.patient_id' , '=' , 'patients_appointments.appointment_patient_related_id')
             ->where('patients_appointments.appointment_dr_related_id' , $admin_id_from_users_table )
             ->where('patients_appointments.appointment_date'          , $show_all_appointments_on_this_date )
-            ->orderBy('patients_appointments.appointment_time')
+            ->oldest('patients_appointments.appointment_time')
             ->get() ;
 
             $result_middleware_provide_count_of_appointment_on_waiting_on_header = patients_appointment::
@@ -138,7 +138,7 @@ class middleware_provide_header_data
             ->where('patients_appointments.appointment_date'          , $show_all_appointments_on_this_date )
             ->where('patients_appointments.appointment_status_unique' , '0' )
             ->where('patients_appointments.appointment_status'        , '1' )
-            ->orderBy('patients_appointments.appointment_time')
+            ->oldest('patients_appointments.appointment_time')
             ->get() ;
 
             // How many appointments found for situation patients are waiting for going to doctors room on TODAY

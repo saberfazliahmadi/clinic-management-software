@@ -2,18 +2,13 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\patients_EHR_document;
 use App\Http\Requests\Storepatients_EHR_documentRequest;
 use App\Http\Requests\Updatepatients_EHR_documentRequest;
 
 // I added the below lines manually
-use App\Models\patients_photo;
-use App\Models\patients_general_info;
+use App\Models\{patients_EHR_document , patients_photo , patients_general_info} ;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Http\Request;
-
-
-use DB;
 
 class PatientsEHRDocumentController extends Controller
 {
@@ -155,7 +150,12 @@ class PatientsEHRDocumentController extends Controller
                 $patient_more_description .= ','.$request->typed_keyboard_savabegh;
             }
 
-            patients_general_info::update_this_patient_general_info_from_ehr_page($decrypted_request_patient_id, $patient_more_description, $request->post('patient_surgery_history'), $request->post('patient_disease_background'), $request->post('patient_medication_history'), $request->post('patient_allergies_history') ) ;
+            $result_update_this_patient_general_info = patients_general_info::update_this_patient_general_info_from_ehr_page($decrypted_request_patient_id, $patient_more_description, $request->post('patient_surgery_history'), $request->post('patient_disease_background'), $request->post('patient_medication_history'), $request->post('patient_allergies_history') ) ;
+            if ( ! $result_update_this_patient_general_info )
+            {
+                return redirect(route('home'))
+                ->with(['success_message' => '<span style="color:blue;">New information of patient does not updated! <br> So the New Photo and new EHR information of patient did not save also</span>']);
+            }
 
             $common_drug_2 = NULL ;
             if( Auth::user()->common_drug !== "" )
@@ -239,7 +239,7 @@ class PatientsEHRDocumentController extends Controller
             if ( !$result_store_new_ehr_doc )
             {
                 return redirect(route('home'))
-                ->with(['success_message' => '<span style="color:blue;">Can not Save new EHR!</span>']);
+                ->with(['success_message' => '<span style="color:blue;">New EHR information did not Save! <br> So the New Photo of patient did not save also if you inserted it!</span>']);
             }
 
             if ( $request->hasFile('image') )
@@ -258,7 +258,7 @@ class PatientsEHRDocumentController extends Controller
                 if ( ! $store_patient_photo_from_ehr_page )
                 {
                     return redirect(route('home'))
-                    ->with(['success_message' => '<span style="color:blue;">We could not Save the Photo of patient but the other EHR info have saved successfully!</span>']);
+                    ->with(['success_message' => '<span style="color:blue;">New Photo of patient did not save but the other new EHR information have been saved successfully!</span>']);
                 }
             }
 
@@ -267,7 +267,7 @@ class PatientsEHRDocumentController extends Controller
         catch (\Exception $exception)
         {
             return redirect(route('home'))
-            ->with( [ 'success_message' => $exception.'<span style="color:blue;">Can not Save new EHR!</span>' ] );
+            ->with( [ 'success_message' => '<span style="color:blue;">Can not Save new EHR information!</span>' ] );
         }
     }
 

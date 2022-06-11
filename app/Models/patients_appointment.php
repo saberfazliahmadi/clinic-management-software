@@ -43,7 +43,7 @@ class patients_appointment extends Model
         join('patients_general_infos' , 'patients_general_infos.patient_id' , '=' , 'patients_appointments.appointment_patient_related_id')
         ->equal_this_to_admin_id_from_user_table('patients_appointments.appointment_dr_related_id')
         ->where('patients_appointments.appointment_date' , $show_all_appointments_on_this_date )
-        ->orderBy('patients_appointments.appointment_time')
+        ->oldest('patients_appointments.appointment_time')
         ->get() ;
 
         return $result_show_form_of_appointments_on_specific_date ;

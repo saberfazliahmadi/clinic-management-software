@@ -7,8 +7,7 @@ use App\Http\Requests\show_form_of_appointments_on_specific_dateRequest;
 use App\Http\Requests\store_patient_time_appointment_tableRequest;
 use App\Http\Requests\Storepatients_appointmentRequest;
 use App\Http\Requests\Updatepatients_appointmentRequest;
-use App\Models\patients_appointment;
-use App\Models\patients_general_info;
+use App\Models\{ patients_appointment , patients_general_info } ;
 use Illuminate\Support\Facades\Auth;
 
 class PatientsAppointmentController extends Controller
