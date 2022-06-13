@@ -68,5 +68,5 @@ Route::group( [ 'middleware' => ['protected_page_accessible_for_admin' , 'thrott
     // All Routes related to EHR table
     Route::get('show_patients_ehr_document_page/{patient_id}/{related_appointment_id?}/{child_dr_related_name?}' ,'PatientsEHRDocumentController@show_patients_ehr_document_page')->name('show_patients_ehr_document_page')->where([ 'patient_id' => '[0-z--- ]+' , 'related_appointment_id' => '[0-9]+' , 'child_dr_related_name' => '[0-z--- ]+']);
     Route::post('store_patients_ehr_document_page/{patient_id}' , 'PatientsEHRDocumentController@store_patients_ehr_document_page')->name('store_patients_ehr_document_page')->where(['patient_id' => '[0-z--- ]+']) ;
-    Route::get('show_new_saved_ehr/{EHR_document_id}' , 'PatientsEHRDocumentController@show_new_saved_ehr' )->name('show_new_saved_ehr')->where(['EHR_document_id' => '[0-9]+']) ;
+    Route::get('show_new_saved_ehr/{EHR_document_id}/{patient_name}' , 'PatientsEHRDocumentController@show_new_saved_ehr' )->name('show_new_saved_ehr')->where(['EHR_document_id' => '[0-z--- ]+']) ;
 }) ;

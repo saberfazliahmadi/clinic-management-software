@@ -7,8 +7,10 @@ use App\Http\Requests\show_form_of_appointments_on_specific_dateRequest;
 use App\Http\Requests\store_patient_time_appointment_tableRequest;
 use App\Http\Requests\Storepatients_appointmentRequest;
 use App\Http\Requests\Updatepatients_appointmentRequest;
-use App\Models\{ patients_appointment , patients_general_info } ;
+
+// I added the below lines manually
 use Illuminate\Support\Facades\Auth;
+use App\Models\{ patients_appointment , patients_general_info };
 
 class PatientsAppointmentController extends Controller
 {
@@ -51,7 +53,7 @@ class PatientsAppointmentController extends Controller
      */
     public function show(patients_appointment $patients_appointment , show_form_of_appointments_on_specific_dateRequest $request )
     {
-        // Define and Specify a variable of date of appointments by GET or POST method
+        // Define and Specify a variable of date of appointments by GET or POST methods
         $show_all_appointments_on_this_date = '' ;
         if( $request->post('show_all_appointments_on_this_date') !== "" )
         {
@@ -67,18 +69,17 @@ class PatientsAppointmentController extends Controller
             // Create mysql query to extract all of appointments that record in database on this specific date (JOIN TYPE)
             $result_show_form_of_appointments_on_specific_date = patients_appointment::result_show_form_of_appointments_on_specific_date($show_all_appointments_on_this_date) ;
 
-            // How many appointment found on this specific date
+            // How many appointment found on requested date
             $count_of_appointment = $result_show_form_of_appointments_on_specific_date->count() ;
 
             // If there is not any appointment on the database
-            if( $count_of_appointment == 0 )
+            if( $count_of_appointment === 0 )
             {
-                return view('back.show_form_of_appointments_on_specific_date' , [ 'title_of_page' => '<b style="color:blue" >There is no Appointment on Date '.$show_all_appointments_on_this_date.'</b>' ] )
-                ->with(['success_message' => '<span style="color:blue;" >There are not any Appointment on Date '.$show_all_appointments_on_this_date.'</span> <br> Please, Choose a Date to Show Appointments']) ;
+                return redirect(route('show_form_of_appointments_on_specific_date'))->with(['success_message' => '<b style="color:blue" >There is no appointment on date '.$show_all_appointments_on_this_date.'</b><br> Please, choose another date to show appointments']) ;
             }
 
             $financial_management_data = '' ;
-            if( strlen(Auth::user()->financial_management) > 0 )
+            if( Auth::user()->financial_management !== '')
             {
                 $financial_management_data = Auth::user()->financial_management ;
             }
@@ -237,8 +238,6 @@ class PatientsAppointmentController extends Controller
     {
         $encrypted_choose_time_for_this_patient_id = request()->post('choose_time_for_this_patient_id') ;
         $decrypted_choose_time_for_this_patient_id = encrypt_decrypt('decrypt', request()->post('choose_time_for_this_patient_id') ) ;
-        $choose_time_for_this_date       = request()->post('choose_time_for_this_date') ;
-        $appointment_time                = request()->post('appointment_time') ;
 
         // This value SHOULD NOT BE NULL because we use this value is financial transaction searching pag
         $appointment_child_dr_related_name = '' ;
@@ -256,8 +255,8 @@ class PatientsAppointmentController extends Controller
 
         try
         {
-            $result_store_new_patient_appointment_time              = patients_appointment::store_new_patient_appointment_time($decrypted_choose_time_for_this_patient_id,$choose_time_for_this_date,$appointment_time,$appointment_child_dr_related_name,$appointment_service_type) ;
-            $update_patient_general_info_last_appointment_data_time = patients_general_info::update_patient_general_info_last_appointment_data_time($decrypted_choose_time_for_this_patient_id,$choose_time_for_this_date,$appointment_time) ;
+            $result_store_new_patient_appointment_time              = patients_appointment::store_new_patient_appointment_time($decrypted_choose_time_for_this_patient_id,request()->post('choose_time_for_this_date'),request()->post('appointment_time'),$appointment_child_dr_related_name,$appointment_service_type) ;
+            $update_patient_general_info_last_appointment_data_time = patients_general_info::update_patient_general_info_last_appointment_data_time($decrypted_choose_time_for_this_patient_id,request()->post('choose_time_for_this_date'),request()->post('appointment_time')) ;
 
             if(!$result_store_new_patient_appointment_time || !$update_patient_general_info_last_appointment_data_time)
             {
@@ -265,7 +264,7 @@ class PatientsAppointmentController extends Controller
                 ->with( [ 'success_message' => '<span style="color:blue;">The Time and Date Appointment Were NOT Successfully Submitted!</span>' ] );
             }
             return redirect(route('submit_new_patient_form'))
-            ->with( [ 'success_message' => 'The Appointment Time= '.$appointment_time.' On Date= '.$choose_time_for_this_date.' <br> of <a href="'.route('edit_patient_form', $encrypted_choose_time_for_this_patient_id ).'" ><b>Patient</b></a> Were Successfully Submitted' ] );
+            ->with( [ 'success_message' => 'The Appointment Time= '.request()->post('appointment_time').' On Date= '.request()->post('choose_time_for_this_date').' <br> of <a href="'.route('edit_patient_form', $encrypted_choose_time_for_this_patient_id ).'" ><b>Patient</b></a> Were Successfully Submitted' ] );
         }
         catch (\Exception $exception)
         {

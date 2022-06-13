@@ -7,6 +7,7 @@ use App\Models\financial_transaction;
 use App\Http\Requests\Storefinancial_transactionRequest;
 use App\Http\Requests\Updatefinancial_transactionRequest;
 
+// I added the below lines manually
 use Illuminate\Http\Request ;
 use Illuminate\Support\Facades\Auth;
 use function Illuminate\Events\queueable;
@@ -121,6 +122,7 @@ class FinancialTransactionController extends Controller
         $all_financial_items = explode(',' , request()->post('financial_management')) ;
         foreach($all_financial_items as $financial_items)
         {
+            // Check all require conditions that financial items should have
             if(!strpos( $financial_items,':') || strlen($financial_items) < 3 || !preg_replace('/[^0-9]/', '', $financial_items) || !preg_replace('/[^a-zA-Z]/', '', $financial_items) )
             {
                 return redirect(route('show_financial_settings_receiving_money_form'))
@@ -131,6 +133,7 @@ class FinancialTransactionController extends Controller
         try
         {
             $financial_management  = request()->post('financial_management') ;
+            // Remove some extra words from financial item if it has
             $financial_management  = str_replace( "." , "" , $financial_management ) ;
             $financial_management  = str_replace( "/" , "" , $financial_management ) ;
 
@@ -180,13 +183,13 @@ class FinancialTransactionController extends Controller
         $title_of_payment = request()->post('title_of_payment') ;
 
         $medical_document_number_of_patient = request()->post('medical_document_number') ;
-        if( $medical_document_number_of_patient == '' )
+        if( $medical_document_number_of_patient === '' )
         {
             $medical_document_number_of_patient = NULL ;
         }
 
         $financial_transaction_child_dr_related_name = request()->post('financial_transaction_child_dr_related_name') ;
-        if( request()->post('financial_transaction_child_dr_related_name') == NULL )
+        if( request()->post('financial_transaction_child_dr_related_name') === NULL )
         {
             // This value SHOULD NOT BE NULL because we use this value in financial transaction reporting page
             // So leave it EMPTY

@@ -6,9 +6,9 @@ use App\Http\Requests\Storepatients_EHR_documentRequest;
 use App\Http\Requests\Updatepatients_EHR_documentRequest;
 
 // I added the below lines manually
-use App\Models\{patients_EHR_document , patients_photo , patients_general_info} ;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Http\Request;
+use App\Models\{patients_EHR_document , patients_photo , patients_general_info} ;
 
 class PatientsEHRDocumentController extends Controller
 {
@@ -94,19 +94,20 @@ class PatientsEHRDocumentController extends Controller
         {
             $decrypted_request_patient_id = encrypt_decrypt('decrypt', $request->patient_id ) ;
             $encrypted_request_patient_id = $request->patient_id ;
+
+            $result_of_show_patients_general_infos = patients_general_info::fetch_info_of_this_patient_id( $decrypted_request_patient_id ) ;
+            if(!$result_of_show_patients_general_infos)
+            {
+                return redirect(route('home'))
+                ->with( [ 'success_message' => '<span style="color:blue;">Requested Patient Does Not Exist!</span>' ] );
+            }
+
             $result_of_patients_photo = patients_photo::result_of_patient_ehr_photo( $decrypted_request_patient_id ) ;
             $count_result_of_patients_photo = $result_of_patients_photo->count() ;
 
             $result_of_patients_ehr_document = patients_EHR_document::result_of_patients_ehr_document( $decrypted_request_patient_id ) ;
             $count_result_of_patients_ehr_document = $result_of_patients_ehr_document->count() ;
 
-            $result_of_show_patients_general_infos = patients_general_info::fetch_info_of_this_patient_id( $decrypted_request_patient_id ) ;
-
-            if(!$result_of_show_patients_general_infos)
-            {
-                return redirect(route('home'))
-                ->with( [ 'success_message' => '<span style="color:blue;">This Patient Does Not Exist!</span>' ] );
-            }
             return view('back.show_patients_ehr_document_page' ,
             [
                 'title_of_page'                             => 'EHR of Patient' ,
@@ -154,7 +155,7 @@ class PatientsEHRDocumentController extends Controller
             if ( ! $result_update_this_patient_general_info )
             {
                 return redirect(route('home'))
-                ->with(['success_message' => '<span style="color:blue;">New information of patient does not updated! <br> So the New Photo and new EHR information of patient did not save also</span>']);
+                ->with(['success_message' => '<span style="color:blue;">New information of patient DOES NOT updated! <br> So the New Photo and new EHR information of patient did not save also</span>']);
             }
 
             $common_drug_2 = NULL ;
@@ -262,7 +263,7 @@ class PatientsEHRDocumentController extends Controller
                 }
             }
 
-            return redirect(route('show_new_saved_ehr', $result_store_new_ehr_doc->EHR_document_id));
+            return redirect(route('show_new_saved_ehr', [ 'EHR_document_id' => encrypt_decrypt('encrypt', $result_store_new_ehr_doc->EHR_document_id ) , 'patient_name' => $request->patient_name ] )) ;
         }
         catch (\Exception $exception)
         {
@@ -275,7 +276,7 @@ class PatientsEHRDocumentController extends Controller
     {
         try
         {
-            $result_show_new_saved_ehr = patients_EHR_document::show_new_saved_ehr($request->EHR_document_id) ;
+            $result_show_new_saved_ehr = patients_EHR_document::show_new_saved_ehr( encrypt_decrypt('decrypt', $request->EHR_document_id) ) ;
 
             if(!$result_show_new_saved_ehr)
             {
@@ -284,7 +285,7 @@ class PatientsEHRDocumentController extends Controller
             }
             return view('back.show_new_saved_ehr' ,
             [
-                'title_of_page'                            => 'a new EHR information of patient <br>with patient number: '.$result_show_new_saved_ehr->EHR_document_patient_related_id.'<br> successfully saved at date '.date("Y/m/d") ,
+                'title_of_page'                            => 'a new EHR information of <b>'.encrypt_decrypt('decrypt',$request->patient_name).'</b> <br> successfully saved at date '.date("Y/m/d") ,
                 'show_ehr_report'                          => 'true' ,
                 'EHR_document_patient_related_id'          => $result_show_new_saved_ehr->EHR_document_patient_related_id ,
                 'EHR_document_prescribed_common_drug'      => $result_show_new_saved_ehr->EHR_document_prescribed_common_drug ,

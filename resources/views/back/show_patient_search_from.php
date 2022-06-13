@@ -97,75 +97,77 @@ echo '
         <br>';
 
         // We use chunk(10) in our MODEL for situations that we want to show 10000 result of our search which chunk breaks a big result to small peaces and can handle Servers Ram resource
-        foreach ( $result_run_search_form as $keys )
+        foreach ( $result_run_search_form as $key )
         {
-            foreach ($keys as $key)
-            {
+            echo '
+            <div class="col-md-12 col-sm-12 col-xs-12 well" >
+                
+                <div class="col-md-4 col-sm-4 col-xs-4 btn-link">
+                    <h3 style="color:gray;" >
+                        '.$key->patient_first_name.' '.$key->patient_last_name.'
+                    </h3>
+                </div>
+                
+                <div class="col-md-4 col-sm-4 col-xs-4 btn-link">
+                    <h3 style="color:gray;" >
+                        '.$key->patient_nationality_number.'
+                    </h3>
+                </div>
+                
+                <div class="col-md-4 col-sm-4 col-xs-4 btn-link">
+                    <h3 style="color:gray;" >
+                        '.$key->patient_mobile_number;
+
+                // START OF IF DR TELEGRAM ACTIVATED.
+                if (isset($key->telegram) && $key->telegram === 'true')
+                {
+                    if (strlen($key->patient_from_external_platform_id) > 0)
+                    {
+                        echo '
+                        <div style="float:left;font-size:13px;margin-left:10px;" class="col-md-12 col-sm-12 col-xs-12" >
+                            This patient was connect to Telegram
+                            <span class="glyphicon glyphicon-ok" aria-hidden="true" ></span>
+                        </div>';
+                    }
+                    else
+                    {
+                        echo '
+                        <div style="float:left;font-size:13px;margin-left:10px;color:red" class="col-md-12 col-sm-12 col-xs-12" >
+                            This patient does NOT connected to Telegram
+                            <span class="glyphicon glyphicon-remove" aria-hidden="true" ></span>
+                        </div>';
+                    }
+                } // END OF IF DR TELEGRAM ACTIVATED.
+
                 echo '
-                <div class="col-md-12 col-sm-12 col-xs-12 well" >
-                    
-                    <div class="col-md-4 col-sm-4 col-xs-4 btn-link">
-                        <h3 style="color:gray;" >
-                            '.$key->patient_first_name.' '.$key->patient_last_name.'
-                        </h3>
-                    </div>
-                    
-                    <div class="col-md-4 col-sm-4 col-xs-4 btn-link">
-                        <h3 style="color:gray;" >
-                            '.$key->patient_nationality_number.'
-                        </h3>
-                    </div>
-                    
-                    <div class="col-md-4 col-sm-4 col-xs-4 btn-link">
-                        <h3 style="color:gray;" >
-                            '.$key->patient_mobile_number;
+                    </h3>
+                </div>
+                <br>
+                <hr style="width:1px;" >
 
-                    // START OF IF DR TELEGRAM ACTIVATED.
-                    if (isset($key->telegram) && $key->telegram === 'true') {
-                        if (strlen($key->patient_from_external_platform_id) > 0) {
-                            echo '
-                                    <div style="float:left;font-size:13px;margin-left:10px;" class="col-md-12 col-sm-12 col-xs-12" >
-                                        This patient was connect to Telegram
-                                        <span class="glyphicon glyphicon-ok" aria-hidden="true" ></span>
-                                    </div>';
-                        } else {
-                            echo '
-                                    <div style="float:left;font-size:13px;margin-left:10px;color:red" class="col-md-12 col-sm-12 col-xs-12" >
-                                        This patient does NOT connected to Telegram
-                                        <span class="glyphicon glyphicon-remove" aria-hidden="true" ></span>
-                                    </div>';
-                        }
-                    } // END OF IF DR TELEGRAM ACTIVATED.
+                <div class="col-md-12 col-sm-12 col-xs-12" > 
+                    <a href="'.route('show_patients_ehr_document_page', ['patient_id' => encrypt_decrypt('encrypt', $key->patient_id)]).'" class="text-center uiuxtrick" >
+                        <div class="col-md-4 col-sm-4 col-xs-12 btn btn-default" style="border:1px solid #e3e3e3;float:right;color:#337ab7;padding-top: 15px;padding-bottom: 15px;" >
+                             <i class="fa fa-clone"></i>
+                             EHR Document
+                        </div>
+                    </a>
+                    <a href="'.route('home').'" class="text-center uiuxtrick" >
+                        <div class="col-md-4 col-sm-4 col-xs-12 btn btn-default" style="border:1px solid #e3e3e3;float:right;color:#337ab7;padding-top: 15px;padding-bottom: 15px;" >
+                             <i class="glyphicon glyphicon-tags"></i>&nbsp;
+                             Medical Prescriptions
+                        </div>
+                    </a>
+                    <a href="'.route('edit_patient_form', encrypt_decrypt('encrypt', $key->patient_id)).'" class="text-center uiuxtrick" >
+                        <div class="col-md-3 col-sm-3 col-xs-12 btn btn-default" style="border:1px solid #e3e3e3;float:right;color:#337ab7;padding-top: 15px;padding-bottom: 15px;" >
+                              <i class="fa fa-edit"></i>
+                             Book Appointment | Edit Info
+                        </div>
+                    </a>
+                </div>
 
-                    echo '
-                        </h3>
-                    </div>
-                    <br>
-                    <hr style="width:1px;" >
-    
-                    <div class="col-md-12 col-sm-12 col-xs-12" > 
-                        <a href="'.route('show_patients_ehr_document_page', ['patient_id' => encrypt_decrypt('encrypt', $key->patient_id)]).'" class="text-center uiuxtrick" >
-                            <div class="col-md-4 col-sm-4 col-xs-12 btn btn-default" style="border:1px solid #e3e3e3;float:right;color:#337ab7;padding-top: 15px;padding-bottom: 15px;" >
-                                 <i class="fa fa-clone"></i>
-                                 EHR Document
-                            </div>
-                        </a>
-                        <a href="'.route('home').'" class="text-center uiuxtrick" >
-                            <div class="col-md-4 col-sm-4 col-xs-12 btn btn-default" style="border:1px solid #e3e3e3;float:right;color:#337ab7;padding-top: 15px;padding-bottom: 15px;" >
-                                 <i class="glyphicon glyphicon-tags"></i>&nbsp;
-                                 Medical Prescriptions
-                            </div>
-                        </a>
-                        <a href="'.route('edit_patient_form', encrypt_decrypt('encrypt', $key->patient_id)).'" class="text-center uiuxtrick" >
-                            <div class="col-md-3 col-sm-3 col-xs-12 btn btn-default" style="border:1px solid #e3e3e3;float:right;color:#337ab7;padding-top: 15px;padding-bottom: 15px;" >
-                                  <i class="fa fa-edit"></i>
-                                 Book Appointment | Edit Info
-                            </div>
-                        </a>
-                    </div>
-    
-                </div>';
-            }
+            </div>';
+
         }
 
         // Put this piece of code to make a gap between search button and the last result for better UX
@@ -179,4 +181,3 @@ echo '
 
 // Call the footer include.
 include 'layout/footer.php' ;
-?>

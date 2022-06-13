@@ -5,9 +5,9 @@ namespace App\Http\Controllers;
 use App\Http\Requests\Storepatients_general_infoRequest;
 use App\Http\Requests\Updatepatients_general_infoRequest;
 
-// I added the below lines manually.
-use App\Models\{patients_general_info , patients_appointment } ;
+// I added the below lines manually
 use Illuminate\Http\Request;
+use App\Models\{patients_general_info , patients_appointment } ;
 
 class PatientsGeneralInfoController extends Controller
 {
@@ -149,11 +149,10 @@ class PatientsGeneralInfoController extends Controller
         $decrypted_update_this_patient_id = encrypt_decrypt('decrypt', $update_this_patient_id );
         $encrypted_update_this_patient_id = $update_this_patient_id ;
 
-        $request_patient_mobile_number = $request->post('patient_mobile_number') ;
         // Check for mobile number duplication
         // WE SHOULD NOT HAVE TWO PATIENTS WITH SAME MOBILE NUMBERS IN OUR DATABASE!
         // The mobile numbers should be unique
-        $number_of_duplicate_mobile_number = patients_general_info::number_of_duplicate_mobile_number($decrypted_update_this_patient_id , $request_patient_mobile_number) ;
+        $number_of_duplicate_mobile_number = patients_general_info::number_of_duplicate_mobile_number($decrypted_update_this_patient_id , $request->post('patient_mobile_number') ) ;
 
         // If the Mobile Number was not unique then redirect
         if ( $number_of_duplicate_mobile_number !== 0 )
@@ -167,18 +166,18 @@ class PatientsGeneralInfoController extends Controller
             $request_all = $request->all() ;
             $result_update_this_patient_id = patients_general_info::result_update_this_patient_id($decrypted_update_this_patient_id,$request_all) ;
 
-            if($result_update_this_patient_id)
+            if(!$result_update_this_patient_id)
             {
                 return redirect(route('edit_patient_form', $encrypted_update_this_patient_id))
-                ->with(['success_message' => '<b>' . $request->post('patient_first_name') . ' ' . $request->post('patient_last_name') . '</b> Information of Successfully Updated' ]) ;
+                ->with(['success_message' => '<span style="color:blue;font-weight:bolder;">' . $request->post('patient_first_name') . ' ' . $request->post('patient_last_name') . ' Information WAS NOT Updated</span>']) ;
             }
             return redirect(route('edit_patient_form', $encrypted_update_this_patient_id))
-            ->with(['success_message' => '<span style="color:blue;font-weight:bolder;">' . $request->post('patient_first_name') . ' ' . $request->post('patient_last_name') . ' Information WAS NOT Updated</span>']) ;
+            ->with(['success_message' => '<b>' . $request->post('patient_first_name') . ' ' . $request->post('patient_last_name') . '\'s Information Successfully Updated</b>' ]) ;
         }
         catch (\Exception $exception)
         {
             return redirect(route('edit_patient_form', $encrypted_update_this_patient_id))
-            ->with(['success_message' => '<span style="color:blue;font-weight:bolder;">' . $request->post('patient_first_name') . ' ' . $request->post('patient_last_name') . ' Information WAS NOT Updated</span>']) ;
+            ->with(['success_message' => '<span style="color:blue;font-weight:bolder;">' . $request->post('patient_first_name') . ' ' . $request->post('patient_last_name') . ' Information WAS NOT Updated!</span>']) ;
         }
     }
 
@@ -194,19 +193,20 @@ class PatientsGeneralInfoController extends Controller
         {
             $decrypted_request_delete_this_patient_id = encrypt_decrypt('decrypt', $request->delete_this_patient_id ) ;
             $result_delete_this_patient_id = patients_general_info::delete_this_patient_id($decrypted_request_delete_this_patient_id) ;
-            // If we found this patient id in database and successfully deleted it
-            if($result_delete_this_patient_id)
+
+            // If we did not found this patient id in database and successfully deleted it
+            if(!$result_delete_this_patient_id)
             {
                 return redirect(route('submit_new_patient_form'))
-                ->with(['success_message' => 'The requested patient Number successfully deleted']);
+                ->with(['success_message' => 'We have an error to delete this patient Number<br> Maybe there is an appointment or a financial transaction related to this patient,<br> So if you want to delete this patient<br> at first, you need to delete all appointments and financial transactions related to him']);
             }
             return redirect(route('submit_new_patient_form'))
-            ->with(['success_message' => 'We have an error to delete this patient Number<br> Maybe there is an appointment or a financial transaction related to this patient,<br> So if you want to delete this patient<br> at first, you need to delete all appointments and financial transactions related to him']);
+            ->with(['success_message' => 'The requested patient successfully deleted']);
         }
         catch (\Exception $exception)
         {
             return redirect()->back()
-            ->with(['success_message' => 'We have an error to delete this patient Number<br> Maybe there is an appointment or a financial transaction related to this patient,<br> So if you want to delete this patient<br> at first, you need to delete all appointments and financial transactions related to him']);
+            ->with(['success_message' => 'We have an error to delete this patient<br> Maybe there is an appointment or a financial transaction related to this patient,<br> So if you want to delete this patient<br> at first, you need to delete all appointments and financial transactions related to him']);
         }
     }
 
@@ -229,13 +229,13 @@ class PatientsGeneralInfoController extends Controller
             $result_of_run_search_form = patients_general_info::fetch_result_of_search_from() ;
 
             // If there is NOT ANY result in database
-            if( $result_of_run_search_form->count() == 0 )
+            if( $result_of_run_search_form->count() === 0 )
             {
                 return redirect(route('show_patient_search_from'))
                 ->with([ 'success_message' => 'There is not any result for <b style="color:blue;" >'.request()->post('search_text').'</b>' ] );
             }
 
-            \Session::flash('success_message', '<b>'.$result_of_run_search_form->count().'</b> results found for <b>"'.request()->post('search_text').'"</b></b>' ) ;
+            \Session::flash('success_message', '<b style="color:blue;" >'.$result_of_run_search_form->count().'</b> results found for <b style="color:blue;" >"'.request()->post('search_text').'"</b>' ) ;
             return view('back.show_patient_search_from',
             [
                 'title_of_page'          => 'Search Patients' ,

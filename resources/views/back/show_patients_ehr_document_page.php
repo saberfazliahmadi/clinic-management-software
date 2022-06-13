@@ -710,14 +710,14 @@ if( Auth::user()->user_type === 'admin' )
                     {
                         echo '
                         <li role="presentation" >
-                            <a id="various222" href="#paraclinic" type="button" aria-controls="profile" type="button" role="tab" data-toggle="tab" >
+                            <a id="various222" href="#para-clinic" type="button" aria-controls="profile" type="button" role="tab" data-toggle="tab" >
                                 '.$cms_menu_title[1].'
                             </a>
                         </li>
                         
-                        <!-- START of login fancy console panel paraclinic -->
+                        <!-- START of login fancy console panel para-clinic -->
                         <div style="display:none;" >
-                            <div id="paraclinic" style="height:550px;width:900px!important;overflow-x: hidden!important;padding-bottom:30px;padding-top:35px;" >
+                            <div id="para-clinic" style="height:550px;width:900px!important;overflow-x: hidden!important;padding-bottom:30px;padding-top:35px;" >
                         
                                 <div class="col-md-12 col-sm-12 col-xs-12 text-center" style="margin-bottom:19px;" >
                         
@@ -735,11 +735,9 @@ if( Auth::user()->user_type === 'admin' )
                                         <hr>
                                         
                                         <div class="col-md-12 col-sm-12 col-xs-12" >
-                            
                                             <a id="various222" href="#help_photo_upload" class="btn-primary btn-lg" type="button" style="cursor:pointer;color:black!important;background-color:#F7F7F7!important;border:1px solid #bfbdbd;font-size:14px;" >
                                                 Guide - Must be Read
                                             </a>
-                            
                                         </div>
                                         
                                     </div>
@@ -788,9 +786,8 @@ if( Auth::user()->user_type === 'admin' )
                                             }
                                             else
                                             {
-                                                // let to SUM patients_photos_id with 17 to prevent hacking database
-                                                $without_title_trick = 17+$key_patient_photo->patients_photos_id ;
-                                                $patients_photos_file_description = 'Without title '.$without_title_trick ;
+                                                // let to SUM patient_id with patients_photos_id to prevent hacking database
+                                                $patients_photos_file_description = 'Without title '.$result_of_patients_general_infos->patient_id+$key_patient_photo->patients_photos_id ;
                                             }
 
                                             echo '
@@ -831,7 +828,7 @@ if( Auth::user()->user_type === 'admin' )
                                 </div>
                             </div>
                         </div>
-                        <!-- END of login fancy console panel paraclinic -->';
+                        <!-- END of login fancy console panel para-clinic -->';
                     } // END of if $cms_menu_title[1] exist
 
                     // START of if $cms_menu_title[0] exist
@@ -870,6 +867,7 @@ if( Auth::user()->user_type === 'admin' )
                                                     // START of foreach EHR
                                                     foreach ( $result_of_patients_ehr_document as $key_ehr )
                                                     {
+                                                        $ehr_document_number_trick = $key_ehr->EHR_document_id + $result_of_patients_general_infos->patient_id ;
                                                         // Make a trick to prevent from POST method error (post method should'nt have Space in him content)
                                                         // $EHR_document_prescribed_common_diet      = $key_ehr->EHR_document_prescribed_common_diet ;
                                                         // $EHR_document_prescribed_common_drug      = $key_ehr->EHR_document_prescribed_common_drug ;
@@ -878,18 +876,18 @@ if( Auth::user()->user_type === 'admin' )
 
                                                         echo '
                                                         <!-- Button trigger modal -->
-                                                        <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#ehr_detail_'.$key_ehr->EHR_document_id.'" style="margin:5px 5px 5px 5px;" >
-                                                          '.$key_ehr->EHR_document_id.' => '.substr($key_ehr->created_at , '0' , '10').'
+                                                        <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#ehr_detail_'.$ehr_document_number_trick.'" style="margin:5px 5px 5px 5px;" >
+                                                          '.$ehr_document_number_trick.' => '.substr($key_ehr->created_at , '0' , '10').'
                                                         </button>
                                                         
                                                         <!-- START Modal -->
-                                                        <div class="modal fade" id="ehr_detail_'.$key_ehr->EHR_document_id.'" tabindex="-1'.$key_ehr->EHR_document_id.'" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                                                        <div class="modal fade" id="ehr_detail_'.$ehr_document_number_trick.'" tabindex="-1'.$ehr_document_number_trick.'" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
                                                           <div class="modal-dialog" role="document">
                                                             <div class="modal-content">
                                                               <div class="modal-header">
                                                                 <center>
                                                                     <h5 class="modal-title" id="exampleModalLabel" style="float:none;">
-                                                                        '.$key_ehr->EHR_document_id.' => '.substr($key_ehr->created_at , '0' , '10').'
+                                                                        '.$ehr_document_number_trick.' => '.substr($key_ehr->created_at , '0' , '10').'
                                                                     </h5>
                                                                 </center>
                                                                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
@@ -1223,6 +1221,7 @@ echo '
 </div>
 
 <input type="hidden" name="patient_id" value="'.$EHR_document_patient_related_id.'" >
+<input type="hidden" name="patient_name" value="'.encrypt_decrypt('encrypt',$result_of_patients_general_infos->patient_first_name.' '.$result_of_patients_general_infos->patient_last_name).'" >
 <input  type="hidden" name="EHR_document_related_appointment_id" value="'.$EHR_document_related_appointment_id.'">
 <input  type="hidden" name="EHR_document_related_clinic_doctor_name" value="'.$EHR_document_related_clinic_doctor_name.'" >' ;
 //<input  type="hidden" name="svg_post" value="" id="svg" >

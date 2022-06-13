@@ -187,8 +187,7 @@ class patients_general_info extends Model
                    ]  ) ;
         })
         ->latest('patient_id')
-        ->get()
-        ->chunk(10) ;
+        ->get() ;
         // We use chunk(10) for situations that we want to show 10000 result of our search which chunk breaks a big result to small peaces and can handle Servers Ram resource
         return $result_of_run_search_form ;
     }
