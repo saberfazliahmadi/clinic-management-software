@@ -40,22 +40,34 @@ class patients_EHR_document extends Model
 
     public function getEHRDocumentPrescribedCommonDrugAttribute($value)
     {
-        return encrypt_decrypt('decrypt', $value ) ;
+        if($value !== NULL)
+        {
+            return encrypt_decrypt('decrypt', $value ) ;
+        }
     }
 
     public function setEHRDocumentPrescribedCommonDrugAttribute($value)
     {
-        $this->attributes['EHR_document_prescribed_common_drug'] = encrypt_decrypt('encrypt', $value ) ;
+        if($value !== NULL)
+        {
+            $this->attributes['EHR_document_prescribed_common_drug'] = encrypt_decrypt('encrypt', $value ) ;
+        }
     }
 
     public function getEHRDocumentPrescribedCommonDietAttribute($value)
     {
-        return encrypt_decrypt('decrypt', $value ) ;
+        if($value !== NULL)
+        {
+            return encrypt_decrypt('decrypt', $value ) ;
+        }
     }
 
     public function setEHRDocumentPrescribedCommonDietAttribute($value)
     {
-        $this->attributes['EHR_document_prescribed_common_diet'] = encrypt_decrypt('encrypt', $value ) ;
+        if($value !== NULL)
+        {
+            $this->attributes['EHR_document_prescribed_common_diet'] = encrypt_decrypt('encrypt', $value ) ;
+        }
     }
 
     static function result_of_patients_ehr_document($request_patient_id)

@@ -169,10 +169,10 @@ class PatientsEHRDocumentController extends Controller
                 // Estimate how many drug this variable has to use of for loop
                 $end                = $common_drug_number ;
 
-                // Make a for loop to check all drugs validation
+                // Make a for loop to check all drugs defined on settings of software page
                 for( $start='0' ; $start < $end ; $start++ )
                 {
-                    // Drug should be exist on ADMIN drug list and $request->common_drug_1[$start]
+                    // An accepted drug should be exist on ADMIN defined drugs list AND selected by user $request->common_drug_1[$start]
                     if( strlen($common_drug_1[$start]) > 0 && strlen($request->post($common_drug_1[$start])) > 0 )
                     {
                         $common_drug_2 .= $common_drug_1[$start].' = '.$request->post($common_drug_1[$start]) ;
@@ -184,7 +184,7 @@ class PatientsEHRDocumentController extends Controller
                 }
 
                 // Get keyboard_medications_picker
-                if( $request->keyboard_medications_picker !== "" )
+                if( strlen($request->keyboard_medications_picker) > 0 )
                 {
                     $common_drug_2 .= $request->post('keyboard_medications_picker').','     ;
                 }
@@ -201,7 +201,7 @@ class PatientsEHRDocumentController extends Controller
                     }
                 }
 
-                if( $request->keyboard_common_diet !== "" )
+                if( strlen($request->keyboard_common_diet) > 0 )
                 {
                     $common_diet_2 .= $request->post('keyboard_common_diet').',' ;
                 }
