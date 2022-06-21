@@ -110,7 +110,7 @@ class PatientsGeneralInfoController extends Controller
         try
         {
             $decrypted_edit_this_patient_id = encrypt_decrypt('decrypt', $edit_this_patient_id ) ;
-            $result_edit_patient_form = patients_general_info::fetch_info_of_this_patient_id($decrypted_edit_this_patient_id) ;
+            $result_edit_patient_form       = patients_general_info::fetch_info_of_this_patient_id($decrypted_edit_this_patient_id) ;
 
             // If the requested patient does not exist
             if(!$result_edit_patient_form)
@@ -119,7 +119,7 @@ class PatientsGeneralInfoController extends Controller
                 ->with( ['success_message' => '<span style="color:blue;font-weight:bolder;">The requested patient does not exist</span>']) ;
             }
 
-            $number_of_total_clinic_patients = patients_general_info::number_of_total_clinic_patients() ;
+            $number_of_total_clinic_patients         = patients_general_info::number_of_total_clinic_patients() ;
             $result_show_all_appointments_of_this_id = patients_appointment::result_show_all_appointments_of_this_id($decrypted_edit_this_patient_id) ;
 
             return view('back.submit_new_patient_form' ,
@@ -192,7 +192,7 @@ class PatientsGeneralInfoController extends Controller
         try
         {
             $decrypted_request_delete_this_patient_id = encrypt_decrypt('decrypt', $request->delete_this_patient_id ) ;
-            $result_delete_this_patient_id = patients_general_info::delete_this_patient_id($decrypted_request_delete_this_patient_id) ;
+            $result_delete_this_patient_id            = patients_general_info::delete_this_patient_id($decrypted_request_delete_this_patient_id) ;
 
             // If we did not found this patient id in database and successfully deleted it
             if(!$result_delete_this_patient_id)
@@ -205,7 +205,7 @@ class PatientsGeneralInfoController extends Controller
         }
         catch (\Exception $exception)
         {
-            return redirect()->back()
+            return redirect(route('submit_new_patient_form'))
             ->with(['success_message' => 'We have an error to delete this patient<br> Maybe there is an appointment or a financial transaction related to this patient,<br> So if you want to delete this patient<br> at first, you need to delete all appointments and financial transactions related to him']);
         }
     }

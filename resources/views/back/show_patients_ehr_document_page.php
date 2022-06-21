@@ -1177,7 +1177,7 @@ if( strlen($result_of_patients_general_infos->patient_birth_day) > 0 )
     <div style="float:right;font-size:16px;margin-right:10px;" >Birthday: '.$result_of_patients_general_infos->patient_birth_day.' | </div>' ;
 }
 
-$options_for_user = (unserialize(Auth::user()->options_for_user)) ;
+// $options_for_user = (unserialize(Auth::user()->options_for_user)) ;
 
 //// START of if admin activated money section
 //if( $options_for_user[0] == 't' && isset($_GET['money_receive']) )

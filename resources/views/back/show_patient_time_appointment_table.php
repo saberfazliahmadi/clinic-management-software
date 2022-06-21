@@ -162,8 +162,8 @@ echo '
             // END of select service type of appointment
 
             echo '
-            <center>
-                '.$text_trick.'
+            <center>'
+                .$text_trick.'
             </center>
 
             <button type="submit" name="submit" class="btn btn-success btn-group-justified uiuxtrick" style="font-size:28px;position: fixed;bottom: 0px;right: 0px;z-index: 1;margin-bottom:0px;margin-right:0px;" >

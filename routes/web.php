@@ -15,7 +15,7 @@ use Monolog\Handler\RotatingFileHandler;
 */
 Auth::routes();
 
-Route::match(array('GET', 'POST'),'/', function () {
+Route::match(array('POST','GET'),'/', static function () {
     return view('auth.login');
 });
 
@@ -30,7 +30,7 @@ Route::group( [ 'middleware' => ['protected_page_accessible_for_user_and_admin' 
     Route::get('submit_new_patient_form','PatientsGeneralInfoController@create')->name('submit_new_patient_form') ;
     Route::put('store_new_patient_form','PatientsGeneralInfoController@store')->name('store_new_patient_form');
     Route::get('show_patient_search_from','PatientsGeneralInfoController@show_patient_search_from' )->name('show_patient_search_from') ;
-    Route::post('run_patient_search_form' , 'PatientsGeneralInfoController@run_patient_search_form')->name('run_patient_search_form') ;
+    Route::match(array('GET' , 'POST') , 'run_patient_search_form' , 'PatientsGeneralInfoController@run_patient_search_form')->name('run_patient_search_form') ;
     Route::get('delete_this_patient_id/{delete_this_patient_id}', 'PatientsGeneralInfoController@destroy' )->name('delete_this_patient_id')->where(['delete_this_patient_id' => '[0-z--- ]+']);
 
     // All Routes related to patients_appointments table

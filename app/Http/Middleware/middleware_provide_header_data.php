@@ -151,7 +151,7 @@ class middleware_provide_header_data
             if( $count_of_appointment_in_header > 0 )
             {
                 $financial_management_data_in_header = '' ;
-                if( strlen(Auth::user()->financial_management) > 0 )
+                if(Auth::user()->financial_management !== '')
                 {
                     $financial_management_data_in_header = Auth::user()->financial_management ;
                 }

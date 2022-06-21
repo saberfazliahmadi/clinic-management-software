@@ -95,7 +95,7 @@ class FinancialTransactionController extends Controller
                 return redirect(route('show_financial_transaction_reporting_form'))
                 ->with(['success_message' => '<b style="color:blue;" >We have an error to destroy this Financial Transaction</b>']);
             }
-            return redirect()->back()
+            return back()
             ->with(['success_message' => '<span>The Selected Financial Transaction Successfully Deleted</span>']);
         }
         catch (\Exception $exception)
@@ -115,30 +115,50 @@ class FinancialTransactionController extends Controller
         return view('back.show_financial_settings_receiving_money_form', [ 'title_of_page' => 'Financial Service Types Settings' ]) ;
     }
 
-    public function store_financial_settings_receiving_money_form( Request $request )
+    public function validation_of_financial_management_variable($request_post_financial_management)
     {
-        // Check all financial items to be eligible
-        // Each of financial transaction items should have number and character and ':'
-        $all_financial_items = explode(',' , request()->post('financial_management')) ;
-        foreach($all_financial_items as $financial_items)
+        $financial_management_revealed_errors = '' ;
+        // If ADMIN typed something for financial management service
+        if ($request_post_financial_management ==! '')
         {
-            // Check all require conditions that financial items should have
-            if(!strpos( $financial_items,':') || strlen($financial_items) < 3 || !preg_replace('/[^0-9]/', '', $financial_items) || !preg_replace('/[^a-zA-Z]/', '', $financial_items) )
+            // Check all financial items to be eligible
+            // Each of financial transaction items should have number & character & ':'
+            $exploded_values = explode(',', $request_post_financial_management);
+            foreach ($exploded_values as $financial_item)
             {
-                return redirect(route('show_financial_settings_receiving_money_form'))
-                ->with(['success_message' => '<b style="color:red;">'.$financial_items.' is wrong</b><br><b style="color:blue;" >At least type 3 characters followed by this type <br> Service Name : Service Amount</b><br> and at the end press Save button<br>Remember, each service type should have this character <b style="color:blue;" >:</b>' ]);
+                // Check all require conditions that financial items should have
+                if (! (strpos($financial_item, ':') && strlen($financial_item) > 2 && preg_match('/[A-Za-z]/', $financial_item) && preg_match('/[0-9]/', $financial_item)))
+                {
+                    $financial_management_revealed_errors .= ' '.$financial_item ;
+                }
             }
         }
+        return $financial_management_revealed_errors ;
+    }
 
+    // Remove some extra words from financial items
+    public function remove_extra_words_from_financial_management_variable($request_financial_management)
+    {
+        return str_replace([".","/","|","+","-"], "", $request_financial_management );
+    }
+
+    public function store_financial_settings_receiving_money_form( Request $request )
+    {
         try
         {
-            $financial_management  = request()->post('financial_management') ;
-            // Remove some extra words from financial item if it has
-            $financial_management  = str_replace( "." , "" , $financial_management ) ;
-            $financial_management  = str_replace( "/" , "" , $financial_management ) ;
+            // Check the request()->post('financial_management')
+            // and then If we have some errors on $financial_management_revealed_errors then show it
+            $financial_management_revealed_errors = $this->validation_of_financial_management_variable(request()->post('financial_management')) ;
+            if( $financial_management_revealed_errors !== '' )
+            {
+                return redirect()->route('show_financial_settings_receiving_money_form')
+                ->with(['success_message' => '<b style="color:red;">'.$financial_management_revealed_errors.' is wrong</b><br><b style="color:blue;" >At least type 3 characters followed by this type <br> Service Name : Service Amount</b><br> and at the end press Save button<br>Remember, each service type should have this character <b style="color:blue;" >:</b>']);
+            }
+
+            // Remove some extra words from financial items
+            $financial_management = $this->remove_extra_words_from_financial_management_variable(request()->post('financial_management')) ;
 
             $store_financial_settings_receiving_money_form = financial_transaction::store_financial_settings_receiving_money_form($financial_management,Auth::user()->name);
-
             if(!$store_financial_settings_receiving_money_form)
             {
                 return redirect(route('show_financial_settings_receiving_money_form'))
@@ -173,15 +193,20 @@ class FinancialTransactionController extends Controller
         }
     }
 
+    // Remove any character from payment amount variable except numbers
+    public function remove_extra_words_of_amount_of_payment_variable($request_amount_of_payment)
+    {
+        return preg_replace('/[^0-9]/', '' , $request_amount_of_payment );
+    }
+
     public function store_show_submit_financial_transaction_form( Storefinancial_transactionRequest $request )
     {
-        $financial_transaction_type = request()->post('financial_transaction_type') ;
-        // Remove any character from payment amount except numbers
-        $amount_of_payment  = preg_replace('/[^0-9]/', '', request()->post('amount_of_payment'));
-        $financial_transaction_date  = request()->post('financial_transaction_date') ;
-        $financial_transaction_time  = request()->post('financial_transaction_time') ;
-        $title_of_payment = request()->post('title_of_payment') ;
-
+        // Remove any character from payment amount variable except numbers
+        $amount_of_payment                  = $this->remove_extra_words_of_amount_of_payment_variable(request()->post('amount_of_payment')) ;
+        $financial_transaction_type         = request()->post('financial_transaction_type') ;
+        $financial_transaction_date         = request()->post('financial_transaction_date') ;
+        $financial_transaction_time         = request()->post('financial_transaction_time') ;
+        $title_of_payment                   = request()->post('title_of_payment')           ;
         $medical_document_number_of_patient = request()->post('medical_document_number') ;
         if( $medical_document_number_of_patient === '' )
         {

@@ -87,10 +87,7 @@ if( strlen($EHR_document_prescribed_next_appointment) > 0 )
 }
 
 // Remove some characters to prevent GET conflicting or crashing error on SMS & TELEGRAM API services
-$telegram_text_content = str_replace( "&" , ""    , $telegram_text_content ) 				   ;
-$telegram_text_content = str_replace( "=" , ""    , $telegram_text_content ) 				   ;
-$telegram_text_content = str_replace( "#" , ""    , $telegram_text_content ) 				   ;
-$telegram_text_content = str_replace( "~" , ""    , $telegram_text_content ) 				   ;
+$telegram_text_content = str_replace( ["&" ,"=","#","~"]  , ""    , $telegram_text_content ) ;
 
 echo '
 <center>

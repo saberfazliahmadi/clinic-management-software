@@ -130,26 +130,109 @@ class PatientsEHRDocumentController extends Controller
         }
     }
 
-    public function store_patients_ehr_document_page( Request $request )
+    public function prepare_patient_more_description_variable($request_patient_more_description,$request_typed_keyboard_savabegh,$request_common_hypersensitivity_2311)
+    {
+        $patient_more_description  = '' ;
+        $patient_more_description .= $request_patient_more_description ;
+
+        if(is_array($request_common_hypersensitivity_2311))
+        {
+            foreach ($request_common_hypersensitivity_2311 as $item)
+            {
+                $patient_more_description .= ', '.$item;
+            }
+        }
+
+        if( $request_typed_keyboard_savabegh !== "" )
+        {
+            $patient_more_description .= ', '.$request_typed_keyboard_savabegh;
+        }
+
+        return $patient_more_description ;
+    }
+
+    public function prepare_common_drug_variable($request_all)
+    {
+        $common_drug = NULL ;
+        if( Auth::user()->common_drug !== '' )
+        {
+            // Explode and make an array of Auth::user()->common_drug
+            $defined_common_drugs = explode("," , Auth::user()->common_drug ) ;
+            // Estimate how many drugs this variable has to use on for loop
+            $end                  = count($defined_common_drugs) ;
+            // Make a for loop to check all selected drugs by doctors which should be defined on settings of software page
+            for( $start='0' ; $start < $end ; $start++ )
+            {
+                // An accepted drug should be exist on defined drugs of ADMIN AND selected by user $request->$defined_common_drugs[$start]
+                if( strlen($defined_common_drugs[$start]) > 0 && strlen(isset($request_all[$defined_common_drugs[$start]])) > 0 )
+                {
+                    $common_drug .= $defined_common_drugs[$start].' = '.$request_all[$defined_common_drugs[$start]] ;
+                    if( $start < $end - 1 )
+                    {
+                        $common_drug .= ',' ;
+                    }
+                }
+            }
+
+            // Get keyboard_medications_picker if exist
+            if( strlen($request_all['keyboard_medications_picker']) > 0 )
+            {
+                $common_drug .= $request_all['keyboard_medications_picker'].',' ;
+            }
+        }
+        return $common_drug ;
+    }
+
+    public function prepare_common_diet_variable($request_all)
+    {
+        $common_diet = NULL ;
+        if( Auth::user()->common_diet !== "" )
+        {
+            if(isset($request_all['common_diet']) && is_array($request_all['common_diet']))
+            {
+                foreach ($request_all['common_diet'] as $item)
+                {
+                    $common_diet .= $item.',' ;
+                }
+            }
+
+            // Get keyboard_common_diet if exist
+            if( strlen($request_all['keyboard_common_diet']) > 0 )
+            {
+                $common_diet .= $request_all['keyboard_common_diet'].',' ;
+            }
+        }
+        return $common_diet ;
+    }
+
+    public function prepare_common_return_date_variable($request_all)
+    {
+        $common_return_date = NULL ;
+        if( Auth::user()->common_return_date !== "" )
+        {
+            if(isset($request_all['common_return_date']) && is_array($request_all['common_return_date']))
+            {
+                foreach ($request_all['common_return_date'] as $item)
+                {
+                    $common_return_date .= $item.',' ;
+                }
+            }
+
+            // Get keyboard_common_return_date if exist
+            if( strlen($request_all['keyboard_common_return_date']) > 0 )
+            {
+                $common_return_date .= $request_all['keyboard_common_return_date'].',' ;
+            }
+        }
+        return $common_return_date ;
+    }
+
+    public function store_patients_ehr_document_page( Storepatients_EHR_documentRequest $request )
     {
         $decrypted_request_patient_id = encrypt_decrypt('decrypt', $request->patient_id ) ;
         try
         {
-            $patient_more_description  = '' ;
-            $patient_more_description .= $request->patient_more_description ;
-
-            if(is_array($request->common_hypersensitivity_2311))
-            {
-                foreach ($request->common_hypersensitivity_2311 as $item)
-                {
-                    $patient_more_description .= ','.$item;
-                }
-            }
-
-            if( $request->typed_keyboard_savabegh !== "" )
-            {
-                $patient_more_description .= ','.$request->typed_keyboard_savabegh;
-            }
+            $patient_more_description = $this->prepare_patient_more_description_variable($request->patient_more_description,$request->typed_keyboard_savabegh,$request->common_hypersensitivity_2311) ;
 
             $result_update_this_patient_general_info = patients_general_info::update_this_patient_general_info_from_ehr_page($decrypted_request_patient_id, $patient_more_description, $request->post('patient_surgery_history'), $request->post('patient_disease_background'), $request->post('patient_medication_history'), $request->post('patient_allergies_history') ) ;
             if ( ! $result_update_this_patient_general_info )
@@ -158,71 +241,9 @@ class PatientsEHRDocumentController extends Controller
                 ->with(['success_message' => '<span style="color:blue;">New information of patient DOES NOT updated! <br> So the New Photo and new EHR information of patient did not save also</span>']);
             }
 
-            $common_drug_2 = NULL ;
-            if( Auth::user()->common_drug !== "" )
-            {
-                $common_drug        = Auth::user()->common_drug ;
-                // Explode and make an array of this variable
-                $common_drug_1      = explode(",",$common_drug) ;
-                // Estimate how many drug this variable has
-                $common_drug_number = count($common_drug_1) ;
-                // Estimate how many drug this variable has to use of for loop
-                $end                = $common_drug_number ;
-
-                // Make a for loop to check all drugs defined on settings of software page
-                for( $start='0' ; $start < $end ; $start++ )
-                {
-                    // An accepted drug should be exist on ADMIN defined drugs list AND selected by user $request->common_drug_1[$start]
-                    if( strlen($common_drug_1[$start]) > 0 && strlen($request->post($common_drug_1[$start])) > 0 )
-                    {
-                        $common_drug_2 .= $common_drug_1[$start].' = '.$request->post($common_drug_1[$start]) ;
-                        if( $start < $end - 1 )
-                        {
-                            $common_drug_2 .= ',' ;
-                        }
-                    }
-                }
-
-                // Get keyboard_medications_picker
-                if( strlen($request->keyboard_medications_picker) > 0 )
-                {
-                    $common_drug_2 .= $request->post('keyboard_medications_picker').','     ;
-                }
-            }
-
-            $common_diet_2 = NULL ;
-            if( Auth::user()->common_diet !== "" )
-            {
-                if(is_array($request->common_diet))
-                {
-                    foreach ($request->common_diet as $item)
-                    {
-                        $common_diet_2 .= $item.',' ;
-                    }
-                }
-
-                if( strlen($request->keyboard_common_diet) > 0 )
-                {
-                    $common_diet_2 .= $request->post('keyboard_common_diet').',' ;
-                }
-            }
-
-            $common_return_date_2 = NULL ;
-            if( Auth::user()->common_return_date !== "" )
-            {
-                if(is_array($request->common_return_date))
-                {
-                    foreach ($request->common_return_date as $item)
-                    {
-                        $common_return_date_2 .= $item.',' ;
-                    }
-                }
-
-                if( $request->keyboard_common_return_date !== "" )
-                {
-                    $common_return_date_2 .= $request->post('keyboard_common_return_date').',' ;
-                }
-            }
+            $common_drug        = $this->prepare_common_drug_variable($request->all()) ;
+            $common_diet        = $this->prepare_common_diet_variable($request->all()) ;
+            $common_return_date = $this->prepare_common_return_date_variable($request->all()) ;
 
             $EHR_document_related_appointment_id_trick = NULL ;
             if( strlen($request->post('EHR_document_related_appointment_id')) > 0 )
@@ -236,26 +257,17 @@ class PatientsEHRDocumentController extends Controller
                 $EHR_document_related_clinic_doctor_name_trick = $request->post('EHR_document_related_clinic_doctor_name') ;
             }
 
-            $result_store_new_ehr_doc = patients_EHR_document::store_new_ehr_doc($common_drug_2, $common_diet_2, $common_return_date_2, $decrypted_request_patient_id, $EHR_document_related_appointment_id_trick, $EHR_document_related_clinic_doctor_name_trick);
-            if ( !$result_store_new_ehr_doc )
+            $result_store_new_ehr_doc = patients_EHR_document::store_new_ehr_doc($common_drug, $common_diet, $common_return_date, $decrypted_request_patient_id, $EHR_document_related_appointment_id_trick, $EHR_document_related_clinic_doctor_name_trick);
+            if ( ! $result_store_new_ehr_doc )
             {
                 return redirect(route('home'))
                 ->with(['success_message' => '<span style="color:blue;">New EHR information did not Save! <br> So the New Photo of patient did not save also if you inserted it!</span>']);
             }
 
+            // If an image for uploading exist
             if ( $request->hasFile('image') )
             {
-                $request->validate([
-                                       'image' => 'image|mimes:jpeg,png,jpg,gif,svg|max:10048',
-                                   ]);
-                $file            = $request->file('image');
-                $extension       = $request->file('image')->extension();
-                $fileName        = rand(11111, 99999).time().rand().'.'.$extension;
-                $destinationPath = public_path().'/storage/images/'.find_admin_id_from_users_table().'/'.$decrypted_request_patient_id.'/para';
-                $file->move($destinationPath, $fileName);
-                //$path = $request->file('image')->sotre('public/images/'.Auth::user()->name.'/'.$request->patient_id.'/para' , $name );
-
-                $store_patient_photo_from_ehr_page = patients_photo::store_patient_photo_from_ehr_page($fileName, $request->keyboard_paraclinic_file_title, $decrypted_request_patient_id);
+                $store_patient_photo_from_ehr_page = PatientsPhotoController::preparation_file_process_and_upload_image($request,$request->keyboard_paraclinic_file_title ,$decrypted_request_patient_id) ;
                 if ( ! $store_patient_photo_from_ehr_page )
                 {
                     return redirect(route('home'))

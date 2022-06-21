@@ -62,22 +62,50 @@ class UserController extends Controller
         }
     }
 
-    public function update_show_main_settings_of_software_form(update_show_main_settings_of_software_formRequest $request)
+    public function prepare_variable_of_gap_time_between_appointments($request_gap_time_between_appointments)
     {
-        $gap_time_between_appointments = str_replace(" ", "", $request->gap_time_between_appointments);
-        // $gap_time_between_appointments should be an amount between 10 and 60 minutes
-        if ($gap_time_between_appointments < 10 && is_numeric($gap_time_between_appointments))
+        // Remove space from gap time variable
+        $gap_time_between_appointments = str_replace(" ", "", $request_gap_time_between_appointments);
+        // $gap_time_between_appointments should be an amount between 5 and 60 minutes
+        if ($gap_time_between_appointments < 5 && is_numeric($gap_time_between_appointments))
         {
-            $gap_time_between_appointments = 10 ;
+            $gap_time_between_appointments = 5 ;
         }
         elseif ($gap_time_between_appointments > 60 && is_numeric($gap_time_between_appointments))
         {
             $gap_time_between_appointments = 60 ;
         }
+        // the acceptable gap time range
+        elseif ($gap_time_between_appointments >= 5 && $gap_time_between_appointments <= 60 && is_numeric($gap_time_between_appointments))
+        {
+            $gap_time_between_appointments = $gap_time_between_appointments ;
+        }
+        // the default gap time
         else
         {
             $gap_time_between_appointments = 30 ;
         }
+        return $gap_time_between_appointments ;
+    }
+
+    public function prepare_variable_of_options_for_user($money_console_status)
+    {
+        // The processing to un-serialize an array variable and add new value at the end of it
+        // and then serialize that variable again. a:1:{i:0;s:1:"f";}
+        $options_for_user    = Auth::user()->options_for_user ;
+        $options_for_user    = (unserialize($options_for_user)) ;
+        $options_for_user[0] = 'f' ;
+        if ($money_console_status === 'true')
+        {
+            $options_for_user[0] = 't' ;
+        }
+        $options_for_user = serialize($options_for_user);
+        return $options_for_user ;
+    }
+
+    public function update_show_main_settings_of_software_form(update_show_main_settings_of_software_formRequest $request)
+    {
+        $gap_time_between_appointments = $this->prepare_variable_of_gap_time_between_appointments($request->gap_time_between_appointments) ;
 
         $clinic_doctors_name     = $request->clinic_doctors_name;
         $common_hypersensitivity = $request->common_hypersensitivity;
@@ -149,17 +177,8 @@ class UserController extends Controller
         . ',' . $cms_menu_title_27
         . ',' . $cms_menu_title_28;
 
-        // The processing to unserialize an array variable and add new value at the end of it
-        // and then serialize that variable again. a:1:{i:0;s:1:"f";}
-        $options_for_user   = Auth::user()->options_for_user;
-        $options_for_user   = (unserialize($options_for_user));
-        $options_for_user[0] = 'f';
-        if ($money_console_status == 'true')
-        {
-            $options_for_user[0] = 't';
-        }
-        $options_for_user = serialize($options_for_user);
-
+        $options_for_user = $this->prepare_variable_of_options_for_user($money_console_status) ;
+        
         try
         {
             $result_update_main_settings_of_software_form = User::update_main_settings_of_software_form(Auth::user()->id, Auth::user()->name,$common_drug,$common_diet,$common_return_date,$phone_number,$college_branch,$contact_address,$common_hypersensitivity,$options_for_user,$cms_menu_title,$gap_time_between_appointments,$clinic_doctors_name) ;

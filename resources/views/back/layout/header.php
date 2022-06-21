@@ -296,8 +296,9 @@ label
                                     
                                     <li style="margin-top:15px;" >
                                         <span class="fa fa-sign-out pull-left" aria-hidden="true" style="float:left;font-size:26px;margin-left:0px;padding-left:15px;padding-right:19px;"></span>
-                                        <form method="post" action="'.route('logout').'" >
+                                        <form method="POST" action="'.route('logout').'" >
                                             <input type="hidden" name="_token" value="'.csrf_token().'" >
+                                            <input type="hidden" name="_method" value="POST" >
                                             <input type="submit" name="logout" value="' . $cms_menu_title_data_from_middleware[28] . '" class="btn btn-success" >
                                         </form>
                                     </li>

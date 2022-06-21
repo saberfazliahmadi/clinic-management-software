@@ -84,4 +84,24 @@ class PatientsPhotoController extends Controller
     {
         //
     }
+
+    static function preparation_file_process_and_upload_image($request,$request_keyboard_paraclinic_file_title ,$decrypted_request_patient_id)
+    {
+        $file            = $request->file('image') ;
+        $extension       = $request->file('image')->extension() ;
+        $fileName        = rand(11111, 99999).time().rand().'.'.$extension ;
+        $destinationPath = public_path().'/storage/images/'.find_admin_id_from_users_table().'/'.$decrypted_request_patient_id.'/para';
+        $file->move($destinationPath, $fileName) ;
+        //$path = $request->file('image')->sotre('public/images/'.Auth::user()->name.'/'.$request->patient_id.'/para' , $name );
+
+        $keyboard_paraclinic_file_title_trick = NULL ;
+        if( $request_keyboard_paraclinic_file_title !== '')
+        {
+            $keyboard_paraclinic_file_title_trick = $request_keyboard_paraclinic_file_title ;
+        }
+
+        $store_patient_photo_from_ehr_page = patients_photo::store_patient_photo_from_ehr_page($fileName, $keyboard_paraclinic_file_title_trick , $decrypted_request_patient_id);
+
+        return $store_patient_photo_from_ehr_page ;
+    }
 }

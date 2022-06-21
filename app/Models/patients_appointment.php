@@ -76,7 +76,7 @@ class patients_appointment extends Model
     {
         $result_appointments_of_patients_on_this_time_and_date = self::
         join('patients_general_infos' , 'patients_general_infos.patient_id' , '=' , 'patients_appointments.appointment_patient_related_id')
-        ->select('patients_appointments.*' , 'patients_general_infos.patient_id' , 'patients_general_infos.patient_first_name' , 'patients_general_infos.patient_last_name' )
+        ->select('patients_appointments.*' , 'patients_general_infos.patient_id' , 'patients_general_infos.patient_first_name' , 'patients_general_infos.patient_last_name' , 'patients_general_infos.patient_mobile_number' )
         ->equal_this_to_admin_id_from_user_table('patients_appointments.appointment_dr_related_id')
         ->where( [
             'patients_appointments.appointment_date' => $choose_time_for_this_date ,
