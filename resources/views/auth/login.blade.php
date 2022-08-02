@@ -77,3 +77,20 @@
     </div>
 </div>
 @endsection
+
+<?php
+if($errors->any())
+{
+    foreach($errors->all() as $error)
+    {
+        echo '
+        <div class="col-md-12 col-sm-12 col-xs-12 alert alert-danger" role="alert" style="float:right;" > <button type="button" class="close" data-dismiss="alert" aria-label="Close"  ><span aria-hidden="true">&times;</span></button> <h4 style="font-size:25px;text-align:center!important;overflow-wrap: break-word; word-wrap: break-word; hyphens: auto;" >'.$error.'</h4></div>' ;
+    }
+}
+
+if( Session::get('success_message') !== '' && session()->has('success_message') )
+{
+    echo '<div class="col-md-12 col-sm-12 col-xs-12" style="float:right!important;" ><div class="col-md-12 col-sm-12 col-xs-12 alert alert-success" role="alert" style="text-align:center!important;overflow-wrap: break-word; word-wrap: break-word; hyphens: auto;float:right!important;" > <button type="button" class="close" data-dismiss="alert" aria-label="Close" style="font-size:50px;margin-left:15px!important;" ><span aria-hidden="true">&times;</span></button><h3>'.Session::get('success_message').'</h3></div></div>' ;
+    session()->pull('success_message') ;
+}
+?>

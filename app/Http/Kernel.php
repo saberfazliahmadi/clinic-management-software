@@ -21,7 +21,7 @@ class Kernel extends HttpKernel
         \Illuminate\Foundation\Http\Middleware\ValidatePostSize::class,
         \App\Http\Middleware\TrimStrings::class,
         \Illuminate\Foundation\Http\Middleware\ConvertEmptyStringsToNull::class,
-        \App\Http\Middleware\middleware_prevent_xss::class,
+        \App\Http\Middleware\MiddlewarePreventXss::class,
     ];
 
     /**
@@ -46,18 +46,28 @@ class Kernel extends HttpKernel
             \Illuminate\Routing\Middleware\SubstituteBindings::class,
         ],
 
-        'protected_page_accessible_for_user_and_admin' =>
+        'protected_page_accessible_for_user_and_admin_and_super_admin' =>
         [
-            \App\Http\Middleware\middleware_check_page_access_for_user_level::class,
-            \App\Http\Middleware\middleware_provide_header_data::class,
             \App\Http\Middleware\Authenticate::class,
+            \App\Http\Middleware\PreventingBannedUsers::class ,
+            \App\Http\Middleware\CheckPageAccessibilityForUserLevel::class,
+            \App\Http\Middleware\ProvideHeaderData::class,
         ],
 
-        'protected_page_accessible_for_admin' =>
+        'protected_page_accessible_for_admin_and_super_admin' =>
         [
-            \App\Http\Middleware\middleware_check_page_access_for_admin_level::class,
-            \App\Http\Middleware\middleware_provide_header_data::class,
             \App\Http\Middleware\Authenticate::class,
+            \App\Http\Middleware\PreventingBannedUsers::class ,
+            \App\Http\Middleware\CheckPageAccessibilityForAdminLevel::class,
+            \App\Http\Middleware\ProvideHeaderData::class,
+        ],
+
+        'protected_page_accessible_for_super_admin' =>
+        [
+            \App\Http\Middleware\Authenticate::class,
+            \App\Http\Middleware\PreventingBannedUsers::class ,
+            \App\Http\Middleware\CheckPageAccessibilityForSuperAdminLevel::class,
+            \App\Http\Middleware\ProvideHeaderData::class,
         ],
 
     ];
@@ -79,5 +89,14 @@ class Kernel extends HttpKernel
         'signed'        => \Illuminate\Routing\Middleware\ValidateSignature::class,
         'throttle'      => \Illuminate\Routing\Middleware\ThrottleRequests::class,
         'verified'      => \Illuminate\Auth\Middleware\EnsureEmailIsVerified::class,
+
+        'TransactionOnDatabaseToRollbackWhenExceptionsHappen' => \App\Http\Middleware\TransactionOnDatabaseToRollbackWhenExceptionsHappen::class,
+
+        'ValidatorStorepatients_general_infoRequest' => \App\Http\Middleware\ValidatorStorepatients_general_infoRequest::class,
+        'ValidatorUpdatepatients_general_infoRequest' => \App\Http\Middleware\ValidatorUpdatepatients_general_infoRequest::class,
+
+        'ValidatorStorepatients_EHR_documentRequest' => \AppEHR\Http\Middleware\ValidatorStorepatients_EHR_documentRequest::class,
+        'ValidatorUpdatepatients_EHR_documentRequest' => \AppEHR\Http\Middleware\ValidatorUpdatepatients_EHR_documentRequest::class,
+
     ];
 }

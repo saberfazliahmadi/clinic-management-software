@@ -1,105 +1,31 @@
 <?php
+namespace AppEHR\Http\Controller ;
 
-namespace App\Http\Controllers;
-
-use App\Http\Requests\Storepatients_EHR_documentRequest;
-use App\Http\Requests\Updatepatients_EHR_documentRequest;
-
+use App\Http\Controllers\Controller ;
 // I added the below lines manually
+use Illuminate\Database\QueryException;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Http\Request;
-use App\Models\{patients_EHR_document , patients_photo , patients_general_info} ;
+use AppEHR\Models\patients_EHR_document ;
+use App\Http\Controllers\PatientsPhotoController ;
+use App\Models\{ patients_photo , patients_general_info} ;
+use App\Responses\Responses ;
 
+/** In this controller according to Single Responsibility and Open-Closed Principles of SOLID
+ we validate user inputs by Middleware **/
 class PatientsEHRDocumentController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function index()
-    {
-        //
-    }
-
-    /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function create()
-    {
-        //
-    }
-
-    /**
-     * Store a newly created resource in storage.
-     *
-     * @param  \App\Http\Requests\Storepatients_EHR_documentRequest  $request
-     * @return \Illuminate\Http\Response
-     */
-    public function store(Storepatients_EHR_documentRequest $request)
-    {
-        //
-    }
-
-    /**
-     * Display the specified resource.
-     *
-     * @param  \App\Models\patients_EHR_document  $patients_EHR_document
-     * @return \Illuminate\Http\Response
-     */
-    public function show(patients_EHR_document $patients_EHR_document)
-    {
-        //
-    }
-
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  \App\Models\patients_EHR_document  $patients_EHR_document
-     * @return \Illuminate\Http\Response
-     */
-    public function edit(patients_EHR_document $patients_EHR_document)
-    {
-        //
-    }
-
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param  \App\Http\Requests\Updatepatients_EHR_documentRequest  $request
-     * @param  \App\Models\patients_EHR_document  $patients_EHR_document
-     * @return \Illuminate\Http\Response
-     */
-    public function update(Updatepatients_EHR_documentRequest $request, patients_EHR_document $patients_EHR_document)
-    {
-        //
-    }
-
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param  \App\Models\patients_EHR_document  $patients_EHR_document
-     * @return \Illuminate\Http\Response
-     */
-    public function destroy(patients_EHR_document $patients_EHR_document)
-    {
-        //
-    }
-
     public function show_patients_ehr_document_page( Request $request )
     {
         try
         {
-            $decrypted_request_patient_id = encrypt_decrypt('decrypt', $request->patient_id ) ;
+            $decrypted_request_patient_id = encrypt_decrypt('decrypt' , $request->patient_id ) ;
             $encrypted_request_patient_id = $request->patient_id ;
 
             $result_of_show_patients_general_infos = patients_general_info::fetch_info_of_this_patient_id( $decrypted_request_patient_id ) ;
             if(!$result_of_show_patients_general_infos)
             {
-                return redirect(route('home'))
-                ->with( [ 'success_message' => '<span style="color:blue;">Requested Patient Does Not Exist!</span>' ] );
+                return Responses::Failed('home', '<span style="color:blue;">Requested Patient Does Not Exist!</span>' ) ;
             }
 
             $result_of_patients_photo = patients_photo::result_of_patient_ehr_photo( $decrypted_request_patient_id ) ;
@@ -108,7 +34,7 @@ class PatientsEHRDocumentController extends Controller
             $result_of_patients_ehr_document = patients_EHR_document::result_of_patients_ehr_document( $decrypted_request_patient_id ) ;
             $count_result_of_patients_ehr_document = $result_of_patients_ehr_document->count() ;
 
-            return view('back.show_patients_ehr_document_page' ,
+            return view('EHR::show_patients_ehr_document_page' ,
             [
                 'title_of_page'                             => 'EHR of Patient' ,
                 'EHR_document_patient_related_id'           => $encrypted_request_patient_id ,
@@ -123,10 +49,9 @@ class PatientsEHRDocumentController extends Controller
                 'admin_id_from_users_table'                 => find_admin_id_from_users_table()
             ]) ;
         }
-        catch (\Exception $exception)
+        catch (QueryException $exception)
         {
-            return redirect(route('home'))
-            ->with( [ 'success_message' => '<span style="color:blue;">Can not display this EHR!</span>' ] );
+            return Responses::FailedWithException('home', '<span style="color:blue;">Can not display this EHR!</span>' , $exception ) ;
         }
     }
 
@@ -227,60 +152,66 @@ class PatientsEHRDocumentController extends Controller
         return $common_return_date ;
     }
 
-    public function store_patients_ehr_document_page( Storepatients_EHR_documentRequest $request )
+    public function prepare_EHR_document_related_appointment_id_variable($request_post_EHR_document_related_appointment_id)
+    {
+        $EHR_document_related_appointment_id_trick = NULL ;
+        if( strlen($request_post_EHR_document_related_appointment_id) > 0 )
+        {
+            $EHR_document_related_appointment_id_trick = $request_post_EHR_document_related_appointment_id ;
+        }
+        return $EHR_document_related_appointment_id_trick ;
+    }
+
+    public function prepare_EHR_document_related_clinic_doctor_name($request_post_EHR_document_related_clinic_doctor_name)
+    {
+        $EHR_document_related_clinic_doctor_name_trick = NULL ;
+        if( strlen($request_post_EHR_document_related_clinic_doctor_name) > 0 )
+        {
+            $EHR_document_related_clinic_doctor_name_trick = $request_post_EHR_document_related_clinic_doctor_name ;
+        }
+        return $EHR_document_related_clinic_doctor_name_trick ;
+    }
+
+    public function store_patients_ehr_document_page( Request $request )
     {
         $decrypted_request_patient_id = encrypt_decrypt('decrypt', $request->patient_id ) ;
         try
         {
-            $patient_more_description = $this->prepare_patient_more_description_variable($request->patient_more_description,$request->typed_keyboard_savabegh,$request->common_hypersensitivity_2311) ;
+            $patient_more_description = $this->prepare_patient_more_description_variable($request->patient_more_description, $request->typed_keyboard_savabegh, $request->common_hypersensitivity_2311) ;
 
             $result_update_this_patient_general_info = patients_general_info::update_this_patient_general_info_from_ehr_page($decrypted_request_patient_id, $patient_more_description, $request->post('patient_surgery_history'), $request->post('patient_disease_background'), $request->post('patient_medication_history'), $request->post('patient_allergies_history') ) ;
             if ( ! $result_update_this_patient_general_info )
             {
-                return redirect(route('home'))
-                ->with(['success_message' => '<span style="color:blue;">New information of patient DOES NOT updated! <br> So the New Photo and new EHR information of patient did not save also</span>']);
+                return Responses::Failed('home', '<span style="color:blue;">New information of patient DOES NOT updated! <br> So the New Photo and new EHR information of patient did not save also</span>' ) ;
             }
 
             $common_drug        = $this->prepare_common_drug_variable($request->all()) ;
             $common_diet        = $this->prepare_common_diet_variable($request->all()) ;
             $common_return_date = $this->prepare_common_return_date_variable($request->all()) ;
 
-            $EHR_document_related_appointment_id_trick = NULL ;
-            if( strlen($request->post('EHR_document_related_appointment_id')) > 0 )
-            {
-                $EHR_document_related_appointment_id_trick = $request->post('EHR_document_related_appointment_id') ;
-            }
+            $EHR_document_related_appointment_id_trick     = $this->prepare_EHR_document_related_appointment_id_variable($request->post('EHR_document_related_appointment_id')) ;
+            $EHR_document_related_clinic_doctor_name_trick = $this->prepare_EHR_document_related_clinic_doctor_name($request->post('EHR_document_related_clinic_doctor_name'));
 
-            $EHR_document_related_clinic_doctor_name_trick = NULL ;
-            if( strlen($request->post('EHR_document_related_clinic_doctor_name')) > 0 )
+            $result_store_new_ehr_doc = patients_EHR_document::store_new_ehr_doc($common_drug, $common_diet, $common_return_date, $decrypted_request_patient_id, $EHR_document_related_appointment_id_trick, $EHR_document_related_clinic_doctor_name_trick) ;
+            if ( ! $result_store_new_ehr_doc->exists )
             {
-                $EHR_document_related_clinic_doctor_name_trick = $request->post('EHR_document_related_clinic_doctor_name') ;
-            }
-
-            $result_store_new_ehr_doc = patients_EHR_document::store_new_ehr_doc($common_drug, $common_diet, $common_return_date, $decrypted_request_patient_id, $EHR_document_related_appointment_id_trick, $EHR_document_related_clinic_doctor_name_trick);
-            if ( ! $result_store_new_ehr_doc )
-            {
-                return redirect(route('home'))
-                ->with(['success_message' => '<span style="color:blue;">New EHR information did not Save! <br> So the New Photo of patient did not save also if you inserted it!</span>']);
+                return Responses::Failed('home', '<span style="color:blue;">New EHR information did not Save! <br> So the New Photo of patient did not save also if you inserted it!</span>' ) ;
             }
 
             // If an image for uploading exist
             if ( $request->hasFile('image') )
             {
                 $store_patient_photo_from_ehr_page = PatientsPhotoController::preparation_file_process_and_upload_image($request,$request->keyboard_paraclinic_file_title ,$decrypted_request_patient_id) ;
-                if ( ! $store_patient_photo_from_ehr_page )
+                if ( ! $store_patient_photo_from_ehr_page->exists )
                 {
-                    return redirect(route('home'))
-                    ->with(['success_message' => '<span style="color:blue;">New Photo of patient did not save but the other new EHR information have been saved successfully!</span>']);
+                    return Responses::Failed('home', '<span style="color:blue;">New Photo of patient did not save but the other new EHR information have been saved successfully!</span>' ) ;
                 }
             }
-
-            return redirect(route('show_new_saved_ehr', [ 'EHR_document_id' => encrypt_decrypt('encrypt', $result_store_new_ehr_doc->EHR_document_id ) , 'patient_name' => $request->patient_name ] )) ;
+            return Responses::Success('show_new_saved_ehr' , array( 'EHR_document_id' => encrypt_decrypt('encrypt', $result_store_new_ehr_doc->EHR_document_id ) , 'patient_name' => $request->patient_name ) , '' ) ;
         }
-        catch (\Exception $exception)
+        catch ( QueryException $exception )
         {
-            return redirect(route('home'))
-            ->with( [ 'success_message' => '<span style="color:blue;">Can not Save new EHR information!</span>' ] );
+            return Responses::FailedWithException('home', '<span style="color:blue;">Can not Save new EHR information!</span>' , $exception ) ;
         }
     }
 
@@ -292,10 +223,9 @@ class PatientsEHRDocumentController extends Controller
 
             if(!$result_show_new_saved_ehr)
             {
-                return redirect(route('home'))
-                ->with( [ 'success_message' => '<span style="color:blue;">Can not show new saved EHR!</span>' ] );
+                return Responses::Failed('home', '<span style="color:blue;">Can not show new saved EHR!</span>' ) ;
             }
-            return view('back.show_new_saved_ehr' ,
+            return view('EHR::show_new_saved_ehr' ,
             [
                 'title_of_page'                            => 'a new EHR information of <b>'.encrypt_decrypt('decrypt',$request->patient_name).'</b> <br> successfully saved at date '.date("Y/m/d") ,
                 'show_ehr_report'                          => 'true' ,
@@ -307,10 +237,10 @@ class PatientsEHRDocumentController extends Controller
                 'EHR_document_dr_related_id'               => find_admin_id_from_users_table() ,
             ] ) ;
         }
-        catch (\Exception $exception)
+        catch (QueryException $exception)
         {
-            return redirect(route('home'))
-            ->with( [ 'success_message' => '<span style="color:blue;">Can not show new saved EHR!</span>' ] );
+            return Responses::FailedWithException('home' , '<span style="color:blue;">Can not show new saved EHR!</span>' , $exception);
         }
     }
+
 }

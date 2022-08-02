@@ -1,52 +1,20 @@
 <?php
-
 namespace App\Http\Controllers;
 
 use App\Http\Requests\delete_this_appointment_idRequest;
 use App\Http\Requests\show_form_of_appointments_on_specific_dateRequest;
 use App\Http\Requests\store_patient_time_appointment_tableRequest;
-use App\Http\Requests\Storepatients_appointmentRequest;
-use App\Http\Requests\Updatepatients_appointmentRequest;
-
-// I added the below lines manually
+use App\Responses\Responses;
 use Illuminate\Support\Facades\Auth;
 use App\Models\{ patients_appointment , patients_general_info };
+use Illuminate\Database\QueryException;
 
+/** In this controller according to Single Responsibility and Open-Closed Principles of SOLID
+we validate user inputs by Middleware **/
 class PatientsAppointmentController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function index()
-    {
-        //
-    }
-
-    /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function create()
-    {
-        //
-    }
-
-    /**
-     * Store a newly created resource in storage.
-     *
-     * @param  \App\Http\Requests\Storepatients_appointmentRequest  $request
-     * @return \Illuminate\Http\Response
-     */
-    public function store(Storepatients_appointmentRequest $request)
-    {
-        //
-    }
-
     // Define and Specify a variable of date's appointments by GET or POST method
-    public function get_date_of_appointment($request_post_show_all_appointments_on_this_date , $request_get_show_all_appointments_this_date )
+    public function prepare_date_of_appointment($request_post_show_all_appointments_on_this_date , $request_get_show_all_appointments_this_date )
     {
         $show_all_appointments_on_this_date = '' ;
         if( $request_post_show_all_appointments_on_this_date !== "" )
@@ -60,16 +28,10 @@ class PatientsAppointmentController extends Controller
         return $show_all_appointments_on_this_date ;
     }
 
-    /**
-     * Display the specified resource.
-     *
-     * @param  \App\Models\patients_appointment  $patients_appointment
-     * @return \Illuminate\Http\Response
-     */
     public function show(patients_appointment $patients_appointment , show_form_of_appointments_on_specific_dateRequest $request )
     {
         // Define and Specify a variable of date's appointments by GET or POST method
-        $show_all_appointments_on_this_date = $this->get_date_of_appointment($request->post('show_all_appointments_on_this_date') , $request->show_all_appointments_this_date ) ;
+        $show_all_appointments_on_this_date = $this->prepare_date_of_appointment($request->post('show_all_appointments_on_this_date') , $request->show_all_appointments_this_date ) ;
 
         try
         {
@@ -82,8 +44,7 @@ class PatientsAppointmentController extends Controller
             // If there is not any appointment on the database
             if( $count_of_appointment === 0 )
             {
-                return redirect(route('show_form_of_appointments_on_specific_date'))
-                ->with(['success_message' => '<b style="color:blue" >There is no appointment on date '.$show_all_appointments_on_this_date.'</b><br> Please, choose another date to show appointments']) ;
+                return Responses::Success( 'show_form_of_appointments_on_specific_date' , '' , '<b style="color:blue" >There is no appointment on date '.$show_all_appointments_on_this_date.'</b><br> Please, choose another date to show appointments' ) ;
             }
 
             $financial_management_data = '' ;
@@ -101,61 +62,28 @@ class PatientsAppointmentController extends Controller
                 'financial_management_data'                         => $financial_management_data
             ] ) ;
         }
-        catch ( \Exception $exception )
+        catch ( QueryException $exception )
         {
-            return view('back.show_form_of_appointments_on_specific_date'
-            , [ 'title_of_page' => 'List of All Appointments on Date '.$show_all_appointments_on_this_date ])
-            ->with(['success_message' => '<b style="color:blue;" >We have an Error to show appointments on Date '.$show_all_appointments_on_this_date.'</b>']) ;
+            return Responses::FailedWithException( 'show_form_of_appointments_on_specific_date' , '' , '<b style="color:blue;" >We have an Error to show appointments on Date '.$show_all_appointments_on_this_date.'</b>' , $exception ) ;
         }
     }
 
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  \App\Models\patients_appointment  $patients_appointment
-     * @return \Illuminate\Http\Response
-     */
-    public function edit(patients_appointment $patients_appointment)
-    {
-        //
-    }
-
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param  \App\Http\Requests\Updatepatients_appointmentRequest  $request
-     * @param  \App\Models\patients_appointment  $patients_appointment
-     * @return \Illuminate\Http\Response
-     */
-    public function update(Updatepatients_appointmentRequest $request, patients_appointment $patients_appointment)
-    {
-        //
-    }
-
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param  \App\Models\patients_appointment  $patients_appointment
-     * @return \Illuminate\Http\Response
-     */
     public function destroy(patients_appointment $patients_appointment , delete_this_appointment_idRequest $request )
     {
+        $response_message = '<span style="color:blue;">The Selected Appointment WAS NOT Deleted!</span><br>You may have a related financial transaction to this appointment<br>So, first of all you should delete related financial transaction' ;
         try
         {
             $result_of_delete_this_appointment_id = patients_appointment::delete_this_appointment_id($request->appointment_id) ;
 
-            if(!$result_of_delete_this_appointment_id)
+            if($result_of_delete_this_appointment_id)
             {
-                return back()
-                ->with(['success_message' => '<span style="color:blue;">The Selected Appointment WAS NOT Deleted!</span><br>You may have a related financial transaction to this appointment<br>So, first of all you should delete related financial transaction']);
+                $response_message = '<span>The Selected Appointment Successfully Deleted</span>' ;
             }
-            return back()
-            ->with(['success_message' => '<span>The Selected Appointment Successfully Deleted</span>']);
+            return Responses::Success( 'back_to_previous_page' , '' , $response_message ) ;
         }
-        catch (\Exception $exception)
+        catch (QueryException $exception)
         {
-            return back()
-            ->with(['success_message' => '<span style="color:blue;">The Selected Appointment WAS NOT Deleted!</span><br>You may have a related financial transaction to this appointment<br>So, first of all you should delete related financial transaction']);
+            return Responses::FailedWithException( 'back_to_previous_page' , '' , $response_message , $exception ) ;
         }
     }
 
@@ -248,10 +176,9 @@ class PatientsAppointmentController extends Controller
                 'text_trick'                      => $text_trick
             ]);
         }
-        catch (\Exception $exception)
+        catch (QueryException $exception)
         {
-            return redirect(route('home'))
-            ->with( [ 'success_message' => '<span style="color:blue;">We Have an Error to Show List of Appointments Time on This Specific Date</span>' ] );
+            return Responses::FailedWithException( 'home' , '' , '<span style="color:blue;">We Have an Error to Show List of Appointments Time on This Specific Date</span>' , $exception ) ;
         }
     }
 
@@ -274,23 +201,22 @@ class PatientsAppointmentController extends Controller
             $appointment_service_type = request()->post('appointment_service_type') ;
         }
 
+        $response_message = '<span style="color:blue;">The Time and Date Appointment Were NOT Successfully Submitted!</span>' ;
         try
         {
             $result_store_new_patient_appointment_time              = patients_appointment::store_new_patient_appointment_time($decrypted_choose_time_for_this_patient_id,request()->post('choose_time_for_this_date'),request()->post('appointment_time'),$appointment_child_dr_related_name,$appointment_service_type) ;
             $update_patient_general_info_last_appointment_data_time = patients_general_info::update_patient_general_info_last_appointment_data_time($decrypted_choose_time_for_this_patient_id,request()->post('choose_time_for_this_date'),request()->post('appointment_time')) ;
 
-            if(!$result_store_new_patient_appointment_time || !$update_patient_general_info_last_appointment_data_time)
+            // If the appointment successfully submitted make success response message
+            if( $result_store_new_patient_appointment_time->exists && $update_patient_general_info_last_appointment_data_time )
             {
-                return redirect(route('submit_new_patient_form'))
-                ->with( [ 'success_message' => '<span style="color:blue;">The Time and Date Appointment Were NOT Successfully Submitted!</span>' ] );
+                $response_message = 'The Appointment Time= '.request()->post('appointment_time').' On Date= '.request()->post('choose_time_for_this_date').' <br> of <a href="'.route('edit_patient_form', $encrypted_choose_time_for_this_patient_id ).'" ><b>Patient</b></a> Were Successfully Submitted' ;
             }
-            return redirect(route('submit_new_patient_form'))
-            ->with( [ 'success_message' => 'The Appointment Time= '.request()->post('appointment_time').' On Date= '.request()->post('choose_time_for_this_date').' <br> of <a href="'.route('edit_patient_form', $encrypted_choose_time_for_this_patient_id ).'" ><b>Patient</b></a> Were Successfully Submitted' ] );
+            return Responses::Success( 'submit_new_patient_form' , '' , $response_message ) ;
         }
-        catch (\Exception $exception)
+        catch (QueryException $exception)
         {
-            return redirect(route('submit_new_patient_form'))
-            ->with( [ 'success_message' => '<span style="color:blue;">The Time and Date Appointment Were NOT Successfully Submitted!</span>' ] );
+            return Responses::FailedWithException( 'submit_new_patient_form' , '' , $response_message , $exception ) ;
         }
     }
 

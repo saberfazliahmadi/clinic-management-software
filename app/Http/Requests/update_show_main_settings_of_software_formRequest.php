@@ -63,7 +63,12 @@ class update_show_main_settings_of_software_formRequest extends FormRequest
             'cms_menu_title_26'               => 'string' ,
             'cms_menu_title_27'               => 'string' ,
             'cms_menu_title_28'               => 'string' ,
-            'setting_status'                  => 'string'
+
+            'name_of_user'   => 'string|exists:users,name' ,
+             encrypt_decrypt('decrypt', request()->id_of_user) => 'string|exists:users,id' ,
+
+            'status_of_user' => 'nullable|in:'.config('global.active').','.config('global.ban') ,
+            'level_of_user'  => 'nullable|in:'.config('global.guest_level').','.config('global.user_level').','.config('global.admin_level') ,
         ];
     }
 }

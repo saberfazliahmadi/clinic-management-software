@@ -1,5 +1,7 @@
 <?php
 // Add your custom css files here. (will located in header)
+use Illuminate\Support\Facades\Auth;
+
 $extra_links_header = '' ;
 // Add your custom js files here. (will located in footer)
 $extra_links_footer = '' ;
@@ -12,9 +14,16 @@ echo '
     
     <div style="width: 100%;height: 80px;padding: 10px 0;" >
         <center>
-            <h3 style="text-align:center;">
-                '.$title_of_page.'
+            <h3 style="text-align:center;">' ;
+
+                if(isset($success_message_of_search))
+                {
+                    echo '<div class="col-md-12 col-sm-12 col-xs-12">'.$success_message_of_search.'</div>' ;
+                }
+                echo
+                $title_of_page.'
                 <br>
+                
             </h3>
         </center>
     </div>
@@ -61,7 +70,7 @@ echo '
             </center>
 
             <button type="submit" name="Search" class="btn btn-success btn-lg btn-block uiuxtrick" style="font-size:28px;position: fixed;bottom: 0px;right: 0px;z-index: 1;margin-bottom:0px;margin-right:0px;" onclick="this.disabled=true;this.form.submit();" >
-                Search
+                <i class="fa fa-search" aria-hidden="true"></i> Search
             </button>
 
         </form>
@@ -145,21 +154,30 @@ echo '
                 <br>
                 <hr style="width:1px;" >
 
-                <div class="col-md-12 col-sm-12 col-xs-12" > 
-                    <a href="'.route('show_patients_ehr_document_page', ['patient_id' => encrypt_decrypt('encrypt', $key->patient_id)]).'" class="text-center uiuxtrick" >
-                        <div class="col-md-4 col-sm-4 col-xs-12 btn btn-default" style="border:1px solid #e3e3e3;float:right;color:#337ab7;padding-top: 15px;padding-bottom: 15px;" >
-                             <i class="fa fa-clone"></i>
-                             EHR Document
-                        </div>
-                    </a>
+                <div class="col-md-12 col-sm-12 col-xs-12" >' ;
+
+                    $bootstrap_col_md_trick = 'col-md-12 col-sm-12 col-xs-12' ;
+                    if( Auth::user()->user_level >= config('global.admin_level'))
+                    {
+                        echo '
+                        <a href="'.route('show_patients_ehr_document_page', ['patient_id' => encrypt_decrypt('encrypt', $key->patient_id)]).'" class="text-center uiuxtrick" >
+                            <div class="col-md-4 col-sm-4 col-xs-12 btn btn-default" style="border:1px solid #e3e3e3;float:right;color:#337ab7;padding-top: 15px;padding-bottom: 15px;margin-right:0px;" >
+                                 <i class="fa fa-clone"></i>
+                                 EHR Document
+                            </div>
+                        </a>';
+                        $bootstrap_col_md_trick = 'col-md-4 col-sm-4 col-xs-12' ;
+                    }
+
+                    echo '
                     <a href="'.route('home').'" class="text-center uiuxtrick" >
-                        <div class="col-md-4 col-sm-4 col-xs-12 btn btn-default" style="border:1px solid #e3e3e3;float:right;color:#337ab7;padding-top: 15px;padding-bottom: 15px;" >
+                        <div class="'.$bootstrap_col_md_trick.' btn btn-default" style="border:1px solid #e3e3e3;float:right;color:#337ab7;padding-top: 15px;padding-bottom: 15px;margin-right:0px;" >
                              <i class="glyphicon glyphicon-tags"></i>&nbsp;
                              Medical Prescriptions
                         </div>
                     </a>
                     <a href="'.route('edit_patient_form', encrypt_decrypt('encrypt', $key->patient_id)).'" class="text-center uiuxtrick" >
-                        <div class="col-md-3 col-sm-3 col-xs-12 btn btn-default" style="border:1px solid #e3e3e3;float:right;color:#337ab7;padding-top: 15px;padding-bottom: 15px;" >
+                        <div class="'.$bootstrap_col_md_trick.' btn btn-default" style="border:1px solid #e3e3e3;float:right;color:#337ab7;padding-top: 15px;padding-bottom: 15px;margin-right:0px;" >
                               <i class="fa fa-edit"></i>
                              Book Appointment | Edit Info
                         </div>

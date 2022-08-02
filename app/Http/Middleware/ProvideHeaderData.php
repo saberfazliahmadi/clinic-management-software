@@ -1,11 +1,7 @@
 <?php
-
 namespace App\Http\Middleware;
-
 use Closure;
 use Illuminate\Http\Request;
-
-// I added this model to this page manually.
 use App\Models\patients_appointment;
 use Illuminate\Support\Facades\View;
 use Illuminate\Support\Facades\Auth;
@@ -13,22 +9,12 @@ use App\Models\financial_transaction;
 use phpDocumentor\Reflection\Types\Null_;
 use App\Helpers ;
 
-class middleware_provide_header_data
+class ProvideHeaderData
 {
-    /**
-     * Handle an incoming request.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  \Closure  $next
-     * @return mixed
-     */
-
     public function handle(Request $request, Closure $next)
     {
         $show_all_appointments_on_this_date  = date('Y-m-d');
         $admin_id_from_users_table           = find_admin_id_from_users_table() ;
-        $admin_accessibility_to_telegram     = Auth::user()->telegram ;
-        $admin_full_name                     = Auth::user()->name ;
         $cms_menu_title_data_from_middleware = explode(",", Auth::user()->cms_menu_title) ;
 
         // If user click on send patient to doctors room from header
@@ -111,7 +97,7 @@ class middleware_provide_header_data
 
                     \Session::flash('success_message', '<b>The Patient Successfully Sent to Doctors Room');
                 }
-                catch (\Exception $exception)
+                catch (QueryException $exception)
                 {
                     \Session::flash('success_message', '<span style="color:blue;">We have an error to send this patient to doctors room</span>');
                 }
@@ -161,8 +147,6 @@ class middleware_provide_header_data
                 'financial_management_data_in_header' => $financial_management_data_in_header ,
                 'count_of_appointment_in_header'      => $count_of_appointment_in_header ,
                 'count_of_appointment_in_header_for_patients_on_waiting_situation' => $count_of_appointment_in_header_for_patients_on_waiting_situation ,
-                'admin_accessibility_to_telegram'     => $admin_accessibility_to_telegram ,
-                'admin_full_name'                     => $admin_full_name ,
                 'cms_menu_title_data_from_middleware' => $cms_menu_title_data_from_middleware
                 ]) ;
             }
@@ -173,13 +157,11 @@ class middleware_provide_header_data
                 'financial_management_data_in_header' => '' ,
                 'count_of_appointment_in_header'      => '' ,
                 'count_of_appointment_in_header_for_patients_on_waiting_situation' => $count_of_appointment_in_header_for_patients_on_waiting_situation ,
-                'admin_accessibility_to_telegram'     => $admin_accessibility_to_telegram ,
-                'admin_full_name'                     => $admin_full_name ,
                 'cms_menu_title_data_from_middleware' => $cms_menu_title_data_from_middleware
                 ]) ;
             }
         }
-        catch (\Exception $exception)
+        catch (QueryException $exception)
         {
             \Session::flash('success_message', '<span style="color:blue;">We have an error to show List of Appointments time on Date '.$show_all_appointments_on_this_date.'</span>');
         }

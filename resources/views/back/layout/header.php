@@ -1,7 +1,5 @@
 <?php
-
 use Illuminate\Support\Facades\Auth;
-
 echo '
 <!DOCTYPE html>
 <html lang="en">
@@ -34,7 +32,7 @@ echo '
     If the language set to 'locale' => 'fa'
     in config/app.php then add persian font-family: 'IRANSansNums'
 */
-if( app()->getLocale() == 'fa' )
+if( app()->getLocale() === 'fa' )
 {
     echo '
     @font-face 
@@ -187,7 +185,7 @@ label
                             </center>
                 
                             <button type="submit" name="Search" class="btn btn-success btn-lg btn-block uiuxtrick" style="font-size:28px;position: fixed;bottom: 0px;right: 0px;z-index: 1;margin-bottom:0px;margin-right:0px;" onclick="this.disabled=true;this.form.submit();" >
-                                Search
+                                <i class="fa fa-search" aria-hidden="true"></i> Search
                             </button>
                         </form>
                         
@@ -218,8 +216,8 @@ label
                                     <li style="border-bottom:1px solid #bfbdbd;padding-bottom:7px;" >
                                         <span style="float:left;margin-top:15px;margin-left:15px;" >
                                             <a href="'.route('home').'" style="color:gray;" >
-                                                <span class="glyphicon glyphicon-user" aria-hidden="true" style="float:left;font-size:26px;margin-left:0px;"></span>
-                                                ' . $cms_menu_title_data_from_middleware[17] . ' '.ucwords($admin_full_name).'
+                                                <span class="fa fa-user-md" aria-hidden="true" style="float:left;font-size:26px;margin-left:0px;"></span>
+                                                ' . $cms_menu_title_data_from_middleware[17] . ' '.ucwords(Auth::user()->name).'
                                             </a>
                                         </span>
                                     </li>
@@ -260,8 +258,8 @@ label
                                         </span>
                                     </li>' ;
 
-                                    // If the user has admin type then show_main_settings_of_software_form
-                                    if( Auth::user()->user_type == 'admin' )
+                                    // If the user has a upper level of global.admin_level then show route show_main_settings_of_software_form to him
+                                    if( Auth::user()->user_level >= config('global.admin_level') )
                                     {
                                         echo '
                                         <li>
@@ -269,6 +267,20 @@ label
                                                 <a href="'.route('show_main_settings_of_software_form').'">
                                                     <span class="fa fa-cog" aria-hidden="true" style="float:left;font-size:26px;margin-left:0px;"></span>
                                                     &nbsp;' . $cms_menu_title_data_from_middleware[25] . '
+                                                </a>
+                                            </span>
+                                        </li>' ;
+                                    }
+
+                                    // If the user has a upper level of global.super_admin_level then show route show_main_settings_of_software_form to him
+                                    if( Auth::user()->user_level >= config('global.super_admin_level') )
+                                    {
+                                        echo '
+                                        <li>
+                                            <span style="float:left;margin-top:15px;margin-left:15px;" >
+                                                <a href="'.route('show_management_users_of_software_form').'">
+                                                    <span class="glyphicon glyphicon-user" aria-hidden="true" style="float:left;font-size:24px;margin-left:0px;"></span>
+                                                    Users Management
                                                 </a>
                                             </span>
                                         </li>' ;
@@ -400,7 +412,7 @@ if ( isset($count_of_appointment_in_header) && $count_of_appointment_in_header >
         {
             $appointment_status_div_color_trick = '#green;' ;
 
-            if( $admin_accessibility_to_telegram === 'true')
+            if( Auth::user()->telegram === 'true')
             { $trick_of_show_check_box = 'Approved <input type="radio" name="appointment_id" value="'.$key_appointment->appointment_id.'" class="flat" required >' ;}
             else{ $trick_of_show_check_box = '<input type="radio" name="appointment_id" value="'.$key_appointment->appointment_id.'" class="flat" required >' ; }
 
@@ -410,7 +422,7 @@ if ( isset($count_of_appointment_in_header) && $count_of_appointment_in_header >
         {
             $appointment_status_div_color_trick = '#orange;' ;
 
-            if( $admin_accessibility_to_telegram === 'true')
+            if( Auth::user()->telegram === 'true')
             { $trick_of_show_check_box = 'Not Defined <input type="radio" name="appointment_id" value="'.$key_appointment->appointment_id.'" class="flat" required >' ;}
             else{ $trick_of_show_check_box = '<input type="radio" name="appointment_id" value="'.$key_appointment->appointment_id.'" class="flat" required >' ; }
 
@@ -420,7 +432,7 @@ if ( isset($count_of_appointment_in_header) && $count_of_appointment_in_header >
         {
             $appointment_status_div_color_trick = 'red;' ;
 
-            if( $admin_accessibility_to_telegram === 'true')
+            if( Auth::user()->telegram === 'true')
             { $trick_of_show_check_box = 'Canceled <input type="radio" name="appointment_id" value="'.$key_appointment->appointment_id.'" class="flat" required >' ; }
             else{ $trick_of_show_check_box = '<input type="radio" name="appointment_id" value="'.$key_appointment->appointment_id.'" class="flat" required >' ; }
 
@@ -478,7 +490,7 @@ if ( isset($count_of_appointment_in_header) && $count_of_appointment_in_header >
                         <br>
                         '.$key_appointment->patient_mobile_number ;
 
-                        if( $admin_accessibility_to_telegram === 'true')
+                        if( Auth::user()->telegram === 'true')
                         {
                             if( $key_appointment->patient_from_external_platform_id )
                             {
@@ -572,14 +584,18 @@ if ( isset($count_of_appointment_in_header) && $count_of_appointment_in_header >
                     $trick_of_variable_appointment_child_dr_related_name = 'free' ;
                 }
 
+                if( Auth::user()->user_level >= config('global.admin_level'))
+                {
+                    echo '
+                    <div style="'.$opacity_appointment_trick.';margin-top:12px;" >
+                        <a title="Display EHR Document" href="'.route('show_patients_ehr_document_page', ['patient_id' => $encrypted_patient_id_header, 'related_appointment_id' => $key_appointment->appointment_id, 'child_dr_related_name' => $trick_of_variable_appointment_child_dr_related_name]).'" style="float:left;color: white; font-size: 13px; float: left;background-color:#5A738E;border:1px solid #5A738E; " class="uiuxtrick btn btn-success" >
+                            <i class="fa fa-clone"></i>
+                            EHR Doc
+                        </a>
+                    </div>';
+                }
+
                 echo '
-                <div style="'.$opacity_appointment_trick.';margin-top:12px;" >
-                    <a title="Display EHR Document" href="'.route('show_patients_ehr_document_page' , [ 'patient_id' => $encrypted_patient_id_header , 'related_appointment_id' => $key_appointment->appointment_id , 'child_dr_related_name' => $trick_of_variable_appointment_child_dr_related_name ] ).'" style="float:left;color: white; font-size: 13px; float: left;background-color:#5A738E;border:1px solid #5A738E; " class="uiuxtrick btn btn-success" >
-                        <i class="fa fa-clone"></i>
-                        EHR Doc
-                    </a>
-                </div>
-                
                 <div style="'.$opacity_appointment_trick.';margin-top:12px;" >';
                     // If the patient has mobile number and active ROBOT then make link of send message by BOT.
                     if( strlen($key_appointment->patient_mobile_number) > 0  && strlen($key_appointment->patient_from_external_platform_id) > 0)
@@ -664,7 +680,7 @@ if ( isset($count_of_appointment_in_header) && $count_of_appointment_in_header >
     <hr style="width:1px;" >
     
     <button type="submit" name="send_patient_to_doctor_room" class="btn btn-success btn-lg btn-block uiuxtrick" style="font-size:28px;position: fixed;bottom: 0px;right: 0px;z-index: 1;margin-bottom:0px;margin-right:0px;" onclick="this.disabled=true;this.form.submit();" >
-        Send Patient to Doctor\'s Room
+       <i class="fa fa-send-o" aria-hidden="true"></i> Send Patient to Doctor\'s Room
     </button>
     </form>' ;
 
@@ -709,9 +725,9 @@ else
         }
     }
 
-    if( session()->has('success_message') )
+    if( Session::get('success_message') !== '' && session()->has('success_message') )
     {
-        echo '<div class="col-md-12 col-sm-12 col-xs-12" style="float:right!important;"  ><div class="col-md-10 col-sm-10 col-xs-10 alert alert-success" role="alert" style="text-align:center!important;overflow-wrap: break-word; word-wrap: break-word; hyphens: auto;float:right!important;" > <button type="button" class="close" data-dismiss="alert" aria-label="Close" style="font-size:50px;margin-left:15px!important;" ><span aria-hidden="true">&times;</span></button> <h3>'.Session::get('success_message').'</h3></div></div>' ;
+        echo '<div class="col-md-12 col-sm-12 col-xs-12" style="float:right!important;" ><div class="col-md-10 col-sm-10 col-xs-10 alert alert-success" role="alert" style="text-align:center!important;overflow-wrap: break-word; word-wrap: break-word; hyphens: auto;float:right!important;" > <button type="button" class="close" data-dismiss="alert" aria-label="Close" style="font-size:50px;margin-left:15px!important;" ><span aria-hidden="true">&times;</span></button><h3>'.Session::get('success_message').'</h3></div></div>' ;
         session()->pull('success_message') ;
     }
 

@@ -1,6 +1,6 @@
 <?php
 // Add your custom css files here. (will located in header)
-$extra_links_header = '
+use Illuminate\Support\Facades\Auth;$extra_links_header = '
 <!-- MD.BootstrapPersianDateTimePicker css -->
 <link href="'.url('back/vendors/MD.BootstrapPersianDateTimePicker/Content/MdBootstrapPersianDateTimePicker/jquery.Bootstrap-PersianDateTimePicker.css').'" rel="stylesheet">' ;
 
@@ -35,7 +35,7 @@ echo '
     <div class="col-md-12 col-sm-12 col-xs-12">' ;
 
     // START of If user came to this page from route('submit_new_patient_form').
-    if( $title_of_page == 'Submit a New Patient' )
+    if( $title_of_page === 'Submit a New Patient' )
     {
         echo '
         <form method="POST" action="' . route('store_new_patient_form') . '" data-parsley-validate class="form-horizontal form-label-left" style="text-align:left!important;direction:ltr!important;font-size:15pt;" id="medical-file-form" >
@@ -259,7 +259,7 @@ echo '
                 
                     <div class="col-md-12 col-sm-12 col-xs-12">
                         <button type="submit" name="booking_status" class="btn btn-success btn-lg btn-block uiuxtrick" style="margin-bottom:0px;margin-right:0px;font-size:28px;position: fixed;bottom: 0px;right: 0px;z-index: 1;"  >
-                            Submit
+                            <i class="fa fa-folder-open-o" aria-hidden="true"></i> Submit
                         </button>				
                     </div>
                     
@@ -453,12 +453,20 @@ echo '
                                 <span class="glyphicon glyphicon-plus" aria-hidden="true" style="color:#ccc;margin-left:5px;" ></span>
                                 More Details
                             </span>
-                        </div>
-                        <div class="col-md-3 col-sm-3 col-xs-3" style="float:right;" >
-                            <a href="'.route('show_patients_ehr_document_page' , [ 'patient_id' => $encrypted_patient_id ] ).'" class="btn btn-success uiuxtrick" title="Display ' .$result_edit_patient_form->patient_first_name. ' ' .$result_edit_patient_form->patient_last_name. ' EHR Document" style="color: white; background-color:#73879C;border:1px solid #5A738E;" >
-                              <i class="fa fa-clone"></i> EHR Document
-                            </a>
-                        </div>
+                        </div>' ;
+
+                        // If the user has a upper level of global.admin_level then show route show_main_settings_of_software_form to him
+                        if( Auth::user()->user_level >= config('global.admin_level') )
+                        {
+                            echo '
+                            <div class="col-md-3 col-sm-3 col-xs-3" style="float:right;" >
+                                <a href="'.route('show_patients_ehr_document_page' , [ 'patient_id' => $encrypted_patient_id ] ).'" class="btn btn-success uiuxtrick" title="Display ' .$result_edit_patient_form->patient_first_name. ' ' .$result_edit_patient_form->patient_last_name. ' EHR Document" style="color: white; background-color:#73879C;border:1px solid #5A738E;" >
+                                  <i class="fa fa-clone"></i> EHR Document
+                                </a>
+                            </div>';
+                        }
+
+                    echo '
                     </center>
                 </div>
             </center>
@@ -517,19 +525,18 @@ echo '
                     $married_text_trick = '' ;
                     $single_text_trick = '' ;
 
-                    if( $result_edit_patient_form->patient_relationship_status == 'divorced' )
+                    if( $result_edit_patient_form->patient_relationship_status === 'divorced' )
                     {
                         $divorced_text_trick = 'checked' ;
                     }
-                    elseif ( $result_edit_patient_form->patient_relationship_status == 'married' )
+                    elseif ( $result_edit_patient_form->patient_relationship_status === 'married' )
                     {
                         $married_text_trick = 'checked' ;
                     }
-                    elseif ( $result_edit_patient_form->patient_relationship_status == 'single' )
+                    elseif ( $result_edit_patient_form->patient_relationship_status === 'single' )
                     {
                         $single_text_trick = 'checked' ;
                     }
-
 
                     echo '
                   <div class="form-group">
@@ -558,11 +565,11 @@ echo '
                     $male_text_trick = '' ;
                     $female_text_trick = '' ;
 
-                    if( $result_edit_patient_form->patient_gender == 'male' )
+                    if( $result_edit_patient_form->patient_gender === 'male' )
                     {
                         $male_text_trick = 'checked' ;
                     }
-                    elseif ( $result_edit_patient_form->patient_gender == 'female' )
+                    elseif ( $result_edit_patient_form->patient_gender === 'female' )
                     {
                         $female_text_trick = 'checked' ;
                     }
@@ -647,7 +654,7 @@ echo '
                     
                         <div class="col-md-12 col-sm-12 col-xs-12">
                             <button type="submit" name="booking_status" class="btn btn-success btn-lg btn-block uiuxtrick" style="margin-bottom:0px;margin-right:0px;font-size:28px;position: fixed;bottom: 0px;right: 0px;z-index: 1;"  >
-                                Update
+                                <i class="fa fa-folder-open-o" aria-hidden="true"></i> Update
                             </button>				
                         </div>
                         

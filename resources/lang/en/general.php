@@ -5,7 +5,7 @@ return [
     /*
     General Words that we will use in MatabeOnline Clinic Management Software
     */
-
+    'Name of software' => 'MatabeOnline Clinic Management Software' ,
     'Welcome to MatabeOnline Clinic Management Software' => 'Welcome to MatabeOnline Clinic Management Software',
     'Booking an Appointment' => 'Booking an Appointment' ,
     'Send Patient to Doctors Room by <br> Patient Medical EHR' => 'Send Patient to Doctors Room by <br> Patient Medical EHR' ,

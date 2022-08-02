@@ -2,7 +2,7 @@
 
 namespace Database\Factories;
 
-use App\Models\patients_EHR_document;
+use AppEHR\Models\patients_EHR_document;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 class PatientsEHRDocumentFactory extends Factory

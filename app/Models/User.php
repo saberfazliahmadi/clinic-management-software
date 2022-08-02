@@ -7,6 +7,7 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
+use Illuminate\Support\Facades\Auth;
 use Laravel\Sanctum\HasApiTokens;
 
 class User extends Authenticatable
@@ -20,10 +21,12 @@ class User extends Authenticatable
      * @var string[]
      */
     protected $fillable = [
+        'id' ,
         'name',
         'phone',
         'gender',
         'dob',
+        'user_level' ,
         'email',
         'email_verified_at',
         'password' ,
@@ -37,7 +40,7 @@ class User extends Authenticatable
         'website' ,
         'user_ip' ,
         'http_user_agent' ,
-        'activation_status' ,
+        'status' ,
         'language' ,
         'telegram' ,
         'common_hypersensitivity' ,
@@ -83,19 +86,18 @@ class User extends Authenticatable
 
     static function show_main_settings_of_software_form($Auth_user_id, $Auth_user_name)
     {
-        $result_show_main_settings_of_software_form = self::
+        return self::
         name($Auth_user_name)
         ->id($Auth_user_id)
         ->limit('1')
         ->first();
-        return $result_show_main_settings_of_software_form;
     }
 
-    static function update_main_settings_of_software_form($Auth_user_id, $Auth_user_name, $common_drug, $common_diet, $common_return_date, $phone_number, $college_branch, $contact_address, $common_hypersensitivity, $options_for_user, $cms_menu_title, $gap_time_between_appointments, $clinic_doctors_name)
+    static function update_main_settings_of_software_form( $id_of_user , $name_of_user , $common_drug, $common_diet, $common_return_date, $phone_number, $college_branch, $contact_address, $common_hypersensitivity, $options_for_user, $cms_menu_title, $gap_time_between_appointments, $clinic_doctors_name , $financial_management )
     {
-        $result_update_main_settings_of_software_form = self::
-        name($Auth_user_name)
-        ->id($Auth_user_id)
+        return self::
+        name($name_of_user)
+        ->id($id_of_user)
         ->limit('1')
         ->update(
         [
@@ -109,19 +111,60 @@ class User extends Authenticatable
             'options_for_user'    => $options_for_user,
             'cms_menu_title'      => $cms_menu_title,
             'gap_time_between_appointments' => $gap_time_between_appointments,
-            'clinic_doctors_name' => $clinic_doctors_name
+            'clinic_doctors_name' => $clinic_doctors_name ,
+            'financial_management'=> $financial_management
         ]);
-        return $result_update_main_settings_of_software_form ;
+    }
+
+    static function update_main_settings_of_software_form_for_super_admin( $id_of_user , $name_of_user , $common_drug, $common_diet, $common_return_date, $phone_number, $college_branch, $contact_address, $common_hypersensitivity, $options_for_user, $cms_menu_title, $gap_time_between_appointments, $clinic_doctors_name , $request_status_of_user , $request_level_of_user , $financial_management )
+    {
+        return self::
+        name($name_of_user)
+        ->id($id_of_user)
+        ->limit('1')
+        ->update(
+            [
+                'common_drug'          => $common_drug,
+                'common_diet'          => $common_diet,
+                'common_return_date'   => $common_return_date,
+                'phone_number'         => $phone_number,
+                'college_branch'       => $college_branch,
+                'contact_address'      => $contact_address,
+                'common_hypersensitivity' => $common_hypersensitivity,
+                'options_for_user'     => $options_for_user,
+                'cms_menu_title'       => $cms_menu_title,
+                'gap_time_between_appointments' => $gap_time_between_appointments,
+                'clinic_doctors_name'  => $clinic_doctors_name ,
+                'user_level'           => $request_level_of_user ,
+                'status'               => $request_status_of_user ,
+                'financial_management' => $financial_management ,
+            ]);
     }
 
     static function run_change_password_form($Auth_user_id, $Auth_user_name, $hashed_new_password)
     {
-        $result_run_change_password_form = self::
+        return self::
         select( [ 'id' , 'name' , 'password' ] )
         ->name($Auth_user_name)
         ->id($Auth_user_id)
         ->limit('1')
         ->update( ['password' => $hashed_new_password ]);
-        return $result_run_change_password_form ;
+    }
+
+    public static function all_users_related_to_this_super_admin()
+    {
+        return self::
+        where( 'parent_id' , Auth::user()->id )
+        ->get();
+    }
+
+    static function make_ban_or_active_this_user_id($name_of_user , $id_of_user , $action)
+    {
+        return self::
+        select( [ 'id' , 'name' , 'status' ] )
+        ->name($name_of_user)
+        ->id($id_of_user)
+        ->limit('1')
+        ->update( [ 'status' => $action ]);
     }
 }

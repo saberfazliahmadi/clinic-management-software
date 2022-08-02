@@ -1,4 +1,5 @@
 <?php
+use Illuminate\Support\Facades\Auth;
 // Add your custom css files here. (will located in header)
 $extra_links_header = '
 <!-- MD.BootstrapPersianDateTimePicker css -->
@@ -133,13 +134,13 @@ echo '
                         ++$count_trick;
 
                         // Let to make a trick to show Good time OR Bad time for user appointment.
-                        if( $key->appointment_status === '1' && $key->appointment_canceling_status == 'f' )
+                        if( $key->appointment_status === '1' && $key->appointment_canceling_status === 'f' )
                         {
                             $appointment_status_div_color_trick = 'green;' ;
 
-                            if( $admin_accessibility_to_telegram === 'true')
+                            if( Auth::user()->telegram === 'true')
                             { $trick_of_show_check_box            = 'Approved <input type="radio" name="appointment_id" value="'.$key->appointment_id.'" class="flat" required  >' ;}
-                            else{ $trick_of_show_check_box            = '<div style="width:20px;">&nbsp;</div>' ; }
+                            else{ $trick_of_show_check_box        = '<div style="width:20px;">&nbsp;</div>' ; }
 
                             $opacity_appointment_trick 	        = '' ;
                         }
@@ -147,7 +148,7 @@ echo '
                         {
                             $appointment_status_div_color_trick = '#orange;' ;
 
-                            if( $admin_accessibility_to_telegram === 'true')
+                            if( Auth::user()->telegram === 'true')
                             { $trick_of_show_check_box            = 'Not Defined <input type="radio" name="appointment_id" value="'.$key->appointment_id.'" class="flat" required >' ;}
                             else{ $trick_of_show_check_box            = '<div style="width:20px;">&nbsp;</div>' ; }
 
@@ -157,7 +158,7 @@ echo '
                         {
                             $appointment_status_div_color_trick = 'red;' ;
 
-                            if( $admin_accessibility_to_telegram === 'true')
+                            if( Auth::user()->telegram === 'true')
                             { $trick_of_show_check_box            = 'Canceled <input type="radio" name="appointment_id" value="'.$key->appointment_id.'" class="flat" required >' ; }
                             else{ $trick_of_show_check_box            = '<div style="width:20px;">&nbsp;</div>' ; }
 
@@ -215,7 +216,7 @@ echo '
                                         <br>
                                         '.$key->patient_mobile_number ;
 
-                                        if( $admin_accessibility_to_telegram === 'true')
+                                        if( Auth::user()->telegram === 'true')
                                         {
                                             if (strlen($key->patient_from_external_platform_id) > 0)
                                             {
@@ -373,7 +374,7 @@ echo '
                     echo '
                     <hr style="width:1px;" >
                     <button type="submit" name="Search" class="btn btn-success btn-group-justified uiuxtrick" style="font-size:28px;position: fixed;bottom: 0px;right: 0px;z-index: 1;margin-bottom:0px;margin-right:0px;" onclick="this.disabled=true;this.form.submit();" >
-                        Display All Appointments on This Date
+                        <i class="fa fa-hand-o-right" aria-hidden="true"></i> Display All Appointments on This Date
                     </button>' ;
 
                 } // END of if we have result.
@@ -384,7 +385,7 @@ echo '
             {
                 echo '
                 <button type="submit" name="Search" class="btn btn-success btn-group-justified uiuxtrick" style="font-size:28px;position: fixed;bottom: 0px;right: 0px;z-index: 1;margin-bottom:0px;margin-right:0px;" onclick="this.disabled=true;this.form.submit();" >
-                    Display All Appointments on This Date
+                    <i class="fa fa-hand-o-right" aria-hidden="true"></i> Display All Appointments on This Date
                 </button>' ;
             }
 

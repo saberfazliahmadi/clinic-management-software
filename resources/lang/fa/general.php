@@ -5,7 +5,7 @@ return [
     /*
     General Words that we will use in MatabeOnline Clinic Management Software
     */
-
+    'Name of software' => 'نرم افزار مطب آنلاین' ,
     'Welcome to MatabeOnline Clinic Management Software' => 'به نرم افزار مطب آنلاین خوش آمدید',
     'Booking an Appointment' => 'رزرو نوبت' ,
     'Send Patient to Doctors Room by <br> Patient Medical EHR' => 'ارسال بیمار به اتاق پزشکان توسط <br> پرونده پزشکی بیمار' ,

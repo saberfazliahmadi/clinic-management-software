@@ -98,7 +98,7 @@ echo '
                     
                         <div class="col-md-12 col-sm-12 col-xs-12">
                             <button type="submit" class="btn btn-success btn-group-justified uiuxtrick" style="margin-bottom:0px;margin-right:0px;font-size:28px;position: fixed;bottom: 0px;right: 0px;z-index: 1;"  >
-                                Update Password
+                                <i class="fa fa-mail-forward" aria-hidden="true"></i> Update Password
                             </button>				
                         </div>
                         

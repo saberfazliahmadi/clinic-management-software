@@ -15,12 +15,12 @@ class CreateUsersTable extends Migration
     {
         Schema::create('users', function (Blueprint $table) {
             $table->id()->autoIncrement()->unsigned();
-            $table->integer('parent_id')->nullable()->comment('The "parent_id" should be extended from "id", in addition when a user have a "parent_id" , its "user_type" should be "user" . But if the "parent_id" was "NULL" then "user_type should be "admin" , remember that the "parent_id" by default is "NULL" , You can change it Manually')->unsigned();
+            $table->integer('parent_id')->nullable()->comment('The "parent_id" should be extended from "id", in addition when a user have a "parent_id" , its "user_level" should be "global.user_level" . But if the "parent_id" was "NULL" then "user_level should be "global.admin_level" or "global.super_admin_level" , remember that the "parent_id" by default is "NULL" , You can change it Manually')->unsigned();
             $table->string('name')->collation('utf8_general_ci')->unique();
             $table->string('phone')->collation('utf8_general_ci')->nullable();
             $table->string('gender')->collation('utf8_general_ci')->nullable();
             $table->string('dob')->collation('utf8_general_ci')->nullable();
-            $table->string('user_type')->collation('utf8_general_ci')->default('admin')->comment('The "user_type" should be "admin" or "user" and by default is "NULL" , You can change it Manually');
+            $table->integer('user_level')->collation('utf8_general_ci')->default('1')->comment('The "user_level" could be guest_level = "0" or user_level = "1" or admin_level = "2" or super_admin_level = "3" based on config/global.php variable and by default is "1" , You can change it Manually');
             $table->string('email')->collation('utf8_general_ci')->unique();
             $table->timestamp('email_verified_at')->collation('utf8_general_ci')->nullable();
             $table->string('password');
@@ -34,7 +34,7 @@ class CreateUsersTable extends Migration
             $table->string('website')->collation('utf8_general_ci')->default('https://MatabeOnline.ir');
             $table->string('user_ip')->collation('utf8_general_ci')->nullable();
             $table->string('http_user_agent')->collation('utf8_general_ci')->nullable();
-            $table->string('activation_status')->collation('utf8_general_ci')->default('active');
+            $table->string('status')->collation('utf8_general_ci')->default('activated');
             $table->string('language')->collation('utf8_general_ci')->default('english');
             $table->string('telegram')->collation('utf8_general_ci')->default('true')->comment('if dr enable telegram service');
             $table->string('common_hypersensitivity' , '1000')->collation('utf8_general_ci')->default('DM,HTN,IHD,Fatty Liver,Autoimmune hepatitis,Lung,Thyroid,Allergy,Seizure,RRMS,SPMS-,SPMS+,PPMS-,PPMS+,NMO-,NMO+,Atypical,Overlap,Interesting,RION,Re myelitis,Autoimmune,Aggressive,RIS,DD,CIS,Others');

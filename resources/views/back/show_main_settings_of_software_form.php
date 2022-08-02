@@ -1,15 +1,13 @@
 <?php
-
 // Add your custom css files here. (will located in header)
 $extra_links_header = '' ;
-
 // Add your custom js files here. (will located in footer)
 $extra_links_footer = '
 <!-- jQuery Tags Input -->
 <script src="'.url('back/vendors/jquery.tagsinput/src/jquery.tagsinput.js').'"></script>' ;
 
 // Call the header include.
-include 'layout/header.php' ;
+include_once 'layout/header.php' ;
 ?>
 
 <style>
@@ -47,8 +45,9 @@ echo '
                 echo '
 			    <form method="post" action="'.route('update_show_main_settings_of_software_form').'" id="medical-file-form" >
 			        <input type="hidden" name="_token" value="'.csrf_token().'" >
-                    
-                    
+			        <input type="hidden" name="name_of_user" value="'.$result_show_main_settings_of_software_form->name.'" >
+                    <input type="hidden" name="id_of_user" value="'.encrypt_decrypt( 'encrypt', $result_show_main_settings_of_software_form->id ).'" >
+                                   
                   <div class="form-group col-md-12 col-sm-12 col-xs-12" style="border-bottom:1px solid #aba5a5;padding-bottom:50px;" >
                     <center>
                         <label class="control-label col-md-12 col-sm-12 col-xs-12" style="margin-bottom:5px;margin-top:5px;font-size:19px;font-weight:normal;" >
@@ -181,7 +180,46 @@ echo '
                         <div class="col-md-12 col-sm-12 col-xs-12">
                             <input type="checkbox" name="money_console_status" class="form-control" value="true" autocomplete="off"  aria-expanded="false" aria-haspopup="true" role="combobox" spellcheck="false" ' . $money_console_status_trick_text . ' >
                         </div>
-                    </div>';
+                    </div>
+                    
+                     <div class="form-group col-md-12 col-sm-12 col-xs-12"  >
+
+						<center>
+							<h3>Types of Financial Services</h3>
+							<label class="control-label col-md-12 col-sm-12 col-xs-12" style="margin-bottom:5px;font-size:19px;font-weight:normal;" >
+								Please enter the name of the service and the cost of the service only in the below format in example,
+                                <br>
+                                and then press the ENTER key on your keyboard for the next service
+							</label>
+							
+							<label class="control-label col-md-12 col-sm-12 col-xs-12" style="margin-bottom:25px;margin-top:15px;font-size:19px;font-weight:normal;" >
+								 <span data-toggle="collapse" data-target="#more_details" class="btn-primary btn-lg" type="button" style="cursor:pointer;color:gray;background-color:white;border:1px solid #bfbdbd;" >
+                                     <span class="glyphicon glyphicon-plus" aria-hidden="true" style="color:#ccc;margin-left:5px;" ></span>
+                                     Example 
+                                 </span>
+								
+								<div id="more_details" class="collapse col-md-12 col-sm-12 col-xs-12">
+                                    <center>
+                                        <div class="well col-md-12" align="center" style="float:none;" >
+                                            <div class="well col-md-6 text-center"  style="float:none;" >
+                                                Service name: Amount of your desire money of this service
+                                            </div>
+                                            <div class="well col-md-4" align="center" style="float:none;" >
+                                                Visit Patient : 50000
+                                            </div>
+                                        </div>
+                                    </center>
+								</div>
+							</label>
+									
+                            <div class="col-md-12 col-sm-12 col-xs-12" style="font-size:22px!important;"  >
+                               <textarea id="tags_financial" type="text" name="financial_management" class="tags form-control" >'.Auth::user()->financial_management.'</textarea>
+                              <div id="suggestions-container" ></div>
+                            </div>
+                            
+						</center>
+
+					  </div>';
 
                     // Explode and array these cms_menu_title.
                     $cms_menu_title = explode(",", $result_show_main_settings_of_software_form->cms_menu_title);
@@ -487,7 +525,7 @@ echo '
                             </div>
                         
                          </div>
-                    
+                    </div>
                       <div class="form-group col-md-12 col-sm-12 col-xs-12" style="margin-top:30px;margin-bottom:150px;" >
     
                         <center>
@@ -507,7 +545,7 @@ echo '
                       </div>
                       
                   <button type="submit" name="setting_status" value="true" class="btn btn-success btn-group-justified uiuxtrick" style="font-size:27px;position: fixed;bottom: 0px;right: 0px;z-index: 1;" >
-                        Update Settings of Software
+                        <i class="fa fa-mail-forward" aria-hidden="true"></i> Update Settings of Software
                   </button>	
     
                 </form>
@@ -521,7 +559,7 @@ echo '
 <!-- /page content -->' ;
 
 // Call the footer include.
-include 'layout/footer.php' ;
+include_once 'layout/footer.php' ;
 ?>
 
 <!-- jQuery Tags Input -->
@@ -573,5 +611,25 @@ $('#tags_4').tagsInput({
   width: 'auto'
 });
 });
-</script>
+
+
+	  function onAddTag(tag) {
+		alert("Add Item: " + tag);
+	  }
+
+	  function onRemoveTag(tag) {
+		alert("Delete Item: " + tag);
+	  }
+
+	  function onChangeTag(input, tag) {
+		alert("Change Item: " + tag);
+	  }
+
+	  $(document).ready(function() {
+		$('#tags_financial').tagsInput({
+		  width: 'auto' ,
+		  height: 'auto'
+		});
+	  });
+	</script>
 <!-- /jQuery Tags Input -->

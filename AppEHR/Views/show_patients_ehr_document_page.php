@@ -1,13 +1,13 @@
 <?php
-// Add your custom css files here. (will located in header)
 use Illuminate\Support\Facades\Auth;
 
+// Add your custom css files here. (will located in header)
 $extra_links_header = '' ;
 // Add your custom js files here. (will located in footer)
 $extra_links_footer = '' ;
 
-// Call the header include.
-include 'layout/header.php' ;
+// Call the header layout by require_once
+require_once '../resources/views/back/layout/header.php' ;
 
 ?>
 <style type="text/css" >
@@ -243,21 +243,13 @@ include 'layout/header.php' ;
 </style>
 <?php
 
+$cms_menu_title = explode("," , Auth::user()->cms_menu_title)  ;
 echo '
-<!-- page content -->
 <div class="right_col" role="main" >
-    <div class="form-group col-md-12 col-sm-12 col-xs-12" > ' ;
-
-// START of show to Admin user type.
-if( Auth::user()->user_type === 'admin' )
-{
-    $cms_menu_title = explode("," , Auth::user()->cms_menu_title)  ;
-    // START of page content
-    echo '
+    <div class="form-group col-md-12 col-sm-12 col-xs-12" >
+    
     <!-- display a loading icon until the page loads completely -->
     <div id="load"></div>
-
-    <!-- START of page content -->
     
   <div class="col-md-12 col-sm-12 col-xs-12" >
 
@@ -850,29 +842,24 @@ if( Auth::user()->user_type === 'admin' )
                                         <br>
                                         <hr style="width:1px;" >
                         
-                                        <a id="various222" href="#sharhe_hal_haye_pishin_normal" type="button" aria-controls="profile" role="tab" data-toggle="tab" class="btn btn-success btn-group col-md-10 col-sm-10 col-xs-10" style="float:none;font-size:25px;" >
+                                        <a id="various222" href="#prescriptions_given_to_the_patient" type="button" aria-controls="profile" role="tab" data-toggle="tab" class="btn btn-success btn-group col-md-10 col-sm-10 col-xs-10" style="float:none;font-size:25px;" >
                                             Prescriptions given to the patient
                                         </a>
                         
-                                        <!-- START of login fancy console panel sharhe_hal_haye_pishin_normal -->
                                         <div style="display:none;" >
-                                            <div id="sharhe_hal_haye_pishin_normal" style="height:550px!important;width:920px!important;overflow-x: hidden!important;" >' ;
+                                            <div id="prescriptions_given_to_the_patient" style="height:550px!important;width:920px!important;overflow-x: hidden!important;" >' ;
 
-                                                // // Create mysql query for extract all of titles record in mysql data base we want to avoid these title.
-                                                // $res_sik_doc_time_line = mysql_query( " SELECT sic_rel_id , doc_rel_id , doc_id , doc_turn_id , child_dr_name_rel_doc , doc_date_created FROM $DB_NAME_LOGIN.sik_doc
-
-                                                // START of if there was more than 1 document for this patient then show it on document time line
+                                                // START of if there was more than 1 EHR document
                                                 if( $count_result_of_patients_ehr_document > 0 )
                                                 {
-                                                    // START of foreach EHR
                                                     foreach ( $result_of_patients_ehr_document as $key_ehr )
                                                     {
                                                         $ehr_document_number_trick = $key_ehr->EHR_document_id + $result_of_patients_general_infos->patient_id ;
                                                         // Make a trick to prevent from POST method error (post method should'nt have Space in him content)
-                                                        // $EHR_document_prescribed_common_diet      = $key_ehr->EHR_document_prescribed_common_diet ;
-                                                        // $EHR_document_prescribed_common_drug      = $key_ehr->EHR_document_prescribed_common_drug ;
-                                                        $EHR_document_prescribed_next_appointment = str_replace("_", " ", $key_ehr->EHR_document_prescribed_next_appointment );
-                                                        $EHR_document_related_clinic_doctor_name  = str_replace("_", " ", $key_ehr->EHR_document_related_clinic_doctor_name );
+                                                        // $EHR_document_prescribed_common_diet         = $key_ehr->EHR_document_prescribed_common_diet ;
+                                                        // $EHR_document_prescribed_common_drug         = $key_ehr->EHR_document_prescribed_common_drug ;
+                                                        $EHR_document_prescribed_next_appointment       = str_replace("_", " ", $key_ehr->EHR_document_prescribed_next_appointment );
+                                                        $EHR_document_related_clinic_doctor_name_trick  = str_replace("_", " ", $key_ehr->EHR_document_related_clinic_doctor_name );
 
                                                         echo '
                                                         <!-- Button trigger modal -->
@@ -891,7 +878,7 @@ if( Auth::user()->user_type === 'admin' )
                                                                     </h5>
                                                                 </center>
                                                                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                                                                  <span aria-hidden="true">&times;</span>
+                                                                  <span aria-hidden="true" style="font-size:74px!important;" >&times;</span>
                                                                 </button>
                                                               </div>
                                                               <div class="modal-body" style="overflow: auto!important;" >';
@@ -926,7 +913,7 @@ if( Auth::user()->user_type === 'admin' )
                                                                 echo '
                                                                 <div class="well" style="background-color: inherit;border-bottom:0px;border-left:0px;font-size:17px;margin-bottom:0px;padding-bottom:0px;" >
                                                                     Doctor:
-                                                                    <p class="child-dr-name-rel-doc" style="overflow-wrap: break-word; word-wrap: break-word; hyphens: auto;" >'.$EHR_document_related_clinic_doctor_name.'</p>
+                                                                    <p class="child-dr-name-rel-doc" style="overflow-wrap: break-word; word-wrap: break-word; hyphens: auto;" >'.$EHR_document_related_clinic_doctor_name_trick.'</p>
                                                                 </div>
                                                                 
                                                               </div>
@@ -937,7 +924,7 @@ if( Auth::user()->user_type === 'admin' )
                                                           </div>
                                                         </div>
                                                         <!-- END Modal --> ';
-                                                    } // END of foreach EHR
+                                                    }
                                                 } // END  of if there was more than 1 document for this patient then show it on document time line.
                                                 else
                                                 {
@@ -957,7 +944,7 @@ if( Auth::user()->user_type === 'admin' )
                                             echo '
                                             </div>
                                         </div>
-                                        <!-- END of login fancy console panel sharhe_hal_haye_pishin_normal -->
+                                        
                                     </center>
                                 </div>
                             </div>
@@ -1022,71 +1009,6 @@ if( Auth::user()->user_type === 'admin' )
                                     </div>
                                   </div>
                         
-                                <div class="col-md-12 col-sm-12 col-xs-12" >
-                        
-                                    <hr style="width:1px;" >
-                                    <hr style="width:1px;" >' ;
-
-                                    //// Create mysql query for extract chart data.
-                                    //$res_sik_doc_chart = mysql_query( " SELECT sic_rel_id , doc_rel_id , doc_id , doc_date_created , chart_1 , chart_2 ,chart_3 , chart_4 FROM $DB_NAME_LOGIN.sik_doc
-                                    //                                        WHERE sic_rel_id     = '".filter($patient_id)."'
-                                    //                                        AND   doc_rel_id     = '".filter($_SESSION['user_id'])."'
-                                    //                                        ORDER BY doc_id ASC
-                                    //                                      " , $database_connection) or die( " Error : Connection section res_sik_doc_time_line . " .mysql_error() ) ;
-                                    //
-                                    //if( mysql_num_rows($res_sik_doc_chart) > 0 )
-                                    //{
-                                    //    echo '
-                                    //    <div class="col-md-12 col-sm-12 col-xs-12" >
-                                    //        <center>
-                                    //            <font size="+2" class="text-center" style="float:none;" >
-                                    //                <span> مقایسه همزمان شاخص های حیاتی بیمار بر روی نمودار در گذر زمان </span>
-                                    //            </font>
-                                    //        </center>
-                                    //        <hr style="width:1px;" >
-                                    //        <hr style="width:1px;" >
-                                    //        <div id="container" style="min-width: 310px; height: 400px; margin: 0 auto"></div>
-                                    //    </div>' ;
-                                    //
-                                    //    $data_chart_date_1  = '' ;
-                                    //    $data_chart_value_1 = '' ;
-
-                                    //    // START of while.
-                                    //    while( $row_sik_doc_chart = mysql_fetch_array($res_sik_doc_chart) )
-                                    //    {
-                                    //        extract( $row_sik_doc_chart ) ;
-                                    //
-                                    //        // make label chart string variable to use on charts.
-                                    //        $data_chart_date_1    .= "'".$doc_date_created."'," ;
-                                    //        // make data chart string variable to use on charts.
-                                    //        $data_chart_value_1   .= $chart_1.',' 			   ;
-                                    //        $data_chart_value_2   .= $chart_2.',' 			   ;
-                                    //        $data_chart_value_3   .= $chart_3.',' 			   ;
-                                    //        $data_chart_value_4   .= $chart_4.',' 			   ;
-                                    //    }
-                                    //    // END of while.
-                        //
-                        //                echo '
-                        //                <p align="center" style="text-align:center" >
-                        //                    با کلیک بر روی اسم هر نمودار در بالا می توانید نمودار مربوطه را فعال یا غیر فعال نمایید
-                        //                </p>' ;
-                        //            }
-                        //            else
-                        //            {
-                        //                echo '
-                        //                <center>
-                        //                    <div class="col-md-12 col-sm-12 col-xs-12" >
-                        //                        <h3 style="padding-top:10px;font-size:25px;opacity:0.7;text-align:center;" >
-                        //                             <i class="glyphicon glyphicon-file" style="font-size:46px;padding: 19px;float:right;" ></i>
-                        //                             تا به حال برای این بیمار اطلاعاتی ثبت نشده
-                        //                        </h3>
-                        //                    </div>
-                        //                </center>';
-                        //            }
-
-                                echo '
-                                </div>
-                        
                             </div>
                         </div>
                         <!-- END of login fancy console panel chart -->';
@@ -1150,15 +1072,15 @@ if( Auth::user()->user_type === 'admin' )
     <div style="float:right;font-size:16px;margin-right:9px;" >Name: '.$result_of_patients_general_infos->patient_first_name.' '.$result_of_patients_general_infos->patient_last_name.'</div>
 
     <div style="float:right;font-size:16px;margin-right:10px;" >' ;
-        if($result_of_patients_general_infos->patient_relationship_status == 'single')
+        if($result_of_patients_general_infos->patient_relationship_status === 'single')
         {
             echo 'Marital Status: Single | ' ;
         }
-        elseif($result_of_patients_general_infos->patient_relationship_status == 'married')
+        elseif($result_of_patients_general_infos->patient_relationship_status === 'married')
         {
             echo 'Marital Status: Married | ' ;
         }
-        elseif($result_of_patients_general_infos->patient_relationship_status == 'divorced')
+        elseif($result_of_patients_general_infos->patient_relationship_status === 'divorced')
         {
             echo 'Marital Status: Divorced | ' ;
         }
@@ -1177,25 +1099,7 @@ if( strlen($result_of_patients_general_infos->patient_birth_day) > 0 )
     <div style="float:right;font-size:16px;margin-right:10px;" >Birthday: '.$result_of_patients_general_infos->patient_birth_day.' | </div>' ;
 }
 
-// $options_for_user = (unserialize(Auth::user()->options_for_user)) ;
-
-//// START of if admin activated money section
-//if( $options_for_user[0] == 't' && isset($_GET['money_receive']) )
-//{
-//    if( $_GET['money_receive'] == '0' )
-//    {
-//        echo '
-//        <div style="float:right;font-size:16px;margin-right:10px;" title="The fee did not receive" ><span class="glyphicon glyphicon-remove" aria-hidden="true" style="color:red;" ></span> Pay | </div>';
-//    }
-//    else
-//    {
-//        echo '
-//        <div style="float:right;font-size:16px;margin-right:10px;" title="The fee received '.$_GET['money_receive'].'" ><span class="glyphicon glyphicon-ok" aria-hidden="true" ></span> Paid &nbsp; | </div>';
-//    }
-//
-//} // END of if admin activated money section
-
-if( Auth::user()->telegram == 'true' )
+if( Auth::user()->telegram === 'true' )
 {
     if( strlen($result_of_patients_general_infos->patient_from_external_platform_id) > 0  )
     {
@@ -1223,90 +1127,8 @@ echo '
 <input type="hidden" name="patient_id" value="'.$EHR_document_patient_related_id.'" >
 <input type="hidden" name="patient_name" value="'.encrypt_decrypt('encrypt',$result_of_patients_general_infos->patient_first_name.' '.$result_of_patients_general_infos->patient_last_name).'" >
 <input  type="hidden" name="EHR_document_related_appointment_id" value="'.$EHR_document_related_appointment_id.'">
-<input  type="hidden" name="EHR_document_related_clinic_doctor_name" value="'.$EHR_document_related_clinic_doctor_name.'" >' ;
-//<input  type="hidden" name="svg_post" value="" id="svg" >
-
-echo '
-<button type="submit" name="final" class="btn btn-success btn-lg btn-block col-md-12 col-sm-12 col-xs-12 uiuxtrick" data-action="export-as-svg" value="Export as SVG" style="font-size:25px;position: fixed;bottom: 0px;right: 0px;z-index: 1;" onclick="this.disabled=true;this.form.submit();formSubmitting=true;" >Save</button>';
-
-//if ( strlen($cms_menu_title[6]) > 0 )
-//{
-//echo '
-//<div class="col-md-12 col-sm-12 col-xs-12" style="margin:0px 0px 0px 0px;padding:0px 0px 0px 0px;" >
-//    <div class="export-svg fs-container" style="float:right;margin:0px 0px 0px 0px;padding:0px 0px 0px 0px;" >
-//        <div id="lc" ></div>
-//    </div>
-//</div>
-//
-//<a id="canvas-fullscreen" style="float:left;font-size:25px;position:fixed;bottom:0px;left:0px;z-index:250;margin-bottom:0px;min-width:230px;" class="btn btn-success btn-group" >
-//    '.$cms_menu_title[6].'
-//</a>
-//
-//<a id="canvas-close-1" style="float: right; position: absolute;z-index: 1000000;background-image: url(../vendors/fancybox/fancybox_sprite.png);zoom: 3 !important;right: -10px !important;top: -18px !important;cursor: pointer;width: 36px;height: 36px;" >
-//
-//</a>';
-//}
-
-
-// START of Let to check user visit this page with SUMSUNG GALAXY TAB S3
-$is_campatible_android_device = '' 			;
-$ua = strtolower($_SERVER['HTTP_USER_AGENT']) ;
-if( ( stripos( $ua , 'SM-T825') == true ) && (stripos( $ua , 'Chrome') == true ) )
-{ // && stripos($ua,'mobile') !== false) {
-$is_campatible_android_device = 'true'    ;
-
-// START of if user visit this page with compatible device with software and PORTRAIT SCREEN THEN alert message to him.
-?>
-<style type="text/css" >
-    /* if portrait mode is detected hidden every thing with css */
-    @media (orientation: portrait)
-    {
-        .body { display: none; }
-        div   { display: none; }
-        body  { display: none; }
-    }
-</style>
-
-<script type="text/javascript" >
-
-    // Find matches
-    var mql = window.matchMedia("(orientation: portrait)");
-
-    // If there are matches, we're in portrait
-    if(mql.matches)
-    {
-        // Portrait orientation
-        alert("Please reset your tablet to landscape mode") ;
-    }
-    else
-    {
-    }
-
-    // Add a media query change listener
-    mql.addListener(function(m)
-    {
-        if(m.matches)
-        {
-            // Changed to Portrait
-            // Portrait orientation
-            alert("Please reset your tablet to landscape mode") ;
-        }
-        else
-        {
-        }
-    });
-
-</script>
-<?php
-// END of if user visit this page with compatible device with software and PORTRAIT SCREEN THEN alert message to him.
-}
-else
-{
-    $is_campatible_android_device = 'false' ;
-}
-// END of Let to check user visit this page with SUMSUNG GALAXY TAB S3
-
-                    echo '
+<input  type="hidden" name="EHR_document_related_clinic_doctor_name" value="'.$EHR_document_related_clinic_doctor_name.'" >
+<button type="submit" name="final" class="btn btn-success btn-lg btn-block col-md-12 col-sm-12 col-xs-12 uiuxtrick" data-action="export-as-svg" value="Export as SVG" style="font-size:25px;position: fixed;bottom: 0px;right: 0px;z-index: 1;" onclick="this.disabled=true;this.form.submit();formSubmitting=true;" ><i class="fa fa-folder-open-o" aria-hidden="true"></i> Save</button>
                     </div>
                     <!-- END Tab panes -->
 
@@ -1315,22 +1137,10 @@ else
           </form>
 
       </div>
-    
-  <!-- END of page content -->';
-// END of content.
 
-}
-// END of show to Admin user type.
-else
-{
-    echo '<P>This page is not accessible for you</P>' ;
-}
-
-    echo '
     </div>
-</div>
-<!-- /page content -->' ;
+</div>' ;
 
-// Call the footer include.
-include 'layout/footer.php' ;
+// Call the footer layout by require_once
+require_once '../resources/views/back/layout/footer.php' ;
 ?>

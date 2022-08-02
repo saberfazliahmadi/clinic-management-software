@@ -184,6 +184,7 @@ class ComposerStaticInitcefd90bede8c4a90dab5041f37c93b61
         array (
             'Asm89\\Stack\\' => 12,
             'App\\' => 4,
+            'AppEHR\\' => 7,
         ),
     );
 
@@ -540,6 +541,10 @@ class ComposerStaticInitcefd90bede8c4a90dab5041f37c93b61
         array (
             0 => __DIR__ . '/../..' . '/app',
         ),
+        'AppEHR\\' => 
+        array (
+            0 => __DIR__ . '/../..' . '/AppEHR',
+        ),
     );
 
     public static $prefixesPsr0 = array (
@@ -553,6 +558,11 @@ class ComposerStaticInitcefd90bede8c4a90dab5041f37c93b61
     );
 
     public static $classMap = array (
+        'AppEHR\\Http\\Controller\\PatientsEHRDocumentController' => __DIR__ . '/../..' . '/AppEHR/Http/Controller/PatientsEHRDocumentController.php',
+        'AppEHR\\Http\\Middleware\\ValidatorStorepatients_EHR_documentRequest' => __DIR__ . '/../..' . '/AppEHR/Http/Middleware/ValidatorStorepatients_EHR_documentRequest.php',
+        'AppEHR\\Http\\Middleware\\ValidatorUpdatepatients_EHR_documentRequest' => __DIR__ . '/../..' . '/AppEHR/Http/Middleware/ValidatorUpdatepatients_EHR_documentRequest.php',
+        'AppEHR\\Models\\patients_EHR_document' => __DIR__ . '/../..' . '/AppEHR/Models/patients_EHR_document.php',
+        'AppEHR\\Providers\\ehrServiceProvider' => __DIR__ . '/../..' . '/AppEHR/Providers/ehrServiceProvider.php',
         'App\\Console\\Kernel' => __DIR__ . '/../..' . '/app/Console/Kernel.php',
         'App\\Exceptions\\Handler' => __DIR__ . '/../..' . '/app/Exceptions/Handler.php',
         'App\\Http\\Controllers\\Auth\\ConfirmPasswordController' => __DIR__ . '/../..' . '/app/Http/Controllers/Auth/ConfirmPasswordController.php',
@@ -565,7 +575,6 @@ class ComposerStaticInitcefd90bede8c4a90dab5041f37c93b61
         'App\\Http\\Controllers\\FinancialTransactionController' => __DIR__ . '/../..' . '/app/Http/Controllers/FinancialTransactionController.php',
         'App\\Http\\Controllers\\HomeController' => __DIR__ . '/../..' . '/app/Http/Controllers/HomeController.php',
         'App\\Http\\Controllers\\PatientsAppointmentController' => __DIR__ . '/../..' . '/app/Http/Controllers/PatientsAppointmentController.php',
-        'App\\Http\\Controllers\\PatientsEHRDocumentController' => __DIR__ . '/../..' . '/app/Http/Controllers/PatientsEHRDocumentController.php',
         'App\\Http\\Controllers\\PatientsGeneralInfoController' => __DIR__ . '/../..' . '/app/Http/Controllers/PatientsGeneralInfoController.php',
         'App\\Http\\Controllers\\PatientsPhotoController' => __DIR__ . '/../..' . '/app/Http/Controllers/PatientsPhotoController.php',
         'App\\Http\\Controllers\\UserController' => __DIR__ . '/../..' . '/app/Http/Controllers/UserController.php',
@@ -574,9 +583,12 @@ class ComposerStaticInitcefd90bede8c4a90dab5041f37c93b61
         'App\\Http\\Middleware\\EncryptCookies' => __DIR__ . '/../..' . '/app/Http/Middleware/EncryptCookies.php',
         'App\\Http\\Middleware\\PreventRequestsDuringMaintenance' => __DIR__ . '/../..' . '/app/Http/Middleware/PreventRequestsDuringMaintenance.php',
         'App\\Http\\Middleware\\RedirectIfAuthenticated' => __DIR__ . '/../..' . '/app/Http/Middleware/RedirectIfAuthenticated.php',
+        'App\\Http\\Middleware\\TransactionOnDatabaseToRollbackWhenExceptionsHappen' => __DIR__ . '/../..' . '/app/Http/Middleware/TransactionOnDatabaseToRollbackWhenExceptionsHappen.php',
         'App\\Http\\Middleware\\TrimStrings' => __DIR__ . '/../..' . '/app/Http/Middleware/TrimStrings.php',
         'App\\Http\\Middleware\\TrustHosts' => __DIR__ . '/../..' . '/app/Http/Middleware/TrustHosts.php',
         'App\\Http\\Middleware\\TrustProxies' => __DIR__ . '/../..' . '/app/Http/Middleware/TrustProxies.php',
+        'App\\Http\\Middleware\\ValidatorStorepatients_general_infoRequest' => __DIR__ . '/../..' . '/app/Http/Middleware/ValidatorStorepatients_general_infoRequest.php',
+        'App\\Http\\Middleware\\ValidatorUpdatepatients_general_infoRequest' => __DIR__ . '/../..' . '/app/Http/Middleware/ValidatorUpdatepatients_general_infoRequest.php',
         'App\\Http\\Middleware\\VerifyCsrfToken' => __DIR__ . '/../..' . '/app/Http/Middleware/VerifyCsrfToken.php',
         'App\\Http\\Middleware\\middleware_check_page_access_for_admin_level' => __DIR__ . '/../..' . '/app/Http/Middleware/middleware_check_page_access_for_admin_level.php',
         'App\\Http\\Middleware\\middleware_check_page_access_for_user_level' => __DIR__ . '/../..' . '/app/Http/Middleware/middleware_check_page_access_for_user_level.php',
@@ -585,26 +597,20 @@ class ComposerStaticInitcefd90bede8c4a90dab5041f37c93b61
         'App\\Http\\Requests\\ReportFinancialTransactionRequest' => __DIR__ . '/../..' . '/app/Http/Requests/ReportFinancialTransactionRequest.php',
         'App\\Http\\Requests\\Storeclinic_financial_detailRequest' => __DIR__ . '/../..' . '/app/Http/Requests/Storeclinic_financial_detailRequest.php',
         'App\\Http\\Requests\\Storefinancial_transactionRequest' => __DIR__ . '/../..' . '/app/Http/Requests/Storefinancial_transactionRequest.php',
-        'App\\Http\\Requests\\Storepatients_EHR_documentRequest' => __DIR__ . '/../..' . '/app/Http/Requests/Storepatients_EHR_documentRequest.php',
         'App\\Http\\Requests\\Storepatients_appointmentRequest' => __DIR__ . '/../..' . '/app/Http/Requests/Storepatients_appointmentRequest.php',
-        'App\\Http\\Requests\\Storepatients_general_infoRequest' => __DIR__ . '/../..' . '/app/Http/Requests/Storepatients_general_infoRequest.php',
         'App\\Http\\Requests\\Storepatients_photoRequest' => __DIR__ . '/../..' . '/app/Http/Requests/Storepatients_photoRequest.php',
         'App\\Http\\Requests\\Updateclinic_financial_detailRequest' => __DIR__ . '/../..' . '/app/Http/Requests/Updateclinic_financial_detailRequest.php',
         'App\\Http\\Requests\\Updatefinancial_transactionRequest' => __DIR__ . '/../..' . '/app/Http/Requests/Updatefinancial_transactionRequest.php',
-        'App\\Http\\Requests\\Updatepatients_EHR_documentRequest' => __DIR__ . '/../..' . '/app/Http/Requests/Updatepatients_EHR_documentRequest.php',
         'App\\Http\\Requests\\Updatepatients_appointmentRequest' => __DIR__ . '/../..' . '/app/Http/Requests/Updatepatients_appointmentRequest.php',
-        'App\\Http\\Requests\\Updatepatients_general_infoRequest' => __DIR__ . '/../..' . '/app/Http/Requests/Updatepatients_general_infoRequest.php',
         'App\\Http\\Requests\\Updatepatients_photoRequest' => __DIR__ . '/../..' . '/app/Http/Requests/Updatepatients_photoRequest.php',
         'App\\Http\\Requests\\delete_this_appointment_idRequest' => __DIR__ . '/../..' . '/app/Http/Requests/delete_this_appointment_idRequest.php',
         'App\\Http\\Requests\\run_change_password_formRequest' => __DIR__ . '/../..' . '/app/Http/Requests/run_change_password_formRequest.php',
         'App\\Http\\Requests\\run_financial_transaction_reporting_formRequest' => __DIR__ . '/../..' . '/app/Http/Requests/run_financial_transaction_reporting_formRequest.php',
         'App\\Http\\Requests\\show_form_of_appointments_on_specific_dateRequest' => __DIR__ . '/../..' . '/app/Http/Requests/show_form_of_appointments_on_specific_dateRequest.php',
         'App\\Http\\Requests\\store_patient_time_appointment_tableRequest' => __DIR__ . '/../..' . '/app/Http/Requests/store_patient_time_appointment_tableRequest.php',
-        'App\\Http\\Requests\\store_patients_ehr_document_pageRequest' => __DIR__ . '/../..' . '/app/Http/Requests/store_patients_ehr_document_pageRequest.php',
         'App\\Http\\Requests\\update_show_main_settings_of_software_formRequest' => __DIR__ . '/../..' . '/app/Http/Requests/update_show_main_settings_of_software_formRequest.php',
         'App\\Models\\User' => __DIR__ . '/../..' . '/app/Models/User.php',
         'App\\Models\\financial_transaction' => __DIR__ . '/../..' . '/app/Models/financial_transaction.php',
-        'App\\Models\\patients_EHR_document' => __DIR__ . '/../..' . '/app/Models/patients_EHR_document.php',
         'App\\Models\\patients_appointment' => __DIR__ . '/../..' . '/app/Models/patients_appointment.php',
         'App\\Models\\patients_general_info' => __DIR__ . '/../..' . '/app/Models/patients_general_info.php',
         'App\\Models\\patients_photo' => __DIR__ . '/../..' . '/app/Models/patients_photo.php',
@@ -5670,6 +5676,7 @@ class ComposerStaticInitcefd90bede8c4a90dab5041f37c93b61
         'Symfony\\Polyfill\\Php80\\Php80' => __DIR__ . '/..' . '/symfony/polyfill-php80/Php80.php',
         'Symfony\\Polyfill\\Php81\\Php81' => __DIR__ . '/..' . '/symfony/polyfill-php81/Php81.php',
         'Tests\\CreatesApplication' => __DIR__ . '/../..' . '/tests/CreatesApplication.php',
+        'Tests\\Feature\\EHR_Page' => __DIR__ . '/../..' . '/tests/Feature/EHR_Page.php',
         'Tests\\Feature\\ExampleTest' => __DIR__ . '/../..' . '/tests/Feature/ExampleTest.php',
         'Tests\\TestCase' => __DIR__ . '/../..' . '/tests/TestCase.php',
         'Tests\\Unit\\ExampleTest' => __DIR__ . '/../..' . '/tests/Unit/ExampleTest.php',

@@ -1,43 +1,51 @@
 <?php
-
 namespace App\Http\Controllers;
 
 use App\Http\Requests\run_change_password_formRequest;
 use App\Http\Requests\update_show_main_settings_of_software_formRequest;
 use App\Models\User;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\File;
 use mysql_xdevapi\Session;
 use phpDocumentor\Reflection\DocBlock\Tags\Uses;
 use Hash;
-
-// START OF MANUALLY RECEIVING DATA FROM A FORM BY GET OR POST METHOD AND USE IT IN YOUR CUSTOMIZE FUNCTIONS.
+use Illuminate\Database\QueryException;
+use App\Responses\Responses ;
+// MANUALLY RECEIVING DATA FROM A FORM BY GET OR POST METHOD AND USE IT IN YOUR CUSTOMIZE FUNCTIONS.
 // https://stackoverflow.com/questions/32718870/how-to-get-all-input-of-post-in-laravel
-// step(1) add this use to top of your controller page after the name space.
-// use Illuminate\Http\Request ;
-// step(2) write your function with this structure
-//    public function function_name( Request $request )
-//    {
-//        //
-//    }
-// step(3) use below codes in it.
-//// Show only POST data
-//$request->post(); // DI
-//request()->post(); // global method
-//Request::post(); // facade
-//
-//// Show only GET data
-//$request->query(); // DI
-//request()->query(); // global method
-//Request::query(); // facade
-//
-//// Show all data (i.e. both GET and POST data)
-//$request->all(); // DI
-//request()->all(); // global method
-//Request::all(); // facade
-// END OF MANUALLY RECEIVING DATA FROM A FORM BY GET OR POST METHOD AND USE IT IN YOUR CUSTOMIZE FUNCTIONS.
-
+/** In this controller according to Single Responsibility and Open-Closed Principles of SOLID
+we validate user inputs by Middleware **/
 class UserController extends Controller
 {
+    public static function make_ban_or_active_this_user_id( $name_of_user , $id_of_user , $action )
+    {
+        return User::make_ban_or_active_this_user_id($name_of_user , $id_of_user , $action) ;
+    }
+
+    public function show_management_users_of_software_form()
+    {
+        $data_of_log_file = '' ;
+        if(File::exists(storage_path('logs\laravel.log')))
+        {
+            $data_of_log_file = File::get(storage_path('logs\laravel.log')) ;
+        }
+
+        try
+        {
+            $result_of_all_users_related_to_this_super_admin = User::all_users_related_to_this_super_admin() ;
+            return view('back.show_management_users_of_software_form' ,
+            [
+                'title_of_page'                                   => 'Management Users of '.__('general.Name of software') ,
+                'result_of_all_users_related_to_this_super_admin' => $result_of_all_users_related_to_this_super_admin ,
+                'log_data'                                        => $data_of_log_file ,
+            ]);
+        }
+        catch (QueryException $exception)
+        {
+            return Responses::FailedWithException('home' , '' , '<b style="color:blue;" >We have an error to show Management Users of Software From</b>' , $exception)  ;
+        }
+    }
+
     public function show_main_settings_of_software_form()
     {
         try
@@ -46,8 +54,7 @@ class UserController extends Controller
 
             if(!$result_show_main_settings_of_software_form)
             {
-                return redirect(route('home'))
-                ->with(['success_message' => '<b style="color:blue;" >We have an error to show main settings of software</b>']);
+                return Responses::Failed('home', '' , '<b style="color:blue;" >We have an error to show main settings of software</b>' ) ;
             }
             return view('back.show_main_settings_of_software_form' ,
             [
@@ -55,10 +62,9 @@ class UserController extends Controller
                 'result_show_main_settings_of_software_form' => $result_show_main_settings_of_software_form
             ]);
         }
-        catch (\Exception $exception)
+        catch (QueryException $exception)
         {
-            return redirect(route('home'))
-            ->with(['success_message' => '<b style="color:blue;" >We have an error to show main settings of software</b>']);
+            return Responses::FailedWithException('home', '' , '<b style="color:blue;" >We have an error to show main settings of software</b>' , $exception ) ;
         }
     }
 
@@ -75,12 +81,12 @@ class UserController extends Controller
         {
             $gap_time_between_appointments = 60 ;
         }
-        // the acceptable gap time range
+        // The acceptable gap time range
         elseif ($gap_time_between_appointments >= 5 && $gap_time_between_appointments <= 60 && is_numeric($gap_time_between_appointments))
         {
             $gap_time_between_appointments = $gap_time_between_appointments ;
         }
-        // the default gap time
+        // Define the default gap time of appointments
         else
         {
             $gap_time_between_appointments = 30 ;
@@ -103,8 +109,45 @@ class UserController extends Controller
         return $options_for_user ;
     }
 
+    public function validation_of_financial_management_variable($request_post_financial_management)
+    {
+        $financial_management_revealed_errors = '' ;
+        // If ADMIN typed something for financial management service
+        if ($request_post_financial_management ==! '')
+        {
+            // Check all financial items to be eligible
+            // Each of financial transaction items should have number & character & ':'
+            $exploded_values = explode(',', $request_post_financial_management);
+            foreach ($exploded_values as $financial_item)
+            {
+                // Check all require conditions that financial items should have
+                if (! (strpos($financial_item, ':') && strlen($financial_item) > 2 && preg_match('/[A-Za-z]/', $financial_item) && preg_match('/[0-9]/', $financial_item)))
+                {
+                    $financial_management_revealed_errors .= ' '.$financial_item ;
+                }
+            }
+        }
+        return $financial_management_revealed_errors ;
+    }
+
+    // Remove some extra words from financial items
+    public function remove_extra_words_from_financial_management_variable($request_financial_management)
+    {
+        return str_replace([".","/","|","+","-"], "", $request_financial_management );
+    }
+
     public function update_show_main_settings_of_software_form(update_show_main_settings_of_software_formRequest $request)
     {
+        /** Check the $request->financial_management
+        and then if we have some errors on $financial_management_revealed_errors then show it **/
+        $financial_management_revealed_errors = $this->validation_of_financial_management_variable($request->financial_management) ;
+        if( $financial_management_revealed_errors !== '' )
+        {
+            return Responses::Failed( 'back_to_previous_page' , '' , '<b>Financial Type Error</b><br><b style="color:red;">'.$financial_management_revealed_errors.' is wrong</b><br><b style="color:blue;" >At least type 3 characters followed by this type <br> Service Name : Service Amount</b><br>Remember, each service type should have this character <b style="color:blue;" >:</b>' ) ;
+        }
+
+        $financial_management = $this->remove_extra_words_from_financial_management_variable($request->financial_management) ;
+
         $gap_time_between_appointments = $this->prepare_variable_of_gap_time_between_appointments($request->gap_time_between_appointments) ;
 
         $clinic_doctors_name     = $request->clinic_doctors_name;
@@ -178,23 +221,40 @@ class UserController extends Controller
         . ',' . $cms_menu_title_28;
 
         $options_for_user = $this->prepare_variable_of_options_for_user($money_console_status) ;
-        
+
+        $success_message = 'The New Settings of Software Successfully Updated' ;
+        $failed_message  = '<b style="color:blue;" >We have an error to update New Settings of Software</b>' ;
+        $extra_message   = ' for <b style="color:blue;" >'.$request->name_of_user.'</b>' ;
+        $decrypted_id_of_user = encrypt_decrypt( 'decrypt' , $request->id_of_user) ;
+
         try
         {
-            $result_update_main_settings_of_software_form = User::update_main_settings_of_software_form(Auth::user()->id, Auth::user()->name,$common_drug,$common_diet,$common_return_date,$phone_number,$college_branch,$contact_address,$common_hypersensitivity,$options_for_user,$cms_menu_title,$gap_time_between_appointments,$clinic_doctors_name) ;
-
-            if($result_update_main_settings_of_software_form)
+            // If the request was from Route => update_user_info_by_super_admin
+            if( $request->route()->getName() === 'update_user_info_by_super_admin')
             {
-                return redirect(route('show_main_settings_of_software_form'))
-                ->with(['success_message' => 'The New Settings of Software Successfully Updated']);
+                $result_update_main_settings_of_software_form = User::update_main_settings_of_software_form_for_super_admin( $decrypted_id_of_user , $request->name_of_user , $common_drug , $common_diet , $common_return_date ,$phone_number,$college_branch,$contact_address,$common_hypersensitivity,$options_for_user,$cms_menu_title,$gap_time_between_appointments,$clinic_doctors_name , $request->status_of_user , $request->level_of_user , $financial_management ) ;
+                if(!$result_update_main_settings_of_software_form)
+                {
+                    return Responses::Failed('show_management_users_of_software_form' , '' , $failed_message ) ;
+                }
+                return Responses::Success('show_management_users_of_software_form' , '' , $success_message.$extra_message ) ;
             }
-            return redirect(route('show_main_settings_of_software_form'))
-            ->with(['success_message' => '<b style="color:blue;" >We have an error to update New Settings of Software</b>']);
+
+            // If the request was from Route => update_show_main_settings_of_software_form
+            $result_update_main_settings_of_software_form = User::update_main_settings_of_software_form( $decrypted_id_of_user , $request->name_of_user , $common_drug , $common_diet , $common_return_date ,$phone_number,$college_branch,$contact_address,$common_hypersensitivity,$options_for_user,$cms_menu_title,$gap_time_between_appointments,$clinic_doctors_name, $financial_management ) ;
+            if(!$result_update_main_settings_of_software_form)
+            {
+                return Responses::Failed('show_main_settings_of_software_form' , '' , $failed_message ) ;
+            }
+            return Responses::Success('show_main_settings_of_software_form' , '' , $success_message ) ;
         }
-        catch (\Exception $exception)
+        catch (QueryException $exception)
         {
-            return redirect(route('show_main_settings_of_software_form'))
-            ->with(['success_message' => '<b style="color:blue;" >We have an error to update New Settings of Software</b>']);
+            if( $request->route()->getName() === 'update_user_info_by_super_admin')
+            {
+                return Responses::FailedWithException('show_management_users_of_software_form' , '' , $failed_message.$extra_message , $exception) ;
+            }
+            return Responses::FailedWithException('show_main_settings_of_software_form' , '' , $failed_message , $exception) ;
         }
     }
 
@@ -208,32 +268,28 @@ class UserController extends Controller
         // The entered current password does not matches with Auth::user()->password
         if (!( Hash::check($request->current_password, Auth::user()->password) ))
         {
-            return redirect(route('show_change_password_form'))
-            ->with(['success_message' => '<b style="color:blue;" >The current password you entered does not matches with your password <br> Try it again</b>']);
+            return Responses::Failed('show_change_password_form' , '' , '<b style="color:blue;" >The current password you entered does not matches with your password <br> Try it again</b>' ) ;
         }
-
+        // The entered current password does not matches Re-EnterPassword
         if( $request->new_password !== $request->retype_new_password )
         {
-            return redirect(route('show_change_password_form'))
-            ->with(['success_message' => '<b style="color:blue;" >Your News Password is NOT EQUAL to Re-Type the New Password <br> Try it again</b>']);
+            return Responses::Failed('show_change_password_form' , '' , '<b style="color:blue;" >Your News Password is NOT EQUAL to Re-Type the New Password <br> Try it again</b>' ) ;
         }
 
+        $response_message_failed = '<b style="color:blue;" >We have an error to update this password <br> Try it again</b>' ;
+        $response_message_success = 'Your Password Successfully Updated' ;
         try
         {
             $result_run_change_password_form = user::run_change_password_form(Auth::user()->id, Auth::user()->name, Hash::make($request->new_password)) ;
-
             if(!$result_run_change_password_form)
             {
-                return redirect(route('show_change_password_form'))
-                ->with(['success_message' => '<b style="color:blue;" >We have an error to update this password <br> Try it again</b>']);
+                return Responses::Failed('show_change_password_form' , '' , $response_message_failed ) ;
             }
-            return redirect(route('show_change_password_form'))
-            ->with(['success_message' => 'Your Password Successfully Updated']);
+            return Responses::Success('show_change_password_form' , '' , $response_message_success ) ;
         }
-        catch ( \Exception $exception )
+        catch ( QueryException $exception )
         {
-            return redirect(route('show_change_password_form'))
-            ->with(['success_message' => '<b style="color:blue;" >We have an error to update this password <br> Try it again</b>']);
+            return Responses::FailedWithException('show_change_password_form' , '' , $response_message_failed , $exception) ;
         }
     }
 }

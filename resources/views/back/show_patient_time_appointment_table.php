@@ -167,7 +167,7 @@ echo '
             </center>
 
             <button type="submit" name="submit" class="btn btn-success btn-group-justified uiuxtrick" style="font-size:28px;position: fixed;bottom: 0px;right: 0px;z-index: 1;margin-bottom:0px;margin-right:0px;" >
-                Book This Appointment Time on Date '.$choose_time_for_this_date.'
+               <i class="fa fa-clock-o" aria-hidden="true"></i> Book This Appointment Time on Date '.$choose_time_for_this_date.'
             </button>
         </form>
     </div>

@@ -1,29 +1,23 @@
 <?php
 
-namespace App\Http\Requests;
+namespace AppEHR\Http\Middleware;
 
-use Illuminate\Foundation\Http\FormRequest;
+use Closure;
+use Illuminate\Http\Request;
 
-class Storepatients_EHR_documentRequest extends FormRequest
+class ValidatorStorepatients_EHR_documentRequest
 {
     /**
-     * Determine if the user is authorized to make this request.
+     * Handle an incoming request.
      *
-     * @return bool
+     * @param  \Illuminate\Http\Request  $request
+     * @param  \Closure  $next
+     * @return mixed
      */
-    public function authorize()
-    {
-        return true;
-    }
 
-    /**
-     * Get the validation rules that apply to the request.
-     *
-     * @return array
-     */
-    public function rules()
+    public function handle(Request $request, Closure $next)
     {
-        return [
+        $rules = [
             "_method"                      => 'in:post',
             "common_hypersensitivity_2311" => 'array' ,
             "typed_keyboard_savabegh"      => "",
@@ -34,7 +28,8 @@ class Storepatients_EHR_documentRequest extends FormRequest
             "keyboard_medications_picker"  => "",
             "common_diet"                  => "array" ,
             "keyboard_common_diet"         => "",
-            "keyboard_common_return_date"  => "array" ,
+            "common_return_date"           => "array",
+            "keyboard_common_return_date"  => "" ,
             "keyboard_paraclinic_file_title" => "",
             "keyboard_chart_1"             => "",
             "keyboard_chart_2"             => "",
@@ -47,5 +42,8 @@ class Storepatients_EHR_documentRequest extends FormRequest
             "EHR_document_related_clinic_doctor_name" => "" ,
             "image" => "image|mimes:jpeg,png,jpg,gif,svg|max:10048" ,
         ];
+
+        $request->validate($rules);
+        return $next($request);
     }
 }

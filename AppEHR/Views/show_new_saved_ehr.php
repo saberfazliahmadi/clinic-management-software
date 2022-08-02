@@ -7,8 +7,8 @@ $extra_links_header = '' ;
 // Add your custom js files here.
 $extra_links_footer = '' ;
 
-// call the header include.
-include 'layout/header.php' ;
+// Call the header by require_once
+require_once '../resources/views/back/layout/header.php' ;
 
 if(isset($show_ehr_report))
 {
@@ -140,8 +140,8 @@ else
     return redirect(route('show_main_settings_of_software_form'));
 }
 
-// Call the footer include
-include 'layout/footer.php' ;
+// Call the footer by require_once
+require_once '../resources/views/back/layout/footer.php' ;
 ?>
 
 
