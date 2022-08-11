@@ -20,7 +20,8 @@ class UserFactory extends Factory
             'email_verified_at' => now(),
             'password'          => '$2y$10$B9g142ODH45aslgw7dY7UeF5opvPqSdtFZtUOCvd2MTjIU3.cFata', // password
             'remember_token'    => Str::random(10),
-            'user_level'        => '3'
+            'user_level'        => '3',
+            'status'            => 'activated' ,
         ];
     }
 

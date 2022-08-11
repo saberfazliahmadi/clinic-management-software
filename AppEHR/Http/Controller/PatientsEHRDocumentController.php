@@ -2,7 +2,6 @@
 namespace AppEHR\Http\Controller ;
 
 use App\Http\Controllers\Controller ;
-// I added the below lines manually
 use Illuminate\Database\QueryException;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Http\Request;
@@ -25,7 +24,7 @@ class PatientsEHRDocumentController extends Controller
             $result_of_show_patients_general_infos = patients_general_info::fetch_info_of_this_patient_id( $decrypted_request_patient_id ) ;
             if(!$result_of_show_patients_general_infos)
             {
-                return Responses::Failed('home', '<span style="color:blue;">Requested Patient Does Not Exist!</span>' ) ;
+                return Responses::Failed( 'home' , '' , '<span style="color:blue;">Requested Patient Does Not Exist!</span>' ) ;
             }
 
             $result_of_patients_photo = patients_photo::result_of_patient_ehr_photo( $decrypted_request_patient_id ) ;
@@ -51,7 +50,7 @@ class PatientsEHRDocumentController extends Controller
         }
         catch (QueryException $exception)
         {
-            return Responses::FailedWithException('home', '<span style="color:blue;">Can not display this EHR!</span>' , $exception ) ;
+            return Responses::FailedWithException( 'home' , '' , '<span style="color:blue;">Can not display this EHR!</span>' , $exception ) ;
         }
     }
 
@@ -182,7 +181,7 @@ class PatientsEHRDocumentController extends Controller
             $result_update_this_patient_general_info = patients_general_info::update_this_patient_general_info_from_ehr_page($decrypted_request_patient_id, $patient_more_description, $request->post('patient_surgery_history'), $request->post('patient_disease_background'), $request->post('patient_medication_history'), $request->post('patient_allergies_history') ) ;
             if ( ! $result_update_this_patient_general_info )
             {
-                return Responses::Failed('home', '<span style="color:blue;">New information of patient DOES NOT updated! <br> So the New Photo and new EHR information of patient did not save also</span>' ) ;
+                return Responses::Failed( 'home', '' , '<span style="color:blue;">New information of patient DOES NOT updated! <br> So the New Photo and new EHR information of patient did not save also</span>' ) ;
             }
 
             $common_drug        = $this->prepare_common_drug_variable($request->all()) ;
@@ -195,7 +194,7 @@ class PatientsEHRDocumentController extends Controller
             $result_store_new_ehr_doc = patients_EHR_document::store_new_ehr_doc($common_drug, $common_diet, $common_return_date, $decrypted_request_patient_id, $EHR_document_related_appointment_id_trick, $EHR_document_related_clinic_doctor_name_trick) ;
             if ( ! $result_store_new_ehr_doc->exists )
             {
-                return Responses::Failed('home', '<span style="color:blue;">New EHR information did not Save! <br> So the New Photo of patient did not save also if you inserted it!</span>' ) ;
+                return Responses::Failed( 'home' , '' , '<span style="color:blue;">New EHR information did not Save! <br> So the New Photo of patient did not save also if you inserted it!</span>' ) ;
             }
 
             // If an image for uploading exist
@@ -204,26 +203,27 @@ class PatientsEHRDocumentController extends Controller
                 $store_patient_photo_from_ehr_page = PatientsPhotoController::preparation_file_process_and_upload_image($request,$request->keyboard_paraclinic_file_title ,$decrypted_request_patient_id) ;
                 if ( ! $store_patient_photo_from_ehr_page->exists )
                 {
-                    return Responses::Failed('home', '<span style="color:blue;">New Photo of patient did not save but the other new EHR information have been saved successfully!</span>' ) ;
+                    return Responses::Failed( 'home' , '' , '<span style="color:blue;">New Photo of patient did not save but the other new EHR information have been saved successfully!</span>' ) ;
                 }
             }
             return Responses::Success('show_new_saved_ehr' , array( 'EHR_document_id' => encrypt_decrypt('encrypt', $result_store_new_ehr_doc->EHR_document_id ) , 'patient_name' => $request->patient_name ) , '' ) ;
         }
         catch ( QueryException $exception )
         {
-            return Responses::FailedWithException('home', '<span style="color:blue;">Can not Save new EHR information!</span>' , $exception ) ;
+            return Responses::FailedWithException('home', '' , '<span style="color:blue;">Can not Save new EHR information!</span>' , $exception ) ;
         }
     }
 
     public function show_new_saved_ehr( Request $request )
     {
+        $response_message_failed = '<span style="color:blue;">Can not show new saved EHR!</span>' ;
         try
         {
             $result_show_new_saved_ehr = patients_EHR_document::show_new_saved_ehr( encrypt_decrypt('decrypt', $request->EHR_document_id) ) ;
 
             if(!$result_show_new_saved_ehr)
             {
-                return Responses::Failed('home', '<span style="color:blue;">Can not show new saved EHR!</span>' ) ;
+                return Responses::Failed( 'home' , '' , $response_message_failed ) ;
             }
             return view('EHR::show_new_saved_ehr' ,
             [
@@ -239,7 +239,7 @@ class PatientsEHRDocumentController extends Controller
         }
         catch (QueryException $exception)
         {
-            return Responses::FailedWithException('home' , '<span style="color:blue;">Can not show new saved EHR!</span>' , $exception);
+            return Responses::FailedWithException( 'home' , '' , $response_message_failed , $exception);
         }
     }
 

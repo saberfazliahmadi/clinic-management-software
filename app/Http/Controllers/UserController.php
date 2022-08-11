@@ -24,12 +24,6 @@ class UserController extends Controller
 
     public function show_management_users_of_software_form()
     {
-        $data_of_log_file = '' ;
-        if(File::exists(storage_path('logs\laravel.log')))
-        {
-            $data_of_log_file = File::get(storage_path('logs\laravel.log')) ;
-        }
-
         try
         {
             $result_of_all_users_related_to_this_super_admin = User::all_users_related_to_this_super_admin() ;
@@ -37,12 +31,33 @@ class UserController extends Controller
             [
                 'title_of_page'                                   => 'Management Users of '.__('general.Name of software') ,
                 'result_of_all_users_related_to_this_super_admin' => $result_of_all_users_related_to_this_super_admin ,
-                'log_data'                                        => $data_of_log_file ,
             ]);
         }
         catch (QueryException $exception)
         {
             return Responses::FailedWithException('home' , '' , '<b style="color:blue;" >We have an error to show Management Users of Software From</b>' , $exception)  ;
+        }
+    }
+
+    public function show_users_activities_logs()
+    {
+        try
+        {
+            $data_of_log_file = '' ;
+            if(File::exists(storage_path('logs\laravel.log')))
+            {
+                $data_of_log_file = File::get(storage_path('logs\laravel.log')) ;
+            }
+
+            return view('back.show_users_activities_logs' ,
+            [
+                'title_of_page' => 'Users Activities Logs' ,
+                'log_data'      => $data_of_log_file ,
+            ]);
+        }
+        catch (QueryException $exception)
+        {
+            return Responses::FailedWithException('home' , '' , '<b style="color:blue;" >We have an error to show Users Activities Logs</b>' , $exception)  ;
         }
     }
 

@@ -54,7 +54,6 @@ class PatientsGeneralInfoController extends Controller
             {
                 return Responses::Success( 'show_patient_time_appointment_table', [ 'choose_time_for_this_date' => $request->get('patient_last_appointment_date') , 'choose_time_for_this_patient_id' => $encrypted_choose_time_for_this_patient_id ] , $response_message.'<br>Now choose an appointment time on date '.$request->get('patient_last_appointment_date') ) ;
             }
-
             // If this patient DOES NOT have a selected date of appointment then redirect him to route('submit_new_patient_form') with success message
             return Responses::Success( 'submit_new_patient_form', '' , $response_message ) ;
         }

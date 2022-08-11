@@ -283,6 +283,14 @@ label
                                                     Users Management
                                                 </a>
                                             </span>
+                                        </li>
+                                        <li>
+                                            <span style="float:left;margin-top:15px;margin-left:15px;" >
+                                                <a href="'.route('show_users_activities_logs').'">
+                                                    <span class="fa fa-align-left" aria-hidden="true" style="float:left;font-size:24px;margin-left:0px;"></span>
+                                                    Users Activities Logs
+                                                </a>
+                                            </span>
                                         </li>' ;
                                     }
 

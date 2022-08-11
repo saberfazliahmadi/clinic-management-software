@@ -6,19 +6,17 @@ use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Foundation\Testing\WithFaker;
 use Tests\TestCase;
 
-class EHR_Page extends TestCase
+class ehr_Test extends TestCase
 {
     /**
      * A basic feature test example.
      *
      * @return void
      */
-    public function testExample()
+    public function test_example()
     {
-        $response = $this->get('/show_patients_ehr_document_page/NG0razhIRDgwV0FyS0JyRjQ4M2YzZz09');
+        $response = $this->get('/');
 
         $response->assertStatus(200);
-        // $response->assertSee('Alpha');
-        $response->assertDontSee('Beta');
     }
 }

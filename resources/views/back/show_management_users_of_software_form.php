@@ -53,43 +53,7 @@ echo '
 			  <hr style="width:1px;">
 			  <div class="form-group col-md-12 col-sm-12 col-xs-12" >
 			  
-                <center><h3>List of all users</h3></center>
-                
-                <!-- Button trigger LOG modal -->
-                <button type="button" class="col-md-12 col-sm-12 col-xs-12 btn btn-primary" data-toggle="modal" data-target="#log_data" style="margin:5px 5px 5px 5px;font-size:2.5vw;margin-top:20px;" >
-                    Log Data 
-                </button>
-                
-                <!-- START LOG Modal -->
-                <div class="modal fade" id="log_data" tabindex="-100" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true" >
-                    <div class="modal-dialog" role="document">
-                        <div class="modal-content">
-                        
-                          <div class="modal-header">
-                            <div class="col-md-9" style="margin-top:20px;">
-                                <h3 class="modal-title" id="exampleModalLabel"  >
-                                    <center>
-                                        Log Data
-                                    </center>
-                                </h3>
-                            </div>
-                            <div class="col-md-3">
-                                <button type="button" class="close" data-dismiss="modal" aria-label="Close" >
-                                    <span aria-hidden="true" style="font-size:74px!important;">&times;</span>
-                                </button>
-                            </div>
-                          </div>
-                          
-                          <div class="modal-body" style="overflow: auto!important;" >
-                            <pre>
-                            '.$log_data.'
-                            </pre>
-                          </div>
-                          
-                        </div>
-                    </div>
-                </div>
-                <!-- END of LOG Modal -->';
+                <center><h3>List of all users</h3></center>';
 
                     foreach( $result_of_all_users_related_to_this_super_admin as $key )
                     {
