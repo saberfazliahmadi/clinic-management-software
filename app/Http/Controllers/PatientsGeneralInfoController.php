@@ -16,7 +16,7 @@ class PatientsGeneralInfoController extends Controller
         try
         {
             $number_of_total_clinic_patients = patients_general_info::number_of_total_clinic_patients() ;
-            return view('back.submit_new_patient_form' ,
+            return Responses::view('back.submit_new_patient_form' ,
             [
                 'title_of_page'                   => 'Submit a New Patient' ,
                 'number_of_total_clinic_patients' => $number_of_total_clinic_patients
@@ -69,17 +69,10 @@ class PatientsGeneralInfoController extends Controller
         {
             $decrypted_edit_this_patient_id = encrypt_decrypt('decrypt', $edit_this_patient_id ) ;
             $result_edit_patient_form       = patients_general_info::fetch_info_of_this_patient_id($decrypted_edit_this_patient_id) ;
-
-            // If the requested patient does not exist
-            if(!$result_edit_patient_form)
-            {
-                return Responses::Failed( 'submit_new_patient_form' , '' , '<span style="color:blue;font-weight:bolder;">The requested patient does not exist</span>' ) ;
-            }
-
-            $number_of_total_clinic_patients         = patients_general_info::number_of_total_clinic_patients() ;
             $result_show_all_appointments_of_this_id = patients_appointment::result_show_all_appointments_of_this_id($decrypted_edit_this_patient_id) ;
+            $number_of_total_clinic_patients         = patients_general_info::number_of_total_clinic_patients() ;
 
-            return view('back.submit_new_patient_form' ,
+            return Responses::view('back.submit_new_patient_form' ,
             [
                 'title_of_page'                           => 'Edit Patient Information' ,
                 'result_edit_patient_form'                => $result_edit_patient_form ,
@@ -152,7 +145,7 @@ class PatientsGeneralInfoController extends Controller
 
     public function show_patient_search_from()
     {
-        return view('back.show_patient_search_from' , [ 'title_of_page' => 'Search Patients' ] );
+        return Responses::view('back.show_patient_search_from' , [ 'title_of_page' => 'Search Patients' ] );
     }
 
     public function run_patient_search_form( run_patient_search_formRequest $request )
@@ -167,7 +160,7 @@ class PatientsGeneralInfoController extends Controller
                 return Responses::Failed( 'show_patient_search_from' , '' ,'There is not any result for <b style="color:blue;" >'.request()->post('search_text').'</b>' ) ;
             }
 
-            return view('back.show_patient_search_from',
+            return Responses::view('back.show_patient_search_from',
             [
                 'title_of_page'             => 'Search Patients' ,
                 'result_run_search_form'    => $result_of_run_search_form ,

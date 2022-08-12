@@ -31,16 +31,16 @@ Route::group( [ 'middleware' => ['protected_page_accessible_for_user_and_admin_a
     Route::get('/home', 'HomeController@index')->name('home');
 
     // All Routes related to patients_general_infos table
-    Route::put('update_this_patient/{update_this_patient_id}' , [ PatientsGeneralInfoController::class , 'update' ] )->name('update_this_patient')->where(['update_this_patient_id' => config('global.regex_rule_of_encrypted_id') ])->middleware('ValidatorUpdatepatients_general_infoRequest');
-    Route::get('edit_patient_form/{edit_this_patient_id}'     , [ PatientsGeneralInfoController::class , 'edit' ] )->name('edit_patient_form')->where(['edit_this_patient_id' => config('global.regex_rule_of_encrypted_id') ]);
+    Route::put('update_this_patient/{update_this_patient_id}' , [ PatientsGeneralInfoController::class , 'update' ] )->name('update_this_patient')->where(['update_this_patient_id' => config('global.regex_rule_of_encrypted_id') ])->middleware([ 'CheckValidityOfPatientID' , 'ValidatorUpdatepatients_general_infoRequest' ] );
+    Route::get('edit_patient_form/{edit_this_patient_id}'     , [ PatientsGeneralInfoController::class , 'edit' ] )->name('edit_patient_form')->where(['edit_this_patient_id' => config('global.regex_rule_of_encrypted_id') ])->middleware('CheckValidityOfPatientID');
     Route::get('submit_new_patient_form'                      , [ PatientsGeneralInfoController::class , 'create' ] )->name('submit_new_patient_form') ;
     Route::put('store_new_patient_form'                       , [ PatientsGeneralInfoController::class , 'store' ] )->name('store_new_patient_form')->middleware('ValidatorStorepatients_general_infoRequest');
     Route::get('show_patient_search_from'                     , [ PatientsGeneralInfoController::class , 'show_patient_search_from' ] )->name('show_patient_search_from') ;
     Route::match(array('GET' , 'POST') , 'run_patient_search_form' , [ PatientsGeneralInfoController::class , 'run_patient_search_form' ] )->name('run_patient_search_form') ;
-    Route::get('delete_this_patient_id/{delete_this_patient_id}', [ PatientsGeneralInfoController::class , 'destroy' ] )->name('delete_this_patient_id')->where(['delete_this_patient_id' => config('global.regex_rule_of_encrypted_id') ]);
+    Route::get('delete_this_patient_id/{delete_this_patient_id}', [ PatientsGeneralInfoController::class , 'destroy' ] )->name('delete_this_patient_id')->where(['delete_this_patient_id' => config('global.regex_rule_of_encrypted_id') ])->middleware('CheckValidityOfPatientID');
 
     // All Routes related to patients_appointments table
-    Route::get('show_patient_time_appointment_table/{choose_time_for_this_date}/{choose_time_for_this_patient_id}' , [ PatientsAppointmentController::class , 'show_patient_time_appointment_table' ] )->name('show_patient_time_appointment_table')->where(['choose_time_for_this_date' => config('global.regex_rule_of_show_date') , 'choose_time_for_this_patient_id' => config('global.regex_rule_of_encrypted_id') ]);
+    Route::get('show_patient_time_appointment_table/{choose_time_for_this_date}/{choose_time_for_this_patient_id}' , [ PatientsAppointmentController::class , 'show_patient_time_appointment_table' ] )->name('show_patient_time_appointment_table')->where(['choose_time_for_this_date' => config('global.regex_rule_of_show_date') , 'choose_time_for_this_patient_id' => config('global.regex_rule_of_encrypted_id') ])->middleware('CheckValidityOfPatientID');
     Route::put('store_patient_time_appointment_table' , [ PatientsAppointmentController::class , 'store_patient_time_appointment_table' ] )->name('store_patient_time_appointment_table')->middleware('TransactionOnDatabaseToRollbackWhenExceptionsHappen') ;
     Route::get('show_form_of_appointments_on_specific_date' , [ PatientsAppointmentController::class , 'show_form_of_appointments_on_specific_date' ] )->name('show_form_of_appointments_on_specific_date') ;
     Route::get('run_show_form_of_appointments_on_specific_date' , [ PatientsAppointmentController::class , 'show' ] )->name('run_show_form_of_appointments_on_specific_date') ;
