@@ -1,5 +1,4 @@
 <?php
-
 namespace AppEHR\Http\Middleware;
 
 use Closure;
@@ -7,14 +6,6 @@ use Illuminate\Http\Request;
 
 class ValidatorStorepatients_EHR_documentRequest
 {
-    /**
-     * Handle an incoming request.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  \Closure  $next
-     * @return mixed
-     */
-
     public function handle(Request $request, Closure $next)
     {
         $rules = [

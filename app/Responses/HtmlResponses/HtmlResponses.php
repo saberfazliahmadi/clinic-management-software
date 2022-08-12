@@ -5,6 +5,11 @@ use Illuminate\Support\Facades\Auth;
 
 class HtmlResponses
 {
+    public static function view($view , $data)
+    {
+        return view( $view , $data ) ;
+    }
+
     public static function redirect_to_previous_page($Message)
     {
         return redirect()->back()->with( [ 'success_message' => $Message ] ) ;

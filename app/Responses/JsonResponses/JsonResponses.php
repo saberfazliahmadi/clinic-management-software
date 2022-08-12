@@ -5,6 +5,14 @@ use Illuminate\Support\Facades\Auth;
 
 class JsonResponses
 {
+    public static function view($view , $data)
+    {
+        return response()->json([
+                                    'view' => $view,
+                                    'data' => $data,
+                                ]);
+    }
+
     public static function redirect_to_previous_page($Message)
     {
         return redirect()->back()->with( [ 'success_message' => $Message ] ) ;

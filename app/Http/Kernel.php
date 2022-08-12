@@ -95,7 +95,10 @@ class Kernel extends HttpKernel
         'ValidatorStorepatients_general_infoRequest' => \App\Http\Middleware\ValidatorStorepatients_general_infoRequest::class,
         'ValidatorUpdatepatients_general_infoRequest' => \App\Http\Middleware\ValidatorUpdatepatients_general_infoRequest::class,
 
-        'ValidatorStorepatients_EHR_documentRequest' => \AppEHR\Http\Middleware\ValidatorStorepatients_EHR_documentRequest::class,
+        'CheckValidityOfPatientID'                    => \AppEHR\Http\Middleware\CheckValidityOfPatientID::class,
+
+        'CheckValidityOfEHRID'                        => \AppEHR\Http\Middleware\CheckValidityOfEHRID::class,
+        'ValidatorStorepatients_EHR_documentRequest'  => \AppEHR\Http\Middleware\ValidatorStorepatients_EHR_documentRequest::class,
         'ValidatorUpdatepatients_EHR_documentRequest' => \AppEHR\Http\Middleware\ValidatorUpdatepatients_EHR_documentRequest::class,
 
     ];

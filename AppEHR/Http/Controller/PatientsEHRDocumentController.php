@@ -2,16 +2,16 @@
 namespace AppEHR\Http\Controller ;
 
 use App\Http\Controllers\Controller ;
+use App\Http\Controllers\PatientsPhotoController ;
 use Illuminate\Database\QueryException;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Http\Request;
 use AppEHR\Models\patients_EHR_document ;
-use App\Http\Controllers\PatientsPhotoController ;
 use App\Models\{ patients_photo , patients_general_info} ;
 use App\Responses\Responses ;
 
 /** In this controller according to Single Responsibility and Open-Closed Principles of SOLID
- we validate user inputs by Middleware **/
+ we validate user inputs by Middlewares **/
 class PatientsEHRDocumentController extends Controller
 {
     public function show_patients_ehr_document_page( Request $request )
@@ -19,13 +19,8 @@ class PatientsEHRDocumentController extends Controller
         try
         {
             $decrypted_request_patient_id = encrypt_decrypt('decrypt' , $request->patient_id ) ;
-            $encrypted_request_patient_id = $request->patient_id ;
 
             $result_of_show_patients_general_infos = patients_general_info::fetch_info_of_this_patient_id( $decrypted_request_patient_id ) ;
-            if(!$result_of_show_patients_general_infos)
-            {
-                return Responses::Failed( 'home' , '' , '<span style="color:blue;">Requested Patient Does Not Exist!</span>' ) ;
-            }
 
             $result_of_patients_photo = patients_photo::result_of_patient_ehr_photo( $decrypted_request_patient_id ) ;
             $count_result_of_patients_photo = $result_of_patients_photo->count() ;
@@ -33,10 +28,10 @@ class PatientsEHRDocumentController extends Controller
             $result_of_patients_ehr_document = patients_EHR_document::result_of_patients_ehr_document( $decrypted_request_patient_id ) ;
             $count_result_of_patients_ehr_document = $result_of_patients_ehr_document->count() ;
 
-            return view('EHR::show_patients_ehr_document_page' ,
+            return Responses::view('EHR::show_patients_ehr_document_page' ,
             [
                 'title_of_page'                             => 'EHR of Patient' ,
-                'EHR_document_patient_related_id'           => $encrypted_request_patient_id ,
+                'EHR_document_patient_related_id'           => $request->patient_id ,
                 'EHR_document_dr_related_id'                => find_admin_id_from_users_table() ,
                 'EHR_document_related_appointment_id'       => $request->related_appointment_id ,
                 'EHR_document_related_clinic_doctor_name'   => $request->child_dr_related_name ,
@@ -87,7 +82,7 @@ class PatientsEHRDocumentController extends Controller
             // Make a for loop to check all selected drugs by doctors which should be defined on settings of software page
             for( $start='0' ; $start < $end ; $start++ )
             {
-                // An accepted drug should be exist on defined drugs of ADMIN AND selected by user $request->$defined_common_drugs[$start]
+                // An accepted drug should be existed on defined drugs of ADMIN AND selected by user $request->$defined_common_drugs[$start]
                 if( strlen($defined_common_drugs[$start]) > 0 && strlen(isset($request_all[$defined_common_drugs[$start]])) > 0 )
                 {
                     $common_drug .= $defined_common_drugs[$start].' = '.$request_all[$defined_common_drugs[$start]] ;
@@ -173,9 +168,10 @@ class PatientsEHRDocumentController extends Controller
 
     public function store_patients_ehr_document_page( Request $request )
     {
-        $decrypted_request_patient_id = encrypt_decrypt('decrypt', $request->patient_id ) ;
         try
         {
+            $decrypted_request_patient_id = encrypt_decrypt('decrypt', $request->patient_id ) ;
+
             $patient_more_description = $this->prepare_patient_more_description_variable($request->patient_more_description, $request->typed_keyboard_savabegh, $request->common_hypersensitivity_2311) ;
 
             $result_update_this_patient_general_info = patients_general_info::update_this_patient_general_info_from_ehr_page($decrypted_request_patient_id, $patient_more_description, $request->post('patient_surgery_history'), $request->post('patient_disease_background'), $request->post('patient_medication_history'), $request->post('patient_allergies_history') ) ;
@@ -216,16 +212,10 @@ class PatientsEHRDocumentController extends Controller
 
     public function show_new_saved_ehr( Request $request )
     {
-        $response_message_failed = '<span style="color:blue;">Can not show new saved EHR!</span>' ;
         try
         {
             $result_show_new_saved_ehr = patients_EHR_document::show_new_saved_ehr( encrypt_decrypt('decrypt', $request->EHR_document_id) ) ;
-
-            if(!$result_show_new_saved_ehr)
-            {
-                return Responses::Failed( 'home' , '' , $response_message_failed ) ;
-            }
-            return view('EHR::show_new_saved_ehr' ,
+            return Responses::view('EHR::show_new_saved_ehr' ,
             [
                 'title_of_page'                            => 'a new EHR information of <b>'.encrypt_decrypt('decrypt',$request->patient_name).'</b> <br> successfully saved at date '.date("Y/m/d") ,
                 'show_ehr_report'                          => 'true' ,
@@ -239,7 +229,7 @@ class PatientsEHRDocumentController extends Controller
         }
         catch (QueryException $exception)
         {
-            return Responses::FailedWithException( 'home' , '' , $response_message_failed , $exception);
+            return Responses::FailedWithException( 'home' , '' , '<span style="color:blue;">Can not show new saved EHR!</span>' , $exception);
         }
     }
 

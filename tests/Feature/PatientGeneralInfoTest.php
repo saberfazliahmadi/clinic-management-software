@@ -2,6 +2,7 @@
 namespace Tests\Feature;
 use App\Models\patients_general_info;
 use App\Models\User;
+use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Tests\TestCase;
@@ -26,6 +27,8 @@ use Illuminate\Foundation\Testing\WithoutMiddleware;
 // $response_store_new_patient_form_test->assertSessionHasNoErrors();
 // $response->assertRedirectContains('Welcome');
 // $this->actingAs($user , 'web' )->post(route('login') , [ 'email' => $user->email, 'password' => 'password', ] );
+// Carbon::setTestNow(now()->endOfDay()->addSecond());
+// $this->assertAuthenticatedAs($user);
 /** Inside this folder, each test class is named as <name>Test.php.
  * This format allows PHPUnit to find each test class—it will ignore anything that does not end in Test.php.
  */
@@ -35,20 +38,34 @@ class ExampleTest extends TestCase
     // use RefreshDatabase;
     // use WithoutMiddleware;
 
-    public function test_should_allow_an_authenticated_user_to_store_new_patient_information()
+    public function setUp(): void
     {
+        parent::setUp();
+
         DB::beginTransaction();
 
         $user = User::factory()->create();
         Auth::loginUsingId($user->id);
+    }
 
+    public function tearDown(): void
+    {
+        Auth::logout();
+
+        DB::rollBack();
+
+        parent::tearDown();
+    }
+
+    public function test_should_allow_an_authenticated_user_to_store_new_patient_information()
+    {
         $patient_first_name    = $this->faker->name ;
         $patient_last_name     = $this->faker->lastName ;
         $patient_mobile_number = $this->faker->numerify('+90(###)###########');
 
         $counted_before_insert_data = patients_general_info::all()->count() ;
 
-        $response = $this->actingAs($user)->post( route('store_new_patient_form' ), [
+        $response = $this->post( route('store_new_patient_form' ), [
             'patient_first_name'            => $patient_first_name ,
             'patient_last_name'             => $patient_last_name ,
             'patient_mobile_number'         => $patient_mobile_number ,
@@ -70,20 +87,18 @@ class ExampleTest extends TestCase
         ]);
 
         $this->assertAuthenticated();
-        $this->assertAuthenticatedAs($user);
         $this->assertDatabaseHas('patients_general_infos', [ 'patient_first_name' => $patient_first_name, 'patient_last_name' => $patient_last_name, 'patient_mobile_number' => $patient_mobile_number ]);
         $this->assertDatabaseCount('patients_general_infos' , $counted_before_insert_data + 1 );
         $response->assertStatus(302);
         $response->assertRedirect(route('submit_new_patient_form')) ;
         // $this->followRedirects($response)->assertsee('Successfullysss Submittedsss') ;
-        Auth::logout();
 
-        DB::rollBack();
     }
 
     public function test_should_check_an_unauthenticated_user_can_not_store_new_patient_information()
     {
-        DB::beginTransaction();
+        Auth::logout();
+
         $patient_first_name    = $this->faker->name ;
         $patient_last_name     = $this->faker->lastName ;
         $patient_mobile_number = $this->faker->numerify('+90(###)###########');
@@ -116,7 +131,6 @@ class ExampleTest extends TestCase
         $this->assertDatabaseCount('patients_general_infos' , $counted_before_insert_data );
         $response->assertStatus(302);
         $response->assertRedirect(route('login')) ;
-        DB::rollBack();
     }
 
     public function test_should_check_validation_rules_of_submit_patient_form_works_well()
@@ -135,6 +149,11 @@ class ExampleTest extends TestCase
     }
 
     public function test_should_check_user_can_not_delete_patient_document_of_other_clinics()
+    {
+
+    }
+
+    public function test_should_check_blocked_user_can_not_do_anything()
     {
 
     }

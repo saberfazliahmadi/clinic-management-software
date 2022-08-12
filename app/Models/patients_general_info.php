@@ -136,6 +136,16 @@ class patients_general_info extends Model
          ]);
     }
 
+    public static function CheckValidityOfPatientID($this_patient_id)
+    {
+        return self::
+        select('patient_id','patient_dr_related_id')
+        ->patient_id($this_patient_id)
+        ->equal_this_to_admin_id_from_user_table('patient_dr_related_id')
+        ->limit('1')
+        ->first() ;
+    }
+
     static function fetch_info_of_this_patient_id($edit_this_patient_id)
     {
         return self::

@@ -102,4 +102,14 @@ class patients_EHR_document extends Model
         ->limit('1')
         ->first() ;
     }
+
+    public static function CheckValidityOfEHRID($decrypted_requested_EHR_id)
+    {
+        return self::
+        select('EHR_document_dr_related_id' , 'EHR_document_id')
+        ->equal_this_to_admin_id_from_user_table('EHR_document_dr_related_id')
+        ->where('EHR_document_id' , $decrypted_requested_EHR_id )
+        ->limit('1')
+        ->first() ;
+    }
 }
