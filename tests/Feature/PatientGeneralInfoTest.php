@@ -2,11 +2,9 @@
 namespace Tests\Feature;
 use App\Models\patients_general_info;
 use App\Models\User;
-use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Tests\TestCase;
-use Illuminate\Support\Str;
 use Illuminate\Foundation\Testing\WithFaker;
 use Illuminate\Foundation\Testing\WithoutMiddleware;
 
@@ -86,9 +84,11 @@ class ExampleTest extends TestCase
             '_method'                       => 'put' ,
         ]);
 
+        $counted_after_insert_data = patients_general_info::all()->count() ;
+
         $this->assertAuthenticated();
         $this->assertDatabaseHas('patients_general_infos', [ 'patient_first_name' => $patient_first_name, 'patient_last_name' => $patient_last_name, 'patient_mobile_number' => $patient_mobile_number ]);
-        $this->assertDatabaseCount('patients_general_infos' , $counted_before_insert_data + 1 );
+        $this->assertEquals( $counted_after_insert_data ,$counted_before_insert_data + 1 );
         $response->assertStatus(302);
         $response->assertRedirect(route('submit_new_patient_form')) ;
         // $this->followRedirects($response)->assertsee('Successfullysss Submittedsss') ;
@@ -126,9 +126,11 @@ class ExampleTest extends TestCase
             '_method'                       => 'put' ,
         ]);
 
+        $counted_after_insert_data = patients_general_info::all()->count() ;
+
         $this->assertGuest();
         $this->assertDatabaseMissing('patients_general_infos', [ 'patient_first_name' => $patient_first_name, 'patient_last_name' => $patient_last_name, 'patient_mobile_number' => $patient_mobile_number ]);
-        $this->assertDatabaseCount('patients_general_infos' , $counted_before_insert_data );
+        $this->assertEquals($counted_after_insert_data , $counted_before_insert_data );
         $response->assertStatus(302);
         $response->assertRedirect(route('login')) ;
     }

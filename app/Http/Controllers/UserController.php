@@ -26,11 +26,10 @@ class UserController extends Controller
     {
         try
         {
-            $result_of_all_users_related_to_this_super_admin = User::all_users_related_to_this_super_admin() ;
             return view('back.show_management_users_of_software_form' ,
             [
                 'title_of_page'                                   => 'Management Users of '.__('general.Name of software') ,
-                'result_of_all_users_related_to_this_super_admin' => $result_of_all_users_related_to_this_super_admin ,
+                'result_of_all_users_related_to_this_super_admin' =>  User::all_users_related_to_this_super_admin() ,
             ]);
         }
         catch (QueryException $exception)
@@ -120,8 +119,7 @@ class UserController extends Controller
         {
             $options_for_user[0] = 't' ;
         }
-        $options_for_user = serialize($options_for_user);
-        return $options_for_user ;
+        return serialize($options_for_user) ;
     }
 
     public function validation_of_financial_management_variable($request_post_financial_management)
@@ -285,7 +283,7 @@ class UserController extends Controller
         {
             return Responses::Failed('show_change_password_form' , '' , '<b style="color:blue;" >The current password you entered does not matches with your password <br> Try it again</b>' ) ;
         }
-        // The entered current password does not matches Re-EnterPassword
+        // The entered current password does not match Re-EnterPassword
         if( $request->new_password !== $request->retype_new_password )
         {
             return Responses::Failed('show_change_password_form' , '' , '<b style="color:blue;" >Your News Password is NOT EQUAL to Re-Type the New Password <br> Try it again</b>' ) ;

@@ -1,12 +1,13 @@
 <?php
 namespace AppEHR\Providers;
-
+use AppEHR\Interfaces\EHRRepositoryInterface;
+use AppEHR\Repositories\EHRRepository ;
 use Illuminate\Support\ServiceProvider;
-
 class ehrServiceProvider extends ServiceProvider
 {
     public function register()
     {
+        app()->bind( EHRRepositoryInterface::class , EHRRepository::class );
     }
 
     public function boot()

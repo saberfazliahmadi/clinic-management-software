@@ -35,7 +35,7 @@ class PatientsAppointmentController extends Controller
 
         try
         {
-            // Create mysql query to extract all of appointments that record in database on this specific date (JOIN TYPE)
+            // Create mysql query to extract all appointments that record in database on this specific date (JOIN TYPE)
             $result_show_form_of_appointments_on_specific_date = patients_appointment::result_show_form_of_appointments_on_specific_date($show_all_appointments_on_this_date) ;
 
             // How many appointment found on requested date
@@ -103,7 +103,7 @@ class PatientsAppointmentController extends Controller
             // Make an appointment time trick
             $appointment_time_trick = date('H:i', $index_counter);
 
-            // Create mysql query to extract all of appointments data on this specific time and date by (JOIN TYPE)
+            // Create mysql query to extract all appointments data on this specific time and date by (JOIN TYPE)
             $result_appointments_of_patients_on_this_time_and_date = patients_appointment::result_appointments_of_patients_on_this_time_and_date($choose_time_for_this_date, $appointment_time_trick) ;
 
             // How many appointment time equal with $appointment_time_trick exist in database

@@ -110,37 +110,28 @@ class FinancialTransactionController extends Controller
             $financial_report_from_date     = $request->financial_report_from_date    ;
             $financial_report_to_date       = $request->financial_report_to_date      ;
 
+            $sign_trick_1 = '!=' ;
+            $financial_transaction_child_dr_related_name_text_trick = '_' ;
+            $name_of_financial_transaction_child_dr_related_name    = '' ;
             if( $request->financial_transaction_child_dr_related_name !== NULL )
             {
                 $sign_trick_1 = "=" ;
                 $financial_transaction_child_dr_related_name_text_trick = "$request->financial_transaction_child_dr_related_name" ;
                 $name_of_financial_transaction_child_dr_related_name    = $request->financial_transaction_child_dr_related_name.'<br>' ;
             }
-            else
-            {
-                $sign_trick_1 = '!=' ;
-                $financial_transaction_child_dr_related_name_text_trick = '_' ;
-                $name_of_financial_transaction_child_dr_related_name    = '' ;
-            }
 
+            $sign_trick_2 = "!=" ;
+            $financial_transaction_title_text_trick = "_" ;
+            $name_of_financial_transaction_title    = '' ;
             if( $request->financial_transaction_title !== NULL )
             {
                 $sign_trick_2 = "=" ;
                 $financial_transaction_title_text_trick = "$request->financial_transaction_title" ;
                 $name_of_financial_transaction_title    = $request->financial_transaction_title.'<br>' ;
             }
-            else
-            {
-                $sign_trick_2 = "!=" ;
-                $financial_transaction_title_text_trick = "_" ;
-                $name_of_financial_transaction_title    = '' ;
-            }
 
             $result_fetch_receive_transactions_from_date_to_date = financial_transaction::result_fetch_receive_or_pay_transactions_from_date_to_date($financial_transaction_type = '+' , $sign_trick_1 , $financial_transaction_child_dr_related_name_text_trick , $sign_trick_2 , $financial_transaction_title_text_trick , $financial_report_from_date , $financial_report_to_date ) ;
-            $num_of_receive_transactions = $result_fetch_receive_transactions_from_date_to_date->count() ;
-
-            $result_fetch_pay_transactions_from_date_to_date = financial_transaction::result_fetch_receive_or_pay_transactions_from_date_to_date($financial_transaction_type = '-' , $sign_trick_1 , $financial_transaction_child_dr_related_name_text_trick , $sign_trick_2 , $financial_transaction_title_text_trick , $financial_report_from_date , $financial_report_to_date ) ;
-            $num_of_pay_transactions = $result_fetch_pay_transactions_from_date_to_date->count() ;
+            $result_fetch_pay_transactions_from_date_to_date     = financial_transaction::result_fetch_receive_or_pay_transactions_from_date_to_date($financial_transaction_type = '-' , $sign_trick_1 , $financial_transaction_child_dr_related_name_text_trick , $sign_trick_2 , $financial_transaction_title_text_trick , $financial_report_from_date , $financial_report_to_date ) ;
 
             return view('back.show_financial_transaction_reporting_form',
             [
@@ -149,8 +140,8 @@ class FinancialTransactionController extends Controller
                 'result_fetch_pay_transactions_from_date_to_date'     => $result_fetch_pay_transactions_from_date_to_date ,
                 'financial_report_from_date'                          => $financial_report_from_date ,
                 'financial_report_to_date'                            => $financial_report_to_date ,
-                'num_of_receive_transactions'                         => $num_of_receive_transactions ,
-                'num_of_pay_transactions'                             => $num_of_pay_transactions ,
+                'num_of_receive_transactions'                         => $result_fetch_receive_transactions_from_date_to_date->count() ,
+                'num_of_pay_transactions'                             => $result_fetch_pay_transactions_from_date_to_date->count() ,
                 'name_of_financial_transaction_child_dr_related_name' => $name_of_financial_transaction_child_dr_related_name ,
                 'name_of_financial_transaction_title'                 => $name_of_financial_transaction_title ,
             ]) ;
