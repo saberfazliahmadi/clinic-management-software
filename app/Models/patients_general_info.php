@@ -183,17 +183,18 @@ class patients_general_info extends Model
         return self::query()
         ->select( 'patient_id' , 'patient_dr_related_id' , 'patient_mobile_number' , 'patient_nationality_number' , 'patient_first_name' , 'patient_last_name' )
         ->where( 'patient_dr_related_id' , find_admin_id_from_users_table() )
-        ->Where(function($query) {
+        ->Where(function($query)
+        {
         $query->where( 'patient_mobile_number' , request()->post('search_text') )
         ->orwhere( [
-            'patient_nationality_number' => request()->post('search_text') ,
-            'patient_first_name'         => request()->post('search_text') ,
-            'patient_last_name'          => request()->post('search_text') ,
+                    'patient_nationality_number' => request()->post('search_text') ,
+                    'patient_first_name'         => request()->post('search_text') ,
+                    'patient_last_name'          => request()->post('search_text') ,
                    ]  ) ;
         })
         ->latest('patient_id')
         ->get() ;
-        // We use chunk(10) for situations that we want to show 10000 result of our search which chunk breaks a big result to small peaces and can handle Servers Ram resource
+        // We can use chunk(10) here, for situations that we want to show 10000 result of our search which chunk breaks a big result to small peaces and can handle Servers Ram resource
     }
 
     static function delete_this_patient_id($request_delete_this_patient_id)

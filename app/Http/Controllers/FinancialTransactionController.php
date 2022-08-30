@@ -12,7 +12,7 @@ use Illuminate\Database\QueryException;
 we validate user inputs by Middleware **/
 class FinancialTransactionController extends Controller
 {
-    public function destroy(financial_transaction $financial_transaction , Request $request )
+    public function destroy( Request $request )
     {
         $response_message  = '<b style="color:blue;" >We have an error to destroy this Financial Transaction</b>' ;
         try

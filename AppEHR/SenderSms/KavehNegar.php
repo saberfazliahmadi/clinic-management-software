@@ -1,9 +1,9 @@
 <?php
-namespace AppEHR\SmsSender;
+namespace AppEHR\SenderSms;
 class KavehNegar
 {
     public function send( $detail , $message )
     {
-        return 'saber' ;
+        echo 'The '.$message.' Sent to'. $detail ;
     }
 }

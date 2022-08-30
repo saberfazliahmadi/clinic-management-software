@@ -108,7 +108,7 @@ class PatientsEHRDocumentController extends Controller
             // Strategy Design Pattern With Facade
             // MessageSenderFacade::driver('SmsSenderKavehNegar')->send( $result_show_new_saved_ehr->EHR_document_patient_related_id , $result_show_new_saved_ehr->EHR_document_prescribed_common_drug );
             // Strategy Design Pattern With app() method
-            // echo app(MessageSender::class)->driver('SmsSenderKavehNegar')->send( $result_show_new_saved_ehr->EHR_document_patient_related_id , $result_show_new_saved_ehr->EHR_document_prescribed_common_drug );
+            app(MessageSender::class)->driver('Mailtrap')->send( $result_show_new_saved_ehr->EHR_document_patient_related_id , $result_show_new_saved_ehr->EHR_document_prescribed_common_drug );
             // resolve('', '' ) ;
             // dd(app()->make('PatientsGeneralInfoController')->hello());
             // app()->extend();

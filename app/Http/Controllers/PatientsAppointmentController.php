@@ -28,7 +28,7 @@ class PatientsAppointmentController extends Controller
         return $show_all_appointments_on_this_date ;
     }
 
-    public function show(patients_appointment $patients_appointment , show_form_of_appointments_on_specific_dateRequest $request )
+    public function show( show_form_of_appointments_on_specific_dateRequest $request )
     {
         // Define and Specify a variable of date's appointments by GET or POST method
         $show_all_appointments_on_this_date = $this->prepare_date_of_appointment($request->post('show_all_appointments_on_this_date') , $request->show_all_appointments_this_date ) ;
@@ -68,7 +68,7 @@ class PatientsAppointmentController extends Controller
         }
     }
 
-    public function destroy(patients_appointment $patients_appointment , delete_this_appointment_idRequest $request )
+    public function destroy( delete_this_appointment_idRequest $request )
     {
         $response_message = '<span style="color:blue;">The Selected Appointment WAS NOT Deleted!</span><br>You may have a related financial transaction to this appointment<br>So, first of all you should delete related financial transaction' ;
         try

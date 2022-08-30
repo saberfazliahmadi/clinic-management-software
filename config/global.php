@@ -1,6 +1,10 @@
 <?php
 return [
-    // The levels if user which will be check on middleware
+    // The URL of application that we want to use it as a link on different situation
+    'app_url' => 'http://matabeonline.ir/' ,
+    'app_name' => 'MatabeOnline Clinic Management Software' ,
+
+    // The levels if user which will be checked on middleware
     'guest_level'        => '0' ,
     '0'        => 'guest level' ,
 

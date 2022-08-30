@@ -63,7 +63,7 @@ class PatientsGeneralInfoController extends Controller
         }
     }
 
-    public function edit(patients_general_info $patients_general_info , $edit_this_patient_id )
+    public function edit( $edit_this_patient_id )
     {
         try
         {
@@ -86,7 +86,7 @@ class PatientsGeneralInfoController extends Controller
         }
     }
 
-    public function update(Request $request, patients_general_info $patients_general_info )
+    public function update( Request $request )
     {
         $decrypted_update_this_patient_id = encrypt_decrypt('decrypt', $request->update_this_patient_id );
         $encrypted_update_this_patient_id = $request->update_this_patient_id ;
@@ -121,7 +121,7 @@ class PatientsGeneralInfoController extends Controller
         }
     }
 
-    public function destroy(patients_general_info $patients_general_info , Request $request)
+    public function destroy( Request $request)
     {
         $response_message_success = 'The requested patient successfully deleted' ;
         $response_message_failed  = 'We have an error to delete this patient Number<br> Maybe there is an appointment or a financial transaction related to this patient,<br> So if you want to delete this patient<br> at first, you need to delete all appointments and financial transactions related to him' ;

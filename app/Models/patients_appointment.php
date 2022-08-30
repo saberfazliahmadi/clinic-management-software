@@ -1,5 +1,4 @@
 <?php
-
 namespace App\Models;
 
 use Database\Factories\PatientsAppointmentFactory;
@@ -91,4 +90,49 @@ class patients_appointment extends Model
             ]
         );
     }
+
+    static function UpdateThisAppointmentFromWatingStatusToDoneStatus( $request_appointment_id , $admin_id_from_users_table , $money_receive_header_console )
+    {
+        self::
+        where( 'appointment_id'              , $request_appointment_id )
+        ->where( 'appointment_dr_related_id' , $admin_id_from_users_table )
+        ->update([
+                     'appointment_status'                    => '0' ,
+                     'appointment_status_unique'             => '1' ,
+                     'appointment_received_financial_status' => $money_receive_header_console
+                 ]);
+    }
+
+    public static function fetch_appointment_data( $request_appointment_id , $admin_id_from_users_table )
+    {
+        return self::
+        select('appointment_id' , 'appointment_dr_related_id' , 'appointment_patient_related_id' , 'appointment_child_dr_related_name' , 'appointment_service_type' )
+        ->where('appointment_id'            , $request_appointment_id)
+        ->where('appointment_dr_related_id' , $admin_id_from_users_table)
+        ->limit('1')
+        ->get() ;
+    }
+
+    public static function AllAppointmentsOnThisDate( $admin_id_from_users_table , $show_all_appointments_on_this_date )
+    {
+        return self::
+        join('patients_general_infos' , 'patients_general_infos.patient_id' , '=' , 'patients_appointments.appointment_patient_related_id')
+        ->where('patients_appointments.appointment_dr_related_id' , $admin_id_from_users_table )
+        ->where('patients_appointments.appointment_date'          , $show_all_appointments_on_this_date )
+        ->oldest('patients_appointments.appointment_time')
+        ->get() ;
+    }
+
+    public static function CountAppointmentsOnThisDateWhichAreOnWaitingStatus( $admin_id_from_users_table , $show_all_appointments_on_this_date )
+    {
+        return self::
+        select('appointment_dr_related_id' , 'appointment_date' , 'appointment_status_unique' , 'appointment_status' , 'appointment_time')
+        ->where('patients_appointments.appointment_dr_related_id' , $admin_id_from_users_table )
+        ->where('patients_appointments.appointment_date'          , $show_all_appointments_on_this_date )
+        ->where('patients_appointments.appointment_status_unique' , '0' )
+        ->where('patients_appointments.appointment_status'        , '1' )
+        ->oldest('patients_appointments.appointment_time')
+        ->get() ;
+    }
+
 }
