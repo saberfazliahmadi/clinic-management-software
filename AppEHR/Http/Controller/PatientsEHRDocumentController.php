@@ -102,13 +102,12 @@ class PatientsEHRDocumentController extends Controller
         {
             $result_show_new_saved_ehr = $this->EHRRepository->show_new_saved_ehr( encrypt_decrypt('decrypt', $request->EHR_document_id) ) ;
 
-            //app()->bind('saber' , 'salaaaaaaam');
             /** Use Facade and Strategy Design Pattern to switch between different drivers
             driver->('Telegram') or driver->('SMS') or driver->('Email') to send message to patient **/
             // Strategy Design Pattern With Facade
             // MessageSenderFacade::driver('SmsSenderKavehNegar')->send( $result_show_new_saved_ehr->EHR_document_patient_related_id , $result_show_new_saved_ehr->EHR_document_prescribed_common_drug );
             // Strategy Design Pattern With app() method
-            app(MessageSender::class)->driver('Mailtrap')->send( $result_show_new_saved_ehr->EHR_document_patient_related_id , $result_show_new_saved_ehr->EHR_document_prescribed_common_drug );
+            // app(MessageSender::class)->driver('Mailtrap')->send( $result_show_new_saved_ehr->EHR_document_patient_related_id , $result_show_new_saved_ehr->EHR_document_prescribed_common_drug );
             // resolve('', '' ) ;
             // dd(app()->make('PatientsGeneralInfoController')->hello());
             // app()->extend();

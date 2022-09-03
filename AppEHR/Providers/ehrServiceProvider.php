@@ -7,6 +7,9 @@ class ehrServiceProvider extends ServiceProvider
 {
     public function register()
     {
+        /** To use MYSQL database we bind EHRRepository::class
+        If in the future, you decide to use a new type of database which Laravel does not support that
+        You can change EHRRepository::class to your DesiredRepository::class here behind Repository Pattern Strategy that we used **/
         app()->bind( EHRRepositoryInterface::class , EHRRepository::class );
     }
 

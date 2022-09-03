@@ -94,6 +94,8 @@ class Kernel extends HttpKernel
 
         'ValidatorStorepatients_general_infoRequest' => \App\Http\Middleware\ValidatorStorepatients_general_infoRequest::class,
         'ValidatorUpdatepatients_general_infoRequest' => \App\Http\Middleware\ValidatorUpdatepatients_general_infoRequest::class,
+        'ValidatorChangePasswordFromRequest'          => \App\Http\Middleware\ValidatorChangePasswordFromRequest::class,
+        'ValidatorMainSettingsSoftwareFormRequest'    => \App\Http\Middleware\ValidatorMainSettingsSoftwareFormRequest::class,
 
         'CheckValidityOfPatientID'                    => \App\Http\Middleware\CheckValidityOfPatientID::class,
 

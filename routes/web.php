@@ -6,7 +6,6 @@ use App\Http\Controllers\UserController;
 use AppEHR\Http\Controller\PatientsEHRDocumentController;
 use Illuminate\Support\Facades\Route;
 use Monolog\Handler\RotatingFileHandler;
-
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -57,7 +56,7 @@ Route::group( [ 'middleware' => ['protected_page_accessible_for_user_and_admin_a
 
     // All Routes related to change password on users table
     Route::get('show_change_password_form' , [ UserController::class , 'show_change_password_form' ] )->name('show_change_password_form');
-    Route::post('run_change_password_form' , [ UserController::class , 'run_change_password_form' ] )->name('run_change_password_form');
+    Route::post('run_change_password_form' , [ UserController::class , 'run_change_password_form' ] )->name('run_change_password_form')->middleware('ValidatorChangePasswordFromRequest') ;
 }) ;
 
 // Protected routes which are accessible just for Authenticated Admin
@@ -65,7 +64,7 @@ Route::group( [ 'middleware' => ['protected_page_accessible_for_admin_and_super_
 {
     // All Routes related to users table
     Route::get('show_main_settings_of_software_form'         , [ UserController::class , 'show_main_settings_of_software_form' ] )->name('show_main_settings_of_software_form') ;
-    Route::post('update_show_main_settings_of_software_form' , [ UserController::class , 'update_show_main_settings_of_software_form' ] )->name('update_show_main_settings_of_software_form') ;
+    Route::post('update_show_main_settings_of_software_form' , [ UserController::class , 'update_show_main_settings_of_software_form' ] )->name('update_show_main_settings_of_software_form')->middleware('ValidatorMainSettingsSoftwareFormRequest') ;
 
     // All Routes related to patients__e_h_r_documents table
     Route::get('show_patients_ehr_document_page/{patient_id}/{related_appointment_id?}/{child_dr_related_name?}' , [ PatientsEHRDocumentController::class , 'show_patients_ehr_document_page' ] )->name('show_patients_ehr_document_page')->where([ 'patient_id' => config('global.regex_rule_of_encrypted_id') , 'related_appointment_id' => config('global.regex_rule_of_decrypted_id') , 'child_dr_related_name' => config('global.regex_rule_of_encrypted_id') ])->middleware('CheckValidityOfPatientID');
@@ -78,6 +77,6 @@ Route::group( [ 'middleware' => ['protected_page_accessible_for_super_admin' , '
 {
     // All Routes related to users table
     Route::get('show_management_users_of_software_form' , [ UserController::class , 'show_management_users_of_software_form' ] )->name('show_management_users_of_software_form') ;
-    Route::post('update_user_info_by_super_admin'       , [ UserController::class , 'update_show_main_settings_of_software_form' ] )->name('update_user_info_by_super_admin') ;
+    Route::post('update_user_info_by_super_admin'       , [ UserController::class , 'update_show_main_settings_of_software_form' ] )->name('update_user_info_by_super_admin')->middleware('ValidatorMainSettingsSoftwareFormRequest') ;
     Route::get('show_users_activities_logs'             , [ UserController::class , 'show_users_activities_logs'] )->name('show_users_activities_logs') ;
 }) ;

@@ -7,12 +7,20 @@ use Illuminate\Http\Request;
 use App\Models\{patients_general_info , patients_appointment } ;
 use Illuminate\Database\QueryException;
 
+use Illuminate\Support\Facades\Event;
 /** In this controller according to Single Responsibility and Open-Closed Principles of SOLID
 we validate user inputs by Middleware **/
 class PatientsGeneralInfoController extends Controller
 {
     public function create()
     {
+        //Event::listen('a' , static function ($data)
+        //{
+        //    dd($data);
+        //});
+        //
+        //Event::dispatch('a' , 'Hello saber') ;
+
         try
         {
             $number_of_total_clinic_patients = patients_general_info::number_of_total_clinic_patients() ;
@@ -30,17 +38,6 @@ class PatientsGeneralInfoController extends Controller
 
     public function store(Request $request)
     {
-        // Check for mobile number duplication
-        // WE SHOULD NOT HAVE TWO PATIENTS WITH SAME MOBILE NUMBERS IN OUR DATABASE!
-        // The mobile numbers should be unique
-        $number_of_duplicate_mobile_number = patients_general_info::number_of_duplicate_mobile_number(null , $request->post('patient_mobile_number')) ;
-
-        // If the mobile number of patient was NOT unique then redirect
-        if ( $number_of_duplicate_mobile_number !== 0 )
-        {
-            return Responses::Failed( 'submit_new_patient_form', '' ,'<b style="color:blue;" >The Mobile Number Should be Unique <br>But, There is another Mobile Number Like '.$request->get('patient_mobile_number').' in Database,</b> <br> So Your New Patient Was NOT Submitted! <br> Try a Unique Mobile Number Again' ) ;
-        }
-        // If the mobile number of patient was unique then store its information
         try
         {
             $result_store_new_patient_form = patients_general_info::store_new_patient_form($request->all()) ;
@@ -49,7 +46,7 @@ class PatientsGeneralInfoController extends Controller
             $encrypted_choose_time_for_this_patient_id = encrypt_decrypt('encrypt', $result_store_new_patient_form->patient_id ) ;
 
             $response_message = 'Your New Patient with Name <br><a href="'.route('edit_patient_form', $encrypted_choose_time_for_this_patient_id ).'" ><b>'.$request->get('patient_first_name').' ' . $request->get('patient_last_name').'</b></a> Successfully Submitted' ;
-            // If this patient has a date appointment then redirect him to route('show_patient_time_appointment_table') to select desired time for this appointment
+            // If this patient has a date of appointment then redirect him to route('show_patient_time_appointment_table') to select desired time for this appointment
             if( $request->get('patient_last_appointment_date') !== '' )
             {
                 return Responses::Success( 'show_patient_time_appointment_table', [ 'choose_time_for_this_date' => $request->get('patient_last_appointment_date') , 'choose_time_for_this_patient_id' => $encrypted_choose_time_for_this_patient_id ] , $response_message.'<br>Now choose an appointment time on date '.$request->get('patient_last_appointment_date') ) ;
@@ -68,16 +65,12 @@ class PatientsGeneralInfoController extends Controller
         try
         {
             $decrypted_edit_this_patient_id = encrypt_decrypt('decrypt', $edit_this_patient_id ) ;
-            $result_edit_patient_form       = patients_general_info::fetch_info_of_this_patient_id($decrypted_edit_this_patient_id) ;
-            $result_show_all_appointments_of_this_id = patients_appointment::result_show_all_appointments_of_this_id($decrypted_edit_this_patient_id) ;
-            $number_of_total_clinic_patients         = patients_general_info::number_of_total_clinic_patients() ;
-
             return Responses::view('back.submit_new_patient_form' ,
             [
                 'title_of_page'                           => 'Edit Patient Information' ,
-                'result_edit_patient_form'                => $result_edit_patient_form ,
-                'result_show_all_appointments_of_this_id' => $result_show_all_appointments_of_this_id ,
-                'number_of_total_clinic_patients'         => $number_of_total_clinic_patients
+                'result_edit_patient_form'                => patients_general_info::fetch_info_of_this_patient_id($decrypted_edit_this_patient_id) ,
+                'result_show_all_appointments_of_this_id' => patients_appointment::result_show_all_appointments_of_this_id($decrypted_edit_this_patient_id) ,
+                'number_of_total_clinic_patients'         => patients_general_info::number_of_total_clinic_patients()
             ] ) ;
         }
         catch ( QueryException $exception )
@@ -91,24 +84,11 @@ class PatientsGeneralInfoController extends Controller
         $decrypted_update_this_patient_id = encrypt_decrypt('decrypt', $request->update_this_patient_id );
         $encrypted_update_this_patient_id = $request->update_this_patient_id ;
 
-        // Check for mobile number duplication
-        // WE SHOULD NOT HAVE TWO PATIENTS WITH SAME MOBILE NUMBERS IN OUR DATABASE!
-        // The mobile numbers should be unique
-        $number_of_duplicate_mobile_number = patients_general_info::number_of_duplicate_mobile_number($decrypted_update_this_patient_id , $request->post('patient_mobile_number') ) ;
-
-        // If the Mobile Number was not unique then redirect him
-        if ( $number_of_duplicate_mobile_number !== 0 )
-        {
-            return Responses::Success( 'edit_patient_form' , $encrypted_update_this_patient_id , 'The Mobile Number Should be Unique <br>But, There is another Mobile Number Like ' . $request->get('patient_mobile_number') . ' in Database, <br><span style="color:blue;font-weight:bolder;" > So Your New Patient Was NOT Submitted! </span><br> Try a Unique Mobile Number' ) ;
-        }
-
         $response_message_success = '<b>'.$request->post('patient_first_name') . ' ' . $request->post('patient_last_name') . '\'s Information Successfully Updated</b>' ;
         $response_message_failed  = '<span style="color:blue;font-weight:bolder;">' . $request->post('patient_first_name') . ' ' . $request->post('patient_last_name') . ' Information WAS NOT Updated</span>' ;
         try
         {
-            $request_all                   = $request->all() ;
-            $result_update_this_patient_id = patients_general_info::result_update_this_patient_id($decrypted_update_this_patient_id,$request_all) ;
-
+            $result_update_this_patient_id = patients_general_info::result_update_this_patient_id($decrypted_update_this_patient_id,$request->all()) ;
             if(!$result_update_this_patient_id)
             {
                 return Responses::Success( 'edit_patient_form' , $encrypted_update_this_patient_id , $response_message_failed ) ;
@@ -127,10 +107,7 @@ class PatientsGeneralInfoController extends Controller
         $response_message_failed  = 'We have an error to delete this patient Number<br> Maybe there is an appointment or a financial transaction related to this patient,<br> So if you want to delete this patient<br> at first, you need to delete all appointments and financial transactions related to him' ;
         try
         {
-            $decrypted_request_delete_this_patient_id = encrypt_decrypt('decrypt', $request->delete_this_patient_id ) ;
-            $result_delete_this_patient_id            = patients_general_info::delete_this_patient_id($decrypted_request_delete_this_patient_id) ;
-
-            // If we did not found this patient id in database and successfully deleted it
+            $result_delete_this_patient_id = patients_general_info::delete_this_patient_id(encrypt_decrypt('decrypt', $request->delete_this_patient_id ) ) ;
             if(!$result_delete_this_patient_id)
             {
                 return Responses::Failed( 'submit_new_patient_form' , '' , $response_message_failed ) ;
@@ -154,7 +131,7 @@ class PatientsGeneralInfoController extends Controller
         {
             $result_of_run_search_form = patients_general_info::fetch_result_of_search_from() ;
 
-            // If there is NOT ANY result in database
+            // If we did NOT find ANY matched record in database for requested text
             if( $result_of_run_search_form->count() === 0 )
             {
                 return Responses::Failed( 'show_patient_search_from' , '' ,'There is not any result for <b style="color:blue;" >'.request()->post('search_text').'</b>' ) ;

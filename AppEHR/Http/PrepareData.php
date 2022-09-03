@@ -1,6 +1,7 @@
 <?php
 namespace AppEHR\Http;
 use Illuminate\Support\Facades\Auth;
+use phpDocumentor\Reflection\Types\Null_;
 
 class PrepareData
 {
