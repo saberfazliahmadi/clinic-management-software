@@ -10,6 +10,21 @@ class CheckValidityOfPatientID
 {
     public function handle(Request $request, Closure $next)
     {
+        $trick_of_patient_id = $this->GetPatientIDinDifferentSituations($request) ;
+
+        $decrypted_request_patient_id = encrypt_decrypt('decrypt' , $trick_of_patient_id ) ;
+
+        $HowManyResultExist = patients_general_info::CheckValidityOfPatientID( $decrypted_request_patient_id ) ;
+        if( $HowManyResultExist !== 1 )
+        {
+            return Responses::Failed( 'home' , '' , '<span style="color:blue;">The Requested Patient Does Not Exist!</span>' ) ;
+        }
+
+        return $next($request);
+    }
+
+    public function GetPatientIDinDifferentSituations($request)
+    {
         $trick_of_patient_id = '' ;
         if(isset($request->patient_id))
         {
@@ -32,14 +47,6 @@ class CheckValidityOfPatientID
             $trick_of_patient_id = $request->choose_time_for_this_patient_id ;
         }
 
-        $decrypted_request_patient_id = encrypt_decrypt('decrypt' , $trick_of_patient_id ) ;
-
-        $result_of_CheckValidityOfPatientID = patients_general_info::CheckValidityOfPatientID( $decrypted_request_patient_id ) ;
-        if(!$result_of_CheckValidityOfPatientID)
-        {
-            return Responses::Failed( 'home' , '' , '<span style="color:blue;">The Requested Patient Does Not Exist!</span>' ) ;
-        }
-
-        return $next($request);
+        return $trick_of_patient_id ;
     }
 }

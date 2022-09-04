@@ -362,7 +362,7 @@ label
 if ( isset($count_of_appointment_in_header) && $count_of_appointment_in_header > 0 )
 {
     echo '
-    <form method="get" action="'.route('home').'" id="header_today_appointments" data-parsley-validate >
+    <form method="get" action="'.route('send_patient_to_doctor_room').'" id="header_today_appointments" data-parsley-validate >
     <input type="hidden" name="_token" value="'.csrf_token().'" >
     <input type="hidden" name="send_patient_to_doctors_room" value="true" >
     

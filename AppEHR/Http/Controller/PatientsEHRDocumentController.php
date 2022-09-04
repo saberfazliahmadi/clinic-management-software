@@ -69,7 +69,6 @@ class PatientsEHRDocumentController extends Controller
             $common_drug        = $PrepareData->prepare_common_drug_variable($request->all()) ;
             $common_diet        = $PrepareData->prepare_common_diet_variable($request->all()) ;
             $common_return_date = $PrepareData->prepare_common_return_date_variable($request->all()) ;
-
             $EHR_document_related_appointment_id_trick     = $PrepareData->prepare_EHR_document_related_appointment_id_variable($request->post('EHR_document_related_appointment_id')) ;
             $EHR_document_related_clinic_doctor_name_trick = $PrepareData->prepare_EHR_document_related_clinic_doctor_name($request->post('EHR_document_related_clinic_doctor_name'));
 
@@ -111,6 +110,14 @@ class PatientsEHRDocumentController extends Controller
             // resolve('', '' ) ;
             // dd(app()->make('PatientsGeneralInfoController')->hello());
             // app()->extend();
+
+            // use Illuminate\Support\Facades\Event;
+            //Event::listen('a' , static function ($data)
+            //{
+            //    dd($data);
+            //});
+            //
+            //Event::dispatch('a' , 'Hello saber') ;
 
             return Responses::view('EHR::show_new_saved_ehr' ,
             [

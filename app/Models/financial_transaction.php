@@ -70,10 +70,11 @@ class financial_transaction extends Model
     public static function result_fetch_receive_or_pay_transactions_from_date_to_date($financial_transaction_type = '+' , $sign_trick_1 , $financial_transaction_child_dr_related_name_text_trick , $sign_trick_2 , $financial_transaction_title_text_trick , $financial_report_from_date , $financial_report_to_date )
     {
         return self::
-        where('financial_dr_related_id'      , find_admin_id_from_users_table() )
-        ->where('financial_transaction_type' , $financial_transaction_type )
+        where( [ 'financial_dr_related_id'    => find_admin_id_from_users_table() ,
+                 'financial_transaction_type' => $financial_transaction_type
+                 ] )
         ->where('financial_transaction_child_dr_related_name' , $sign_trick_1 , $financial_transaction_child_dr_related_name_text_trick )
-        ->where('financial_transaction_title' , $sign_trick_2 , $financial_transaction_title_text_trick )
+        ->where('financial_transaction_title'                 , $sign_trick_2 , $financial_transaction_title_text_trick )
         ->whereBetween('financial_transaction_date', [$financial_report_from_date, $financial_report_to_date])
         ->latest('financial_transaction_id')
         ->get() ;

@@ -92,12 +92,15 @@ class Kernel extends HttpKernel
 
         'TransactionOnDatabaseToRollbackWhenExceptionsHappen' => \App\Http\Middleware\TransactionOnDatabaseToRollbackWhenExceptionsHappen::class,
 
-        'ValidatorStorepatients_general_infoRequest' => \App\Http\Middleware\ValidatorStorepatients_general_infoRequest::class,
+        'ValidatorIfUserClickOnButtonSendPatientToDoctorRoom' => \App\Http\Middleware\ValidatorIfUserClickOnButtonSendPatientToDoctorRoom::class,
+
+        'ValidatorStorepatients_general_infoRequest'  => \App\Http\Middleware\ValidatorStorepatients_general_infoRequest::class,
         'ValidatorUpdatepatients_general_infoRequest' => \App\Http\Middleware\ValidatorUpdatepatients_general_infoRequest::class,
         'ValidatorChangePasswordFromRequest'          => \App\Http\Middleware\ValidatorChangePasswordFromRequest::class,
         'ValidatorMainSettingsSoftwareFormRequest'    => \App\Http\Middleware\ValidatorMainSettingsSoftwareFormRequest::class,
 
         'CheckValidityOfPatientID'                    => \App\Http\Middleware\CheckValidityOfPatientID::class,
+        'CheckValidityOfAppointmentID'                => \App\Http\Middleware\CheckValidityOfAppointmentID::class,
 
         'CheckValidityOfEHRID'                        => \AppEHR\Http\Middleware\CheckValidityOfEHRID::class,
         'ValidatorStorepatients_EHR_documentRequest'  => \AppEHR\Http\Middleware\ValidatorStorepatients_EHR_documentRequest::class,

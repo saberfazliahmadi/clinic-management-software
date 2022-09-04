@@ -143,7 +143,7 @@ class patients_general_info extends Model
         ->patient_id($this_patient_id)
         ->equal_this_to_admin_id_from_user_table('patient_dr_related_id')
         ->limit('1')
-        ->first() ;
+        ->count() ;
     }
 
     static function fetch_info_of_this_patient_id($edit_this_patient_id)
@@ -157,15 +157,15 @@ class patients_general_info extends Model
 
     static function number_of_duplicate_mobile_number( $update_this_patient_id , $request_patient_mobile_number )
     {
-        // Check for mobile number duplication
-        // WE SHOULD NOT HAVE TWO PATIENTS WITH SAME MOBILE NUMBERS IN OUR DATABASE!
-        // The mobile numbers should be unique
-        // EXCEPTION condition ( patient_id != $update_this_patient_id )
+        /** Check for mobile number duplication
+        We should not have two patients with same Mobile Number in our Database!
+        It means, the mobile numbers should be unique
+        Remember that, we have an EXCEPTION condition ( patient_id != $update_this_patient_id ) **/
         return self::
         select('patient_mobile_number'  , 'patient_dr_related_id' , 'patient_id' )
         ->equal_this_to_admin_id_from_user_table('patient_dr_related_id')
-        ->where('patient_mobile_number' , $request_patient_mobile_number )
-        ->where('patient_id'            , '!=' , $update_this_patient_id )
+        ->where( 'patient_mobile_number' , $request_patient_mobile_number )
+        ->where( 'patient_id'            , '!=' , $update_this_patient_id )
         ->limit('1')
         ->count();
     }
@@ -183,18 +183,20 @@ class patients_general_info extends Model
         return self::query()
         ->select( 'patient_id' , 'patient_dr_related_id' , 'patient_mobile_number' , 'patient_nationality_number' , 'patient_first_name' , 'patient_last_name' )
         ->where( 'patient_dr_related_id' , find_admin_id_from_users_table() )
-        ->Where(function($query)
+        ->where(function($query)
         {
-        $query->where( 'patient_mobile_number' , request()->post('search_text') )
-        ->orwhere( [
-                    'patient_nationality_number' => request()->post('search_text') ,
-                    'patient_first_name'         => request()->post('search_text') ,
-                    'patient_last_name'          => request()->post('search_text') ,
-                   ]  ) ;
+            $query->where( 'patient_mobile_number' , request()->post('search_text') )
+            ->orwhere([
+                        'patient_nationality_number' => request()->post('search_text') ,
+                        'patient_first_name'         => request()->post('search_text') ,
+                        'patient_last_name'          => request()->post('search_text') ,
+                       ]) ;
         })
         ->latest('patient_id')
         ->get() ;
-        // We can use chunk(10) here, for situations that we want to show 10000 result of our search which chunk breaks a big result to small peaces and can handle Servers Ram resource
+        /** We can use chunk(10) method here,
+        For situations that we want to show 10000 result of our search
+        Which chunk breaks a big result to small peaces, so we can handle Servers Ram resource **/
     }
 
     static function delete_this_patient_id($request_delete_this_patient_id)

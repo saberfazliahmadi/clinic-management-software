@@ -7,27 +7,18 @@ use Illuminate\Http\Request;
 use App\Models\{patients_general_info , patients_appointment } ;
 use Illuminate\Database\QueryException;
 
-use Illuminate\Support\Facades\Event;
 /** In this controller according to Single Responsibility and Open-Closed Principles of SOLID
 we validate user inputs by Middleware **/
 class PatientsGeneralInfoController extends Controller
 {
     public function create()
     {
-        //Event::listen('a' , static function ($data)
-        //{
-        //    dd($data);
-        //});
-        //
-        //Event::dispatch('a' , 'Hello saber') ;
-
         try
         {
-            $number_of_total_clinic_patients = patients_general_info::number_of_total_clinic_patients() ;
             return Responses::view('back.submit_new_patient_form' ,
             [
                 'title_of_page'                   => 'Submit a New Patient' ,
-                'number_of_total_clinic_patients' => $number_of_total_clinic_patients
+                'number_of_total_clinic_patients' => patients_general_info::number_of_total_clinic_patients()
             ] );
         }
         catch (QueryException $exception)
@@ -42,7 +33,7 @@ class PatientsGeneralInfoController extends Controller
         {
             $result_store_new_patient_form = patients_general_info::store_new_patient_form($request->all()) ;
 
-            // Specify last id created in database and encrypt it to use it in route passing data
+            // Specify last id created in database and encrypt it to have more security and use it in route passing data
             $encrypted_choose_time_for_this_patient_id = encrypt_decrypt('encrypt', $result_store_new_patient_form->patient_id ) ;
 
             $response_message = 'Your New Patient with Name <br><a href="'.route('edit_patient_form', $encrypted_choose_time_for_this_patient_id ).'" ><b>'.$request->get('patient_first_name').' ' . $request->get('patient_last_name').'</b></a> Successfully Submitted' ;

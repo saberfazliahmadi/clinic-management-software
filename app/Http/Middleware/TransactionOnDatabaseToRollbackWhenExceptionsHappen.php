@@ -14,10 +14,11 @@ class TransactionOnDatabaseToRollbackWhenExceptionsHappen
     {
         DB::beginTransaction();
         $response = $next($request);
-        /* If the response on database transaction has exception
+        /** If the response on database transaction has exception
          it means one of the transactions does not work properly,
-         So rollback anything done on database and then return response */
-        if ($response->exception) {
+         So rollback anything done on database and then return response **/
+        if ($response->exception)
+        {
             DB::rollBack();
             return $response;
         }

@@ -1,7 +1,5 @@
 <?php
-
 namespace App\Models;
-
 use Database\Factories\PatientsPhotoFactory;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
@@ -32,7 +30,7 @@ class patients_photo extends Model
     {
         return self::
         equal_this_to_admin_id_from_user_table('patients_photos_dr_related_id')
-        ->where('patients_photos_patient_related_id' , $request_patient_id )
+        ->where( 'patients_photos_patient_related_id' , $request_patient_id )
         ->latest('patients_photos_id')
         ->get() ;
     }

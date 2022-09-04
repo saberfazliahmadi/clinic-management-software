@@ -12,9 +12,9 @@ class MiddlewarePreventXss
         $userInput = $request->all();
         array_walk_recursive($userInput, static function (&$userInput) {
             $userInput = strip_tags($userInput);
-//            $userInput .= htmlentities($userInput);
-//            $userInput .= addslashes($userInput);
-//            $userInput .= htmlspecialchars($userInput);
+            // $userInput .= htmlentities($userInput);
+            // $userInput .= addslashes($userInput);
+            // $userInput .= htmlspecialchars($userInput);
 
         });
         $request->merge($userInput);
