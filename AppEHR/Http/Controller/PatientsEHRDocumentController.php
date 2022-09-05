@@ -81,8 +81,8 @@ class PatientsEHRDocumentController extends Controller
             // If an image was sent by user
             if ( $request->hasFile('image') )
             {
-                $store_patient_photo_from_ehr_page = $this->EHRRepository->preparation_file_process_and_upload_image($request,$request->keyboard_paraclinic_file_title ,$decrypted_request_patient_id) ;
-                if ( ! $store_patient_photo_from_ehr_page->exists )
+                $store_patient_photo_from_ehr_page = App()->call('App\Http\Controllers\PatientsPhotoController@preparation_file_process_and_upload_image' , [ "request" => $request , "request_keyboard_paraclinic_file_title" => $request->keyboard_paraclinic_file_title , "decrypted_request_patient_id" => $decrypted_request_patient_id ]) ;
+                if ( ! $store_patient_photo_from_ehr_page )
                 {
                     return Responses::Failed( 'home' , '' , '<span style="color:blue;">New Photo of patient did not save but the other new EHR information have been saved successfully!</span>' ) ;
                 }

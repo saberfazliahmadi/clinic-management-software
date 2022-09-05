@@ -1,8 +1,8 @@
 <?php
 use Illuminate\Support\Facades\Auth;
-// Add your custom css files here. (will located in header)
+// Add your custom css files here. (will be located in header)
 $extra_links_header = '' ;
-// Add your custom js files here. (will located in footer)
+// Add your custom js files here. (will be located in footer)
 $extra_links_footer = '' ;
 
 // Call the header include.
@@ -163,7 +163,7 @@ echo '
 
             echo '
             <center>'
-                .$text_trick.'
+                .$HTMLContentOfAppointmentTimeTable.'
             </center>
 
             <button type="submit" name="submit" class="btn btn-success btn-group-justified uiuxtrick" style="font-size:28px;position: fixed;bottom: 0px;right: 0px;z-index: 1;margin-bottom:0px;margin-right:0px;" >

@@ -11,7 +11,17 @@ use Illuminate\Database\QueryException;
 we validate user inputs by Middleware **/
 class PatientsPhotoController extends Controller
 {
-    static function preparation_file_process_and_upload_image($request,$request_keyboard_paraclinic_file_title ,$decrypted_request_patient_id)
+    public function PrepareKeyboardParaClinic($request_keyboard_paraclinic_file_title)
+    {
+        $keyboard_para_clinic_file_title_trick = NULL ;
+        if( $request_keyboard_paraclinic_file_title !== '')
+        {
+            $keyboard_para_clinic_file_title_trick = $request_keyboard_paraclinic_file_title ;
+        }
+        return $keyboard_para_clinic_file_title_trick ;
+    }
+
+    public function preparation_file_process_and_upload_image($request,$request_keyboard_paraclinic_file_title ,$decrypted_request_patient_id)
     {
         $file            = $request->file('image') ;
         $extension       = $request->file('image')->extension() ;
@@ -19,13 +29,8 @@ class PatientsPhotoController extends Controller
         $destinationPath = public_path().'/storage/images/'.find_admin_id_from_users_table().'/'.$decrypted_request_patient_id.'/para';
         $file->move($destinationPath, $fileName) ;
         //$path = $request->file('image')->sotre('public/images/'.Auth::user()->name.'/'.$request->patient_id.'/para' , $name );
+        $keyboard_para_clinic_file_title_trick = $this->PrepareKeyboardParaClinic($request_keyboard_paraclinic_file_title) ;
 
-        $keyboard_paraclinic_file_title_trick = NULL ;
-        if( $request_keyboard_paraclinic_file_title !== '')
-        {
-            $keyboard_paraclinic_file_title_trick = $request_keyboard_paraclinic_file_title ;
-        }
-
-        return patients_photo::store_patient_photo_from_ehr_page($fileName, $keyboard_paraclinic_file_title_trick , $decrypted_request_patient_id);
+        return patients_photo::store_patient_photo_from_ehr_page($fileName, $keyboard_para_clinic_file_title_trick , $decrypted_request_patient_id);
     }
 }

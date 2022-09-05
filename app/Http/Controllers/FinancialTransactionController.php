@@ -76,7 +76,7 @@ class FinancialTransactionController extends Controller
         {
             /** This variable should not be NULL
             Because we use this variable in financial transaction reporting page
-            and if it be null we will face so errors there, so leave it EMPTY **/
+            and if it is null we will face with errors, so leave it EMPTY **/
             $financial_transaction_child_dr_related_name = '' ;
         }
         return $financial_transaction_child_dr_related_name ;

@@ -1,7 +1,6 @@
 <?php
 namespace App\Http\Controllers;
 
-use App\Http\Requests\update_show_main_settings_of_software_formRequest;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -37,16 +36,21 @@ class UserController extends Controller
         }
     }
 
+    public function PrepareDataLogFile()
+    {
+        $data_of_log_file = '' ;
+        if(File::exists(storage_path('logs\laravel.log')))
+        {
+            $data_of_log_file = File::get(storage_path('logs\laravel.log')) ;
+        }
+        return $data_of_log_file ;
+    }
+
     public function show_users_activities_logs()
     {
         try
         {
-            $data_of_log_file = '' ;
-            if(File::exists(storage_path('logs\laravel.log')))
-            {
-                $data_of_log_file = File::get(storage_path('logs\laravel.log')) ;
-            }
-
+            $data_of_log_file = $this->PrepareDataLogFile();
             return view('back.show_users_activities_logs' ,
             [
                 'title_of_page' => 'Users Activities Logs' ,

@@ -4,8 +4,8 @@ namespace AppEHR\Repositories;
 use App\Http\Controllers\PatientsPhotoController;
 use App\Models\patients_general_info;
 use App\Models\patients_photo;
-use AppEHR\Interfaces\EHRRepositoryInterface;
 use AppEHR\Models\patients_EHR_document;
+use AppEHR\Interfaces\EHRRepositoryInterface;
 
 class EHRRepository implements EHRRepositoryInterface
 {
@@ -32,11 +32,6 @@ class EHRRepository implements EHRRepositoryInterface
     public function store_new_ehr_doc($common_drug, $common_diet, $common_return_date, $decrypted_request_patient_id, $EHR_document_related_appointment_id_trick, $EHR_document_related_clinic_doctor_name_trick)
     {
         return patients_EHR_document::store_new_ehr_doc($common_drug, $common_diet, $common_return_date, $decrypted_request_patient_id, $EHR_document_related_appointment_id_trick, $EHR_document_related_clinic_doctor_name_trick) ;
-    }
-
-    public function preparation_file_process_and_upload_image($request,$request_keyboard_para_clinic_file_title ,$decrypted_request_patient_id)
-    {
-        return PatientsPhotoController::preparation_file_process_and_upload_image($request,$request_keyboard_para_clinic_file_title ,$decrypted_request_patient_id) ;
     }
 
     public function show_new_saved_ehr( $decrypt_request_EHR_document_id )

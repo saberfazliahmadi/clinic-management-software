@@ -37,7 +37,7 @@ class PatientsGeneralInfoController extends Controller
             $encrypted_choose_time_for_this_patient_id = encrypt_decrypt('encrypt', $result_store_new_patient_form->patient_id ) ;
 
             $response_message = 'Your New Patient with Name <br><a href="'.route('edit_patient_form', $encrypted_choose_time_for_this_patient_id ).'" ><b>'.$request->get('patient_first_name').' ' . $request->get('patient_last_name').'</b></a> Successfully Submitted' ;
-            // If this patient has a date of appointment then redirect him to route('show_patient_time_appointment_table') to select desired time for this appointment
+            // If this patient has a date of appointment, then redirect him to route('show_patient_time_appointment_table') to select desired time for this appointment
             if( $request->get('patient_last_appointment_date') !== '' )
             {
                 return Responses::Success( 'show_patient_time_appointment_table', [ 'choose_time_for_this_date' => $request->get('patient_last_appointment_date') , 'choose_time_for_this_patient_id' => $encrypted_choose_time_for_this_patient_id ] , $response_message.'<br>Now choose an appointment time on date '.$request->get('patient_last_appointment_date') ) ;
@@ -122,7 +122,6 @@ class PatientsGeneralInfoController extends Controller
         {
             $result_of_run_search_form = patients_general_info::fetch_result_of_search_from() ;
 
-            // If we did NOT find ANY matched record in database for requested text
             if( $result_of_run_search_form->count() === 0 )
             {
                 return Responses::Failed( 'show_patient_search_from' , '' ,'There is not any result for <b style="color:blue;" >'.request()->post('search_text').'</b>' ) ;

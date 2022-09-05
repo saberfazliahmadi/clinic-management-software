@@ -14,7 +14,7 @@ we validate user inputs by Middleware **/
 class PatientsAppointmentController extends Controller
 {
     // Define and Specify a variable of date's appointments by GET or POST method
-    public function prepare_date_of_appointment($request_post_show_all_appointments_on_this_date , $request_get_show_all_appointments_this_date )
+    public function PrepareDateOfAppointment($request_post_show_all_appointments_on_this_date , $request_get_show_all_appointments_this_date )
     {
         $show_all_appointments_on_this_date = '' ;
         if( $request_post_show_all_appointments_on_this_date !== "" )
@@ -28,38 +28,36 @@ class PatientsAppointmentController extends Controller
         return $show_all_appointments_on_this_date ;
     }
 
+    public function PrepareFinancialManagementData()
+    {
+        $financial_management_data = '' ;
+        if( Auth::user()->financial_management !== '' )
+        {
+            $financial_management_data = Auth::user()->financial_management ;
+        }
+        return $financial_management_data ;
+    }
+
     public function show( show_form_of_appointments_on_specific_dateRequest $request )
     {
-        // Define and Specify a variable of date's appointments by GET or POST method
-        $show_all_appointments_on_this_date = $this->prepare_date_of_appointment($request->post('show_all_appointments_on_this_date') , $request->show_all_appointments_this_date ) ;
-
+        $show_all_appointments_on_this_date = $this->PrepareDateOfAppointment($request->post('show_all_appointments_on_this_date') , $request->show_all_appointments_this_date ) ;
         try
         {
-            // Create mysql query to extract all appointments that record in database on this specific date (JOIN TYPE)
-            $result_show_form_of_appointments_on_specific_date = patients_appointment::result_show_form_of_appointments_on_specific_date($show_all_appointments_on_this_date) ;
+            $appointments_on_specific_date = patients_appointment::appointments_on_specific_date($show_all_appointments_on_this_date) ;
+            $count_of_appointment          = $appointments_on_specific_date->count() ;
 
-            // How many appointment found on requested date
-            $count_of_appointment = $result_show_form_of_appointments_on_specific_date->count() ;
-
-            // If there is not any appointment on the database
             if( $count_of_appointment === 0 )
             {
                 return Responses::Success( 'show_form_of_appointments_on_specific_date' , '' , '<b style="color:blue" >There is no appointment on date '.$show_all_appointments_on_this_date.'</b><br> Please, choose another date to show appointments' ) ;
             }
 
-            $financial_management_data = '' ;
-            if( Auth::user()->financial_management !== '' )
-            {
-                $financial_management_data = Auth::user()->financial_management ;
-            }
-
             return view('back.show_form_of_appointments_on_specific_date' ,
             [
                 'title_of_page'                                     => 'List of All Appointments on Date '.$show_all_appointments_on_this_date ,
-                'result_show_form_of_appointments_on_specific_date' => $result_show_form_of_appointments_on_specific_date ,
+                'result_show_form_of_appointments_on_specific_date' => $appointments_on_specific_date ,
                 'count_of_appointment'                              => $count_of_appointment ,
                 'show_all_appointments_on_this_date'                => $show_all_appointments_on_this_date ,
-                'financial_management_data'                         => $financial_management_data
+                'financial_management_data'                         => $this->PrepareFinancialManagementData()
             ] ) ;
         }
         catch ( QueryException $exception )
@@ -87,93 +85,98 @@ class PatientsAppointmentController extends Controller
         }
     }
 
-    public function prepare_content_of_patient_time_appointment_table($choose_time_for_this_date)
+    public function PrepareTitleOfAppointmentDiv($appointments_of_patients_on_this_time_and_date)
     {
-        // All of HTML codes will be added to this variable and at the end of this function, this variable will be passed to view page.
-        $text_trick = '';
+        $title_of_appointment_div = '' ;
+        foreach ( $appointments_of_patients_on_this_time_and_date as $key )
+        {
+            $title_of_appointment_div .= '( '.$key->patient_first_name.' '.$key->patient_last_name.' -> '.$key->patient_mobile_number.' ) ' ;
+        }
+        return $title_of_appointment_div ;
+    }
 
+    public function PrepareClassNameAndColorStyleOfAppointmentDiv($number_of_appointments_on_this_time_and_date)
+    {
+        // Free Time (WHITE COLOR) **Default values**
+        $class_name_of_appointment_div   = 'well';
+        $color_style_of_appointment_div  = 'color:gray;';
+
+        // Busy Time (ORANGE COLOR)
+        if ($number_of_appointments_on_this_time_and_date > '0' && $number_of_appointments_on_this_time_and_date <= '3')
+        {
+            $class_name_of_appointment_div   = 'alert alert-warning well';
+            $color_style_of_appointment_div  = 'color:white;background-color: rgba(243,156,18,0.88);';
+        }
+        // Over Busy Time (RED COLOR)
+        elseif ($number_of_appointments_on_this_time_and_date > '3')
+        {
+            $class_name_of_appointment_div   = 'alert alert-danger well';
+            $color_style_of_appointment_div  = 'color:white;background-color: rgba(231,76,60,0.88);';
+        }
+
+        return array($class_name_of_appointment_div , $color_style_of_appointment_div) ;
+    }
+
+    public function PrepareHtmlContent($time_of_appointment,$number_of_appointments_on_this_time_and_date,$title_of_appointment_div,$class_name_of_appointment_div,$color_style_of_appointment_div)
+    {
+        /** All of HTML codes will be concatenated to $HtmlContent variable
+        and at the end of this function, this variable will be return to share on a view page **/
+        $HtmlContent = '
+        <label title="'.$title_of_appointment_div.'" class="well col-md-2 col-sm-2 col-xs-2 form-group btn-default '.$class_name_of_appointment_div.'" style="text-align:center;font-weight:normal;cursor: pointer;font-size:14px;'.$color_style_of_appointment_div.'" >';
+
+            // If number of appointments on this specific time is more than 0 , Show that number
+            if ($number_of_appointments_on_this_time_and_date !== '0')
+            {
+                $HtmlContent .= '
+                <span>
+                    ' . $number_of_appointments_on_this_time_and_date . '
+                </span>';
+            }
+            else
+            {
+                $HtmlContent .= '
+                <span>
+                    &nbsp;
+                </span>';
+            }
+
+            $HtmlContent .= '
+            <div title="' . $title_of_appointment_div . '" ><input type="radio" name="appointment_time" class="flat" value="' . $time_of_appointment . '" > ' . $time_of_appointment . '</div>
+        </label>';
+
+        return $HtmlContent ;
+    }
+
+    public function PrepareHTMLContentOfAppointmentTimeTable($choose_time_for_this_date)
+    {
+        $HtmlContent = '' ;
         $start_of_day = strtotime('00:00');
         $end_end_day  = strtotime('24:00');
 
-        // In here, the Algorithm is Chunk 1 day to small pieces of minutes
-        // START of time appointment counter creator.
+        // Chunk a day to small pieces of minutes
         for ( $index_counter = $start_of_day ; $index_counter <= $end_end_day ; $index_counter = $index_counter + Auth::user()->gap_time_between_appointments * 60 )
         {
-            // The date function will change N minutes to HH:MM format
-            // Make an appointment time trick
-            $appointment_time_trick = date('H:i', $index_counter);
-
-            // Create mysql query to extract all appointments data on this specific time and date by (JOIN TYPE)
-            $result_appointments_of_patients_on_this_time_and_date = patients_appointment::result_appointments_of_patients_on_this_time_and_date($choose_time_for_this_date, $appointment_time_trick) ;
-
-            // How many appointment time equal with $appointment_time_trick exist in database
-            $num_of_res_time_trick = $result_appointments_of_patients_on_this_time_and_date->count();
-
-            $trick_of_title = '' ;
-            foreach ( $result_appointments_of_patients_on_this_time_and_date as $key_3 )
-            {
-                $trick_of_title .= '( '.$key_3->patient_first_name.' '.$key_3->patient_last_name.' -> '.$key_3->patient_mobile_number.' ) ' ;
-            }
-
-            //  Show Busy time by (ORANGE COLOR)
-            if ($num_of_res_time_trick > '0' && $num_of_res_time_trick <= '3')
-            {
-                $appointment_div_trick        = 'alert alert-warning well';
-                $appointment_text_color_trick = 'color:white;background-color: rgba(243,156,18,0.88);';
-            }
-            // Show Dangerous time by (RED COLOR)
-            elseif ($num_of_res_time_trick > '3')
-            {
-                $appointment_div_trick        = 'alert alert-danger well';
-                $appointment_text_color_trick = 'color:white;background-color: rgba(231,76,60,0.88);';
-            }
-            // Show Free time by (WHITE COLOR)
-            else
-            {
-                $appointment_div_trick        = 'well';
-                $appointment_text_color_trick = 'color:gray;';
-            }
-
-            $text_trick .= '
-            <label title="' . $trick_of_title . '" class="well col-md-2 col-sm-2 col-xs-2 form-group btn-default ' . $appointment_div_trick . '" style="text-align:center;font-weight:normal;cursor: pointer;font-size:14px;' . $appointment_text_color_trick . '" >';
-
-                // If number of appointments on this specific time is more than 0 , Show that number
-                if ($num_of_res_time_trick !== '0')
-                {
-                    $text_trick .= '
-                    <span>
-                        ' . $num_of_res_time_trick . '
-                    </span>';
-                }
-                else
-                {
-                    $text_trick .= '
-                    <span>
-                        &nbsp;
-                    </span>';
-                }
-
-                $text_trick .= '
-                <div title="' . $trick_of_title . '" ><input type="radio" name="appointment_time" class="flat" value="' . $appointment_time_trick . '" > ' . $appointment_time_trick . '</div>
-            </label>';
-
-        } // END of time appointment counter creator.
-
-        return $text_trick ;
+            // date() method change X minutes to HH:MM format
+            $time_of_appointment                            = date('H:i', $index_counter) ;
+            $appointments_of_patients_on_this_time_and_date = patients_appointment::result_appointments_of_patients_on_this_time_and_date($choose_time_for_this_date, $time_of_appointment) ;
+            $number_of_appointments_on_this_time_and_date   = $appointments_of_patients_on_this_time_and_date->count();
+            $title_of_appointment_div                       = $this->PrepareTitleOfAppointmentDiv($appointments_of_patients_on_this_time_and_date) ;
+            [$class_name_of_appointment_div, $color_style_of_appointment_div] = $this->PrepareClassNameAndColorStyleOfAppointmentDiv($number_of_appointments_on_this_time_and_date);
+            $HtmlContent .= $this->PrepareHtmlContent($time_of_appointment,$number_of_appointments_on_this_time_and_date,$title_of_appointment_div,$class_name_of_appointment_div,$color_style_of_appointment_div) ;
+        }
+        return $HtmlContent ;
     }
 
     public function show_patient_time_appointment_table( $choose_time_for_this_date , $choose_time_for_this_patient_id )
     {
         try
         {
-            $text_trick = $this->prepare_content_of_patient_time_appointment_table($choose_time_for_this_date) ;
-
             return view('back.show_patient_time_appointment_table',
             [
-                'title_of_page'                   => 'List of Appointments Time on Date: ' . $choose_time_for_this_date,
-                'choose_time_for_this_date'       => $choose_time_for_this_date,
-                'choose_time_for_this_patient_id' => $choose_time_for_this_patient_id ,
-                'text_trick'                      => $text_trick
+                'title_of_page'                     => 'List of Appointments Time on Date: ' . $choose_time_for_this_date,
+                'choose_time_for_this_date'         => $choose_time_for_this_date,
+                'choose_time_for_this_patient_id'   => $choose_time_for_this_patient_id ,
+                'HTMLContentOfAppointmentTimeTable' => $this->PrepareHTMLContentOfAppointmentTimeTable($choose_time_for_this_date)
             ]);
         }
         catch (QueryException $exception)
@@ -182,24 +185,34 @@ class PatientsAppointmentController extends Controller
         }
     }
 
+    public function PrepareAppointmentChildDrRelatedName($request_post_appointment_child_dr_related_name)
+    {
+        // This value SHOULD NOT BE NULL because we use this value on financial transaction searching page
+        $appointment_child_dr_related_name = '' ;
+        if( $request_post_appointment_child_dr_related_name !== null )
+        {
+            $appointment_child_dr_related_name = $request_post_appointment_child_dr_related_name ;
+        }
+        return $appointment_child_dr_related_name ;
+    }
+
+    public function PrepareAppointmentServiceType($request_post_appointment_service_type)
+    {
+        // This value SHOULD NOT BE NULL because we use this value on financial transaction searching page
+        $appointment_service_type = '' ;
+        if( $request_post_appointment_service_type !== null )
+        {
+            $appointment_service_type = $request_post_appointment_service_type ;
+        }
+        return $appointment_service_type ;
+    }
+
     public function store_patient_time_appointment_table( store_patient_time_appointment_tableRequest $request )
     {
         $encrypted_choose_time_for_this_patient_id = request()->post('choose_time_for_this_patient_id') ;
         $decrypted_choose_time_for_this_patient_id = encrypt_decrypt('decrypt', request()->post('choose_time_for_this_patient_id') ) ;
-
-        // This value SHOULD NOT BE NULL because we use this value is financial transaction searching pag
-        $appointment_child_dr_related_name = '' ;
-        if( request()->post('appointment_child_dr_related_name') !== null )
-        {
-            $appointment_child_dr_related_name = request()->post('appointment_child_dr_related_name') ;
-        }
-
-        // This value SHOULD NOT BE NULL because we use this value is financial transaction searching pag
-        $appointment_service_type = '' ;
-        if( request()->post('appointment_service_type') !== null )
-        {
-            $appointment_service_type = request()->post('appointment_service_type') ;
-        }
+        $appointment_child_dr_related_name         = $this->PrepareAppointmentChildDrRelatedName(request()->post('appointment_child_dr_related_name')) ;
+        $appointment_service_type                  = $this->PrepareAppointmentServiceType(request()->post('appointment_service_type')) ;
 
         $response_message = '<span style="color:blue;">The Time and Date Appointment Were NOT Successfully Submitted!</span>' ;
         try

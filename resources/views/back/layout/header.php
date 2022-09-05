@@ -331,8 +331,7 @@ label
 
                                     if( $count_of_appointment_in_header_for_patients_on_waiting_situation !== 0 )
                                     {
-                                        echo '
-                                        <span class="glyphicon glyphicon-bell" aria-hidden="true" style="margin-right:5px;" ></span>' ;
+                                        echo '<span class="glyphicon glyphicon-bell" aria-hidden="true" style="margin-right:5px;" ></span>' ;
                                     }
 
                                     echo '

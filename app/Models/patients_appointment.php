@@ -36,7 +36,7 @@ class patients_appointment extends Model
         return new PatientsAppointmentFactory() ;
     }
 
-    static function result_show_form_of_appointments_on_specific_date($show_all_appointments_on_this_date)
+    static function appointments_on_specific_date($show_all_appointments_on_this_date)
     {
         return self::
         join('patients_general_infos' , 'patients_general_infos.patient_id' , '=' , 'patients_appointments.appointment_patient_related_id')
@@ -152,8 +152,7 @@ class patients_appointment extends Model
                     'patients_appointments.appointment_status_unique' => '0' ,
                     'patients_appointments.appointment_status'        => '1'
                  ])
-        ->oldest('patients_appointments.appointment_time')
-        ->get() ;
+        ->count() ;
     }
 
 }
