@@ -16,7 +16,7 @@ use AppEHR\MessageSenderFacade;
 
 /** Remember that, when in a controller using a method from a Service class, you should pass all the required variable parameters one by one
  It means you should never use Illuminate\Http\Request; in your Service class,
- Because if you do not do this, you will face some problems when you want to write a PHPUnit Test/Job/Que/Artisan Command and call a method of this Service class from anywhere else in the future.
+ Because if you do not do this, you will face some problems when you want to write a PHPUnitTest/Job/Que/ArtisanCommand and call a method of this Service class from anywhere else in the future.
  In fact, your Service's methods should be called from wherever you will need them in the future.
  By definition, a service should take some variables from wherever they come, apply some logic to them, and finally return them.
  So, imagine that your service class is a separate unit, which should be able to deal with variables in the future that will be passed into that form wherever. */
