@@ -51,7 +51,7 @@ class ValidatorMainSettingsSoftwareFormRequest
             'cms_menu_title_28'               => 'string' ,
 
             'name_of_user'   => 'string|exists:users,name' ,
-             encrypt_decrypt('decrypt', request()->id_of_user) => 'string|exists:users,id' ,
+             encryptDecrypt('decrypt', request()->id_of_user) => 'string|exists:users,id' ,
 
             'status_of_user' => 'nullable|in:'.config('global.active').','.config('global.ban') ,
             'level_of_user'  => 'nullable|in:'.config('global.guest_level').','.config('global.user_level').','.config('global.admin_level') ,
@@ -64,7 +64,7 @@ class ValidatorMainSettingsSoftwareFormRequest
         $financial_management_revealed_errors = $this->validation_of_financial_management_variable($request->financial_management) ;
         if( $financial_management_revealed_errors !== '' )
         {
-            return Responses::Failed( 'back_to_previous_page' , '' , '<b>Financial Type Error</b><br><b style="color:red;">'.$financial_management_revealed_errors.' is wrong</b><br><b style="color:blue;" >At least type 3 characters followed by this type <br> Service Name : Service Amount</b><br>Remember, each service type should have this character <b style="color:blue;" >:</b>' ) ;
+            return Responses::failed( 'back_to_previous_page' , '' , '<b>Financial Type Error</b><br><b style="color:red;">'.$financial_management_revealed_errors.' is wrong</b><br><b style="color:blue;" >At least type 3 characters followed by this type <br> Service Name : Service Amount</b><br>Remember, each service type should have this character <b style="color:blue;" >:</b>' ) ;
         }
 
         return $next($request);

@@ -1,18 +1,33 @@
 <?php
 use Illuminate\Support\Facades\Auth;
-
-if (!function_exists('encrypt_decrypt'))
+//use Illuminate\Support\Facades\Crypt;
+//use Illuminate\Contracts\Encryption\DecryptException;
+//use App\Responses\Responses;
+if (!function_exists('encryptDecrypt'))
 {
-    function encrypt_decrypt($action, $string)
+    function encryptDecrypt($action, $string)
     {
-        $output = false;
+        //try {
+        //    if ($action === 'encrypt') {
+        //        return Crypt::encryptString($string);
+        //    } elseif ($action === 'decrypt') {
+        //        return Crypt::decryptString($string);
+        //    }
+        //    return Responses::Failed('home', '', '<span style="color:blue;">we have an error to encrypt data!</span>');
+        //}
+        //catch (DecryptException $e)
+        //{
+        //    return Responses::Failed('home', '', '<span style="color:blue;">we have an error to encrypt data!</span>');
+        //}
+
+        $output         = false;
         $encrypt_method = "AES-256-CBC";
-        $secret_key = Auth::user()->created_at;
-        $secret_iv  = Auth::user()->id;
+        $secret_key     = Auth::user()->created_at;
+        $secret_iv      = Auth::id();
         // hash
-        $key = hash('sha256', $secret_key);
+        $key            = hash('sha256', $secret_key);
         // iv - encrypt method AES-256-CBC expects 16 bytes - else you will get a warning
-        $iv  = substr(hash('sha256', $secret_iv), 0, 16);
+        $iv             = substr(hash('sha256', $secret_iv), 0, 16);
         if ($action === 'encrypt')
         {
             $output = openssl_encrypt($string, $encrypt_method, $key, 0, $iv);
@@ -22,20 +37,20 @@ if (!function_exists('encrypt_decrypt'))
         {
             $output = openssl_decrypt(base64_decode($string), $encrypt_method, $key, 0, $iv);
         }
-        return $output;
+        return $output ;
     }
 }
 
-if (!function_exists('find_admin_id_from_users_table'))
+if (!function_exists('findAdminIdFromUsersTable'))
 {
-    function find_admin_id_from_users_table()
+    function findAdminIdFromUsersTable()
     {
         // If the user has a parent_id so user_level = 'global.user_level' OR user_level = 'global.admin_level' ,So we return Auth::user()->parent_id
         if (strlen(Auth::user()->parent_id) > 0)
         {
             return Auth::user()->parent_id;
         }
-        // If the user DOES NOT have parent_id so user_level='global.super_admin_level' , So we return Auth::user()->id
-        return Auth::user()->id;
+        // If the user DOES NOT have parent_id so user_level='global.super_admin_level' , So we return Auth::id()
+        return Auth::id();
     }
 }

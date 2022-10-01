@@ -1,5 +1,4 @@
 <?php
-
 namespace AppEHR\Models;
 
 use Database\Factories\PatientsEHRDocumentFactory;
@@ -42,7 +41,7 @@ class patients_EHR_document extends Model
     {
         if($value !== NULL)
         {
-            return encrypt_decrypt('decrypt', $value ) ;
+            return encryptDecrypt('decrypt', $value ) ;
         }
     }
 
@@ -50,7 +49,7 @@ class patients_EHR_document extends Model
     {
         if($value !== NULL)
         {
-            $this->attributes['EHR_document_prescribed_common_drug'] = encrypt_decrypt('encrypt', $value ) ;
+            $this->attributes['EHR_document_prescribed_common_drug'] = encryptDecrypt('encrypt', $value ) ;
         }
     }
 
@@ -58,7 +57,7 @@ class patients_EHR_document extends Model
     {
         if($value !== NULL)
         {
-            return encrypt_decrypt('decrypt', $value ) ;
+            return encryptDecrypt('decrypt', $value ) ;
         }
     }
 
@@ -66,20 +65,20 @@ class patients_EHR_document extends Model
     {
         if($value !== NULL)
         {
-            $this->attributes['EHR_document_prescribed_common_diet'] = encrypt_decrypt('encrypt', $value ) ;
+            $this->attributes['EHR_document_prescribed_common_diet'] = encryptDecrypt('encrypt', $value ) ;
         }
     }
 
-    static function result_of_patients_ehr_document($request_patient_id)
+    static function resultOfPatientsEhrDocument($request_patient_id)
     {
         return self::
-        equal_this_to_admin_id_from_user_table('EHR_document_dr_related_id')
+        equalThisToAdminIdFromUserTable('EHR_document_dr_related_id')
         ->where('EHR_document_patient_related_id' , $request_patient_id )
         ->latest('EHR_document_id')
         ->get() ;
     }
 
-    static function store_new_ehr_doc($common_drug_2, $common_diet_2, $common_return_date_2, $request_post_patient_id , $EHR_document_related_appointment_id_trick, $EHR_document_related_clinic_doctor_name_trick )
+    static function storeNewEhrDoc($common_drug_2, $common_diet_2, $common_return_date_2, $request_post_patient_id , $EHR_document_related_appointment_id_trick, $EHR_document_related_clinic_doctor_name_trick )
     {
         return self::create(
             [
@@ -87,27 +86,27 @@ class patients_EHR_document extends Model
                 'EHR_document_prescribed_common_diet'      => $common_diet_2 ,
                 'EHR_document_prescribed_next_appointment' => $common_return_date_2 ,
                 'EHR_document_patient_related_id'          => $request_post_patient_id ,
-                'EHR_document_dr_related_id'               => find_admin_id_from_users_table() ,
+                'EHR_document_dr_related_id'               => findAdminIdFromUsersTable() ,
                 'EHR_document_related_appointment_id'      => $EHR_document_related_appointment_id_trick ,
                 'EHR_document_related_clinic_doctor_name'  => $EHR_document_related_clinic_doctor_name_trick
             ]
         ) ;
     }
 
-    static function show_new_saved_ehr($request_EHR_document_id)
+    static function showNewSavedEhr($request_EHR_document_id)
     {
         return self::
-        equal_this_to_admin_id_from_user_table('EHR_document_dr_related_id')
+        equalThisToAdminIdFromUserTable('EHR_document_dr_related_id')
         ->where('EHR_document_id' , $request_EHR_document_id )
         ->limit('1')
         ->first() ;
     }
 
-    public static function CheckValidityOfEHRID($decrypted_requested_EHR_id)
+    public static function checkValidityOfEHRID($decrypted_requested_EHR_id)
     {
         return self::
         select('EHR_document_dr_related_id' , 'EHR_document_id')
-        ->equal_this_to_admin_id_from_user_table('EHR_document_dr_related_id')
+        ->equalThisToAdminIdFromUserTable('EHR_document_dr_related_id')
         ->where('EHR_document_id' , $decrypted_requested_EHR_id )
         ->limit('1')
         ->first() ;

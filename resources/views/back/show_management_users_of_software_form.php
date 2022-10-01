@@ -86,12 +86,13 @@ echo '
                               </div>
                               
                               <div class="modal-body" style="overflow: auto!important;" >
-                              
+                       
                                     <div class="col-md-12 col-sm-12 col-xs-12" >
-                                    <form method="post" action="'.route('update_user_info_by_super_admin' ).'" id="medical-file-form" >
+                                    <form method="POST" action="'.route('update_user_info_by_super_admin' ).'" id="medical-file-form" >
                                         <input type="hidden" name="_token" value="'.csrf_token().'" >
                                         <input type="hidden" name="name_of_user" value="'.$key->name.'" >
-                                        <input type="hidden" name="id_of_user" value="'.encrypt_decrypt( 'encrypt', $key->id ).'" >
+                                        <input type="hidden" name="id_of_user" value="'.encryptDecrypt('encrypt', $key->id ).'" >
+                                        <input type="hidden" name="_method" value="put" >
                                          
                                         <h3 class="modal-title" id="exampleModalLabel"  >
                                             <center>

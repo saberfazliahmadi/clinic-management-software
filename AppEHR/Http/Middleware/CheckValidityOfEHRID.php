@@ -10,9 +10,10 @@ class CheckValidityOfEHRID
 {
     public function handle(Request $request, Closure $next)
     {
-        if(! Patients_EHR_document::CheckValidityOfEHRID( encrypt_decrypt('decrypt' , $request->EHR_document_id ) ) )
+        $trick_of_ehr_id = $request->encrypted_ehr_id ?? '';
+        if( ($trick_of_ehr_id !== '') && !(Patients_EHR_document::checkValidityOfEHRID(encryptDecrypt('decrypt' , $trick_of_ehr_id ))) )
         {
-            return Responses::Failed( 'home' , '' , '<span style="color:blue;">The Requested EHR Document Does Not Exist!</span>' ) ;
+            return Responses::failed( 'home' , '' , '<span style="color:blue;">The Requested EHR Document Does Not Exist!</span>' ) ;
         }
         return $next($request);
     }

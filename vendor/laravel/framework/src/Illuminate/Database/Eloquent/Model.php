@@ -2182,8 +2182,8 @@ abstract class Model implements Arrayable, ArrayAccess, CanBeEscapedWhenCastToSt
     }
 
     // We have to put scope here because the scope methods just work on MODEL (DO NOT WORK ON HELPER CLASS)
-    public function scopeequal_this_to_admin_id_from_user_table($query,$equal_this)
+    public function scopeequalThisToAdminIdFromUserTable($query, $equal_this)
     {
-        return $query->where($equal_this, find_admin_id_from_users_table()) ;
+        return $query->where($equal_this, findAdminIdFromUsersTable()) ;
     }
 }

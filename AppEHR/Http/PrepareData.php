@@ -5,7 +5,7 @@ use phpDocumentor\Reflection\Types\Null_;
 
 class PrepareData
 {
-    public function prepare_patient_more_description_variable($request_patient_more_description,$request_typed_keyboard_savabegh,$request_common_hypersensitivity_2311)
+    public function preparePatientMoreDescriptionVariable($request_patient_more_description, $request_typed_keyboard_savabegh, $request_common_hypersensitivity_2311)
     {
         $patient_more_description  = '' ;
         $patient_more_description .= $request_patient_more_description ;
@@ -26,7 +26,7 @@ class PrepareData
         return $patient_more_description ;
     }
 
-    public function prepare_common_drug_variable($request_all)
+    public function prepareCommonDrugVariable($request_all)
     {
         $common_drug = NULL ;
         if( Auth::user()->common_drug !== '' )
@@ -58,7 +58,7 @@ class PrepareData
         return $common_drug ;
     }
 
-    public function prepare_common_diet_variable($request_all)
+    public function prepareCommonDietVariable($request_all)
     {
         $common_diet = NULL ;
         if( Auth::user()->common_diet !== "" )
@@ -80,7 +80,7 @@ class PrepareData
         return $common_diet ;
     }
 
-    public function prepare_common_return_date_variable($request_all)
+    public function prepareCommonReturnDateVariable($request_all)
     {
         $common_return_date = NULL ;
         if( Auth::user()->common_return_date !== "" )
@@ -102,7 +102,7 @@ class PrepareData
         return $common_return_date ;
     }
 
-    public function prepare_EHR_document_related_appointment_id_variable($request_post_EHR_document_related_appointment_id)
+    public function prepareEHRDocumentRelatedAppointmentIdVariable($request_post_EHR_document_related_appointment_id)
     {
         $EHR_document_related_appointment_id_trick = NULL ;
         if( strlen($request_post_EHR_document_related_appointment_id) > 0 )
@@ -112,7 +112,7 @@ class PrepareData
         return $EHR_document_related_appointment_id_trick ;
     }
 
-    public function prepare_EHR_document_related_clinic_doctor_name($request_post_EHR_document_related_clinic_doctor_name)
+    public function prepareEHRDocumentRelatedClinicDoctorName($request_post_EHR_document_related_clinic_doctor_name)
     {
         $EHR_document_related_clinic_doctor_name_trick = NULL ;
         if( strlen($request_post_EHR_document_related_clinic_doctor_name) > 0 )

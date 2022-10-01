@@ -1,7 +1,7 @@
 <?php
 return [
     // The URL of application that we want to use it as a link on different situation
-    'app_url' => 'http://matabeonline.ir/' ,
+    'app_url' => 'https://matabeonline.ir/' ,
     'app_name' => 'MatabeOnline Clinic Management Software' ,
 
     // The levels if user which will be checked on middleware

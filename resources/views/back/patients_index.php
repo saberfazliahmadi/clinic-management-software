@@ -1,11 +1,10 @@
 <?php
-// Add your custom css files here. (will located in header)
+// Add your custom css files here. (will be located in header)
 use Illuminate\Support\Facades\Auth;
 
 $extra_links_header = '' ;
-// Add your custom js files here. (will located in footer)
+// Add your custom js files here. (will be located in footer)
 $extra_links_footer = '' ;
-// Call the header include.
 include 'layout/header.php' ;
 
 echo '
@@ -23,13 +22,12 @@ echo '
                 echo
                 $title_of_page.'
                 <br>
-                
             </h3>
         </center>
     </div>
     
     <div class="col-md-12 col-sm-12 col-xs-12">  
-        <form method="post" action="'.route('run_patient_search_form').'" id="medical-file-form" data-parsley-validate  >
+        <form method="get" action="'.route('patients.show').'" id="medical-file-form" data-parsley-validate  >
             <input type="hidden" name="_token" value="'.csrf_token().'" >
             
             <center>
@@ -160,7 +158,7 @@ echo '
                     if( Auth::user()->user_level >= config('global.admin_level'))
                     {
                         echo '
-                        <a href="'.route('show_patients_ehr_document_page', ['patient_id' => encrypt_decrypt('encrypt', $key->patient_id)]).'" class="text-center uiuxtrick" >
+                        <a href="'.route('ehr.create', ['encrypted_patient_id' => encryptDecrypt('encrypt', $key->patient_id)]).'" class="text-center uiuxtrick" >
                             <div class="col-md-4 col-sm-4 col-xs-12 btn btn-default" style="border:1px solid #e3e3e3;float:right;color:#337ab7;padding-top: 15px;padding-bottom: 15px;margin-right:0px;" >
                                  <i class="fa fa-clone"></i>
                                  EHR Document
@@ -172,14 +170,14 @@ echo '
                     echo '
                     <a href="'.route('home').'" class="text-center uiuxtrick" >
                         <div class="'.$bootstrap_col_md_trick.' btn btn-default" style="border:1px solid #e3e3e3;float:right;color:#337ab7;padding-top: 15px;padding-bottom: 15px;margin-right:0px;" >
-                             <i class="glyphicon glyphicon-tags"></i>&nbsp;
-                             Medical Prescriptions
+                            <i class="glyphicon glyphicon-tags"></i>&nbsp;
+                            Medical Prescriptions
                         </div>
                     </a>
-                    <a href="'.route('edit_patient_form', encrypt_decrypt('encrypt', $key->patient_id)).'" class="text-center uiuxtrick" >
+                    <a href="'.route('patients.edit', encryptDecrypt('encrypt', $key->patient_id)).'" class="text-center uiuxtrick" >
                         <div class="'.$bootstrap_col_md_trick.' btn btn-default" style="border:1px solid #e3e3e3;float:right;color:#337ab7;padding-top: 15px;padding-bottom: 15px;margin-right:0px;" >
-                              <i class="fa fa-edit"></i>
-                             Book Appointment | Edit Info
+                            <i class="fa fa-edit"></i>
+                            Book Appointment | Edit Info
                         </div>
                     </a>
                 </div>

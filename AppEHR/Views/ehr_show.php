@@ -1,17 +1,11 @@
 <?php
-
-// Add your custom css files here.
 use Illuminate\Support\Facades\Auth;
-
+// Add your custom css files here.
 $extra_links_header = '' ;
 // Add your custom js files here.
 $extra_links_footer = '' ;
-
-// Call the header by require_once
+// Call the header
 require_once '../resources/views/back/layout/header.php' ;
-
-if(isset($show_ehr_report))
-{
 
 ?>
 <style>
@@ -67,9 +61,8 @@ if(isset($show_ehr_report))
 
 <?php
 
-$telegram_text_content = '' ;
 $cms_menu_title = explode("," , Auth::user()->cms_menu_title)  ;
-
+$telegram_text_content = '' ;
 if( strlen($EHR_document_prescribed_common_drug) > 0 )
 {
     $telegram_text_content .= $cms_menu_title[4].':<br>'.str_replace( "," , "<br>" , $EHR_document_prescribed_common_drug ) ;
@@ -106,12 +99,11 @@ echo '
 <br>
 <center>
     <div style="margin-top:15px;" class="col-md-12 col-sm-12 col-xs-12" align="center" >
-        <h1 style="text-align:center;font-size:17pt;margin-top:10px;;" align="center" >
+        <h1 style="text-align:center;font-size:17pt;margin-top:10px;" align="center" >
             <div class="col-md-12 col-sm-12 col-xs-12" >
                 This information will be sent to the Smartphone of the patient by BOT automatically
                 <br>
                 <br>
-                
                 <div class="smartphone">
                     <div class="contentphone" style="overflow-wrap: break-word; word-wrap: break-word; hyphens: auto;" >
                         <br>
@@ -125,7 +117,6 @@ echo '
                         This message was sent to you on date '.date("Y/m/d").'
                     </div>
                 </div>
-                
             </div>
             <br>
             <br>
@@ -133,14 +124,8 @@ echo '
     </div>
 </center>
 </div>' ;
-}
-else
-{
-    \Session::flash('success_message', '<b style="color:blue;" >We have an error to update New Settings of Software</b>');
-    return redirect(route('show_main_settings_of_software_form'));
-}
 
-// Call the footer by require_once
+// Call the footer
 require_once '../resources/views/back/layout/footer.php' ;
 ?>
 

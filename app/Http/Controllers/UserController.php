@@ -8,7 +8,7 @@ use Illuminate\Support\Facades\File;
 use mysql_xdevapi\Session;
 use phpDocumentor\Reflection\DocBlock\Tags\Uses;
 use Hash;
-use Illuminate\Database\QueryException;
+
 use App\Responses\Responses ;
 // https://stackoverflow.com/questions/32718870/how-to-get-all-input-of-post-in-laravel
 /** In this controller according to Single Responsibility and Open-Closed Principles of SOLID
@@ -20,7 +20,7 @@ class UserController extends Controller
         return User::make_ban_or_active_this_user_id($name_of_user , $id_of_user , $action) ;
     }
 
-    public function show_management_users_of_software_form()
+    public function showManagementUsersOfSoftwareForm()
     {
         try
         {
@@ -30,9 +30,9 @@ class UserController extends Controller
                 'result_of_all_users_related_to_this_super_admin' =>  User::all_users_related_to_this_super_admin() ,
             ]);
         }
-        catch (QueryException $exception)
+        catch (\Exception $exception)
         {
-            return Responses::FailedWithException('home' , '' , '<b style="color:blue;" >We have an error to show Management Users of Software From</b>' , $exception)  ;
+            return Responses::failedWithException('home' , '' , '<b style="color:blue;" >We have an error to show Management Users of Software From</b>' , $exception)  ;
         }
     }
 
@@ -46,7 +46,7 @@ class UserController extends Controller
         return $data_of_log_file ;
     }
 
-    public function show_users_activities_logs()
+    public function showUsersActivitiesLogs()
     {
         try
         {
@@ -57,21 +57,21 @@ class UserController extends Controller
                 'log_data'      => $data_of_log_file ,
             ]);
         }
-        catch (QueryException $exception)
+        catch (\Exception $exception)
         {
-            return Responses::FailedWithException('home' , '' , '<b style="color:blue;" >We have an error to show Users Activities Logs</b>' , $exception)  ;
+            return Responses::failedWithException('home' , '' , '<b style="color:blue;" >We have an error to show Users Activities Logs</b>' , $exception)  ;
         }
     }
 
-    public function show_main_settings_of_software_form()
+    public function showMainSettingsOfSoftwareForm()
     {
         try
         {
-            $result_show_main_settings_of_software_form = User::show_main_settings_of_software_form(Auth::user()->id, Auth::user()->name) ;
+            $result_show_main_settings_of_software_form = User::show_main_settings_of_software_form(Auth::id(), Auth::user()->name) ;
 
             if(!$result_show_main_settings_of_software_form)
             {
-                return Responses::Failed('home', '' , '<b style="color:blue;" >We have an error to show main settings of software</b>' ) ;
+                return Responses::failed('home', '' , '<b style="color:blue;" >We have an error to show main settings of software</b>' ) ;
             }
             return view('back.show_main_settings_of_software_form' ,
             [
@@ -79,15 +79,15 @@ class UserController extends Controller
                 'result_show_main_settings_of_software_form' => $result_show_main_settings_of_software_form
             ]);
         }
-        catch (QueryException $exception)
+        catch (\Exception $exception)
         {
-            return Responses::FailedWithException('home', '' , '<b style="color:blue;" >We have an error to show main settings of software</b>' , $exception ) ;
+            return Responses::failedWithException('home', '' , '<b style="color:blue;" >We have an error to show main settings of software</b>' , $exception ) ;
         }
     }
 
     public function prepare_variable_of_gap_time_between_appointments($request_gap_time_between_appointments)
     {
-        // Remove space from gap time variable
+        // Remove space from $request_gap_time_between_appointments
         $gap_time_between_appointments = str_replace(" ", "", $request_gap_time_between_appointments);
         // $gap_time_between_appointments should be an amount between 5 and 60 minutes
         if ($gap_time_between_appointments < 5 && is_numeric($gap_time_between_appointments))
@@ -165,14 +165,14 @@ class UserController extends Controller
     }
 
     // Here form request Validation Executed by ValidatorMainSettingsSoftwareFormRequest Middleware
-    public function update_show_main_settings_of_software_form(Request $request)
+    public function updateShowMainSettingsOfSoftwareForm(Request $request)
     {
         $options_for_user              = $this->prepare_variable_of_options_for_user($request->money_console_status) ;
         $financial_management          = $this->remove_extra_words_from_financial_management_variable($request->financial_management) ;
         $gap_time_between_appointments = $this->prepare_variable_of_gap_time_between_appointments($request->gap_time_between_appointments) ;
         $cms_menu_title                = $this->prepare_cms_menu_title($request->all()) ;
         $common_drug                   = str_replace(" ", "_", $request->common_drug);
-        $decrypted_id_of_user = encrypt_decrypt( 'decrypt' , $request->id_of_user) ;
+        $decrypted_id_of_user = encryptDecrypt('decrypt' , $request->id_of_user) ;
 
         $success_message = 'The New Settings of Software Successfully Updated' ;
         $failed_message  = '<b style="color:blue;" >We have an error to update New Settings of Software</b>' ;
@@ -186,51 +186,51 @@ class UserController extends Controller
                 $result_update_main_settings_of_software_form = User::update_main_settings_of_software_form_for_super_admin( $decrypted_id_of_user , $request->name_of_user , $common_drug , $request->common_diet , $request->common_return_date ,$request->phone_number,$request->college_branch,$request->contact_address,$request->common_hypersensitivity,$options_for_user,$cms_menu_title,$gap_time_between_appointments,$request->clinic_doctors_name , $request->status_of_user , $request->level_of_user , $financial_management ) ;
                 if(!$result_update_main_settings_of_software_form)
                 {
-                    return Responses::Failed('show_management_users_of_software_form' , '' , $failed_message ) ;
+                    return Responses::failed('show_management_users_of_software_form' , '' , $failed_message ) ;
                 }
-                return Responses::Success('show_management_users_of_software_form' , '' , $success_message.$extra_message ) ;
+                return Responses::success('show_management_users_of_software_form' , '' , $success_message.$extra_message ) ;
             }
 
             /** If the request was from Route => update_show_main_settings_of_software_form **/
             $result_update_main_settings_of_software_form = User::update_main_settings_of_software_form( $decrypted_id_of_user , $request->name_of_user , $common_drug , $request->common_diet , $request->common_return_date ,$request->phone_number,$request->college_branch,$request->contact_address,$request->common_hypersensitivity,$options_for_user,$cms_menu_title,$gap_time_between_appointments,$request->clinic_doctors_name, $financial_management ) ;
             if(!$result_update_main_settings_of_software_form)
             {
-                return Responses::Failed('show_main_settings_of_software_form' , '' , $failed_message ) ;
+                return Responses::failed('show_main_settings_of_software_form' , '' , $failed_message ) ;
             }
-            return Responses::Success('show_main_settings_of_software_form' , '' , $success_message ) ;
+            return Responses::success('show_main_settings_of_software_form' , '' , $success_message ) ;
         }
-        catch (QueryException $exception)
+        catch (\Exception $exception)
         {
             if( $request->route()->getName() === 'update_user_info_by_super_admin')
             {
-                return Responses::FailedWithException('show_management_users_of_software_form' , '' , $failed_message.$extra_message , $exception) ;
+                return Responses::failedWithException('show_management_users_of_software_form' , '' , $failed_message.$extra_message , $exception) ;
             }
-            return Responses::FailedWithException('show_main_settings_of_software_form' , '' , $failed_message , $exception) ;
+            return Responses::failedWithException('show_main_settings_of_software_form' , '' , $failed_message , $exception) ;
         }
     }
 
-    public function show_change_password_form()
+    public function showChangePasswordForm()
     {
         return view('back.show_change_password_form', ['title_of_page' => 'Change Password']);
     }
 
     // Here form request Validation Executed by ValidatorChangePasswordRequest Middleware
-    public function run_change_password_form( Request $request )
+    public function runChangePasswordForm(Request $request )
     {
         $response_message_failed = '<b style="color:blue;" >We have an error to update this password <br> Try it again</b>' ;
         $response_message_success = 'Your Password Successfully Updated' ;
         try
         {
-            $result_run_change_password_form = user::run_change_password_form(Auth::user()->id, Auth::user()->name, Hash::make($request->new_password)) ;
+            $result_run_change_password_form = user::run_change_password_form(Auth::id(), Auth::user()->name, Hash::make($request->new_password)) ;
             if(!$result_run_change_password_form)
             {
-                return Responses::Failed('show_change_password_form' , '' , $response_message_failed ) ;
+                return Responses::failed('show_change_password_form' , '' , $response_message_failed ) ;
             }
-            return Responses::Success('show_change_password_form' , '' , $response_message_success ) ;
+            return Responses::success('show_change_password_form' , '' , $response_message_success ) ;
         }
-        catch ( QueryException $exception )
+        catch (\Exception $exception )
         {
-            return Responses::FailedWithException('show_change_password_form' , '' , $response_message_failed , $exception) ;
+            return Responses::failedWithException('show_change_password_form' , '' , $response_message_failed , $exception) ;
         }
     }
 }

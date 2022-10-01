@@ -63,7 +63,7 @@ class ExampleTest extends TestCase
 
         $counted_before_insert_data = patients_general_info::all()->count() ;
 
-        $response = $this->post( route('store_new_patient_form' ), [
+        $response = $this->post( route('patients.store' ), [
             'patient_first_name'            => $patient_first_name ,
             'patient_last_name'             => $patient_last_name ,
             'patient_mobile_number'         => $patient_mobile_number ,
@@ -90,7 +90,7 @@ class ExampleTest extends TestCase
         $this->assertDatabaseHas('patients_general_infos', [ 'patient_first_name' => $patient_first_name, 'patient_last_name' => $patient_last_name, 'patient_mobile_number' => $patient_mobile_number ]);
         $this->assertEquals( $counted_after_insert_data ,$counted_before_insert_data + 1 );
         $response->assertStatus(302);
-        $response->assertRedirect(route('submit_new_patient_form')) ;
+        $response->assertRedirect(route('patients.create')) ;
         // $this->followRedirects($response)->assertsee('Successfullysss Submittedsss') ;
 
     }
@@ -105,7 +105,7 @@ class ExampleTest extends TestCase
 
         $counted_before_insert_data = patients_general_info::all()->count() ;
 
-        $response = $this->post( route('store_new_patient_form'), [
+        $response = $this->post( route('patients.store'), [
             'patient_first_name'            => $patient_first_name ,
             'patient_last_name'             => $patient_last_name ,
             'patient_mobile_number'         => $patient_mobile_number ,

@@ -15,6 +15,7 @@ class FinancialTransactionFactory extends Factory
      */
     public function definition()
     {
+        // The "+" sign means the money received and the "-" sign means the money paid
         $financial_transaction_type = array( '1' => '+' , '2' => '-' );
 
         return [

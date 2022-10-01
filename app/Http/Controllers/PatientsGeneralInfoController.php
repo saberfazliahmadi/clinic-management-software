@@ -1,94 +1,132 @@
 <?php
 namespace App\Http\Controllers;
 
-use App\Http\Requests\run_patient_search_formRequest;
+use App\Http\Requests\PatientsShowRequest;
+use App\Http\Requests\PatientsStoreRequest;
+use App\Http\Requests\PatientsUpdateRequest;
 use App\Responses\Responses;
 use Illuminate\Http\Request;
 use App\Models\{patients_general_info , patients_appointment } ;
-use Illuminate\Database\QueryException;
 
 /** In this controller according to Single Responsibility and Open-Closed Principles of SOLID
 we validate user inputs by Middleware **/
 class PatientsGeneralInfoController extends Controller
 {
+    public function index()
+    {
+        return Responses::view('back.patients_index' , [ 'title_of_page' => 'Search Patients' ] );
+    }
+
     public function create()
     {
         try
         {
-            return Responses::view('back.submit_new_patient_form' ,
+            $number_of_total_clinic_patients = patients_general_info::numberOfTotalClinicPatients() ;
+            if( !$number_of_total_clinic_patients )
+            {
+                return Responses::failed( 'home' , '' , 'We have an error to show number of total patients in your clinic' ) ;
+            }
+
+            return Responses::view('back.patients_create' ,
             [
                 'title_of_page'                   => 'Submit a New Patient' ,
-                'number_of_total_clinic_patients' => patients_general_info::number_of_total_clinic_patients()
+                'number_of_total_clinic_patients' => $number_of_total_clinic_patients
             ] );
         }
-        catch (QueryException $exception)
+        catch (\Exception $exception)
         {
-            return Responses::FailedWithException( 'home' , '' , 'We have an error to show make a new patient form' , $exception ) ;
+            return Responses::failedWithException( 'home' , '' , 'We have an error to show make a new patient form' , $exception ) ;
         }
     }
 
-    public function store(Request $request)
+    public function store(PatientsStoreRequest $request)
     {
         try
         {
-            $result_store_new_patient_form = patients_general_info::store_new_patient_form($request->all()) ;
-
+            $request_validated = $request->validated();
+            $result_store_new_patient_form = patients_general_info::storeNewPatientForm($request_validated) ;
             // Specify last id created in database and encrypt it to have more security and use it in route passing data
-            $encrypted_choose_time_for_this_patient_id = encrypt_decrypt('encrypt', $result_store_new_patient_form->patient_id ) ;
+            $choose_appointment_time_for_this_encrypted_patient_id = encryptDecrypt('encrypt', $result_store_new_patient_form->patient_id ) ;
 
-            $response_message = 'Your New Patient with Name <br><a href="'.route('edit_patient_form', $encrypted_choose_time_for_this_patient_id ).'" ><b>'.$request->get('patient_first_name').' ' . $request->get('patient_last_name').'</b></a> Successfully Submitted' ;
-            // If this patient has a date of appointment, then redirect him to route('show_patient_time_appointment_table') to select desired time for this appointment
-            if( $request->get('patient_last_appointment_date') !== '' )
+            $response_message = 'Your New Patient with Name <br><a href="'.route('patients.edit', $choose_appointment_time_for_this_encrypted_patient_id ).'" ><b>'.$request_validated['patient_first_name'].' '.$request_validated['patient_last_name'].'</b></a> Successfully Submitted' ;
+            // If this patient chose a date of appointment, then redirect him to route('appointments.create') to select desired time for this appointment
+            if( $request_validated['patient_last_appointment_date'] !== '' )
             {
-                return Responses::Success( 'show_patient_time_appointment_table', [ 'choose_time_for_this_date' => $request->get('patient_last_appointment_date') , 'choose_time_for_this_patient_id' => $encrypted_choose_time_for_this_patient_id ] , $response_message.'<br>Now choose an appointment time on date '.$request->get('patient_last_appointment_date') ) ;
+                return Responses::success( 'appointments.create', [ 'encrypted_patient_id' => $choose_appointment_time_for_this_encrypted_patient_id , 'date' => $request_validated['patient_last_appointment_date'] ] , $response_message.'<br>Now choose an appointment time on date '.$request_validated['patient_last_appointment_date'] ) ;
             }
-            // If this patient DOES NOT have a selected date of appointment then redirect him to route('submit_new_patient_form') with success message
-            return Responses::Success( 'submit_new_patient_form', '' , $response_message ) ;
+            // If this patient DOES NOT have a selected date of appointment then redirect him to route('patients.create') with success message
+            return Responses::success( 'patients.create', '' , $response_message ) ;
         }
-        catch (QueryException $exception)
+        catch (\Exception $exception)
         {
-            return Responses::FailedWithException( 'submit_new_patient_form' , '' , '<span style="color:blue;">Your New Patient Was NOT Successfully Submitted!</span>' , $exception ) ;
+            return Responses::failedWithException( 'patients.create' , '' , '<span style="color:blue;">Your New Patient Was NOT Successfully Submitted!</span>' , $exception ) ;
         }
     }
 
-    public function edit( $edit_this_patient_id )
+    public function show(PatientsShowRequest $request)
     {
         try
         {
-            $decrypted_edit_this_patient_id = encrypt_decrypt('decrypt', $edit_this_patient_id ) ;
-            return Responses::view('back.submit_new_patient_form' ,
+            $result_of_run_search_form = patients_general_info::fetchResultOfSearchForm() ;
+            if( !$result_of_run_search_form )
+            {
+                return Responses::failed('patients.index', '', 'We have an Error to search for the word you entered!');
+            }
+
+            if ($result_of_run_search_form->count() === 0)
+            {
+                return Responses::failed('patients.index', '', 'There is not any result for <b style="color:blue;" >'.$request->search_text.'</b>');
+            }
+
+            return Responses::view('back.patients_index',
+           [
+               'title_of_page'              => 'Search Patients',
+               'result_run_search_form'     => $result_of_run_search_form,
+               'success_message_of_search'  => '<b style="color:blue;" >'.$result_of_run_search_form->count().'</b> results found for <b style="color:blue;" >"'.$request->search_text.'"</b>'
+           ]);
+        }
+        catch (\Exception $exception)
+        {
+            return Responses::failedWithException( 'patients.index' , '' ,'We have an error to search for this word <b style="color:blue;" >'.$request->search_text.'</b>' , $exception ) ;
+        }
+    }
+
+    public function edit( $encrypted_patient_id )
+    {
+        try
+        {
+            $decrypted_patient_id = encryptDecrypt('decrypt', $encrypted_patient_id ) ;
+            return Responses::view('back.patients_create' ,
             [
                 'title_of_page'                           => 'Edit Patient Information' ,
-                'result_edit_patient_form'                => patients_general_info::fetch_info_of_this_patient_id($decrypted_edit_this_patient_id) ,
-                'result_show_all_appointments_of_this_id' => patients_appointment::result_show_all_appointments_of_this_id($decrypted_edit_this_patient_id) ,
-                'number_of_total_clinic_patients'         => patients_general_info::number_of_total_clinic_patients()
+                'result_edit_patient_form'                => patients_general_info::fetchInfoOfThisPatientId($decrypted_patient_id) ,
+                'result_show_all_appointments_of_this_id' => patients_appointment::resultShowAllAppointmentsOfThisId($decrypted_patient_id) ,
+                'number_of_total_clinic_patients'         => patients_general_info::numberOfTotalClinicPatients()
             ] ) ;
         }
-        catch ( QueryException $exception )
+        catch (\Exception $exception )
         {
-            return Responses::FailedWithException( 'submit_new_patient_form' , '' ,'<span style="color:blue;font-weight:bolder;">We have an error to show information of this patient</span>' , $exception ) ;
+            return Responses::failedWithException( 'patients.create' , '' ,'<span style="color:blue;font-weight:bolder;">We have an error to show information of this patient</span>' , $exception ) ;
         }
     }
 
-    public function update( Request $request )
+    public function update( PatientsUpdateRequest $request )
     {
-        $decrypted_update_this_patient_id = encrypt_decrypt('decrypt', $request->update_this_patient_id );
-        $encrypted_update_this_patient_id = $request->update_this_patient_id ;
-
-        $response_message_success = '<b>'.$request->post('patient_first_name') . ' ' . $request->post('patient_last_name') . '\'s Information Successfully Updated</b>' ;
-        $response_message_failed  = '<span style="color:blue;font-weight:bolder;">' . $request->post('patient_first_name') . ' ' . $request->post('patient_last_name') . ' Information WAS NOT Updated</span>' ;
+        $validated                        = $request->validated();
+        $decrypted_update_this_patient_id = encryptDecrypt('decrypt', $request->encrypted_patient_id );
+        $response_message_success         = '<b>'.$validated['patient_first_name'].' '.$validated['patient_last_name'].'\'s Information Successfully Updated</b>' ;
+        $response_message_failed          = '<span style="color:blue;font-weight:bolder;">' . $validated['patient_first_name'].' '.$validated['patient_last_name'].' Information WAS NOT Updated</span>' ;
         try
         {
-            $result_update_this_patient_id = patients_general_info::result_update_this_patient_id($decrypted_update_this_patient_id,$request->all()) ;
-            if(!$result_update_this_patient_id)
+            if( !(patients_general_info::resultUpdateThisPatientId($decrypted_update_this_patient_id, $request->validated())) )
             {
-                return Responses::Success( 'edit_patient_form' , $encrypted_update_this_patient_id , $response_message_failed ) ;
+                return Responses::success( 'patients.edit' , $request->encrypted_patient_id , $response_message_failed ) ;
             }
-            return Responses::Success( 'edit_patient_form' , $encrypted_update_this_patient_id , $response_message_success ) ;
+            return Responses::success( 'patients.edit' , $request->encrypted_patient_id , $response_message_success ) ;
         }
-        catch (QueryException $exception)
+        catch (\Exception $exception)
         {
-            return Responses::Success( 'edit_patient_form' , $encrypted_update_this_patient_id , $response_message_failed ) ;
+            return Responses::success( 'patients.edit' , $request->encrypted_patient_id , $response_message_failed ) ;
         }
     }
 
@@ -98,45 +136,15 @@ class PatientsGeneralInfoController extends Controller
         $response_message_failed  = 'We have an error to delete this patient Number<br> Maybe there is an appointment or a financial transaction related to this patient,<br> So if you want to delete this patient<br> at first, you need to delete all appointments and financial transactions related to him' ;
         try
         {
-            $result_delete_this_patient_id = patients_general_info::delete_this_patient_id(encrypt_decrypt('decrypt', $request->delete_this_patient_id ) ) ;
-            if(!$result_delete_this_patient_id)
+            if( !(patients_general_info::deleteThisPatientId( encryptDecrypt('decrypt', $request->encrypted_patient_id ) )) )
             {
-                return Responses::Failed( 'submit_new_patient_form' , '' , $response_message_failed ) ;
+                return Responses::failed( 'patients.create' , '' , $response_message_failed ) ;
             }
-            return Responses::Success( 'submit_new_patient_form' , '' , $response_message_success ) ;
+            return Responses::success( 'patients.create' , '' , $response_message_success ) ;
         }
-        catch (QueryException $exception)
+        catch (\Exception $exception)
         {
-            return Responses::FailedWithException( 'submit_new_patient_form' , '' , $response_message_failed , $exception ) ;
-        }
-    }
-
-    public function show_patient_search_from()
-    {
-        return Responses::view('back.show_patient_search_from' , [ 'title_of_page' => 'Search Patients' ] );
-    }
-
-    public function run_patient_search_form( run_patient_search_formRequest $request )
-    {
-        try
-        {
-            $result_of_run_search_form = patients_general_info::fetch_result_of_search_from() ;
-
-            if( $result_of_run_search_form->count() === 0 )
-            {
-                return Responses::Failed( 'show_patient_search_from' , '' ,'There is not any result for <b style="color:blue;" >'.request()->post('search_text').'</b>' ) ;
-            }
-
-            return Responses::view('back.show_patient_search_from',
-            [
-                'title_of_page'             => 'Search Patients' ,
-                'result_run_search_form'    => $result_of_run_search_form ,
-                'success_message_of_search' => '<b style="color:blue;" >'.$result_of_run_search_form->count().'</b> results found for <b style="color:blue;" >"'.request()->post('search_text').'"</b>'
-            ] ) ;
-        }
-        catch (QueryException $exception)
-        {
-            return Responses::FailedWithException( 'show_patient_search_from' , '' ,'We have an error to search for this word <b style="color:blue;" >'.request()->post('search_text').'</b>' , $exception ) ;
+            return Responses::failedWithException( 'patients.create' , '' , $response_message_failed , $exception ) ;
         }
     }
 }

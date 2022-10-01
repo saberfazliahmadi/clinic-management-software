@@ -21,12 +21,12 @@ class ValidatorChangePasswordFromRequest
         // The entered current password does not matches with Auth::user()->password
         if (!( Hash::check($request->current_password, Auth::user()->password) ))
         {
-            return Responses::Failed('show_change_password_form' , '' , '<b style="color:blue;" >The current password you entered does not matches with your password<br>Try it again</b>' ) ;
+            return Responses::failed('show_change_password_form' , '' , '<b style="color:blue;" >The current password you entered does not matches with your password<br>Try it again</b>' ) ;
         }
         // The entered current password does not match Re-EnterPassword
         if( $request->new_password !== $request->retype_new_password )
         {
-            return Responses::Failed('show_change_password_form' , '' , '<b style="color:blue;" >Your News Password is NOT EQUAL to Re-Type the New Password <br> Try it again</b>' ) ;
+            return Responses::failed('show_change_password_form' , '' , '<b style="color:blue;" >Your News Password is NOT EQUAL to Re-Type the New Password <br> Try it again</b>' ) ;
         }
 
         return $next($request);

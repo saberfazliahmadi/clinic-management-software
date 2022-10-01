@@ -115,14 +115,14 @@ label
                             <ul class="nav side-menu" >
                             
                                 <li>
-                                    <a href="#search_form" id="various222" style="font-size: 16px!important;font-weight:bolder;" >                              
+                                    <a href="#patients_search_form" id="various222" style="font-size: 16px!important;font-weight:bolder;" >                              
                                         <span class="glyphicon glyphicon-search" aria-hidden="true" style="float:left;margin-top:15px;color: #E7E7E7;font-weight: bolder!important;margin-top:0px;" ></span>
                                         &nbsp;&nbsp;' . $cms_menu_title_data_from_middleware[14] . '
                                     </a>
                                 </li>
                                 
                                 <li>
-                                    <a href="'.route('submit_new_patient_form').'" style="font-size: 16px!important;font-weight:bolder;" >
+                                    <a href="'.route('patients.create').'" style="font-size: 16px!important;font-weight:bolder;" >
                                         <span class="glyphicon glyphicon-plus" aria-hidden="true" style="float:left;margin-top:15px;color: #E7E7E7;font-weight: bolder!important;margin-top:0px;" ></span>
                                         &nbsp;&nbsp;' . $cms_menu_title_data_from_middleware[15] . '
                                     </a>
@@ -133,13 +133,13 @@ label
                     </div>
                     <!-- /sidebar menu -->
                     
-                    <!-- START of login fancy console panel search_form -->
+                    <!-- START of login fancy console panel patients_search_form -->
                     <div style="display:none;" >
-                    <div id="search_form" style="overflow:scroll;width:100%!important;height:650px;overflow-x: hidden;" >
-                    
-                    
-                        <form method="post" action="'.route('run_patient_search_form').'" id="medical-file-form" data-parsley-validate style="padding-left:50px;padding-right:50px;"  >
+                    <div id="patients_search_form" style="overflow:scroll;width:100%!important;height:650px;overflow-x: hidden;" >
+                              
+                        <form method="GET" action="'.route('patients.show').'" id="medical-file-form" data-parsley-validate style="padding-left:50px;padding-right:50px;"  >
                             <input type="hidden" name="_token" value="'.csrf_token().'" >
+                            <input type="hidden" name="_method" value="get" >
                             
                             <center>
                                 <h4 class="col-md-12 col-sm-12 col-xs-12 text-center" align="center" style="margin-top:40px;" >
@@ -192,7 +192,7 @@ label
                     
                     </div>
                     </div>
-                    <!-- END of login fancy console panel search_form -->
+                    <!-- END of login fancy console panel patients_search_form -->
                     
                 </div>
             </div>
@@ -224,7 +224,7 @@ label
                                     
                                     <li>
                                         <span style="float:left;margin-top:15px;margin-left:15px;" >
-                                            <a href="'.route('show_form_of_appointments_on_specific_date').'">
+                                            <a href="'.route('appointments.index').'">
                                                 <span class="fa fa-list" aria-hidden="true" style="float:left;font-size:26px;margin-left:0px;"></span>
                                                 ' . $cms_menu_title_data_from_middleware[18] . '
                                             </a>
@@ -233,7 +233,7 @@ label
                                     
                                     <li>
                                         <span style="float:left;margin-top:15px;margin-left:15px;" >
-                                            <a href="'.route('show_form_of_appointments_on_specific_date').'">
+                                            <a href="'.route('appointments.index').'">
                                                 <span class="glyphicon glyphicon-envelope" aria-hidden="true" style="float:left;font-size:26px;margin-left:0px;"></span>
                                                 ' . $cms_menu_title_data_from_middleware[19] . '
                                             </a>
@@ -242,7 +242,7 @@ label
                                     
                                     <li>
                                         <span style="float:left;margin-top:15px;margin-left:15px;" >
-                                            <a href="'.route('show_financial_management_main_page').'">
+                                            <a href="'.route('financial.main.page').'">
                                                 <span class="fa fa-money" aria-hidden="true" style="float:left;font-size:26px;margin-left:0px;"></span>
                                                 ' . $cms_menu_title_data_from_middleware[20] . '
                                             </a>
@@ -258,7 +258,7 @@ label
                                         </span>
                                     </li>' ;
 
-                                    // If the user has a upper level of global.admin_level then show route show_main_settings_of_software_form to him
+                                    // If the user has an upper level of global.admin_level then show route show_main_settings_of_software_form to him
                                     if( Auth::user()->user_level >= config('global.admin_level') )
                                     {
                                         echo '
@@ -410,46 +410,38 @@ if ( isset($count_of_appointment_in_header) && $count_of_appointment_in_header >
     // START of foreach.
     foreach ($result_middleware_provide_header_appointments_data_on_today as $key_appointment)
     {
-        $encrypted_patient_id_header = encrypt_decrypt('encrypt', $key_appointment->patient_id) ;
+        $encrypted_patient_id_header = encryptDecrypt('encrypt', $key_appointment->patient_id) ;
         // Add 1 to previous value
         ++$count_trick;
 
         // Let to make a trick to show Good time OR Bad time for user appointment.
+        $appointment_status_div_color_trick = 'black;' ;
+        $trick_of_show_check_box            = '<div style="width:20px;">&nbsp;</div>' ;
+        $opacity_appointment_trick 	        = 'opacity: 0.5;' ;
+
         if( $key_appointment->appointment_status === '1' && $key_appointment->appointment_canceling_status == 'f' )
         {
             $appointment_status_div_color_trick = '#green;' ;
-
+            $trick_of_show_check_box = '<input type="radio" name="appointment_id" value="'.$key_appointment->appointment_id.'" class="flat" required >' ;
             if( Auth::user()->telegram === 'true')
-            { $trick_of_show_check_box = 'Approved <input type="radio" name="appointment_id" value="'.$key_appointment->appointment_id.'" class="flat" required >' ;}
-            else{ $trick_of_show_check_box = '<input type="radio" name="appointment_id" value="'.$key_appointment->appointment_id.'" class="flat" required >' ; }
-
+            { $trick_of_show_check_box = 'Approved <input type="radio" name="appointment_id" value="'.$key_appointment->appointment_id.'" class="flat" required >' ; }
             $opacity_appointment_trick = '' ;
         }
         elseif( $key_appointment->appointment_status === '1' && $key_appointment->appointment_canceling_status === NULL )
         {
             $appointment_status_div_color_trick = '#orange;' ;
-
+            $trick_of_show_check_box = '<input type="radio" name="appointment_id" value="'.$key_appointment->appointment_id.'" class="flat" required >' ;
             if( Auth::user()->telegram === 'true')
             { $trick_of_show_check_box = 'Not Defined <input type="radio" name="appointment_id" value="'.$key_appointment->appointment_id.'" class="flat" required >' ;}
-            else{ $trick_of_show_check_box = '<input type="radio" name="appointment_id" value="'.$key_appointment->appointment_id.'" class="flat" required >' ; }
-
             $opacity_appointment_trick = '' ;
         }
         elseif( $key_appointment->appointment_canceling_status == 't' )
         {
             $appointment_status_div_color_trick = 'red;' ;
-
+            $trick_of_show_check_box = '<input type="radio" name="appointment_id" value="'.$key_appointment->appointment_id.'" class="flat" required >' ;
             if( Auth::user()->telegram === 'true')
             { $trick_of_show_check_box = 'Canceled <input type="radio" name="appointment_id" value="'.$key_appointment->appointment_id.'" class="flat" required >' ; }
-            else{ $trick_of_show_check_box = '<input type="radio" name="appointment_id" value="'.$key_appointment->appointment_id.'" class="flat" required >' ; }
-
             $opacity_appointment_trick = 'opacity: 0.5;' ;
-        }
-        else
-        {
-            $appointment_status_div_color_trick = 'black;' ;
-            $trick_of_show_check_box            = '<div style="width:20px;">&nbsp;</div>' ;
-            $opacity_appointment_trick 	        = 'opacity: 0.5;' ;
         }
 
         echo '
@@ -476,14 +468,10 @@ if ( isset($count_of_appointment_in_header) && $count_of_appointment_in_header >
                         '.$key_appointment->appointment_time.'
                         <br>
                         <span title="'.$key_appointment->appointment_service_type.'" style="font-size:12px;">' ;
-                            if(strlen($key_appointment->appointment_service_type) > 30 )
-                            {
-                                echo substr($key_appointment->appointment_service_type, 0, 30).'...' ;
-                            }
+                            if(strlen($key_appointment->appointment_service_type) > 30)
+                            { echo substr($key_appointment->appointment_service_type, 0, 30).'...' ; }
                             else
-                            {
-                                echo $key_appointment->appointment_service_type ;
-                            }
+                            { echo $key_appointment->appointment_service_type ; }
                         echo '
                         </span>
                          
@@ -510,7 +498,7 @@ if ( isset($count_of_appointment_in_header) && $count_of_appointment_in_header >
                             else
                             {
                                 echo '
-                                <a href="'.route('edit_patient_form', $encrypted_patient_id_header ).'" >
+                                <a href="'.route('patients.edit', $encrypted_patient_id_header ).'" >
                                     <div style="float:left;font-size:13px;text-align:left;" class="col-md-12 col-sm-12 col-xs-12" >
                                         <span class="glyphicon glyphicon-remove" aria-hidden="true" ></span>
                                         NOT Connected to Bot
@@ -580,22 +568,15 @@ if ( isset($count_of_appointment_in_header) && $count_of_appointment_in_header >
             
             <div class="col-md-2" style="padding-right:0px;padding-left:0px;margin-right:0px;margin-left:0px;margin-top:10px;" >';
 
-                // This variable should always have a value cause it will use on route parameters
-                // which is a require parameter for routing
+                $trick_of_variable_appointment_child_dr_related_name = '' ;
                 if( strlen($key_appointment->appointment_child_dr_related_name) > 0 )
-                {
-                    $trick_of_variable_appointment_child_dr_related_name = $key_appointment->appointment_child_dr_related_name ;
-                }
-                else
-                {
-                    $trick_of_variable_appointment_child_dr_related_name = 'free' ;
-                }
+                { $trick_of_variable_appointment_child_dr_related_name = $key_appointment->appointment_child_dr_related_name ; }
 
                 if( Auth::user()->user_level >= config('global.admin_level'))
                 {
                     echo '
                     <div style="'.$opacity_appointment_trick.';margin-top:12px;" >
-                        <a title="Display EHR Document" href="'.route('show_patients_ehr_document_page', ['patient_id' => $encrypted_patient_id_header, 'related_appointment_id' => $key_appointment->appointment_id, 'child_dr_related_name' => $trick_of_variable_appointment_child_dr_related_name]).'" style="float:left;color: white; font-size: 13px; float: left;background-color:#5A738E;border:1px solid #5A738E; " class="uiuxtrick btn btn-success" >
+                        <a title="Display EHR Document" href="'.route('ehr.create', [ 'encrypted_patient_id' => $encrypted_patient_id_header, 'appointment_id' => $key_appointment->appointment_id , 'child_dr_related_name' => $trick_of_variable_appointment_child_dr_related_name ]).'" style="float:left;color: white; font-size: 13px; float: left;background-color:#5A738E;border:1px solid #5A738E; " class="uiuxtrick btn btn-success" >
                             <i class="fa fa-clone"></i>
                             EHR Doc
                         </a>
@@ -614,7 +595,7 @@ if ( isset($count_of_appointment_in_header) && $count_of_appointment_in_header >
                     }
 
                     echo '
-                    <a href="'.route('edit_patient_form', $encrypted_patient_id_header ).'" title="Edit Patient Information" style="float:left;color: white; font-size: 13px; float: left;background-color:#5A738E;border:1px solid #5A738E; " class="uiuxtrick btn btn-success" >
+                    <a href="'.route('patients.edit', $encrypted_patient_id_header ).'" title="Edit Patient Information" style="float:left;color: white; font-size: 13px; float: left;background-color:#5A738E;border:1px solid #5A738E; " class="uiuxtrick btn btn-success" >
                          <i class="fa fa-edit" aria-hidden="true" ></i>
                          Edit
                     </a>
@@ -670,7 +651,7 @@ if ( isset($count_of_appointment_in_header) && $count_of_appointment_in_header >
                 </div>
                 
                 <div style="'.$opacity_appointment_trick.'" >
-                    <a href="'.route('delete_this_appointment_by_this_id' , [ 'appointment_id' => $key_appointment->appointment_id , 'show_all_appointments_this_date' => $key_appointment->appointment_date ] ).'" style="float:left;color: white; font-size: 13px; float: left;background-color:#5A738E;border:1px solid #5A738E; " class="btn btn-success" ' ; ?> onclick="return confirm('Are you sure to delete this appointment?') <?php echo '" title="Delete This Appointment" >
+                    <a href="'.route('appointments.destroy' , [ 'appointment_id' => $key_appointment->appointment_id ] ).'" style="float:left;color: white; font-size: 13px; float: left;background-color:#5A738E;border:1px solid #5A738E; " class="btn btn-success" ' ; ?> onclick="return confirm('Are you sure to delete this appointment?') <?php echo '" title="Delete This Appointment" >
                         <i class="fa fa-trash-o" aria-hidden="true" ></i>
                         Delete
                     </a>
@@ -726,10 +707,7 @@ else
     if($errors->any())
     {
         foreach($errors->all() as $error)
-        {
-            echo '
-            <div class="col-md-10 col-sm-10 col-xs-10 alert alert-danger" role="alert" style="float:right;" > <button type="button" class="close" data-dismiss="alert" aria-label="Close"  ><span aria-hidden="true">&times;</span></button> <h4 style="font-size:25px;text-align:center!important;overflow-wrap: break-word; word-wrap: break-word; hyphens: auto;" >'.$error.'</h4></div>' ;
-        }
+        { echo '<div class="col-md-10 col-sm-10 col-xs-10 alert alert-danger" role="alert" style="float:right;" > <button type="button" class="close" data-dismiss="alert" aria-label="Close"  ><span aria-hidden="true">&times;</span></button> <h4 style="font-size:25px;text-align:center!important;overflow-wrap: break-word; word-wrap: break-word; hyphens: auto;" >'.$error.'</h4></div>' ;  }
     }
 
     if( Session::get('success_message') !== '' && session()->has('success_message') )
@@ -737,5 +715,4 @@ else
         echo '<div class="col-md-12 col-sm-12 col-xs-12" style="float:right!important;" ><div class="col-md-10 col-sm-10 col-xs-10 alert alert-success" role="alert" style="text-align:center!important;overflow-wrap: break-word; word-wrap: break-word; hyphens: auto;float:right!important;" > <button type="button" class="close" data-dismiss="alert" aria-label="Close" style="font-size:50px;margin-left:15px!important;" ><span aria-hidden="true">&times;</span></button><h3>'.Session::get('success_message').'</h3></div></div>' ;
         session()->pull('success_message') ;
     }
-
 ?>

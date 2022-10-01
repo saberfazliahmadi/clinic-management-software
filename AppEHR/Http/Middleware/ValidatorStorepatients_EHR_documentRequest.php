@@ -27,7 +27,7 @@ class ValidatorStorepatients_EHR_documentRequest
             "keyboard_chart_3"             => "",
             "keyboard_chart_4"             => "",
             "doc_date_created"             => "",
-            "patient_id"                   => 'required' ,
+            "encrypted_patient_id"         => 'required' ,
             "patient_name"                 => "",
             "EHR_document_related_appointment_id" => "",
             "EHR_document_related_clinic_doctor_name" => "" ,

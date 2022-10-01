@@ -78,9 +78,9 @@ echo '
 	</div>
     
     <div class="col-md-12 col-sm-12 col-xs-12" style="margin-top:70px;" >  
-        <form method="post" action="'.route('store_patient_time_appointment_table').'" id="medical-file-form" data-parsley-validate >
+        <form method="post" action="'.route('appointments.store').'" id="medical-file-form" data-parsley-validate >
             <input type="hidden" name="_token" value="'.csrf_token().'" >
-            <input type="hidden" name="_method" value="put" >
+            <input type="hidden" name="_method" value="post" >
             <input type="hidden" name="choose_time_for_this_patient_id" value="'.$choose_time_for_this_patient_id.'" >
             <input type="hidden" name="choose_time_for_this_date" value="'.$choose_time_for_this_date.'" >' ;
 

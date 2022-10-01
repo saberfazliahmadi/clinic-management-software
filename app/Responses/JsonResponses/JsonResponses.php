@@ -13,18 +13,18 @@ class JsonResponses
                                 ]);
     }
 
-    public static function redirect_to_previous_page($Message)
+    public static function redirectToPreviousPage($Message)
     {
         return redirect()->back()->with( [ 'success_message' => $Message ] ) ;
     }
 
-    public static function Success( $RouteName , $RouteParameters , $Message )
+    public static function success( $RouteName , $RouteParameters , $Message )
     {
-        LogTypes::RunNormalLog('Success Action: '.$Message) ;
+        LogTypes::runNormalLog('Success Action: '.$Message) ;
 
         if( $RouteName === 'back_to_previous_page' )
         {
-            return self::redirect_to_previous_page($Message) ;
+            return self::redirectToPreviousPage($Message) ;
         }
 
         return response()->json([
@@ -32,13 +32,13 @@ class JsonResponses
                                 ]);
     }
 
-    public static function Failed( $RouteName , $RouteParameters , $Message )
+    public static function failed( $RouteName , $RouteParameters , $Message )
     {
-        LogTypes::RunNormalLog('Failed Action: '.$Message) ;
+        LogTypes::runNormalLog('Failed Action: '.$Message) ;
 
         if( $RouteName === 'back_to_previous_page' )
         {
-            return self::redirect_to_previous_page($Message) ;
+            return self::redirectToPreviousPage($Message) ;
         }
 
         return response()->json([
@@ -47,18 +47,18 @@ class JsonResponses
     }
 
     // The $Exception Parameter will use for DB::Transaction on middleware => TransactionOnDatabaseToRollbackWhenExceptionsHappen
-    public static function FailedWithException( $RouteName , $RouteParameters , $Message, $Exception )
+    public static function failedWithException( $RouteName , $RouteParameters , $Message, $Exception )
     {
         $Exception_trick = '' ;
         if( strlen($Exception) > 0)
         {
             $Exception_trick = $Exception ;
         }
-        LogTypes::RunNormalLog('Exception: '.$Exception_trick) ;
+        LogTypes::runNormalLog('Exception: '.$Exception_trick) ;
 
         if( $RouteName === 'back_to_previous_page' )
         {
-            return self::redirect_to_previous_page($Message) ;
+            return self::redirectToPreviousPage($Message) ;
         }
 
         return response()->json([
@@ -69,7 +69,7 @@ class JsonResponses
 
     public static function FailedAndLogout( $Message )
     {
-        LogTypes::RunNormalLog('Failed Action: '.$Message) ;
+        LogTypes::runNormalLog('Failed Action: '.$Message) ;
         Auth::logout();
 
         return response()->json([

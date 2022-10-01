@@ -201,7 +201,7 @@ return [
         App\Providers\RouteServiceProvider::class,
 
         // I added this ehrServiceProvider manually
-        AppEHR\Providers\ehrServiceProvider::class,
+        AppEHR\Providers\EhrServiceProvider::class,
 
     ],
 

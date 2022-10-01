@@ -1,10 +1,9 @@
 <?php
-
 namespace App\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
 
-class Storefinancial_transactionRequest extends FormRequest
+class StoreFinancialTransactionRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.

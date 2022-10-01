@@ -41,7 +41,7 @@ echo '
 			
 			  <hr style="width:1px;">
 			  <div class="form-group col-md-12 col-sm-12 col-xs-12" >
-				<form method="get" action="'.route('run_financial_transaction_reporting_form').'?#report_result" >
+				<form method="get" action="'.route('financial.show').'?#report_result" >
                     <input type="hidden" name="_token" value="'.csrf_token().'" >
                     
                     <div class="form-group col-md-12 col-sm-12 col-xs-12" >
@@ -279,7 +279,7 @@ echo '
                                     <center>
                                         ' . $key_receive_transaction->financial_transaction_date . ' - ' . $key_receive_transaction->financial_transaction_time . '
                                         <br>
-                                        <a href="' . route('delete_this_financial_transaction', $key_receive_transaction->financial_transaction_id) . '" style="margin-top:10px;float:none!important;color: white; font-size: 13px; float: left;background-color:#5A738E;border:1px solid #5A738E; " class="btn btn-success" onclick="return confirm(\'Are you sure to delete This Financial Transaction?\') " title="Delete This Financial Transaction">
+                                        <a href="' . route('financial.destroy', $key_receive_transaction->financial_transaction_id) . '" style="margin-top:10px;float:none!important;color: white; font-size: 13px; float: left;background-color:#5A738E;border:1px solid #5A738E; " class="btn btn-success" onclick="return confirm(\'Are you sure to delete This Financial Transaction?\') " title="Delete This Financial Transaction">
                                             <i class="fa fa-trash-o" aria-hidden="true"></i>
                                             Delete
                                         </a>
@@ -369,7 +369,7 @@ echo '
                                         <center>
                                             ' . $key_pay_transaction->financial_transaction_date . ' - ' . $key_pay_transaction->financial_transaction_time . '
                                             <br>
-                                            <a href="' . route('delete_this_financial_transaction', $key_pay_transaction->financial_transaction_id) . '" style="margin-top:10px;float:none!important;color: white; font-size: 13px; float: left;background-color:#5A738E;border:1px solid #5A738E; " class="btn btn-success" onclick="return confirm(\'Are you sure to delete This Financial Transaction?\') " title="Delete This Financial Transaction">
+                                            <a href="' . route('financial.destroy', $key_pay_transaction->financial_transaction_id) . '" style="margin-top:10px;float:none!important;color: white; font-size: 13px; float: left;background-color:#5A738E;border:1px solid #5A738E; " class="btn btn-success" onclick="return confirm(\'Are you sure to delete This Financial Transaction?\') " title="Delete This Financial Transaction">
                                                 <i class="fa fa-trash-o" aria-hidden="true"></i>
                                                 Delete
                                             </a>

@@ -5,7 +5,6 @@ use Database\Factories\PatientsAppointmentFactory;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
-use phpDocumentor\Reflection\Utils;
 
 class patients_appointment extends Model
 {
@@ -36,41 +35,41 @@ class patients_appointment extends Model
         return new PatientsAppointmentFactory() ;
     }
 
-    static function appointments_on_specific_date($show_all_appointments_on_this_date)
+    static function appointmentsOnSpecificDate($show_all_appointments_on_this_date)
     {
         return self::
         join('patients_general_infos' , 'patients_general_infos.patient_id' , '=' , 'patients_appointments.appointment_patient_related_id')
-        ->equal_this_to_admin_id_from_user_table('patients_appointments.appointment_dr_related_id')
+        ->equalThisToAdminIdFromUserTable('patients_appointments.appointment_dr_related_id')
         ->where('patients_appointments.appointment_date' , $show_all_appointments_on_this_date )
         ->oldest('patients_appointments.appointment_time')
         ->get() ;
     }
 
-    static function result_show_all_appointments_of_this_id($edit_this_patient_id)
+    static function resultShowAllAppointmentsOfThisId($decrypted_patient_id)
     {
         return self::
-        where('appointment_patient_related_id' , $edit_this_patient_id)
-        ->equal_this_to_admin_id_from_user_table('appointment_dr_related_id')
+        where('appointment_patient_related_id' , $decrypted_patient_id)
+        ->equalThisToAdminIdFromUserTable('appointment_dr_related_id')
         ->latest('appointment_id')
         ->get() ;
     }
 
-    static function delete_this_appointment_id($request_appointment_id)
+    static function deleteThisAppointmentId($request_appointment_id)
     {
         return self::
         select( 'appointment_id'  , 'appointment_dr_related_id' )
         ->where( 'appointment_id' , $request_appointment_id )
-        ->equal_this_to_admin_id_from_user_table('appointment_dr_related_id')
+        ->equalThisToAdminIdFromUserTable('appointment_dr_related_id')
         ->limit('1')
         ->delete() ;
     }
 
-    static function result_appointments_of_patients_on_this_time_and_date($choose_time_for_this_date, $appointment_time_trick)
+    static function resultAppointmentsOfPatientsOnThisTimeAndDate($choose_time_for_this_date, $appointment_time_trick)
     {
         return self::
         join('patients_general_infos' , 'patients_general_infos.patient_id' , '=' , 'patients_appointments.appointment_patient_related_id')
         ->select('patients_appointments.*' , 'patients_general_infos.patient_id' , 'patients_general_infos.patient_first_name' , 'patients_general_infos.patient_last_name' , 'patients_general_infos.patient_mobile_number' )
-        ->equal_this_to_admin_id_from_user_table('patients_appointments.appointment_dr_related_id')
+        ->equalThisToAdminIdFromUserTable('patients_appointments.appointment_dr_related_id')
         ->where( [
                     'patients_appointments.appointment_date' => $choose_time_for_this_date ,
                     'patients_appointments.appointment_time' => $appointment_time_trick
@@ -78,11 +77,11 @@ class patients_appointment extends Model
         ->get();
     }
 
-    static function store_new_patient_appointment_time($choose_time_for_this_patient_id,$choose_time_for_this_date,$appointment_time,$appointment_child_dr_related_name,$appointment_service_type)
+    static function storeNewPatientAppointmentTime($choose_time_for_this_patient_id, $choose_time_for_this_date, $appointment_time, $appointment_child_dr_related_name, $appointment_service_type)
     {
         return self::create(
             [
-                'appointment_dr_related_id'         => find_admin_id_from_users_table() ,
+                'appointment_dr_related_id'         => findAdminIdFromUsersTable() ,
                 'appointment_patient_related_id'    => $choose_time_for_this_patient_id ,
                 'appointment_date'                  => $choose_time_for_this_date ,
                 'appointment_time'                  => $appointment_time ,
@@ -106,7 +105,7 @@ class patients_appointment extends Model
                  ]);
     }
 
-    public static function fetch_appointment_data( $request_appointment_id , $admin_id_from_users_table )
+    public static function fetchAppointmentData($request_appointment_id , $admin_id_from_users_table )
     {
         return self::
         select('appointment_id' , 'appointment_dr_related_id' , 'appointment_patient_related_id' , 'appointment_child_dr_related_name' , 'appointment_service_type' )
@@ -124,7 +123,7 @@ class patients_appointment extends Model
         select( 'appointment_id' , 'appointment_dr_related_id' )
         ->where( [
                      'appointment_id'            => $trick_of_appointment_id ,
-                     'appointment_dr_related_id' => find_admin_id_from_users_table()
+                     'appointment_dr_related_id' => findAdminIdFromUsersTable()
                  ])
         ->limit('1')
         ->count() ;

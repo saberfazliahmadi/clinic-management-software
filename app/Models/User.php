@@ -152,7 +152,7 @@ class User extends Authenticatable
     public static function all_users_related_to_this_super_admin()
     {
         return self::
-        where( 'parent_id' , Auth::user()->id )
+        where( 'parent_id' , Auth::id() )
         ->get();
     }
 

@@ -46,7 +46,7 @@ class Kernel extends HttpKernel
             \Illuminate\Routing\Middleware\SubstituteBindings::class,
         ],
 
-        'protected_page_accessible_for_user_and_admin_and_super_admin' =>
+        'protectedPageAccessibleForUserAndAdminAndSuperAdmin' =>
         [
             \App\Http\Middleware\Authenticate::class,
             \App\Http\Middleware\PreventingBannedUsers::class ,
@@ -54,7 +54,7 @@ class Kernel extends HttpKernel
             \App\Http\Middleware\ProvideHeaderData::class,
         ],
 
-        'protected_page_accessible_for_admin_and_super_admin' =>
+        'protectedPageAccessibleForAdminAndSuperAdmin' =>
         [
             \App\Http\Middleware\Authenticate::class,
             \App\Http\Middleware\PreventingBannedUsers::class ,
@@ -62,7 +62,7 @@ class Kernel extends HttpKernel
             \App\Http\Middleware\ProvideHeaderData::class,
         ],
 
-        'protected_page_accessible_for_super_admin' =>
+        'protectedPageAccessibleForSuperAdmin' =>
         [
             \App\Http\Middleware\Authenticate::class,
             \App\Http\Middleware\PreventingBannedUsers::class ,
@@ -94,15 +94,13 @@ class Kernel extends HttpKernel
 
         'ValidatorIfUserClickOnButtonSendPatientToDoctorRoom' => \App\Http\Middleware\ValidatorIfUserClickOnButtonSendPatientToDoctorRoom::class,
 
-        'ValidatorStorepatients_general_infoRequest'  => \App\Http\Middleware\ValidatorStorepatients_general_infoRequest::class,
-        'ValidatorUpdatepatients_general_infoRequest' => \App\Http\Middleware\ValidatorUpdatepatients_general_infoRequest::class,
-        'ValidatorChangePasswordFromRequest'          => \App\Http\Middleware\ValidatorChangePasswordFromRequest::class,
-        'ValidatorMainSettingsSoftwareFormRequest'    => \App\Http\Middleware\ValidatorMainSettingsSoftwareFormRequest::class,
-
         'CheckValidityOfPatientID'                    => \App\Http\Middleware\CheckValidityOfPatientID::class,
         'CheckValidityOfAppointmentID'                => \App\Http\Middleware\CheckValidityOfAppointmentID::class,
-
+        'CheckMobileNumberDuplication'                => \App\Http\Middleware\CheckMobileNumberDuplication::class,
         'CheckValidityOfEHRID'                        => \AppEHR\Http\Middleware\CheckValidityOfEHRID::class,
+
+        'ValidatorChangePasswordFromRequest'          => \App\Http\Middleware\ValidatorChangePasswordFromRequest::class,
+        'ValidatorMainSettingsSoftwareFormRequest'    => \App\Http\Middleware\ValidatorMainSettingsSoftwareFormRequest::class,
         'ValidatorStorepatients_EHR_documentRequest'  => \AppEHR\Http\Middleware\ValidatorStorepatients_EHR_documentRequest::class,
         'ValidatorUpdatepatients_EHR_documentRequest' => \AppEHR\Http\Middleware\ValidatorUpdatepatients_EHR_documentRequest::class,
 

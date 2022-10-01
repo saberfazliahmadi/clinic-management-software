@@ -5,7 +5,6 @@ use App\Http\Controllers\Controller;
 use App\Models\financial_transaction;
 use App\Models\patients_appointment;
 use App\Responses\Responses;
-use Illuminate\Database\QueryException;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\View;
 use Illuminate\Http\Request;
@@ -34,7 +33,11 @@ class HeaderController extends Controller
     {
         try
         {
-            $result_appointment_data = patients_appointment::fetch_appointment_data( $request_appointment_id , $admin_id_from_users_table ) ;
+            $result_appointment_data = patients_appointment::fetchAppointmentData($request_appointment_id , $admin_id_from_users_table ) ;
+            if(!$result_appointment_data)
+            {
+                return Responses::failed( 'back_to_previous_page' , '' , '<b>We have an error to fetch data of this appointment!' ) ;
+            }
 
             foreach ( $result_appointment_data as $key )
             {
@@ -67,9 +70,9 @@ class HeaderController extends Controller
             $money_receive_header_console,
             $appointment_child_dr_related_name) ;
         }
-        catch (QueryException $exception)
+        catch (\Exception $exception)
         {
-            return Responses::FailedWithException( 'home' , '' , '<span style="color:blue;">We have an error to store financial transaction for this appointment</span>' , $exception ) ;
+            return Responses::failedWithException( 'home' , '' , '<span style="color:blue;">We have an error to store financial transaction for this appointment</span>' , $exception ) ;
         }
     }
 
@@ -78,7 +81,7 @@ class HeaderController extends Controller
         try
         {
             $show_all_appointments_on_this_date  = date('Y-m-d');
-            $admin_id_from_users_table           = find_admin_id_from_users_table() ;
+            $admin_id_from_users_table           = findAdminIdFromUsersTable() ;
             $money_receive_header_console        = $this->PrepareMoneyReceivedVariable( $request->money_receive ) ;
 
             patients_appointment::UpdateThisAppointmentFromWatingStatusToDoneStatus( $request->appointment_id , $admin_id_from_users_table , $money_receive_header_console ) ;
@@ -87,11 +90,11 @@ class HeaderController extends Controller
             {
                 $this->StoreNewFinancialTransactionForThisAppointment( $show_all_appointments_on_this_date , $admin_id_from_users_table , $request->appointment_id , $money_receive_header_console ) ;
             }
-            return Responses::Success( 'back_to_previous_page' , '' , '<b>The Patient Successfully Sent to Doctors Room' ) ;
+            return Responses::success( 'back_to_previous_page' , '' , '<b>The Patient Successfully Sent to Doctors Room' ) ;
         }
-        catch (QueryException $exception)
+        catch (\Exception $exception)
         {
-            return Responses::FailedWithException( 'home' , '' , '<span style="color:blue;">We have an error to send this patient to doctors room</span>' , $exception ) ;
+            return Responses::failedWithException( 'home' , '' , '<span style="color:blue;">We have an error to send this patient to doctors room</span>' , $exception ) ;
         }
     }
 
@@ -110,7 +113,7 @@ class HeaderController extends Controller
         $show_all_appointments_on_this_date  = date('Y-m-d');
         try
         {
-            $admin_id_from_users_table  = find_admin_id_from_users_table() ;
+            $admin_id_from_users_table  = findAdminIdFromUsersTable() ;
             $today_appointments         = patients_appointment::AllAppointmentsOnThisDate( $admin_id_from_users_table , $show_all_appointments_on_this_date ) ;
             $count_of_today_appointment = $today_appointments->count() ;
 
@@ -123,14 +126,14 @@ class HeaderController extends Controller
             }
 
             View::share([
-                'result_middleware_provide_header_appointments_data_on_today' => $today_appointments ,
-                'count_of_appointment_in_header'      => $count_of_today_appointment ,
-                'count_of_appointment_in_header_for_patients_on_waiting_situation' => $count_of_today_waiting_appointments ,
-                'financial_management_data_in_header' => $financial_management_data_in_header ,
-                'cms_menu_title_data_from_middleware' => explode(",", Auth::user()->cms_menu_title)
+            'result_middleware_provide_header_appointments_data_on_today'      => $today_appointments ,
+            'count_of_appointment_in_header'                                   => $count_of_today_appointment ,
+            'count_of_appointment_in_header_for_patients_on_waiting_situation' => $count_of_today_waiting_appointments ,
+            'financial_management_data_in_header'                              => $financial_management_data_in_header ,
+            'cms_menu_title_data_from_middleware'                              => explode(",", Auth::user()->cms_menu_title)
             ]) ;
         }
-        catch (QueryException $exception)
+        catch (\Exception $exception)
         {
             return Responses::FailedAndLogout( '<span style="color:blue;">We have an error to show List of Appointments time on Date '.$show_all_appointments_on_this_date.'</span>' ) ;
         }

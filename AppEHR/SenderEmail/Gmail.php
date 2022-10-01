@@ -23,11 +23,11 @@ class Gmail
 
         if (Mail::failures())
         {
-            LogTypes::RunNormalLog('The Gmail Email was not sent') ;
+            LogTypes::runNormalLog('The Gmail Email was not sent') ;
         }
         else
         {
-            LogTypes::RunNormalLog('The Gmail Email was Successfully sent') ;
+            LogTypes::runNormalLog('The Gmail Email was Successfully sent') ;
         }
     }
 }

@@ -1,12 +1,12 @@
 <?php
 use Illuminate\Support\Facades\Auth;
 
-// Add your custom css files here. (will located in header)
+// Add your custom css files here. (will be located in header)
 $extra_links_header = '' ;
-// Add your custom js files here. (will located in footer)
+// Add your custom js files here. (will be located in footer)
 $extra_links_footer = '' ;
 
-// Call the header layout by require_once
+// Call the header layout
 require_once '../resources/views/back/layout/header.php' ;
 
 ?>
@@ -253,7 +253,7 @@ echo '
     
   <div class="col-md-12 col-sm-12 col-xs-12" >
 
-      <form id="medical-file-form" method="POST" action="'.route('store_patients_ehr_document_page' , [ 'patient_id' => $EHR_document_patient_related_id ]).'" class="controls export-svg" enctype="multipart/form-data" onsubmit="setFormSubmitting()" >
+      <form id="medical-file-form" method="POST" action="'.route('ehr.store' , [ 'encrypted_patient_id' => $EHR_document_patient_related_id_encrypted ]).'" class="controls export-svg" enctype="multipart/form-data" onsubmit="setFormSubmitting()" >
             <input type="hidden" name="_token" value="'.csrf_token().'" >
             <input type="hidden" name="_method" value="post" >
           <div class="x_content" >
@@ -328,7 +328,7 @@ echo '
                                 <input type="text" name="typed_keyboard_savabegh" style="width:100%;text-align:right;direction:rtl;font-size:22px;height:40px;border: 1px solid #CCC;" placeholder="Type your favorite '.$cms_menu_title[5].'" >
                             </div>';
 
-                            // If there was any more description value then show it
+                            // If more description value exist, then show it
                             if( strlen($result_of_patients_general_infos->patient_more_description) > 0 )
                             {
                                 echo '
@@ -1014,102 +1014,48 @@ echo '
                         <!-- END of login fancy console panel chart -->';
                         }
 
-
-                        //if ( strlen($cms_menu_title[7]) > 0 || strlen($cms_menu_title[8]) > 0 )
-                        //{
-                        //
-                        //    echo '
-                        //    <li role="presentation" >
-                        //        <a id="various222" href="#new_patient_uniqe_doc_paper_plz_console" type="button" aria-controls="profile" role="tab" data-toggle="tab" >
-                        //            New Paper
-                        //        </a>
-                        //    </li>
-                        //
-                        //    <!-- START of login fancy console panel new_patient_uniqe_doc_paper_plz_console -->
-                        //    <div style="display:none;" >
-                        //        <div id="new_patient_uniqe_doc_paper_plz_console" style="height:550px;width:900px!important;overflow-x: hidden!important;padding-bottom:30px;padding-top:35px;" >
-                        //            <div class="col-md-12 col-sm-12 col-xs-12 text-center" >
-                        //                <center>
-                        //
-                        //                    <div class="col-md-12 col-sm-12 col-xs-12" style="font-size:26px;margin-top:25px;" >
-                        //                        If the patient\'s current tab is full, you can add a new tab with a pre-defined design
-                        //                    </div>' ;
-                        //
-                        //                    if ( strlen($cms_menu_title[7]) > 0 )
-                        //                    {
-                        //                        echo '
-                        //                        <br>
-                        //                        <hr style="width:1px;" >
-                        //                        <br>
-                        //                        <hr style="width:1px;" >
-                        //                        <a id="various222" href="#new_patient_uniqe_doc_paper_plz" type="button" aria-controls="profile" role="tab" data-toggle="tab" class="btn btn-success btn-group col-md-10 col-sm-10 col-xs-10" style="float:none;font-size:25px;" >
-                        //                            Add New '.$cms_menu_title[7].' Paper
-                        //                        </a>
-                        //                        <br>
-                        //                        <hr style="width:1px;" >' ;
-                        //                    }
-                        //                    if ( strlen($cms_menu_title[8]) > 0 )
-                        //                    {
-                        //                        echo '
-                        //                        <a id="various222" href="#new_patient_uniqe_doc_paper_plz_3" type="button" aria-controls="profile" role="tab" data-toggle="tab" class="btn btn-success btn-group col-md-10 col-sm-10 col-xs-10" style="float:none;font-size:25px;" >
-                        //                             Add New '.$cms_menu_title[8].' Paper
-                        //                        </a>' ;
-                        //                    }
-                        //
-                        //                echo '
-                        //                </center>
-                        //            </div>
-                        //        </div>
-                        //    </div>
-                        //    <!-- END of login fancy console panel new_patient_uniqe_doc_paper_plz_console -->';
-                        //}
-
                 echo '
                 </ul>
 
 <div class="well col-md-12 col-sm-12 col-xs-12" style="min-height:52px;" >
 
-    <div style="float:right;font-size:16px;margin-right:9px;" >Name: '.$result_of_patients_general_infos->patient_first_name.' '.$result_of_patients_general_infos->patient_last_name.'</div>
+<div style="float:right;font-size:16px;margin-right:9px;" >Name: '.$result_of_patients_general_infos->patient_first_name.' '.$result_of_patients_general_infos->patient_last_name.'</div>
 
-    <div style="float:right;font-size:16px;margin-right:10px;" >' ;
-        if($result_of_patients_general_infos->patient_relationship_status === 'single')
-        {
-            echo 'Marital Status: Single | ' ;
-        }
-        elseif($result_of_patients_general_infos->patient_relationship_status === 'married')
-        {
-            echo 'Marital Status: Married | ' ;
-        }
-        elseif($result_of_patients_general_infos->patient_relationship_status === 'divorced')
-        {
-            echo 'Marital Status: Divorced | ' ;
-        }
-        echo '
-    </div>';
+<div style="float:right;font-size:16px;margin-right:10px;" >' ;
+    if($result_of_patients_general_infos->patient_relationship_status === 'single')
+    {
+        echo 'Marital Status: Single | ' ;
+    }
+    elseif($result_of_patients_general_infos->patient_relationship_status === 'married')
+    {
+        echo 'Marital Status: Married | ' ;
+    }
+    elseif($result_of_patients_general_infos->patient_relationship_status === 'divorced')
+    {
+        echo 'Marital Status: Divorced | ' ;
+    }
+    echo '
+</div>';
 
 if( isset($EHR_document_related_clinic_doctor_name) )
 {
-    echo '
-    <div style="float:right;font-size:16px;margin-right:10px;" >Doctor: '.$EHR_document_related_clinic_doctor_name.' | </div>' ;
+    echo '<div style="float:right;font-size:16px;margin-right:10px;" >Doctor: '.$EHR_document_related_clinic_doctor_name.' | </div>' ;
 }
 
 if( strlen($result_of_patients_general_infos->patient_birth_day) > 0 )
 {
-    echo '
-    <div style="float:right;font-size:16px;margin-right:10px;" >Birthday: '.$result_of_patients_general_infos->patient_birth_day.' | </div>' ;
+    echo '<div style="float:right;font-size:16px;margin-right:10px;" >Birthday: '.$result_of_patients_general_infos->patient_birth_day.' | </div>' ;
 }
 
 if( Auth::user()->telegram === 'true' )
 {
     if( strlen($result_of_patients_general_infos->patient_from_external_platform_id) > 0  )
     {
-        echo '
-        <div style="float:right;font-size:16px;margin-right:10px;" ><span class="glyphicon glyphicon-ok" aria-hidden="true" ></span> Connected to Bot | </div>' ;
+        echo '<div style="float:right;font-size:16px;margin-right:10px;" ><span class="glyphicon glyphicon-ok" aria-hidden="true" ></span> Connected to Bot | </div>' ;
     }
     else
     {
-        echo '
-        <div style="float:right;font-size:16px;margin-right:10px;" ><span class="glyphicon glyphicon-remove" aria-hidden="true" style="color:red;opacity:50%;" ></span> Dose not Connected to Bot | </div>' ;
+        echo '<div style="float:right;font-size:16px;margin-right:10px;" ><span class="glyphicon glyphicon-remove" aria-hidden="true" style="color:red;opacity:50%;" ></span> Dose not Connected to Bot | </div>' ;
     }
 }
 
@@ -1124,11 +1070,13 @@ echo '
     <span class="glyphicon glyphicon-arrow-down" aria-hidden="true"></span>
 </div>
 
-<input type="hidden" name="patient_id" value="'.$EHR_document_patient_related_id.'" >
-<input type="hidden" name="patient_name" value="'.encrypt_decrypt('encrypt',$result_of_patients_general_infos->patient_first_name.' '.$result_of_patients_general_infos->patient_last_name).'" >
-<input  type="hidden" name="EHR_document_related_appointment_id" value="'.$EHR_document_related_appointment_id.'">
-<input  type="hidden" name="EHR_document_related_clinic_doctor_name" value="'.$EHR_document_related_clinic_doctor_name.'" >
-<button type="submit" name="final" class="btn btn-success btn-lg btn-block col-md-12 col-sm-12 col-xs-12 uiuxtrick" data-action="export-as-svg" value="Export as SVG" style="font-size:25px;position: fixed;bottom: 0px;right: 0px;z-index: 1;" onclick="this.disabled=true;this.form.submit();formSubmitting=true;" ><i class="fa fa-folder-open-o" aria-hidden="true"></i> Save</button>
+<input  type="hidden"  name="encrypted_patient_id"                    value="'.$EHR_document_patient_related_id_encrypted.'" >
+<input  type="hidden"  name="encrypted_patient_name"                  value="'.encryptDecrypt('encrypt', $result_of_patients_general_infos->patient_first_name.' '.$result_of_patients_general_infos->patient_last_name).'" >
+<input  type="hidden"  name="EHR_document_related_appointment_id"     value="'.$EHR_document_related_appointment_id.'" >
+<input  type="hidden"  name="EHR_document_related_clinic_doctor_name" value="'.$EHR_document_related_clinic_doctor_name.'" >
+
+<button type="submit"  name="final" class="btn btn-success btn-lg btn-block col-md-12 col-sm-12 col-xs-12 uiuxtrick" style="font-size:25px;position: fixed;bottom: 0px;right: 0px;z-index: 1;" onclick="this.disabled=true;this.form.submit();formSubmitting=true;" ><i class="fa fa-folder-open-o" aria-hidden="true"></i> Save</button>
+
                     </div>
                     <!-- END Tab panes -->
 
@@ -1141,6 +1089,6 @@ echo '
     </div>
 </div>' ;
 
-// Call the footer layout by require_once
+// Call the footer layout
 require_once '../resources/views/back/layout/footer.php' ;
 ?>

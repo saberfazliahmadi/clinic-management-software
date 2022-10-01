@@ -27,7 +27,7 @@ class PatientsGeneralInfoFactory extends Factory
             'patient_last_name'             => $this->faker->lastName(),
             'patient_mobile_number'         => $this->faker->unique->phoneNumber ,
             'patient_last_appointment_date' => date('Y-m-d') ,
-            'patient_nationality_number'    => $this->faker->creditCardNumber ,
+            'patient_nationality_number'    => $this->faker->unique()->creditCardNumber ,
             'patient_phone_number'          => $this->faker->unique->numerify('###########') ,
             'patient_last_appointment_time' => $this->faker->time ,
             'patient_email_address'         => $this->faker->unique()->safeEmail(),

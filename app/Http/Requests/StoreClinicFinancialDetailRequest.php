@@ -1,10 +1,9 @@
 <?php
-
 namespace App\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
 
-class Updatepatients_appointmentRequest extends FormRequest
+class StoreClinicFinancialDetailRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.

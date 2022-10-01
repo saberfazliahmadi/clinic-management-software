@@ -1,11 +1,11 @@
 <?php
 use Illuminate\Support\Facades\Auth;
-// Add your custom css files here. (will located in header)
+// Add your custom css files here. (will be located in header)
 $extra_links_header = '
 <!-- MD.BootstrapPersianDateTimePicker css -->
 <link href="'.url('back/vendors/MD.BootstrapPersianDateTimePicker/Content/MdBootstrapPersianDateTimePicker/jquery.Bootstrap-PersianDateTimePicker.css').'" rel="stylesheet">' ;
 
-// Add your custom js files here. (will located in footer)
+// Add your custom js files here. (will be located in footer)
 // <script src="'.url('back/vendors/MD.BootstrapPersianDateTimePicker/Scripts/MdBootstrapPersianDateTimePicker/jalaali.js').'"></script>
 $extra_links_footer = '
 <!-- MD.BootstrapPersianDateTimePicker js -->
@@ -28,7 +28,7 @@ echo '
 	</div>
     
     <div class="col-md-12 col-sm-12 col-xs-12">  
-        <form method="get" action="'.route('run_show_form_of_appointments_on_specific_date').'" id="medical-file-form" data-parsley-validate  >
+        <form method="get" action="'.route('appointments.show').'" id="medical-file-form" data-parsley-validate  >
         
             <input type="hidden" name="_token" value="'.csrf_token().'" >
             
@@ -129,7 +129,7 @@ echo '
                     // START of foreach.
                     foreach ($result_show_form_of_appointments_on_specific_date as $key)
                     {
-                        $encrypted_patient_id = encrypt_decrypt('encrypt', $key->patient_id) ;
+                        $encrypted_patient_id = encryptDecrypt('encrypt', $key->patient_id) ;
                         // Add 1 to previous value
                         ++$count_trick;
 
@@ -150,7 +150,7 @@ echo '
 
                             if( Auth::user()->telegram === 'true')
                             { $trick_of_show_check_box            = 'Not Defined <input type="radio" name="appointment_id" value="'.$key->appointment_id.'" class="flat" required >' ;}
-                            else{ $trick_of_show_check_box            = '<div style="width:20px;">&nbsp;</div>' ; }
+                            else{ $trick_of_show_check_box        = '<div style="width:20px;">&nbsp;</div>' ; }
 
                             $opacity_appointment_trick 	        = '' ;
                         }
@@ -160,7 +160,7 @@ echo '
 
                             if( Auth::user()->telegram === 'true')
                             { $trick_of_show_check_box            = 'Canceled <input type="radio" name="appointment_id" value="'.$key->appointment_id.'" class="flat" required >' ; }
-                            else{ $trick_of_show_check_box            = '<div style="width:20px;">&nbsp;</div>' ; }
+                            else{ $trick_of_show_check_box        = '<div style="width:20px;">&nbsp;</div>' ; }
 
                             $opacity_appointment_trick          = 'opacity: 0.5;' ;
                         }
@@ -229,7 +229,7 @@ echo '
                                             else
                                             {
                                                 echo '
-                                                <a href="' . route('edit_patient_form', $encrypted_patient_id ) . '" >
+                                                <a href="' . route('patients.edit', $encrypted_patient_id ) . '" >
                                                     <div style="float:left;font-size:13px;" class="col-md-12 col-sm-12 col-xs-12" >
                                                         NOT Connected to BALE Bot
                                                         <span class="glyphicon glyphicon-remove" aria-hidden="true" ></span>
@@ -251,7 +251,7 @@ echo '
                                     echo '
                                     <div style="float:right;margin-right:15px;margin-top:12px;" class="col-md-12 col-sm-12 col-xs-12" >
                                         <select name="money_receive[]" id="dates-field2" class="multiselect-ui form-control" multiple="multiple" style="font-size:18px!important;" >';
-                                            // Explode and make array type variable
+                                            // Explode and make an array type variable
                                             $financial_management = explode(",",$financial_management_data) ;
                                             // Estimate how many index exist in this variable
                                             $financial_management_number = count($financial_management);
@@ -286,14 +286,23 @@ echo '
                             </div>
                         </div>
                             
-                        <div class="col-md-2" style="padding-right:0px;padding-left:0px;margin-right:0px;margin-left:0px;margin-top:10px;" >
-                            
-                            <div class="col-md-12" style="'.$opacity_appointment_trick.';" >
-                                <a title="Display EHR Document" href="'.route('show_patients_ehr_document_page' , [ 'patient_id' => $encrypted_patient_id ] ).'" style="float:left;color: white; font-size: 13px; float: left;background-color:#5A738E;border:1px solid #5A738E; " class="uiuxtrick btn btn-success" >
-                                    <i class="fa fa-clone"></i>
-                                    EHR Document
-                                </a>
-                            </div>
+                        <div class="col-md-2" style="padding-right:0px;padding-left:0px;margin-right:0px;margin-left:0px;margin-top:10px;" >';
+
+                        $trick_of_variable_appointment_child_dr_related_name = '' ;
+                        if( strlen($key->appointment_child_dr_related_name) > 0 )
+                        { $trick_of_variable_appointment_child_dr_related_name = $key->appointment_child_dr_related_name ; }
+
+                        if( Auth::user()->user_level >= config('global.admin_level'))
+                            {
+                                echo '
+                                <div class="col-md-12" style="'.$opacity_appointment_trick.';" >
+                                    <a title="Display EHR Document" href="'.route('ehr.create', ['encrypted_patient_id' => $encrypted_patient_id, 'appointment_id' => $key->appointment_id, 'child_dr_related_name' => $trick_of_variable_appointment_child_dr_related_name]).'" style="float:left;color: white; font-size: 13px; float: left;background-color:#5A738E;border:1px solid #5A738E; " class="uiuxtrick btn btn-success" >
+                                        <i class="fa fa-clone"></i>
+                                        EHR Document
+                                    </a>
+                                </div>';
+                            }
+                            echo '
                             <div class="col-md-12" style="'.$opacity_appointment_trick.';" > ';
                                 // If the patient has mobile number and active ROBOT then make link of send message by BOT.
                                 if( strlen($key->patient_mobile_number) > 0  && strlen($key->patient_from_external_platform_id) > 0)
@@ -305,7 +314,7 @@ echo '
                                 }
 
                                 echo '
-                                <a href="'.route('edit_patient_form', $encrypted_patient_id ).'" style="float:left;color: white; font-size: 13px; float: left;background-color:#5A738E;border:1px solid #5A738E; " class="uiuxtrick btn btn-success" >
+                                <a href="'.route('patients.edit', $encrypted_patient_id ).'" style="float:left;color: white; font-size: 13px; float: left;background-color:#5A738E;border:1px solid #5A738E; " class="uiuxtrick btn btn-success" >
                                      <i class="fa fa-edit" aria-hidden="true" ></i>
                                      Edit Patient Info
                                 </a>
@@ -319,48 +328,48 @@ echo '
                                 <div style="display:none;" >
                                     <div id="a'.$count_trick.'" style="overflow:scroll;width:900px;height:600px;overflow-x: hidden;padding-left:20px;padding-right:20px;padding-top:15px;" >
                                     
-                                    <h3 style="line-height: inherit;" >
-                                        Full Name: '.$key->patient_first_name.' '.$key->patient_last_name.'
-                                        <hr>
-                                        Mobile Number: '.$key->patient_mobile_number.'
-                                        <hr>
-                                        Last Appointment Date & time: '.$key->patient_last_appointment_date.' '.$key->patient_last_appointment_time.'
-                                        <hr>
-                                        Last Appointment Service Type: '.$key->appointment_service_type.'
-                                        <hr>
-                                        Birthday: '.$key->patient_birth_day.'
-                                        <hr>
-                                        Nationality Number: '.$key->patient_nationality_number.'
-                                        <hr>
-                                        Address: '.$key->patient_address.'
-                                        <hr>
-                                        Phone Number: '.$key->patient_phone_number.'
-                                        <hr>
-                                        Phone Mobile number: '.$key->patient_mobile_number.'
-                                        <hr>
-                                        Email Address: '.$key->patient_email_address.'
-                                        <hr>
-                                        Relationship Status: '.$key->patient_relationship_status.'
-                                        <hr>
-                                        Gender: '.$key->patient_gender.'
-                                        <hr>
-                                        Submission Type: '.$key->patient_submit_type.'
-                                        <hr>
-                                        Surgery History: '.$key->patient_surgery_history.'
-                                        <hr>
-                                        Disease Background: '.$key->patient_disease_background.'
-                                        <hr>
-                                        Medication history: '.$key->patient_medication_history.'
-                                        <hr>
-                                        More Description: '.$key->patient_more_description.'
-                                    </h3>
+                                        <h3 style="line-height: inherit;" >
+                                            Full Name: '.$key->patient_first_name.' '.$key->patient_last_name.'
+                                            <hr>
+                                            Mobile Number: '.$key->patient_mobile_number.'
+                                            <hr>
+                                            Last Appointment Date & time: '.$key->patient_last_appointment_date.' '.$key->patient_last_appointment_time.'
+                                            <hr>
+                                            Last Appointment Service Type: '.$key->appointment_service_type.'
+                                            <hr>
+                                            Birthday: '.$key->patient_birth_day.'
+                                            <hr>
+                                            Nationality Number: '.$key->patient_nationality_number.'
+                                            <hr>
+                                            Address: '.$key->patient_address.'
+                                            <hr>
+                                            Phone Number: '.$key->patient_phone_number.'
+                                            <hr>
+                                            Phone Mobile number: '.$key->patient_mobile_number.'
+                                            <hr>
+                                            Email Address: '.$key->patient_email_address.'
+                                            <hr>
+                                            Relationship Status: '.$key->patient_relationship_status.'
+                                            <hr>
+                                            Gender: '.$key->patient_gender.'
+                                            <hr>
+                                            Submission Type: '.$key->patient_submit_type.'
+                                            <hr>
+                                            Surgery History: '.$key->patient_surgery_history.'
+                                            <hr>
+                                            Disease Background: '.$key->patient_disease_background.'
+                                            <hr>
+                                            Medication history: '.$key->patient_medication_history.'
+                                            <hr>
+                                            More Description: '.$key->patient_more_description.'
+                                        </h3>
                                      
                                     </div>
                                 </div>
                             </div>
                             
                             <div class="col-md-12" style="'.$opacity_appointment_trick.'" >
-                                <a href="'.route('delete_this_appointment_by_this_id' , [ 'appointment_id' => $key->appointment_id , 'show_all_appointments_this_date' => $show_all_appointments_on_this_date ] ).'" style="float:left;color: white; font-size: 13px; float: left;background-color:#5A738E;border:1px solid #5A738E; " class="uiuxtrick btn btn-success" ' ; ?> onclick="return confirm('Are you sure to delete this appointment?') <?php echo '" title="Delete This Appointment" >
+                                <a href="'.route('appointments.destroy' , [ 'appointment_id' => $key->appointment_id ] ).'" style="float:left;color: white; font-size: 13px; float: left;background-color:#5A738E;border:1px solid #5A738E; " class="uiuxtrick btn btn-success" ' ; ?> onclick="return confirm('Are you sure to delete this appointment?') <?php echo '" title="Delete This Appointment" >
                                     <i class="fa fa-trash-o" aria-hidden="true" ></i>
                                     Delete
                                 </a>

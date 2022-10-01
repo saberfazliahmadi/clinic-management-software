@@ -1,6 +1,8 @@
 <?php
-// Add your custom css files here. (will located in header)
-use Illuminate\Support\Facades\Auth;$extra_links_header = '
+// Add your custom css files here. (will be located in header)
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Route;
+$extra_links_header = '
 <!-- MD.BootstrapPersianDateTimePicker css -->
 <link href="'.url('back/vendors/MD.BootstrapPersianDateTimePicker/Content/MdBootstrapPersianDateTimePicker/jquery.Bootstrap-PersianDateTimePicker.css').'" rel="stylesheet">' ;
 
@@ -34,14 +36,13 @@ echo '
     
     <div class="col-md-12 col-sm-12 col-xs-12">' ;
 
-    // START of If user came to this page from route('submit_new_patient_form').
-    if( $title_of_page === 'Submit a New Patient' )
+    // START of If user came to this page from route('patients.create')
+    if( Route::currentRouteName() === 'patients.create' )
     {
         echo '
-        <form method="POST" action="' . route('store_new_patient_form') . '" data-parsley-validate class="form-horizontal form-label-left" style="text-align:left!important;direction:ltr!important;font-size:15pt;" id="medical-file-form" >
-            
-            <input type="hidden" name="_token" value="' . csrf_token() . '" >
-            <input type="hidden" name="_method" value="put" >
+        <form method="post" action="'.route('patients.store').'" data-parsley-validate class="form-horizontal form-label-left" style="text-align:left!important;direction:ltr!important;font-size:15pt;" id="medical-file-form" >
+            <input type="hidden" name="_token" value="'.csrf_token().'" >
+            <input type="hidden" name="_method" value="post" >
             
           <div class="form-group">
             <label class="control-label col-md-3 col-sm-3 col-xs-12" for="first-name" title="Maximum 35 words" >
@@ -268,18 +269,19 @@ echo '
               
         </form>';
     }
-    // END of If user came to this page from route('submit_new_patient_form').
-    // START of If user came to this page from route('update_this_patient').
+    // END of If user came to this page from route('patients.create')
+
+    // START of If user came to this page from route('patients.update')
     else
     {
         // Encrypt patient_id for 1 time and use it for several time on below code
-        $encrypted_patient_id = encrypt_decrypt('encrypt', $result_edit_patient_form->patient_id );
+        $encrypted_patient_id = encryptDecrypt('encrypt', $result_edit_patient_form->patient_id );
 
         echo '
-        <form method="POST" action="'.route('update_this_patient' , $encrypted_patient_id ).'" data-parsley-validate class="form-horizontal form-label-left" style="text-align:left!important;direction:ltr!important;font-size:15pt;" id="medical-file-form" >
-            
+        <form method="POST" action="'.route('patients.update' , $encrypted_patient_id ).'" data-parsley-validate class="form-horizontal form-label-left" style="text-align:left!important;direction:ltr!important;font-size:15pt;" id="medical-file-form" >
             <input type="hidden" name="_token" value="' . csrf_token() . '" >
             <input type="hidden" name="_method" value="put" >
+            
               <div class="form-group">
                 <label class="control-label col-md-3 col-sm-3 col-xs-12" for="first-name" title="Maximum 35 words">
                     Name
@@ -324,7 +326,7 @@ echo '
               </div> ' ;
 
                 // If the length of this variable was more than 2 character,
-                // it means this patient has a least 1 appointment in database.
+                // it means this patient has at least 1 appointment in database.
                 if( strlen($result_show_all_appointments_of_this_id ) > 2 )
                 {
                   echo '
@@ -390,7 +392,7 @@ echo '
                                     
                                     <span>
                                         <div >
-                                            <a href="'.route('delete_this_appointment_by_this_id' , [ 'appointment_id' => $key_2->appointment_id , 'show_all_appointments_this_date' => $key_2->appointment_date ] ).'" style="color: white; font-size: 13px; background-color:#5A738E;border:1px solid #5A738E; " class="btn btn-success" ' ; ?> onclick="return confirm('Are you sure to delete this appointment?') <?php echo '" title="Delete This Appointment" >
+                                            <a href="'.route('appointments.destroy' , [ 'appointment_id' => $key_2->appointment_id ] ).'" style="color: white; font-size: 13px; background-color:#5A738E;border:1px solid #5A738E; " class="btn btn-success" title="Delete this Appointment" ' ; ?> onclick="return confirm('Are you sure to delete this appointment?')" <?php echo ' >
                                                 <i class="fa fa-trash-o" aria-hidden="true" ></i>
                                                 Delete
                                             </a>
@@ -435,14 +437,14 @@ echo '
                 </div>
                 
               </div>
-              
+                           
             <br>
             <center>
                 <div class="col-md-12 col-sm-12 col-xs-12">
                     <center>
                         <div class="col-md-4 col-sm-3 col-xs-3" style="float:left;font-size:13px;" >
                             <span>
-                                <a href="'.route('delete_this_patient_id' , [ 'delete_this_patient_id' => $encrypted_patient_id ] ).'" style="float:left;color: white; font-size: 13px; float: left;background-color:#5A738E;border:1px solid #5A738E; " class="btn btn-success" ' ; ?> onclick="return confirm('Are you sure to delete this patient?') <?php echo '" title="Delete This Patient" >
+                                <a href="'.route('patients.destroy' , [ 'encrypted_patient_id' => $encrypted_patient_id ] ).'" style="float:left;color: white; font-size: 13px; float: left;background-color:#5A738E;border:1px solid #5A738E;" class="btn btn-success" title="Delete This Patient" ' ; ?> onclick="return confirm('Are you sure to delete this patient?')" <?php echo ' >
                                     <i class="fa fa-trash-o" aria-hidden="true" ></i>
                                     Delete this Patient
                                 </a>
@@ -455,12 +457,12 @@ echo '
                             </span>
                         </div>' ;
 
-                        // If the user has a upper level of global.admin_level then show route show_main_settings_of_software_form to him
+                        // If the user has an upper level of global.admin_level then show route show_main_settings_of_software_form to him
                         if( Auth::user()->user_level >= config('global.admin_level') )
                         {
                             echo '
                             <div class="col-md-3 col-sm-3 col-xs-3" style="float:right;" >
-                                <a href="'.route('show_patients_ehr_document_page' , [ 'patient_id' => $encrypted_patient_id ] ).'" class="btn btn-success uiuxtrick" title="Display ' .$result_edit_patient_form->patient_first_name. ' ' .$result_edit_patient_form->patient_last_name. ' EHR Document" style="color: white; background-color:#73879C;border:1px solid #5A738E;" >
+                                <a href="'.route('ehr.create' , [ 'encrypted_patient_id' => $encrypted_patient_id ] ).'" class="btn btn-success uiuxtrick" title="Display ' .$result_edit_patient_form->patient_first_name. ' ' .$result_edit_patient_form->patient_last_name. ' EHR Document" style="color: white; background-color:#73879C;border:1px solid #5A738E;" >
                                   <i class="fa fa-clone"></i> EHR Document
                                 </a>
                             </div>';
@@ -664,7 +666,7 @@ echo '
         </form>';
 
     }
-    // END of If user came to this page from route('update_this_patient').
+    // END of If user came to this page from route('patients.update').
 
   echo '  
   </div>
@@ -720,16 +722,23 @@ include 'layout/footer.php' ;
 <!-- /jQuery Tags Input -->
 
 <?php
-// If user came to this page from route('update_this_patient')
+// If user came to this page from route('patients.update')
 if( $title_of_page === 'Edit Patient Information' )
 {
 ?>
-    <!-- Script related to redirect user if click on "Set time of Appointment" button -->
+    <!-- This javascript code is related to situation that we want to redirect user if click on "Set time of Appointment" button -->
     <script type="text/javascript">
     $('[data-name="getValue1"]').on('click', function ()
     {
-    var getValueResult = $('[data-name="datepicker1"]').MdPersianDateTimePicker('getValue');
-    window.location.href = "../show_patient_time_appointment_table/" + getValueResult + "/<?php echo $encrypted_patient_id ; ?>" ;
+        var getValueResult = $('[data-name="datepicker1"]').MdPersianDateTimePicker('getValue');
+        if (getValueResult != "")
+        {
+            window.location.href = "<?php echo url('/') ?>/appointments/create/<?php echo $encrypted_patient_id ; ?>/" + getValueResult ;
+        }
+        else
+        {
+            alert('Oops, first choose a date please!!');
+        }
     });
     </script>
 <?php

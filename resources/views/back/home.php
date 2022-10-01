@@ -24,7 +24,7 @@ echo '
       <ul class="wizard_steps">
       
         <li>
-          <a href="' . route('submit_new_patient_form') . '" >
+          <a href="' . route('patients.create') . '" >
             <span class="step_no">1</span>
             <span class="step_descr">
                 <center>
@@ -36,7 +36,7 @@ echo '
         </li>
     
         <li>
-          <a href="' . route('submit_new_patient_form') . '" >
+          <a href="' . route('patients.create') . '" >
             <span class="step_no">2</span>
             <span class="step_descr">
                 <center>
@@ -60,7 +60,7 @@ echo '
         </li>
     
         <li>
-          <a href="' . route('show_form_of_appointments_on_specific_date') . '" >
+          <a href="' . route('appointments.index') . '" >
             <span class="step_no">4</span>
             <span class="step_descr">
                 <center>

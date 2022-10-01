@@ -24,11 +24,11 @@ class Mailtrap
 
         if (Mail::failures())
         {
-            LogTypes::RunNormalLog('The Mailtrap Email was not sent') ;
+            LogTypes::runNormalLog('The Mailtrap Email was not sent') ;
         }
         else
         {
-            LogTypes::RunNormalLog('The Mailtrap Email was Successfully sent') ;
+            LogTypes::runNormalLog('The Mailtrap Email was Successfully sent') ;
         }
     }
 }

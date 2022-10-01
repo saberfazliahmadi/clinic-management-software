@@ -15,7 +15,7 @@ class CreateUsersTable extends Migration
     {
         Schema::create('users', function (Blueprint $table) {
             $table->id()->autoIncrement()->unsigned();
-            $table->integer('parent_id')->nullable()->comment('The "parent_id" should be extended from "id", in addition when a user have a "parent_id" , its "user_level" should be "global.user_level" . But if the "parent_id" was "NULL" then "user_level should be "global.admin_level" or "global.super_admin_level" , remember that the "parent_id" by default is "NULL" , You can change it Manually')->unsigned();
+            $table->integer('parent_id')->nullable()->comment('The "parent_id" field should be extended from "id" field, in addition when a user have a "parent_id" , its "user_level" field should be "global.user_level" or "global.admin_level". But if the "parent_id" was "NULL" then "user_level should be "global.super_admin_level" , remember that the "parent_id" by default is "NULL" ,So You can change it Manually.')->unsigned();
             $table->string('name')->collation('utf8_general_ci')->unique();
             $table->string('phone')->collation('utf8_general_ci')->nullable();
             $table->string('gender')->collation('utf8_general_ci')->nullable();

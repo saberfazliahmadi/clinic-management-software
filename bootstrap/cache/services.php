@@ -37,7 +37,7 @@
     33 => 'App\\Providers\\AuthServiceProvider',
     34 => 'App\\Providers\\EventServiceProvider',
     35 => 'App\\Providers\\RouteServiceProvider',
-    36 => 'AppEHR\\Providers\\ehrServiceProvider',
+    36 => 'AppEHR\\Providers\\EhrServiceProvider',
   ),
   'eager' => 
   array (
@@ -63,7 +63,7 @@
     19 => 'App\\Providers\\AuthServiceProvider',
     20 => 'App\\Providers\\EventServiceProvider',
     21 => 'App\\Providers\\RouteServiceProvider',
-    22 => 'AppEHR\\Providers\\ehrServiceProvider',
+    22 => 'AppEHR\\Providers\\EhrServiceProvider',
   ),
   'deferred' => 
   array (

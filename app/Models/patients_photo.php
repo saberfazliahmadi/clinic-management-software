@@ -26,10 +26,10 @@ class patients_photo extends Model
         return new PatientsPhotoFactory() ;
     }
 
-    static function result_of_patient_ehr_photo($request_patient_id)
+    static function resultOfPatientEhrPhoto($request_patient_id)
     {
         return self::
-        equal_this_to_admin_id_from_user_table('patients_photos_dr_related_id')
+        equalThisToAdminIdFromUserTable('patients_photos_dr_related_id')
         ->where( 'patients_photos_patient_related_id' , $request_patient_id )
         ->latest('patients_photos_id')
         ->get() ;
@@ -42,7 +42,7 @@ class patients_photo extends Model
                 'patients_photos_file_name'          => $fileName,
                 'patients_photos_file_description'   => $request_keyboard_paraclinic_file_title,
                 'patients_photos_patient_related_id' => $request_patient_id,
-                'patients_photos_dr_related_id'      => find_admin_id_from_users_table()
+                'patients_photos_dr_related_id'      => findAdminIdFromUsersTable()
             ]
         );
     }

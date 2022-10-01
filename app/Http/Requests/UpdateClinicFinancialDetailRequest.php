@@ -1,10 +1,9 @@
 <?php
-
 namespace App\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
 
-class delete_this_appointment_idRequest extends FormRequest
+class UpdateClinicFinancialDetailRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -24,7 +23,7 @@ class delete_this_appointment_idRequest extends FormRequest
     public function rules()
     {
         return [
-            'appointment_id' => 'integer|min:1' ,
+            //
         ];
     }
 }

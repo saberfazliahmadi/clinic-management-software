@@ -21,7 +21,7 @@ class  AppServiceProvider extends ServiceProvider
 
         //// This method works on Laravel 9.x (not less)
         //DB::whenQueryingForLongerThan(500, static function (Connection $connection) {
-        //    LogTypes::RunNormalLog("Database queries exceeded 5 seconds on {$connection->getName()}") ;
+        //    LogTypes::runNormalLog("Database queries exceeded 5 seconds on {$connection->getName()}") ;
         //    // or notify the development team...
         //});
     }

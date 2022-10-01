@@ -1,22 +1,20 @@
 <?php
-
-// Add your custom css files here. (will located in header)
+// Add your custom css files here. (will be located in header)
 $extra_links_header = '
 <!-- MD.BootstrapPersianDateTimePicker css -->
 <link href="'.url('back/vendors/MD.BootstrapPersianDateTimePicker/Content/MdBootstrapPersianDateTimePicker/jquery.Bootstrap-PersianDateTimePicker.css').'" rel="stylesheet">' ;
 
-// Add your custom js files here. (will located in footer)
+// Add your custom js files here. (will be located in footer)
 // <script src="'.url('back/vendors/MD.BootstrapPersianDateTimePicker/Scripts/MdBootstrapPersianDateTimePicker/jalaali.js').'"></script>
 $extra_links_footer = '
 <!-- MD.BootstrapPersianDateTimePicker js -->
-<script src="'.url('back/vendors/MD.BootstrapPersianDateTimePicker/Scripts/MdBootstrapPersianDateTimePicker/jquery.Bootstrap-PersianDateTimePicker.js').'"></script>
-' ;
+<script src="'.url('back/vendors/MD.BootstrapPersianDateTimePicker/Scripts/MdBootstrapPersianDateTimePicker/jquery.Bootstrap-PersianDateTimePicker.js').'"></script>' ;
 
-// Call the header include.
+// Call the header
 include 'layout/header.php' ;
 
 echo '
-<!-- page content -->
+<!-- Start of page content -->
 <div class="right_col" role="main" >
     
     <div style="width: 100%;height: 80px;padding: 10px 0;" >
@@ -39,7 +37,7 @@ echo '
 			  <hr style="width:1px;">
 			  <div class="form-group col-md-12 col-sm-12 col-xs-12" >
 				
-				<form method="post" action="'.route('store_show_submit_financial_transaction_form').'" >
+				<form method="post" action="'.route('financial.store').'" >
                     <input type="hidden" name="_token" value="'.csrf_token().'" >
                     
 					 <div class="col-md-12" >
@@ -49,7 +47,7 @@ echo '
 							<label class="control-label col-md-12 col-sm-12 col-xs-12" style="margin-bottom:5px;font-size:19px;font-weight:normal;" >
 								Please fill out the below * Required fields and finally click on
 								<br>
-								"Submit This Financial Transaction" at the end of this page
+								"Submit This Financial Transaction" Button at the end of this page
 							</label>
 							<label class="control-label col-md-12 col-sm-12 col-xs-12" style="margin-bottom:5px;font-size:19px;font-weight:normal;margin-top:20px;margin-bottom:10px;" >
 							
@@ -65,7 +63,7 @@ echo '
 									<div class="well col-md-12" align="center" style="float:none;" >
                                         Financial Transaction Type : 									
 									    <span class="glyphicon glyphicon-ok-circle" aria-hidden="true"></span>
-									     Receive Money
+									    Receive Money
 									    <br>
 									    Medical Document Number : 1
 									    <br>
@@ -173,18 +171,18 @@ echo '
                                     if( strlen(Auth::user()->clinic_doctors_name) > 0 )
                                     {
                                         /// Explode and make array type variable
-                                        $common_cilinic_dr_1 = explode(",", Auth::user()->clinic_doctors_name);
+                                        $common_clinic_dr_1 = explode(",", Auth::user()->clinic_doctors_name);
                                         // Estimate how many index exist in this variable
-                                        $common_cilinic_dr_number = count($common_cilinic_dr_1);
+                                        $common_clinic_dr_number = count($common_clinic_dr_1);
                                         // Make end number for loop
-                                        $end = $common_cilinic_dr_number;
+                                        $end = $common_clinic_dr_number;
                                         for ($start = '0'; $start < $end; $start++)
                                         {
-                                            if (strlen($common_cilinic_dr_1[$start]) > '0')
+                                            if (strlen($common_clinic_dr_1[$start]) > '0')
                                             {
                                                 echo '
                                                 <label class="btn btn-default well" data-toggle-class="btn-primary" style="font-size:20px;background-color:white;border: 1px solid #ccc;border-radius: 4px!important;" >
-                                                    <input type="radio" name="financial_transaction_child_dr_related_name" value="' . $common_cilinic_dr_1[$start] . '"  > ' . $common_cilinic_dr_1[$start] . '
+                                                    <input type="radio" name="financial_transaction_child_dr_related_name" value="' . $common_clinic_dr_1[$start] . '"  > ' . $common_clinic_dr_1[$start] . '
                                                 </label>' ;
                                             }
                                         }
@@ -272,7 +270,7 @@ echo '
                                             {
                                               echo '<a href="'.$key_10_transaction->financial_appointment_related_id.'" style="font-weight:bolder;font-size:22px;" ><span class="glyphicon glyphicon-file" aria-hidden="true"></span></a>' ;
                                             }
-                                            echo '
+                                        echo '
                                         </div>
                                         <div class="col-md-2 col-sm-2 col-xs-2" style="margin-top:25px;" >
                                             '.$key_10_transaction->financial_patient_related_id.'
@@ -296,7 +294,7 @@ echo '
                                             <center>
                                                 ' . $key_10_transaction->financial_transaction_date . ' - ' . $key_10_transaction->financial_transaction_time . '
                                                 <br>
-                                                <a href="'.route('delete_this_financial_transaction' , $key_10_transaction->financial_transaction_id ).'" style="margin-top:10px;float:none!important;color: white; font-size: 13px; float: left;background-color:#5A738E;border:1px solid #5A738E; " class="btn btn-success" onclick="return confirm(\'Are you sure to delete this appointment?\') " title="Delete This Financial Transaction">
+                                                <a href="'.route('financial.destroy' , $key_10_transaction->financial_transaction_id ).'" style="margin-top:10px;float:none!important;color: white; font-size: 13px; float: left;background-color:#5A738E;border:1px solid #5A738E; " class="btn btn-success" onclick="return confirm(\'Are you sure to delete this appointment?\') " title="Delete This Financial Transaction">
                                                     <i class="fa fa-trash-o" aria-hidden="true"></i>
                                                     Delete
                                                 </a>
@@ -334,10 +332,9 @@ echo '
 		  </div>
 		</div>
     </div>
-</div>      
-<!-- /page content -->' ;
+</div>
+<!-- End of page content -->' ;
 
-// Call the footer include.
+// Call the footer
 include 'layout/footer.php' ;
-?>
 
