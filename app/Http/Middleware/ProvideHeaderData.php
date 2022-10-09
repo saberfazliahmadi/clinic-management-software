@@ -12,7 +12,7 @@ class ProvideHeaderData
 {
     public function handle(Request $request, Closure $next)
     {
-        app()->call( 'App\Http\Controllers\HeaderController@ProvideHeaderDataAndShareItOnView' ) ;
+        app()->call( 'App\Http\Controllers\HeaderController@provideHeaderDataAndShareItOnView' ) ;
         return $next($request);
     }
 }

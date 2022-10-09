@@ -61,21 +61,19 @@ echo '
 								<div id="more_details" class="collapse col-md-12 col-sm-12 col-xs-12">
 								<center>
 									<div class="well col-md-12" align="center" style="float:none;" >
-                                        Financial Transaction Type : 									
-									    <span class="glyphicon glyphicon-ok-circle" aria-hidden="true"></span>
-									    Receive Money
+									    Amount of Transaction: 5000
+										<br>
+										Date of Transaction: 2022-10-02
+										<br>
+                                        Financial Transaction Type: Receive Money
 									    <br>
-									    Medical Document Number : 1
+									    Title of Transaction: payment of visit patient
+										<br>
+									    Patient Number of This Transaction: 1
 									    <br>
-										Title of Transaction : payment of visit patient
+										Transaction Related to: Dr Alex
 										<br>
-										Amount of Transaction : 5000
-										<br>
-										Date of Transaction : 16_12_2021
-										<br>
-										Time of Transaction : 13:30
-										<br>
-										Transaction Related to : Dr Alex
+										Time of Transaction: 13:30
 									</div>
 								</center>
 								</div>
@@ -166,7 +164,8 @@ echo '
                                         </div>
                                     </label>
                                     
-                                    <div class="col-md-12 col-sm-12 col-xs-12" >' ;
+                                    <div class="col-md-12 col-sm-12 col-xs-12" >
+                                    <input type="hidden" name="financial_transaction_child_dr_related_name" value="" checked="checked"  >' ;
 
                                     if( strlen(Auth::user()->clinic_doctors_name) > 0 )
                                     {

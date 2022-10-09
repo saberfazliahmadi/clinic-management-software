@@ -8,7 +8,6 @@ $extra_links_footer = '' ;
 
 // Call the header layout
 require_once '../resources/views/back/layout/header.php' ;
-
 ?>
 <style type="text/css" >
 
@@ -39,48 +38,10 @@ require_once '../resources/views/back/layout/header.php' ;
         cursor: inherit;
         display: block;
     }
-
     .checkbox
     {
         /*text-align: right;*/
         font-size: 19px;
-    }
-
-    /*.dropdown-menu*/
-    /*{*/
-    /*    width:100%;*/
-    /*}*/
-
-    .fs-container
-    {
-        width: 100%;
-        height:800px;
-        margin: auto;
-    }
-
-    .fs-container-2
-    {
-        width: 100%;
-        height:800px;
-        margin: auto;
-    }
-
-    .fs-container-3
-    {
-        width: 100%;
-        height:800px;
-        margin: auto;
-    }
-
-    .literally
-    {
-        width: 100%;
-        height:100%;
-        position: relative;
-        background-color:white;
-        background-repeat: no-repeat;
-        background-position: center;
-        background-origin: content-box;
     }
 
     #fancybox-buttons
@@ -107,7 +68,8 @@ require_once '../resources/views/back/layout/header.php' ;
     .modal.modal-fullscreen.force-fullscreen .modal-header,.modal.modal-fullscreen.force-fullscreen .modal-footer{left:0;position:absolute;right:0}
     .modal.modal-fullscreen.force-fullscreen .modal-header{top:0;}
     .modal.modal-fullscreen.force-fullscreen .modal-footer{bottom:0}
-    .modal.modal-fullscreen .modal-dialog, .modal.modal-fullscreen .modal-content {
+    .modal.modal-fullscreen .modal-dialog, .modal.modal-fullscreen .modal-content
+    {
         bottom: 0;
         left: 0;
         position: fixed;
@@ -116,47 +78,6 @@ require_once '../resources/views/back/layout/header.php' ;
         height: 100%;
         overflow-y: scroll;
     }
-
-    .well{border-top: 0px;}
-
-    .fancybox-lock , .fancybox-overlay
-    {
-        z-index: 999!important;
-        background: initial!important;
-    }
-
-    .fancybox-inner
-    {
-
-    }
-
-    .lc-clear , .lc-zoom-out , .lc-zoom-in
-    {
-        display:none !important;
-    }
-
-    #canvas-close-1 , #canvas-close-2 , #canvas-close-3
-    {
-        display:none;
-    }
-
-    /*#load*/
-    /*{*/
-    /*    width:100%;*/
-    /*    height:100%;*/
-    /*    position:fixed;*/
-    /*    z-index:9999;*/
-    /*    background:url("../../cdn/image/item/Heart_beat.gif") no-repeat center center rgba(0,0,0,0.25);*/
-    /*}*/
-
-    /*.load*/
-    /*{*/
-    /*    width:100%;*/
-    /*    height:100%;*/
-    /*    position:fixed;*/
-    /*    z-index:9999;*/
-    /*    background:url("../../cdn/image/item/Heart_beat.gif") no-repeat center center rgba(0,0,0,0.25);*/
-    /*}*/
 
     .btn-group-justified>.btn
     {
@@ -180,60 +101,6 @@ require_once '../resources/views/back/layout/header.php' ;
     {
         font-family:IRANSansNums!important;
         font-size: 14px;
-    }
-
-    .lc-undo , .lc-redo
-    {
-        display: none;
-    }
-
-    /* The device with borders */
-    .smartphone {
-        position: relative;
-        width: 360px;
-        height: 640px;
-        margin: auto;
-        border: 16px black solid;
-        border-top-width: 60px;
-        border-bottom-width: 60px;
-        border-radius: 36px;
-    }
-
-    /* The horizontal line on the top of the device */
-    .smartphone:before {
-        content: '';
-        display: block;
-        width: 60px;
-        height: 5px;
-        position: absolute;
-        top: -30px;
-        left: 50%;
-        transform: translate(-50%, -50%);
-        background: #333;
-        border-radius: 10px;
-    }
-
-    /* The circle on the bottom of the device */
-    .smartphone:after {
-        content: '';
-        display: block;
-        width: 35px;
-        height: 35px;
-        position: absolute;
-        left: 50%;
-        bottom: -65px;
-        transform: translate(-50%, -50%);
-        background: #333;
-        border-radius: 50%;
-    }
-
-    /* The screen (or content) of the device */
-    .smartphone .contentphone {
-        width: auto;
-        height: auto;
-        background: white;
-        padding-right:30px;
-        padding-left:30px;
     }
 
     .nav-tabs>li.active>a:hover {
@@ -278,12 +145,9 @@ echo '
                             // Explode and array these title
                             $common_hypersensitivity = explode(",",Auth::user()->common_hypersensitivity)  ;
                             // Estimate how many title this text has
-                            $common_hypersensitivity_number = count($common_hypersensitivity) ;
+                            $end_hypersensitivity    = count($common_hypersensitivity) ;
 
-                            // Estimate how many title exist on this text record to use of for loop.
-                            $end_hypersensitivity = $common_hypersensitivity_number ;
-
-                            // START of if dr define common_hypersensitivity.
+                            // START of if admin defined any common_hypersensitivity
                             if( $end_hypersensitivity > 1 )
                             {
                                 echo '
@@ -309,7 +173,7 @@ echo '
                                     </select>
                                 </div>';
                             }
-                            // END of if dr define common_hypersensitivity.
+                            // END of if admin defined any common_hypersensitivity
                             else
                             {
                                 echo '
@@ -317,7 +181,7 @@ echo '
                                     <a href="setting.php" class="btn btn-default" style="font-size:18px;margin-top:50px;border-radius: 4px 4px 0 0; border: 1px solid #CCC;" >
                                         <i class="fa fa-plus text-center col-md-12 col-sm-12 col-xs-12" style="font-size:46px;padding:19px;" ></i>
                                         <div class="col-md-12 col-sm-12 col-xs-12" style="padding-top:17px;padding-bottom:17px;" >
-                                            Add predefined '.$cms_menu_title[5].' to add to patient records
+                                            Add predefined '.$cms_menu_title[5].'
                                         </div>
                                     </a>
                                 </center>';
@@ -325,25 +189,26 @@ echo '
 
                             echo '
                             <div class="col-md-12 col-sm-12 col-xs-12" style="margin-top:20px;" >
-                                <input type="text" name="typed_keyboard_savabegh" style="width:100%;text-align:right;direction:rtl;font-size:22px;height:40px;border: 1px solid #CCC;" placeholder="Type your favorite '.$cms_menu_title[5].'" >
+                                <input type="text" name="typed_keyboard_savabegh" style="width:100%;font-size:22px;height:40px;border: 1px solid #CCC;" placeholder="Type your favorite '.$cms_menu_title[5].'" >
                             </div>';
 
-                            // If more description value exist, then show it
+                            $trick_of_patient_more_description = '' ;
                             if( strlen($result_of_patients_general_infos->patient_more_description) > 0 )
                             {
-                                echo '
-                                <div class="form-group col-md-12 col-sm-12 col-xs-12" style="background-color:white;margin:0px 0px 0px 0px;padding:0px 0px 0px 0px;margin-top:25px;text-align:center;background-color:white;line-height: 40px;font-size:22px; word-break: break-all;" >
-                                    <center>
-                                        <span>
-                                            More Description
-                                        </span>
-                                        <br>
-                                        <input type="text" name="patient_more_description" class="form-control" value="'.$result_of_patients_general_infos->patient_more_description.'" >
-                                    </center>
-                                </div>';
+                                $trick_of_patient_more_description = $result_of_patients_general_infos->patient_more_description ;
                             }
-
                             echo '
+                            <div class="form-group col-md-12 col-sm-12 col-xs-12" style="background-color:white;margin:0px 0px 0px 0px;padding:0px 0px 0px 0px;margin-top:25px;text-align:center;background-color:white;line-height: 40px;font-size:22px; word-break: break-all;" >
+                                <center>
+                                    <span>
+                                        More Description
+                                    </span>
+                                    <br>
+                                    <input type="text" name="patient_more_description" class="form-control" value="'.$trick_of_patient_more_description.'" >
+                                </center>
+                            </div>
+                            
+                            
                           </div>
                         
                           <div class="form-group col-md-3 col-sm-3 col-xs-12" style="margin-top: 15px;" >
@@ -413,7 +278,7 @@ echo '
                             <div id="medications_picker" style="height:550px;width:980px!important;overflow-x: hidden!important;padding-bottom:30px;padding-top:35px;" >
                         
                                 <div class="col-md-12 col-sm-12 col-xs-12" style="margin-bottom:20px;" >
-                                    <input type="text" name="keyboard_medications_picker" style="width:100%;text-align:right;direction:rtl;font-size:22px;height:40px;border: 1px solid #CCC;" placeholder="Type your favorite '.$cms_menu_title[4].'" class="well" >
+                                    <input type="text" name="keyboard_medications_picker" style="width:100%;text-align:right;font-size:22px;height:40px;border: 1px solid #CCC;" placeholder="Type your favorite '.$cms_menu_title[4].'" class="well" >
                                 </div>';
 
                                 // START of common drug predefined
@@ -426,7 +291,7 @@ echo '
                                     // Estimate how many title exist on this text record to use of for loop.
                                     $end = $common_drug_number;
 
-                                    // START of make a for loop to update all title title a text have.
+                                    // START of make a for loop to update all title a text have.
                                     for( $start='0' ; $start < $end ; $start++ )
                                     {
                                         if(strlen($common_drug_1[$start])>'0')
@@ -616,7 +481,7 @@ echo '
 
                                 echo '
                                 <div class="col-md-12 col-sm-12 col-xs-12" style="margin-top:20px;" >
-                                    <input type="text" name="keyboard_common_diet"  style="width:100%;text-align:right;direction:rtl;font-size:22px;height:40px;border:1px solid #CCC;" placeholder="Type your favorite '.$cms_menu_title[3].'" >
+                                    <input type="text" name="keyboard_common_diet"  style="width:100%;text-align:right;font-size:22px;height:40px;border:1px solid #CCC;" placeholder="Type your favorite '.$cms_menu_title[3].'" >
                                 </div>
                             
                             </div>
@@ -688,7 +553,7 @@ echo '
 
                                 echo '
                                 <div class="col-md-12 col-sm-12 col-xs-12" style="margin-top:20px;" >
-                                    <input type="text" name="keyboard_common_return_date"  style="width:100%;text-align:right;direction:rtl;font-size:22px;height:40px;border:1px solid #CCC;" placeholder="Type your favorite '.$cms_menu_title[2].'" >
+                                    <input type="text" name="keyboard_common_return_date"  style="width:100%;text-align:right;font-size:22px;height:40px;border:1px solid #CCC;" placeholder="Type your favorite '.$cms_menu_title[2].'" >
                                 </div>
                     
                             </div>
@@ -722,7 +587,7 @@ echo '
                                         
                                         <hr style="width:1px;" >
                                     
-                                        <input type="text" name="keyboard_paraclinic_file_title" style="width:100%;text-align:right;direction:rtl;font-size:22px;height:40px;border:1px solid #CCC;" placeholder="Type your favorite title" >
+                                        <input type="text" name="keyboard_paraclinic_file_title" style="width:100%;text-align:right;font-size:22px;height:40px;border:1px solid #CCC;" placeholder="Type your favorite title" >
                                         <br>
                                         <hr>
                                         
@@ -971,28 +836,28 @@ echo '
                                         <div class="btn btn-group col-md-12 col-sm-12 col-xs-12" style="font-size: 18px!important;color:gray;" >
                                             '.$cms_menu_title[10].'
                                         </div>
-                                        <input type="text" name="keyboard_chart_1" style="width:100%;text-align:right;direction:rtl;font-size:14px;height:40px;" placeholder="Type your favorite value" >
+                                        <input type="text" name="keyboard_chart_1" style="width:100%;font-size:14px;height:40px;" placeholder="Type your favorite value" >
                                     </div>
                         
                                     <div class="col-md-3 col-sm-3 col-xs-12" style="margin-top:20px;" >
                                         <div class="btn btn-group col-md-12 col-sm-12 col-xs-12" style="font-size: 18px!important;color:gray;" >
                                             '.$cms_menu_title[11].'
                                         </div>
-                                        <input type="text" name="keyboard_chart_2" style="width:100%;text-align:right;direction:rtl;font-size:14px;height:40px;" placeholder="Type your favorite value" >
+                                        <input type="text" name="keyboard_chart_2" style="width:100%;font-size:14px;height:40px;" placeholder="Type your favorite value" >
                                     </div>
                         
                                     <div class="col-md-3 col-sm-3 col-xs-12" style="margin-top:20px;" >
                                         <div class="btn btn-group col-md-12 col-sm-12 col-xs-12" style="font-size: 18px!important;color:gray;" >
                                             '.$cms_menu_title[12].'
                                         </div>
-                                        <input type="text" name="keyboard_chart_3" style="width:100%;text-align:right;direction:rtl;font-size:14px;height:40px;" placeholder="Type your favorite value" >
+                                        <input type="text" name="keyboard_chart_3" style="width:100%;font-size:14px;height:40px;" placeholder="Type your favorite value" >
                                     </div>
                         
                                     <div class="col-md-3 col-sm-3 col-xs-12" style="margin-top:20px;" >
                                         <div class="btn btn-group col-md-12 col-sm-12 col-xs-12" style="font-size: 18px!important;color:gray;" >
                                             '.$cms_menu_title[13].'
                                         </div>
-                                        <input type="text" name="keyboard_chart_4" style="width:100%;text-align:right;direction:rtl;font-size:14px;height:40px;" placeholder="Type your favorite value" >
+                                        <input type="text" name="keyboard_chart_4" style="width:100%;font-size:14px;height:40px;" placeholder="Type your favorite value" >
                                     </div>
                         
                                 </div>

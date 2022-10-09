@@ -5,29 +5,19 @@ use Illuminate\Foundation\Http\FormRequest;
 
 class AppointmentsStoreRequest extends FormRequest
 {
-    /**
-     * Determine if the user is authorized to make this request.
-     *
-     * @return bool
-     */
     public function authorize()
     {
         return true;
     }
 
-    /**
-     * Get the validation rules that apply to the request.
-     *
-     * @return array
-     */
     public function rules()
     {
         return [
-            'choose_time_for_this_patient_id'   => 'required|min:1' ,
-            'choose_time_for_this_date'         => 'required|min:1|max:10|date_format:Y-m-d' ,
-            'appointment_time'                  => 'required|min:1' ,
-            'appointment_child_dr_related_name' => 'max:100' ,
-            'appointment_service_type'          => 'max:100' ,
+        'choose_time_for_this_patient_id'   => 'required|min:1' ,
+        'choose_time_for_this_date'         => 'required|min:6|max:10|date_format:Y-m-d' ,
+        'appointment_time'                  => 'required|min:4|max:6|date_format:H:i' ,
+        'appointment_child_dr_related_name' => 'string' ,
+        'appointment_service_type'          => 'string' ,
         ];
     }
 }

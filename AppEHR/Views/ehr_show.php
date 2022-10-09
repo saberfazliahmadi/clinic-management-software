@@ -82,6 +82,12 @@ if( strlen($EHR_document_prescribed_next_appointment) > 0 )
 // Remove some characters to prevent GET conflicting or crashing error on SMS & TELEGRAM API services
 $telegram_text_content = str_replace( ["&" ,"=","#","~"]  , ""    , $telegram_text_content ) ;
 
+$trick_of_is_photo_uploaded = '';
+if( isset($is_photo_uploaded) && $is_photo_uploaded === 'true')
+{
+    $trick_of_is_photo_uploaded = 'Also, a photo of patient uploaded successfully';
+}
+
 echo '
 <center>
         <div style="margin-top:0px;" class="col-md-12 col-sm-12 col-xs-12" align="center" >
@@ -89,6 +95,8 @@ echo '
                 <div class="col-md-12 col-sm-12 col-xs-12" >
                     <span class="glyphicon glyphicon-ok" aria-hidden="true" style="color:green;"></span>
                     '.$title_of_page.'
+                    <br>
+                    '.$trick_of_is_photo_uploaded.'
                 </div>
                 <br>
                 <br>
@@ -101,7 +109,7 @@ echo '
     <div style="margin-top:15px;" class="col-md-12 col-sm-12 col-xs-12" align="center" >
         <h1 style="text-align:center;font-size:17pt;margin-top:10px;" align="center" >
             <div class="col-md-12 col-sm-12 col-xs-12" >
-                This information will be sent to the Smartphone of the patient by BOT automatically
+                The information mentioned below will be sent to the Smartphone of the patient by BOT automatically
                 <br>
                 <br>
                 <div class="smartphone">

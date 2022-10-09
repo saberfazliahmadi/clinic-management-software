@@ -78,9 +78,9 @@ echo '
         
         
         <div class="col-md-12" >
-            <form method="post" action="'.route('run_change_password_form').'" >
+            <form method="POST" action="'.route('users.update.password').'" >
                 <input type="hidden" name="_token" value="'.csrf_token().'" >
-                <input type="hidden" name="_type" value="post" >
+                <input type="hidden" name="_method" value="put" >
                 <h4 style="float:left;" > Please enter your current password | Minimum 8 Characters </h4>
                 <input type="password" name="current_password" value="" min="4" max="60" required="required" data-requiredmsg="Please enter your current password" title="Please enter your current password | Minimum 8 Characters"  alt="Please enter your current password" placeholder="Type your Current Password | Minimum 8 Characters" class="form-control col-md-12 col-xs-12" autocomplete="off" aria-expanded="false" style="margin-bottom:20px;" />
                 <Br>

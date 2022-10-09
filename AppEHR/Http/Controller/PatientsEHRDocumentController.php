@@ -2,6 +2,7 @@
 namespace AppEHR\Http\Controller ;
 
 use App\Http\Controllers\Controller ;
+use App\Http\Requests\PatientsEHRDocumentStoreRequest;
 use AppEHR\Services\PatientsEHRDocumentsService;
 use Illuminate\Database\QueryException;
 use Illuminate\Http\Request;
@@ -39,14 +40,14 @@ class PatientsEHRDocumentController extends Controller
 
             return Responses::view('EHR::ehr_create' ,
             [
-                'title_of_page'                             => 'EHR of Patient' ,
-                'EHR_document_patient_related_id_encrypted' => $request->encrypted_patient_id ,
-                'EHR_document_dr_related_id'                => findAdminIdFromUsersTable() ,
-                'EHR_document_related_appointment_id'       => $request->appointment_id ,
-                'EHR_document_related_clinic_doctor_name'   => $request->child_dr_related_name ,
-                'result_of_patients_photo'                  => $result_of_patients_photo ,
-                'count_result_of_patients_photo'            => $result_of_patients_photo->count() ,
-                'result_of_patients_ehr_document'           => $result_of_patients_ehr_document ,
+                'title_of_page'                             => 'EHR of Patient'                          ,
+                'EHR_document_patient_related_id_encrypted' => $request->encrypted_patient_id            ,
+                'EHR_document_dr_related_id'                => findAdminIdFromUsersTable()               ,
+                'EHR_document_related_appointment_id'       => $request->appointment_id                  ,
+                'EHR_document_related_clinic_doctor_name'   => $request->child_dr_related_name           ,
+                'result_of_patients_photo'                  => $result_of_patients_photo                 ,
+                'count_result_of_patients_photo'            => $result_of_patients_photo->count()        ,
+                'result_of_patients_ehr_document'           => $result_of_patients_ehr_document          ,
                 'count_result_of_patients_ehr_document'     => $result_of_patients_ehr_document->count() ,
                 'result_of_patients_general_infos'          => $this->PatientsEHRDocumentsService->fetchInfoOfThisPatientId($decrypted_request_patient_id) ,
                 'admin_id_from_users_table'                 => findAdminIdFromUsersTable()
@@ -58,38 +59,44 @@ class PatientsEHRDocumentController extends Controller
         }
     }
 
-    public function store(Request $request )
+    public function store(PatientsEHRDocumentStoreRequest $request)
     {
         try
         {
+            $request_validated            = $request->validated() ;
             $decrypted_request_patient_id = encryptDecrypt('decrypt', $request->encrypted_patient_id ) ;
 
-            if ( ! $this->PatientsEHRDocumentsService->updateThisPatientGeneralInfoFromEHRPage($decrypted_request_patient_id , $request->patient_more_description , $request->typed_keyboard_savabegh , $request->common_hypersensitivity_2311 , $request->post('patient_surgery_history'), $request->post('patient_disease_background'), $request->post('patient_medication_history'), $request->post('patient_allergies_history') ) )
+            if ( ! $this->PatientsEHRDocumentsService->updateThisPatientGeneralInfoFromEHRPage($decrypted_request_patient_id , $request_validated) )
             {
-                return Responses::failed( 'home', '' , '<span style="color:blue;">New information of patient DOES NOT updated! <br> So the New Photo and new EHR information of patient did not save also</span>' ) ;
+                return Responses::failed( 'home', '' , '<b style="color:blue;">New personal information of patient DOES NOT updated!<br>So, the New Photo and new EHR document information of patient DID NOT save!</b>' ) ;
             }
 
-            $result_store_new_ehr_doc = $this->PatientsEHRDocumentsService->storeNewEHRDoc($request->all() , $decrypted_request_patient_id , $request->post('EHR_document_related_appointment_id') , $request->post('EHR_document_related_clinic_doctor_name') ) ;
+            $result_store_new_ehr_doc = $this->PatientsEHRDocumentsService->storeNewEHRDoc($request_validated , $decrypted_request_patient_id , $request->all() ) ;
             if ( ! $result_store_new_ehr_doc->exists() )
             {
-                return Responses::Failed( 'home' , '' , '<span style="color:blue;">New EHR information did not Save! <br> So the New Photo of patient did not save also if you inserted it!</span>' ) ;
+                return Responses::Failed( 'home' , '' , '<b style="color:blue;">New EHR document information and Photo of patient DID NOT save!<br>But New personal information of patient UPDATED successfully!</b>' ) ;
             }
 
-            // If an image was sent by user
+            $is_photo_uploaded = '';
+            // If an image was sent from form
             if ( $request->hasFile('image') )
             {
-                $store_patient_photo_from_ehr_page = $this->PatientsEHRDocumentsService->storePatientPhotoFromEHRPage( $request , $decrypted_request_patient_id ) ;
-                if ( ! $store_patient_photo_from_ehr_page )
+                $result_upload_photo = $this->PatientsEHRDocumentsService->storePatientPhotoFromEHRPage( $request , $decrypted_request_patient_id ) ;
+                if($result_upload_photo->exists)
                 {
-                    return Responses::Failed( 'home' , '' , '<span style="color:blue;">New Photo of patient did not save but the other new EHR information have been saved successfully!</span>' ) ;
+                    $is_photo_uploaded = 'true';
+                }
+                else
+                {
+                    return Responses::Failed('home', '', '<b style="color:blue;">New Photo of patient DID NOT save!<br>But the new EHR document information and New personal information have been saved successfully!</b>');
                 }
             }
 
-            return Responses::Success('ehr.show' , [ 'encrypted_ehr_id' => encryptDecrypt('encrypt', $result_store_new_ehr_doc->EHR_document_id ) , 'encrypted_patient_name' => $request->encrypted_patient_name ] , '' ) ;
+            return Responses::Success('ehr.show' , [ 'encrypted_ehr_id' => encryptDecrypt('encrypt', $result_store_new_ehr_doc->EHR_document_id ) , 'encrypted_patient_name' => $request_validated['encrypted_patient_name'] , 'is_photo_uploaded' => $is_photo_uploaded ] , '' ) ;
         }
         catch ( QueryException $exception )
         {
-            return Responses::failedWithException('home', '' , '<span style="color:blue;">Can not Save new EHR information!</span>' , $exception ) ;
+            return Responses::failedWithException('home', '' , '<b style="color:blue;">Because of an error, we CAN NOT save the new EHR information, new personal information and new photo of this patient!</b>' , $exception ) ;
         }
     }
 
@@ -125,6 +132,7 @@ class PatientsEHRDocumentController extends Controller
                 'EHR_document_prescribed_next_appointment' => $result_show_new_saved_ehr->EHR_document_prescribed_next_appointment ,
                 'EHR_document_related_clinic_doctor_name'  => $result_show_new_saved_ehr->EHR_document_related_clinic_doctor_name ,
                 'EHR_document_dr_related_id'               => findAdminIdFromUsersTable() ,
+                'is_photo_uploaded'                        => $request->is_photo_uploaded
             ] ) ;
         }
         catch (QueryException $exception)

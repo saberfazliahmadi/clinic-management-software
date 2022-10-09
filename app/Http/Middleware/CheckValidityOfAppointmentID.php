@@ -13,7 +13,7 @@ class CheckValidityOfAppointmentID
         $trick_of_appointment_id = $request->appointment_id ?? '';
         if( ($trick_of_appointment_id !== '') && (patients_appointment::CheckValidityOfAppointmentID($trick_of_appointment_id) !== 1) )
         {
-            return Responses::failed( 'home' , '' , '<span style="color:blue;">The Requested Appointment of Patient Does Not Exist!</span>' ) ;
+            return Responses::failed( 'home' , '' , '<b><span style="color:blue;">The Requested Appointment of Patient Does Not Exist!</span></b>' ) ;
         }
         return $next($request);
     }

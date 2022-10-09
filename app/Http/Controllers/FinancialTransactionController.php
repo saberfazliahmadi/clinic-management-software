@@ -1,14 +1,12 @@
 <?php
 namespace App\Http\Controllers;
 
-use App\Http\Requests\runFinancialTransactionReportingFormRequest;
+use App\Http\Requests\FinancialTransactionsShowRequest;
+use App\Http\Requests\FinancialTransactionsStoreRequest;
 use App\Models\financial_transaction;
-use App\Http\Requests\StoreFinancialTransactionRequest;
 use App\Responses\Responses;
-use Illuminate\Http\Request ;
+use Illuminate\Http\Request;
 
-/** In this controller according to Single Responsibility and Open-Closed Principles of SOLID
-we validate user inputs by Middleware **/
 class FinancialTransactionController extends Controller
 {
     public function index()
@@ -34,33 +32,19 @@ class FinancialTransactionController extends Controller
         }
     }
 
-    public function destroy( Request $request )
+    public function store(FinancialTransactionsStoreRequest $request)
     {
+        $request_validated                           = $request->validated() ;
+        $amount_of_payment                           = $this->removeExtraWordsAmountOfPayment($request_validated['amount_of_payment']) ;
+        $medical_document_number_of_patient          = $this->prepareMedicalDocumentNumberOfPatient($request_validated['medical_document_number']) ;
+        $financial_transaction_child_dr_related_name = $this->prepareFinancialTransactionChildDrRelatedName($request_validated['financial_transaction_child_dr_related_name']) ;
+        $response_message                            = '<b style="color:blue;" >We Have an Error To Save This New Financial Financial Transaction</b>' ;
         try
         {
-            if( financial_transaction::destroyThisFinancialTransaction($request->financial_transaction_id) )
-            {
-                return Responses::success( 'back_to_previous_page' , '' , '<span>The Selected Financial Transaction Successfully Deleted</span>' ) ;
-            }
-        }
-        catch (\Exception $exception)
-        {
-            return Responses::failedWithException( 'back_to_previous_page' , '' , '<b style="color:blue;" >We have an error to destroy this Financial Transaction</b>' , $exception ) ;
-        }
-    }
-
-    public function store(StoreFinancialTransactionRequest $request )
-    {
-        $amount_of_payment                           = $this->removeExtraWordsAmountOfPayment(request()->post('amount_of_payment')) ;
-        $medical_document_number_of_patient          = $this->prepareMedicalDocumentNumberOfPatient(request()->post('medical_document_number')) ;
-        $financial_transaction_child_dr_related_name = $this->prepareFinancialTransactionChildDrRelatedName(request()->post('financial_transaction_child_dr_related_name')) ;
-        $response_message                            = '<b style="color:blue;" >We have an error to Save This New Financial Financial Transaction</b>' ;
-        try
-        {
-            $result_store_show_submit_financial_transaction_form = financial_transaction::storeShowSubmitFinancialTransactionForm($medical_document_number_of_patient, request()->post('financial_transaction_type'), request()->post('financial_transaction_date'), request()->post('financial_transaction_time'), request()->post('title_of_payment') , $amount_of_payment, $financial_transaction_child_dr_related_name ) ;
+            $result_store_show_submit_financial_transaction_form = financial_transaction::storeShowSubmitFinancialTransactionForm($medical_document_number_of_patient, $request_validated['financial_transaction_type'], $request_validated['financial_transaction_date'], $request_validated['financial_transaction_time'], $request_validated['title_of_payment'] , $amount_of_payment, $financial_transaction_child_dr_related_name ) ;
             if($result_store_show_submit_financial_transaction_form->exists)
             {
-                $response_message = 'The New Financial Transaction with date: <b>'.request()->post('financial_transaction_date').'</b> <br> and title: <b>'.request()->post('title_of_payment').'</b> and amount: <b>'.$amount_of_payment.'</b> <br> Successfully Submitted' ;
+                $response_message = 'The New Financial Transaction with <br>Date: <b>'.$request_validated['financial_transaction_date'].'</b> <br>Title: <b>'.$request_validated['title_of_payment'].'</b><br>Amount: <b>'.$amount_of_payment.'</b><br>Successfully Submitted' ;
             }
             return Responses::success( 'back_to_previous_page' , '' , $response_message ) ;
         }
@@ -70,21 +54,22 @@ class FinancialTransactionController extends Controller
         }
     }
 
-    public function show(runFinancialTransactionReportingFormRequest $request )
+    public function show(FinancialTransactionsShowRequest $request )
     {
         try
         {
-            [$sign_trick_1, $financial_transaction_child_dr_related_name_text_trick, $name_of_financial_transaction_child_dr_related_name, $sign_trick_2, $financial_transaction_title_text_trick, $name_of_financial_transaction_title] = $this->prepareVaraible($request->financial_transaction_child_dr_related_name, $request->financial_transaction_title);
-            $result_fetch_receive_transactions_from_date_to_date = financial_transaction::resultFetchReceiveOrPayTransactionsFromDateToDate($financial_transaction_type = '+' , $sign_trick_1 , $financial_transaction_child_dr_related_name_text_trick , $sign_trick_2 , $financial_transaction_title_text_trick , $request->financial_report_from_date , $request->financial_report_to_date ) ;
-            $result_fetch_pay_transactions_from_date_to_date     = financial_transaction::resultFetchReceiveOrPayTransactionsFromDateToDate($financial_transaction_type = '-' , $sign_trick_1 , $financial_transaction_child_dr_related_name_text_trick , $sign_trick_2 , $financial_transaction_title_text_trick , $request->financial_report_from_date , $request->financial_report_to_date ) ;
+            $request_validated                                   = $request->validated() ;
+            [$sign_trick_1, $financial_transaction_child_dr_related_name_text_trick, $name_of_financial_transaction_child_dr_related_name, $sign_trick_2, $financial_transaction_title_text_trick, $name_of_financial_transaction_title] = $this->prepareFinancialVaraible($request_validated['financial_transaction_child_dr_related_name'], $request_validated['financial_transaction_title']);
+            $result_fetch_receive_transactions_from_date_to_date = financial_transaction::resultFetchReceiveOrPayTransactionsFromDateToDate($financial_transaction_type = '+' , $sign_trick_1 , $financial_transaction_child_dr_related_name_text_trick , $sign_trick_2 , $financial_transaction_title_text_trick , $request_validated['financial_report_from_date'] , $request_validated['financial_report_to_date'] ) ;
+            $result_fetch_pay_transactions_from_date_to_date     = financial_transaction::resultFetchReceiveOrPayTransactionsFromDateToDate($financial_transaction_type = '-' , $sign_trick_1 , $financial_transaction_child_dr_related_name_text_trick , $sign_trick_2 , $financial_transaction_title_text_trick , $request_validated['financial_report_from_date'] , $request_validated['financial_report_to_date'] ) ;
 
             return view('back.financial_index',
             [
                 'title_of_page'                                       => 'Report Financial Transactions' ,
                 'result_fetch_receive_transactions_from_date_to_date' => $result_fetch_receive_transactions_from_date_to_date ,
                 'result_fetch_pay_transactions_from_date_to_date'     => $result_fetch_pay_transactions_from_date_to_date ,
-                'financial_report_from_date'                          => $request->financial_report_from_date ,
-                'financial_report_to_date'                            => $request->financial_report_to_date ,
+                'financial_report_from_date'                          => $request_validated['financial_report_from_date'] ,
+                'financial_report_to_date'                            => $request_validated['financial_report_to_date'] ,
                 'num_of_receive_transactions'                         => $result_fetch_receive_transactions_from_date_to_date->count() ,
                 'num_of_pay_transactions'                             => $result_fetch_pay_transactions_from_date_to_date->count() ,
                 'name_of_financial_transaction_child_dr_related_name' => $name_of_financial_transaction_child_dr_related_name ,
@@ -93,7 +78,23 @@ class FinancialTransactionController extends Controller
         }
         catch (\Exception $exception)
         {
-            return Responses::failedWithException( 'financial.show' , '' , '<b style="color:blue;" >We have an error to run_financial_transaction_reporting_form</b>' , $exception) ;
+            return Responses::failedWithException( 'financial.show' , '' , '<b style="color:blue;" >We have an error to run financial transaction reporting form</b>' , $exception) ;
+        }
+    }
+
+    public function destroy( Request $request )
+    {
+        try
+        {
+            if( !(financial_transaction::destroyThisFinancialTransaction($request->financial_id)) )
+            {
+                return Responses::success( 'home' , '' , '<b style="color:blue;" >The selected financial transaction that you want to destroy Does Not Exist!</b>' ) ;
+            }
+            return Responses::success( 'back_to_previous_page' , '' , '<span>The selected financial transaction is Successfully Deleted</span>' ) ;
+        }
+        catch (\Exception $exception)
+        {
+            return Responses::failedWithException( 'home' , '' , '<b style="color:blue;" >We have an error to destroy this Financial Transaction</b>' , $exception ) ;
         }
     }
 
@@ -102,24 +103,24 @@ class FinancialTransactionController extends Controller
         return view('back.financial_main' , [ 'title_of_page' => 'Financial Management Main Page' ] ) ;
     }
 
-    public function prepareVaraible($request_financial_transaction_child_dr_related_name,$request_financial_transaction_title)
+    public function prepareFinancialVaraible($request_financial_transaction_child_dr_related_name,$request_financial_transaction_title)
     {
-        $sign_trick_1 = '!=' ;
+        $sign_trick_1                                           = '!=' ;
         $financial_transaction_child_dr_related_name_text_trick = '_' ;
         $name_of_financial_transaction_child_dr_related_name    = ''  ;
-        if( $request_financial_transaction_child_dr_related_name !== NULL )
+        if( $request_financial_transaction_child_dr_related_name !== NULL && $request_financial_transaction_child_dr_related_name !== "" )
         {
-            $sign_trick_1 = "=" ;
+            $sign_trick_1                                           = "=" ;
             $financial_transaction_child_dr_related_name_text_trick = "$request_financial_transaction_child_dr_related_name" ;
             $name_of_financial_transaction_child_dr_related_name    = $request_financial_transaction_child_dr_related_name.'<br>' ;
         }
 
-        $sign_trick_2 = "!=" ;
+        $sign_trick_2                           = "!=" ;
         $financial_transaction_title_text_trick = "_" ;
         $name_of_financial_transaction_title    = ''  ;
-        if( $request_financial_transaction_title !== NULL )
+        if( $request_financial_transaction_title !== NULL && $request_financial_transaction_title !== "" )
         {
-            $sign_trick_2 = "=" ;
+            $sign_trick_2                           = "=" ;
             $financial_transaction_title_text_trick = "$request_financial_transaction_title" ;
             $name_of_financial_transaction_title    = $request_financial_transaction_title.'<br>' ;
         }

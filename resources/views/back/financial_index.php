@@ -1,11 +1,10 @@
 <?php
-
-// Add your custom css files here. (will located in header)
+// Add your custom css files here (will be located in header)
 $extra_links_header = '
 <!-- MD.BootstrapPersianDateTimePicker css -->
 <link href="'.url('back/vendors/MD.BootstrapPersianDateTimePicker/Content/MdBootstrapPersianDateTimePicker/jquery.Bootstrap-PersianDateTimePicker.css').'" rel="stylesheet">' ;
 
-// Add your custom js files here. (will located in footer)
+// Add your custom js files here (will be located in footer)
 // <script src="'.url('back/vendors/MD.BootstrapPersianDateTimePicker/Scripts/MdBootstrapPersianDateTimePicker/jalaali.js').'"></script>
 $extra_links_footer = '
 <!-- MD.BootstrapPersianDateTimePicker js -->
@@ -81,28 +80,27 @@ echo '
                                         Select the dr related name of financial transaction
                                     </h2>
                                     
-                                    <div class="col-md-12 col-sm-12 col-xs-12" >' ;
-
-                                    if( strlen(Auth::user()->clinic_doctors_name) > 0 )
-                                    {
-                                        /// Explode and make array type variable
-                                        $common_cilinic_dr_1 = explode(",", Auth::user()->clinic_doctors_name);
-                                        // Estimate how many index exist in this variable
-                                        $common_cilinic_dr_number = count($common_cilinic_dr_1);
-                                        // Make end number for loop
-                                        $end = $common_cilinic_dr_number;
-                                        for ($start = '0'; $start < $end; $start++)
+                                    <div class="col-md-12 col-sm-12 col-xs-12" >
+                                        <input type="hidden" name="financial_transaction_child_dr_related_name" value="" checked="checked"  >' ;
+                                        if( strlen(Auth::user()->clinic_doctors_name) > 0 )
                                         {
-                                            if (strlen($common_cilinic_dr_1[$start]) > '0')
+                                            /// Explode and make array type variable
+                                            $common_cilinic_dr_1 = explode(",", Auth::user()->clinic_doctors_name);
+                                            // Estimate how many index exist in this variable
+                                            $common_cilinic_dr_number = count($common_cilinic_dr_1);
+                                            // Make end number for loop
+                                            $end = $common_cilinic_dr_number;
+                                            for ($start = '0'; $start < $end; $start++)
                                             {
-                                                echo '
-                                                <label class="btn btn-default well" data-toggle-class="btn-primary" style="font-size:20px;background-color:white;border: 1px solid #ccc;border-radius: 4px!important;" >
-                                                    <input type="radio" name="financial_transaction_child_dr_related_name" value="' . $common_cilinic_dr_1[$start] . '"  > ' . $common_cilinic_dr_1[$start] . '
-                                                </label>' ;
+                                                if (strlen($common_cilinic_dr_1[$start]) > '0')
+                                                {
+                                                    echo '
+                                                    <label class="btn btn-default well" data-toggle-class="btn-primary" style="font-size:20px;background-color:white;border: 1px solid #ccc;border-radius: 4px!important;" >
+                                                        <input type="radio" name="financial_transaction_child_dr_related_name" value="' . $common_cilinic_dr_1[$start] . '"  > ' . $common_cilinic_dr_1[$start] . '
+                                                    </label>' ;
+                                                }
                                             }
                                         }
-                                    }
-
                                     echo '
                                     </div>  
                                 </div>
@@ -111,7 +109,8 @@ echo '
                                   
                                     <h2 class="col-md-12 col-sm-12 col-xs-12 text-center" style="margin-bottom:15px!important;">
                                         Select title of financial transaction
-                                    </h2>';
+                                    </h2>
+                                    <input type="hidden" name="financial_transaction_title" value="" checked="checked"  >';
 
                                     if( strlen(Auth::user()->financial_management) > 0 )
                                     {
@@ -123,7 +122,7 @@ echo '
                                         // Estimate how many title exist on this text record to use of for loop.
                                         $end = $financial_management_array_number;
 
-                                        // START of make a for loop to update all title title a text have.
+                                        // START of make a for loop to update all title a text have.
                                         for ($start = '0'; $start < $end; $start++)
                                         {
                                             if (strlen($financial_management_array[$start]) > '0')
@@ -132,7 +131,6 @@ echo '
                                                 <label class="btn btn-default well" data-toggle-class="btn-primary" style="font-size:20px;background-color:white;border: 1px solid #ccc;border-radius: 4px!important;margin-top:5px;margin-bottom:5px;" >
                                                     <input type="radio" name="financial_transaction_title" value="' . $financial_management_array[$start] . '"  > ' . $financial_management_array[$start] . '
                                                 </label>';
-
                                             }
                                         }
                                     }

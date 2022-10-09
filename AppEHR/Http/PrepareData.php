@@ -1,32 +1,37 @@
 <?php
 namespace AppEHR\Http;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use phpDocumentor\Reflection\Types\Null_;
 
 class PrepareData
 {
-    public function preparePatientMoreDescriptionVariable($request_patient_more_description, $request_typed_keyboard_savabegh, $request_common_hypersensitivity_2311)
+    public function preparePatientMoreDescriptionVariable($request_validated)
     {
         $patient_more_description  = '' ;
-        $patient_more_description .= $request_patient_more_description ;
 
-        if(is_array($request_common_hypersensitivity_2311))
+        if( $request_validated['patient_more_description'] !== "" )
         {
-            foreach ($request_common_hypersensitivity_2311 as $item)
+            $patient_more_description .= $request_validated['patient_more_description'] ;
+        }
+
+        if( isset($request_validated['common_hypersensitivity_2311']) && is_array($request_validated['common_hypersensitivity_2311']) )
+        {
+            foreach ($request_validated['common_hypersensitivity_2311'] as $item)
             {
                 $patient_more_description .= ', '.$item;
             }
         }
 
-        if( $request_typed_keyboard_savabegh !== "" )
+        if( $request_validated['typed_keyboard_savabegh'] !== "" )
         {
-            $patient_more_description .= ', '.$request_typed_keyboard_savabegh;
+            $patient_more_description .= ', '.$request_validated['typed_keyboard_savabegh'] ;
         }
 
         return $patient_more_description ;
     }
 
-    public function prepareCommonDrugVariable($request_all)
+    public function prepareCommonDrugVariable($request_all,$request_all_for_medications_picker)
     {
         $common_drug = NULL ;
         if( Auth::user()->common_drug !== '' )
@@ -38,10 +43,10 @@ class PrepareData
             // Make a for loop to check all selected drugs by doctors which should be defined on settings of software page
             for( $start='0' ; $start < $end ; $start++ )
             {
-                // An accepted drug should be existed on defined drugs of ADMIN AND selected by user $request->$defined_common_drugs[$start]
-                if( strlen($defined_common_drugs[$start]) > 0 && strlen(isset($request_all[$defined_common_drugs[$start]])) > 0 )
+                // An accepted drug should be existed on defined drugs of ADMIN AND selected by user $request_all_for_medications_picker->$defined_common_drugs[$start]
+                if( strlen($defined_common_drugs[$start]) > 0 && strlen(isset($request_all_for_medications_picker[$defined_common_drugs[$start]])) > 0 )
                 {
-                    $common_drug .= $defined_common_drugs[$start].' = '.$request_all[$defined_common_drugs[$start]] ;
+                    $common_drug     .= $defined_common_drugs[$start].' = '.$request_all_for_medications_picker[$defined_common_drugs[$start]] ;
                     if( $start < $end - 1 )
                     {
                         $common_drug .= ',' ;
@@ -49,8 +54,8 @@ class PrepareData
                 }
             }
 
-            // Get keyboard_medications_picker if exist
-            if( strlen($request_all['keyboard_medications_picker']) > 0 )
+            // Get keyboard_medications_picker if exist and concatenate it with $common_drug
+            if($request_all['keyboard_medications_picker'] !== '')
             {
                 $common_drug .= $request_all['keyboard_medications_picker'].',' ;
             }
@@ -71,7 +76,7 @@ class PrepareData
                 }
             }
 
-            // Get keyboard_common_diet if exist
+            // Get keyboard_common_diet if exist and concatenate it with $common_diet
             if( strlen($request_all['keyboard_common_diet']) > 0 )
             {
                 $common_diet .= $request_all['keyboard_common_diet'].',' ;
@@ -93,7 +98,7 @@ class PrepareData
                 }
             }
 
-            // Get keyboard_common_return_date if exist
+            // Get keyboard_common_return_date if exist and concatenate it with $common_return_date
             if( strlen($request_all['keyboard_common_return_date']) > 0 )
             {
                 $common_return_date .= $request_all['keyboard_common_return_date'].',' ;

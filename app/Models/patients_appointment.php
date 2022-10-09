@@ -70,38 +70,37 @@ class patients_appointment extends Model
         join('patients_general_infos' , 'patients_general_infos.patient_id' , '=' , 'patients_appointments.appointment_patient_related_id')
         ->select('patients_appointments.*' , 'patients_general_infos.patient_id' , 'patients_general_infos.patient_first_name' , 'patients_general_infos.patient_last_name' , 'patients_general_infos.patient_mobile_number' )
         ->equalThisToAdminIdFromUserTable('patients_appointments.appointment_dr_related_id')
-        ->where( [
+        ->where([
                     'patients_appointments.appointment_date' => $choose_time_for_this_date ,
                     'patients_appointments.appointment_time' => $appointment_time_trick
-                 ] )
+                 ])
         ->get();
     }
 
     static function storeNewPatientAppointmentTime($choose_time_for_this_patient_id, $choose_time_for_this_date, $appointment_time, $appointment_child_dr_related_name, $appointment_service_type)
     {
         return self::create(
-            [
-                'appointment_dr_related_id'         => findAdminIdFromUsersTable() ,
-                'appointment_patient_related_id'    => $choose_time_for_this_patient_id ,
-                'appointment_date'                  => $choose_time_for_this_date ,
-                'appointment_time'                  => $appointment_time ,
-                'appointment_child_dr_related_name' => $appointment_child_dr_related_name ,
-                'appointment_service_type'          => $appointment_service_type ,
-            ]
-        );
+        [
+            'appointment_dr_related_id'         => findAdminIdFromUsersTable() ,
+            'appointment_patient_related_id'    => $choose_time_for_this_patient_id ,
+            'appointment_date'                  => $choose_time_for_this_date ,
+            'appointment_time'                  => $appointment_time ,
+            'appointment_child_dr_related_name' => $appointment_child_dr_related_name ,
+            'appointment_service_type'          => $appointment_service_type ,
+        ]);
     }
 
-    static function UpdateThisAppointmentFromWatingStatusToDoneStatus( $request_appointment_id , $admin_id_from_users_table , $money_receive_header_console )
+    static function updateThisAppointmentFromWatingStatusToDoneStatus($request_appointment_id , $admin_id_from_users_table , $money_receive_header_console )
     {
         self::
-        where( [ 'appointment_id'            => $request_appointment_id ,
-                 'appointment_dr_related_id' => $admin_id_from_users_table
-                ]
-        )
+        where([
+                'appointment_id'            => $request_appointment_id ,
+                'appointment_dr_related_id' => $admin_id_from_users_table
+               ])
         ->update([
-                     'appointment_status'                    => '0' ,
-                     'appointment_status_unique'             => '1' ,
-                     'appointment_received_financial_status' => $money_receive_header_console
+                 'appointment_status'                    => '0' ,
+                 'appointment_status_unique'             => '1' ,
+                 'appointment_received_financial_status' => $money_receive_header_console
                  ]);
     }
 
@@ -122,14 +121,14 @@ class patients_appointment extends Model
         return self::
         select( 'appointment_id' , 'appointment_dr_related_id' )
         ->where( [
-                     'appointment_id'            => $trick_of_appointment_id ,
-                     'appointment_dr_related_id' => findAdminIdFromUsersTable()
+                 'appointment_id'            => $trick_of_appointment_id ,
+                 'appointment_dr_related_id' => findAdminIdFromUsersTable()
                  ])
         ->limit('1')
         ->count() ;
     }
 
-    public static function AllAppointmentsOnThisDate( $admin_id_from_users_table , $show_all_appointments_on_this_date )
+    public static function allAppointmentsOnThisDate($admin_id_from_users_table , $show_all_appointments_on_this_date )
     {
         return self::
         join('patients_general_infos' , 'patients_general_infos.patient_id' , '=' , 'patients_appointments.appointment_patient_related_id')
@@ -141,7 +140,7 @@ class patients_appointment extends Model
         ->get() ;
     }
 
-    public static function CountAppointmentsOnThisDateWhichAreOnWaitingStatus( $admin_id_from_users_table , $show_all_appointments_on_this_date )
+    public static function countAppointmentsOnThisDateWhichAreOnWaitingStatus($admin_id_from_users_table , $show_all_appointments_on_this_date )
     {
         return self::
         select( 'appointment_dr_related_id' , 'appointment_date' , 'appointment_status_unique' , 'appointment_status' , 'appointment_time' )

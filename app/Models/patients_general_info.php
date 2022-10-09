@@ -109,9 +109,9 @@ class patients_general_info extends Model
 
     static function numberOfDuplicateMobileNumber($update_this_patient_id , $request_patient_mobile_number )
     {
-        /** Check for mobile number duplication
-        We should not have two patients with same Mobile Number in our Database!
-        It means, the mobile numbers should be unique
+        /** Check for mobile number duplication.
+        We should not have two patients with an Equal Mobile Number in our Database!
+        It means, the mobile numbers should be unique.
         Remember that, we have an EXCEPTION condition ( patient_id != $update_this_patient_id ) **/
         return self::
         select( 'patient_mobile_number'  , 'patient_dr_related_id' , 'patient_id' )
@@ -175,20 +175,20 @@ class patients_general_info extends Model
                  ]);
     }
 
-    static function updateThisPatientGeneralInfoFromEhrPage($request_patient_id, $patient_more_description, $request_post_patient_surgery_history , $request_post_patient_disease_background , $request_post_patient_medication_history , $request_post_patient_allergies_history )
+    static function updateThisPatientGeneralInfoFromEhrPage($decrypted_request_patient_id, $patient_more_description, $request_validated)
     {
         return self::
         select( 'patient_dr_related_id' , 'patient_id' , 'patient_more_description' , 'patient_surgery_history' , 'patient_disease_background' , 'patient_medication_history' , 'patient_allergies_history' )
         ->equalThisToAdminIdFromUserTable('patient_dr_related_id')
-        ->patient_id($request_patient_id)
+        ->patient_id($decrypted_request_patient_id)
         ->limit('1')
         ->update(
         [
-            'patient_more_description'   => $patient_more_description                ,
-            'patient_surgery_history'    => $request_post_patient_surgery_history    ,
-            'patient_disease_background' => $request_post_patient_disease_background ,
-            'patient_medication_history' => $request_post_patient_medication_history ,
-            'patient_allergies_history'  => $request_post_patient_allergies_history
+            'patient_more_description'   => $patient_more_description                        ,
+            'patient_surgery_history'    => $request_validated['patient_surgery_history']    ,
+            'patient_disease_background' => $request_validated['patient_disease_background'] ,
+            'patient_medication_history' => $request_validated['patient_medication_history'] ,
+            'patient_allergies_history'  => $request_validated['patient_allergies_history']  ,
         ]);
     }
 }

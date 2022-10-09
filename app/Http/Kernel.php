@@ -92,17 +92,9 @@ class Kernel extends HttpKernel
 
         'TransactionOnDatabaseToRollbackWhenExceptionsHappen' => \App\Http\Middleware\TransactionOnDatabaseToRollbackWhenExceptionsHappen::class,
 
-        'ValidatorIfUserClickOnButtonSendPatientToDoctorRoom' => \App\Http\Middleware\ValidatorIfUserClickOnButtonSendPatientToDoctorRoom::class,
-
         'CheckValidityOfPatientID'                    => \App\Http\Middleware\CheckValidityOfPatientID::class,
         'CheckValidityOfAppointmentID'                => \App\Http\Middleware\CheckValidityOfAppointmentID::class,
-        'CheckMobileNumberDuplication'                => \App\Http\Middleware\CheckMobileNumberDuplication::class,
         'CheckValidityOfEHRID'                        => \AppEHR\Http\Middleware\CheckValidityOfEHRID::class,
-
-        'ValidatorChangePasswordFromRequest'          => \App\Http\Middleware\ValidatorChangePasswordFromRequest::class,
-        'ValidatorMainSettingsSoftwareFormRequest'    => \App\Http\Middleware\ValidatorMainSettingsSoftwareFormRequest::class,
-        'ValidatorStorepatients_EHR_documentRequest'  => \AppEHR\Http\Middleware\ValidatorStorepatients_EHR_documentRequest::class,
-        'ValidatorUpdatepatients_EHR_documentRequest' => \AppEHR\Http\Middleware\ValidatorUpdatepatients_EHR_documentRequest::class,
-
+        'CheckMobileNumberDuplication'                => \App\Http\Middleware\CheckMobileNumberDuplication::class,
     ];
 }

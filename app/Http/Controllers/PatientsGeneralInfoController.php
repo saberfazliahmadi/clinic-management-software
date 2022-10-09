@@ -8,8 +8,6 @@ use App\Responses\Responses;
 use Illuminate\Http\Request;
 use App\Models\{patients_general_info , patients_appointment } ;
 
-/** In this controller according to Single Responsibility and Open-Closed Principles of SOLID
-we validate user inputs by Middleware **/
 class PatientsGeneralInfoController extends Controller
 {
     public function index()
@@ -43,9 +41,14 @@ class PatientsGeneralInfoController extends Controller
     {
         try
         {
-            $request_validated = $request->validated();
+            $request_validated             = $request->validated() ;
             $result_store_new_patient_form = patients_general_info::storeNewPatientForm($request_validated) ;
-            // Specify last id created in database and encrypt it to have more security and use it in route passing data
+            if( !$result_store_new_patient_form->exists )
+            {
+                return Responses::failed( 'home' , '' , 'We have an error to store information of new patient in database' ) ;
+            }
+
+            // Specify last id created in database and encrypt it to have more security and use it on route passing data
             $choose_appointment_time_for_this_encrypted_patient_id = encryptDecrypt('encrypt', $result_store_new_patient_form->patient_id ) ;
 
             $response_message = 'Your New Patient with Name <br><a href="'.route('patients.edit', $choose_appointment_time_for_this_encrypted_patient_id ).'" ><b>'.$request_validated['patient_first_name'].' '.$request_validated['patient_last_name'].'</b></a> Successfully Submitted' ;
@@ -68,12 +71,12 @@ class PatientsGeneralInfoController extends Controller
         try
         {
             $result_of_run_search_form = patients_general_info::fetchResultOfSearchForm() ;
-            if( !$result_of_run_search_form )
+            if(!$result_of_run_search_form)
             {
                 return Responses::failed('patients.index', '', 'We have an Error to search for the word you entered!');
             }
 
-            if ($result_of_run_search_form->count() === 0)
+            if($result_of_run_search_form->count() === 0)
             {
                 return Responses::failed('patients.index', '', 'There is not any result for <b style="color:blue;" >'.$request->search_text.'</b>');
             }
@@ -115,7 +118,7 @@ class PatientsGeneralInfoController extends Controller
         $validated                        = $request->validated();
         $decrypted_update_this_patient_id = encryptDecrypt('decrypt', $request->encrypted_patient_id );
         $response_message_success         = '<b>'.$validated['patient_first_name'].' '.$validated['patient_last_name'].'\'s Information Successfully Updated</b>' ;
-        $response_message_failed          = '<span style="color:blue;font-weight:bolder;">' . $validated['patient_first_name'].' '.$validated['patient_last_name'].' Information WAS NOT Updated</span>' ;
+        $response_message_failed          = '<span style="color:blue;font-weight:bolder;">' . $validated['patient_first_name'].' '.$validated['patient_last_name'].'\'s Information WAS NOT Updated</span>' ;
         try
         {
             if( !(patients_general_info::resultUpdateThisPatientId($decrypted_update_this_patient_id, $request->validated())) )

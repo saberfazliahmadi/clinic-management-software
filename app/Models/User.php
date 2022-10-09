@@ -72,26 +72,49 @@ class User extends Authenticatable
         'email_verified_at' => 'datetime',
     ];
 
-    static function scopename($query,$this_user_name)
+    public static function scopename($query,$this_user_name)
     {
         return $query->where('name' , $this_user_name) ;
     }
 
-    static function scopeid($query,$Auth_user_id)
+    public static function scopeid($query,$Auth_user_id)
     {
         return $query->where('id' , $Auth_user_id) ;
     }
 
-    static function show_main_settings_of_software_form($Auth_user_id, $Auth_user_name)
+    public static function fetchMainSettingsOfSoftwareFormData()
     {
         return self::
-        name($Auth_user_name)
-        ->id($Auth_user_id)
+        id(Auth::id())
+        ->name(Auth::user()->name)
         ->limit('1')
         ->first();
     }
 
-    static function update_main_settings_of_software_form( $id_of_user , $name_of_user , $common_drug, $common_diet, $common_return_date, $phone_number, $college_branch, $contact_address, $common_hypersensitivity, $options_for_user, $cms_menu_title, $gap_time_between_appointments, $clinic_doctors_name , $financial_management )
+    public static function updateMainSettingsOfSoftwareForm( $common_drug, $common_diet, $common_return_date, $phone_number, $college_branch, $contact_address, $common_hypersensitivity, $options_for_user, $cms_menu_title, $gap_time_between_appointments, $clinic_doctors_name , $financial_management )
+    {
+        return self::
+        name(Auth::user()->name)
+        ->id(Auth::id())
+        ->limit('1')
+        ->update(
+        [
+            'common_drug'                   => $common_drug,
+            'common_diet'                   => $common_diet,
+            'common_return_date'            => $common_return_date,
+            'phone_number'                  => $phone_number,
+            'college_branch'                => $college_branch,
+            'contact_address'               => $contact_address,
+            'common_hypersensitivity'       => $common_hypersensitivity,
+            'options_for_user'              => $options_for_user,
+            'cms_menu_title'                => $cms_menu_title,
+            'gap_time_between_appointments' => $gap_time_between_appointments,
+            'clinic_doctors_name'           => $clinic_doctors_name ,
+            'financial_management'          => $financial_management
+        ]);
+    }
+
+    public static function updateMainSettingsOfSoftwareFormForSuperAdmin($id_of_user , $name_of_user , $common_drug, $common_diet, $common_return_date, $phone_number, $college_branch, $contact_address, $common_hypersensitivity, $options_for_user, $cms_menu_title, $gap_time_between_appointments, $clinic_doctors_name , $request_status_of_user , $request_level_of_user , $financial_management )
     {
         return self::
         name($name_of_user)
@@ -99,70 +122,57 @@ class User extends Authenticatable
         ->limit('1')
         ->update(
         [
-            'common_drug'         => $common_drug,
-            'common_diet'         => $common_diet,
-            'common_return_date'  => $common_return_date,
-            'phone_number'        => $phone_number,
-            'college_branch'      => $college_branch,
-            'contact_address'     => $contact_address,
-            'common_hypersensitivity' => $common_hypersensitivity,
-            'options_for_user'    => $options_for_user,
-            'cms_menu_title'      => $cms_menu_title,
+            'common_drug'                   => $common_drug,
+            'common_diet'                   => $common_diet,
+            'common_return_date'            => $common_return_date,
+            'phone_number'                  => $phone_number,
+            'college_branch'                => $college_branch,
+            'contact_address'               => $contact_address,
+            'common_hypersensitivity'       => $common_hypersensitivity,
+            'options_for_user'              => $options_for_user,
+            'cms_menu_title'                => $cms_menu_title,
             'gap_time_between_appointments' => $gap_time_between_appointments,
-            'clinic_doctors_name' => $clinic_doctors_name ,
-            'financial_management'=> $financial_management
+            'clinic_doctors_name'           => $clinic_doctors_name ,
+            'user_level'                    => $request_level_of_user ,
+            'status'                        => $request_status_of_user ,
+            'financial_management'          => $financial_management ,
         ]);
     }
 
-    static function update_main_settings_of_software_form_for_super_admin( $id_of_user , $name_of_user , $common_drug, $common_diet, $common_return_date, $phone_number, $college_branch, $contact_address, $common_hypersensitivity, $options_for_user, $cms_menu_title, $gap_time_between_appointments, $clinic_doctors_name , $request_status_of_user , $request_level_of_user , $financial_management )
+    public static function allUsersRelatedToThisSuperAdmin()
     {
         return self::
-        name($name_of_user)
-        ->id($id_of_user)
-        ->limit('1')
-        ->update(
-            [
-                'common_drug'          => $common_drug,
-                'common_diet'          => $common_diet,
-                'common_return_date'   => $common_return_date,
-                'phone_number'         => $phone_number,
-                'college_branch'       => $college_branch,
-                'contact_address'      => $contact_address,
-                'common_hypersensitivity' => $common_hypersensitivity,
-                'options_for_user'     => $options_for_user,
-                'cms_menu_title'       => $cms_menu_title,
-                'gap_time_between_appointments' => $gap_time_between_appointments,
-                'clinic_doctors_name'  => $clinic_doctors_name ,
-                'user_level'           => $request_level_of_user ,
-                'status'               => $request_status_of_user ,
-                'financial_management' => $financial_management ,
-            ]);
+        where('parent_id',Auth::id())
+        ->get();
     }
 
-    static function run_change_password_form($Auth_user_id, $Auth_user_name, $hashed_new_password)
+    public static function runChangePasswordForm($hashed_new_password)
     {
         return self::
         select( [ 'id' , 'name' , 'password' ] )
-        ->name($Auth_user_name)
-        ->id($Auth_user_id)
+        ->id(Auth::id())
+        ->name(Auth::user()->name)
         ->limit('1')
         ->update( ['password' => $hashed_new_password ]);
     }
 
-    public static function all_users_related_to_this_super_admin()
-    {
-        return self::
-        where( 'parent_id' , Auth::id() )
-        ->get();
-    }
-
-    static function make_ban_or_active_this_user_id($name_of_user , $id_of_user , $action)
+    public static function makeBanOrActiveThisUserIdByUpdateHisStatus($name_of_user , $id_of_user , $action)
     {
         return self::
         select( [ 'id' , 'name' , 'status' ] )
-        ->name($name_of_user)
         ->id($id_of_user)
+        ->name($name_of_user)
         ->limit('1')
-        ->update( [ 'status' => $action ]);
+        ->update([ 'status' => $action ]);
+    }
+
+    public static function countExistanceOfParentIdRelatedToThisIdOfUser($id_of_user)
+    {
+        return self::
+        select(['id','parent_id'])
+        ->where( [ 'id'        => $id_of_user ,
+                   'parent_id' => Auth::id() ] )
+        ->limit('1')
+        ->count() ;
     }
 }

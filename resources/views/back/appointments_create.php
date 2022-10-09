@@ -100,8 +100,8 @@ echo '
                         <div class="col-md-12 col-sm-12 col-xs-12" >
                           <div class="form-group" >
                             <div class="col-md-12 col-sm-12 col-xs-12" >
-                                <div class="col-md-12 col-sm-12 col-xs-12" >';
-
+                                <div class="col-md-12 col-sm-12 col-xs-12" >
+                                <input type="hidden" name="appointment_child_dr_related_name" value="" checked="checked" >';
                                 // Explode and make array type variable
                                 $common_clinic_dr_1      = explode(",",$clinic_doctors_name);
                                 // Estimate how many index exist in this variable
@@ -138,7 +138,8 @@ echo '
                         Choose Type Service of This Appointment
                     </label>
                     
-                    <div style="margin-top:10px;margin-bottom:30px;" class="col-md-12 col-sm-12 col-xs-12" >' ;
+                    <div style="margin-top:10px;margin-bottom:30px;" class="col-md-12 col-sm-12 col-xs-12" >
+                    <input type="hidden" name="appointment_service_type" value="" checked="checked" >' ;
                         // Explode and make array type variable
                         $appointment_service_type = explode(",", Auth::user()->financial_management) ;
                         // Estimate how many index exist in this variable

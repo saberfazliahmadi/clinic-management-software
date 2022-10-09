@@ -6,7 +6,7 @@ $extra_links_header = '
 <!-- MD.BootstrapPersianDateTimePicker css -->
 <link href="'.url('back/vendors/MD.BootstrapPersianDateTimePicker/Content/MdBootstrapPersianDateTimePicker/jquery.Bootstrap-PersianDateTimePicker.css').'" rel="stylesheet">' ;
 
-// Add your custom js files here. (will located in footer)
+// Add your custom js files here. (will be located in footer)
 $extra_links_footer = '
 <!-- jQuery Tags Input -->
 <script src="'.url('back/vendors/jquery.tagsinput/src/jquery.tagsinput.js').'"></script>' ;
@@ -457,7 +457,7 @@ echo '
                             </span>
                         </div>' ;
 
-                        // If the user has an upper level of global.admin_level then show route show_main_settings_of_software_form to him
+                        // If the user has an upper level of global.admin_level then show route users.edit to him
                         if( Auth::user()->user_level >= config('global.admin_level') )
                         {
                             echo '

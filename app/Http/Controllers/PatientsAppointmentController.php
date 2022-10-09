@@ -8,8 +8,6 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use App\Models\{ patients_appointment , patients_general_info };
 
-/** In this controller according to Single Responsibility and Open-Closed Principles of SOLID
-we validate user inputs by Middleware **/
 class PatientsAppointmentController extends Controller
 {
     public function index()
@@ -37,20 +35,21 @@ class PatientsAppointmentController extends Controller
 
     public function store(AppointmentsStoreRequest $request)
     {
-        $encrypted_choose_time_for_this_patient_id = request()->post('choose_time_for_this_patient_id') ;
-        $decrypted_choose_time_for_this_patient_id = encryptDecrypt('decrypt', request()->post('choose_time_for_this_patient_id') ) ;
-        $appointment_child_dr_related_name         = $this->prepareAppointmentChildDrRelatedName(request()->post('appointment_child_dr_related_name')) ;
-        $appointment_service_type                  = $this->prepareAppointmentServiceType(request()->post('appointment_service_type')) ;
-        $response_message = '<span style="color:blue;">The Time and Date Appointment Were NOT Successfully Submitted!</span>' ;
+        $request_validated                         = $request->validated() ;
+        $encrypted_choose_time_for_this_patient_id = $request_validated['choose_time_for_this_patient_id'] ;
+        $decrypted_choose_time_for_this_patient_id = encryptDecrypt('decrypt', $request_validated['choose_time_for_this_patient_id']) ;
+        $appointment_child_dr_related_name         = $this->prepareAppointmentChildDrRelatedName($request_validated['appointment_child_dr_related_name']) ;
+        $appointment_service_type                  = $this->prepareAppointmentServiceType($request_validated['appointment_service_type']) ;
+        $response_message                          = '<span style="color:blue;">The Time and Date Appointment Were NOT Successfully Submitted!</span>' ;
         try
         {
-            $result_store_new_patient_appointment_time              = patients_appointment::storeNewPatientAppointmentTime($decrypted_choose_time_for_this_patient_id, request()->post('choose_time_for_this_date'), request()->post('appointment_time'), $appointment_child_dr_related_name, $appointment_service_type) ;
-            $update_patient_general_info_last_appointment_data_time = patients_general_info::updatePatientGeneralInfoLastAppointmentDataTime($decrypted_choose_time_for_this_patient_id, request()->post('choose_time_for_this_date'), request()->post('appointment_time')) ;
+            $result_store_new_patient_appointment_time              = patients_appointment::storeNewPatientAppointmentTime($decrypted_choose_time_for_this_patient_id, $request_validated['choose_time_for_this_date'], $request_validated['appointment_time'], $appointment_child_dr_related_name, $appointment_service_type) ;
+            $update_patient_general_info_last_appointment_data_time = patients_general_info::updatePatientGeneralInfoLastAppointmentDataTime($decrypted_choose_time_for_this_patient_id, $request_validated['choose_time_for_this_date'], $request_validated['appointment_time']) ;
 
             // If the appointment successfully submitted make success response message
             if( $result_store_new_patient_appointment_time->exists && $update_patient_general_info_last_appointment_data_time )
             {
-                $response_message = 'The Appointment Time= '.request()->post('appointment_time').' On Date= '.request()->post('choose_time_for_this_date').' <br> of <a href="'.route('patients.edit', $encrypted_choose_time_for_this_patient_id ).'" ><b>Patient</b></a> Were Successfully Submitted' ;
+                $response_message = 'The Appointment Time= '.$request_validated['appointment_time'].' On Date= '.$request_validated['choose_time_for_this_date'].' <br>of <a href="'.route('patients.edit', $encrypted_choose_time_for_this_patient_id ).'" ><b>Patient</b></a> Were Successfully Submitted' ;
             }
             return Responses::success( 'patients.create' , '' , $response_message ) ;
         }
@@ -62,7 +61,8 @@ class PatientsAppointmentController extends Controller
     
     public function show(AppointmentsShowRequest $request)
     {
-        $date = $this->prepareDateOfAppointment($request->post('show_all_appointments_on_this_date') , $request->show_all_appointments_on_this_date ) ;
+        $request_validated = $request->validated() ;
+        $date              = $request_validated['show_all_appointments_on_this_date'] ;
         try
         {
             $result_of_appointments_on_specific_date = patients_appointment::appointmentsOnSpecificDate($date) ;
@@ -70,7 +70,7 @@ class PatientsAppointmentController extends Controller
 
             if( $count_of_appointment === 0 )
             {
-                return Responses::success( 'appointments.index' , '' , '<b style="color:blue" >There is no appointment on date '.$date.'</b><br> Please, choose another date to show appointments' ) ;
+                return Responses::success( 'appointments.index' , '' , '<b style="color:blue">There is no appointment on date '.$date.'</b><br>Please, choose another date to show appointments' ) ;
             }
 
             return view('back.appointments_index' ,
@@ -90,7 +90,7 @@ class PatientsAppointmentController extends Controller
 
     public function destroy(Request $request)
     {
-        $response_message = '<span style="color:blue;">The Selected Appointment WAS NOT Deleted!</span><br>You may have a related financial transaction to this appointment<br>So, first of all you should delete related financial transaction' ;
+        $response_message = '<b><span style="color:blue;">The Selected Appointment WAS NOT Deleted!</span></b>' ;
         try
         {
             if( patients_appointment::deleteThisAppointmentId($request->appointment_id) )
@@ -101,23 +101,8 @@ class PatientsAppointmentController extends Controller
         }
         catch (\Exception $exception)
         {
-            return Responses::failedWithException( 'back_to_previous_page' , '' , $response_message , $exception ) ;
+            return Responses::failedWithException( 'home' , '' , $response_message , $exception ) ;
         }
-    }
-
-    // Define and Specify a variable of date's appointments by GET or POST method
-    public function prepareDateOfAppointment($request_post_date , $request_get_date)
-    {
-        $show_all_appointments_on_this_date = '' ;
-        if( $request_post_date !== "" )
-        {
-            $show_all_appointments_on_this_date = $request_post_date ;
-        }
-        elseif( $request_get_date !== "" )
-        {
-            $show_all_appointments_on_this_date = $request_get_date ;
-        }
-        return $show_all_appointments_on_this_date ;
     }
 
     public function prepareFinancialManagementData()
@@ -207,7 +192,7 @@ class PatientsAppointmentController extends Controller
             $number_of_appointments_on_this_time_and_date                     = $appointments_of_patients_on_this_time_and_date->count() ;
             $title_of_appointment_div                                         = $this->prepareTitleOfAppointmentDiv($appointments_of_patients_on_this_time_and_date) ;
             [$class_name_of_appointment_div, $color_style_of_appointment_div] = $this->prepareClassNameAndColorStyleOfAppointmentDiv($number_of_appointments_on_this_time_and_date) ;
-            $html_content .= $this->prepareHtmlContent($time_of_appointment, $number_of_appointments_on_this_time_and_date, $title_of_appointment_div, $class_name_of_appointment_div, $color_style_of_appointment_div) ;
+            $html_content                                                    .= $this->prepareHtmlContent($time_of_appointment, $number_of_appointments_on_this_time_and_date, $title_of_appointment_div, $class_name_of_appointment_div, $color_style_of_appointment_div) ;
         }
         return $html_content ;
     }

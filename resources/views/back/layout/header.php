@@ -251,20 +251,20 @@ label
                                     
                                     <li>
                                         <span style="float:left;margin-top:15px;margin-left:15px;" >
-                                            <a href="'.route('show_change_password_form').'" >
+                                            <a href="'.route('users.edit.password').'" >
                                                 <span class="fa fa-lock" aria-hidden="true" style="float:left;font-size:26px;margin-left:0px;"></span>
                                                 &nbsp;&nbsp;' . $cms_menu_title_data_from_middleware[24] . '
                                             </a>
                                         </span>
                                     </li>' ;
 
-                                    // If the user has an upper level of global.admin_level then show route show_main_settings_of_software_form to him
+                                    // If the user has an upper level of global.admin_level then show route users.edit to him
                                     if( Auth::user()->user_level >= config('global.admin_level') )
                                     {
                                         echo '
                                         <li>
                                             <span style="float:left;margin-top:15px;margin-left:15px;" >
-                                                <a href="'.route('show_main_settings_of_software_form').'">
+                                                <a href="'.route('users.edit').'">
                                                     <span class="fa fa-cog" aria-hidden="true" style="float:left;font-size:26px;margin-left:0px;"></span>
                                                     &nbsp;' . $cms_menu_title_data_from_middleware[25] . '
                                                 </a>
@@ -272,13 +272,13 @@ label
                                         </li>' ;
                                     }
 
-                                    // If the user has a upper level of global.super_admin_level then show route show_main_settings_of_software_form to him
+                                    // If the user has a upper level of global.super_admin_level then show route users.edit to him
                                     if( Auth::user()->user_level >= config('global.super_admin_level') )
                                     {
                                         echo '
                                         <li>
                                             <span style="float:left;margin-top:15px;margin-left:15px;" >
-                                                <a href="'.route('show_management_users_of_software_form').'">
+                                                <a href="'.route('users.edit.group').'">
                                                     <span class="glyphicon glyphicon-user" aria-hidden="true" style="float:left;font-size:24px;margin-left:0px;"></span>
                                                     Users Management
                                                 </a>
@@ -286,7 +286,7 @@ label
                                         </li>
                                         <li>
                                             <span style="float:left;margin-top:15px;margin-left:15px;" >
-                                                <a href="'.route('show_users_activities_logs').'">
+                                                <a href="'.route('users.show.logs').'">
                                                     <span class="fa fa-align-left" aria-hidden="true" style="float:left;font-size:24px;margin-left:0px;"></span>
                                                     Users Activities Logs
                                                 </a>
@@ -535,7 +535,7 @@ if ( isset($count_of_appointment_in_header) && $count_of_appointment_in_header >
                                     if( strlen($financial_management[$start]) > 0 )
                                     {
                                         echo '
-                                        <option value="'.trim(substr($financial_management[$start], strpos($financial_management[$start], ":") + 1)).'" class="col-md-12" >
+                                        <option value="'.trim(substr($financial_management[$start], strpos($financial_management[$start], ":") + 1)).'" class="col-md-12 col-sm-12 col-xs-12" >
                                             '.$financial_management[$start].'
                                         </option>' ;
                                     }

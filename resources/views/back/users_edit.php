@@ -43,10 +43,8 @@ echo '
                 $cms_menu_title_trick = explode(",", $result_show_main_settings_of_software_form->cms_menu_title) ;
 
                 echo '
-			    <form method="POST" action="'.route('update_show_main_settings_of_software_form').'" id="medical-file-form" >
+			    <form method="POST" action="'.route('users.update').'" id="medical-file-form" >
 			        <input type="hidden" name="_token" value="'.csrf_token().'" >
-			        <input type="hidden" name="name_of_user" value="'.$result_show_main_settings_of_software_form->name.'" >
-                    <input type="hidden" name="id_of_user" value="'.encryptDecrypt('encrypt', $result_show_main_settings_of_software_form->id ).'" >
                     <input type="hidden" name="_method" value="put" >
                                    
                   <div class="form-group col-md-12 col-sm-12 col-xs-12" style="border-bottom:1px solid #aba5a5;padding-bottom:50px;" >

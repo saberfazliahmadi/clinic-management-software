@@ -37,10 +37,10 @@ class financial_transaction extends Model
     {
         return self::
         select(['financial_transaction_id', 'financial_dr_related_id'])
-            ->where('financial_transaction_id', $delete_this_financial_id)
-            ->equalThisToAdminIdFromUserTable('financial_dr_related_id')
-            ->limit('1')
-            ->delete();
+        ->where('financial_transaction_id', $delete_this_financial_id)
+        ->equalThisToAdminIdFromUserTable('financial_dr_related_id')
+        ->limit('1')
+        ->delete();
     }
 
     public static function resultFetchLast10Transactions()
@@ -54,17 +54,16 @@ class financial_transaction extends Model
     public static function storeShowSubmitFinancialTransactionForm($medical_document_number_of_patient, $financial_transaction_type, $financial_transaction_date, $financial_transaction_time, $title_of_payment, $amount_of_payment, $financial_transaction_child_dr_related_name )
     {
         return self::create(
-            [
-                'financial_dr_related_id'      => findAdminIdFromUsersTable() ,
-                'financial_patient_related_id' => $medical_document_number_of_patient ,
-                'financial_transaction_type'   => $financial_transaction_type ,
-                'financial_transaction_date'   => $financial_transaction_date ,
-                'financial_transaction_time'   => $financial_transaction_time ,
-                'financial_transaction_title'  => $title_of_payment ,
-                'financial_transaction_amount' => $amount_of_payment ,
-                'financial_transaction_child_dr_related_name' => $financial_transaction_child_dr_related_name
-            ]
-        ) ;
+        [
+            'financial_dr_related_id'      => findAdminIdFromUsersTable() ,
+            'financial_patient_related_id' => $medical_document_number_of_patient ,
+            'financial_transaction_type'   => $financial_transaction_type ,
+            'financial_transaction_date'   => $financial_transaction_date ,
+            'financial_transaction_time'   => $financial_transaction_time ,
+            'financial_transaction_title'  => $title_of_payment ,
+            'financial_transaction_amount' => $amount_of_payment ,
+            'financial_transaction_child_dr_related_name' => $financial_transaction_child_dr_related_name
+        ] ) ;
     }
 
     public static function resultFetchReceiveOrPayTransactionsFromDateToDate($financial_transaction_type = '+' , $sign_trick_1 , $financial_transaction_child_dr_related_name_text_trick , $sign_trick_2 , $financial_transaction_title_text_trick , $financial_report_from_date , $financial_report_to_date )
@@ -80,20 +79,19 @@ class financial_transaction extends Model
         ->get() ;
     }
 
-    public static function StoreNewFinancialTransactionForThisAppointment($admin_id_from_users_table,$appointment_patient_related_id,$request_appointment_id,$show_all_appointments_on_this_date,$show_all_appointments_on_this_time,$appointment_service_type,$money_receive_header_console,$appointment_child_dr_related_name)
+    public static function storeNewFinancialTransactionForThisAppointment($admin_id_from_users_table, $appointment_patient_related_id, $request_appointment_id, $show_all_appointments_on_this_date, $show_all_appointments_on_this_time, $appointment_service_type, $money_receive_header_console, $appointment_child_dr_related_name)
     {
-        self::create(
-            [
-                'financial_dr_related_id'          => $admin_id_from_users_table ,
-                'financial_patient_related_id'     => $appointment_patient_related_id ,
-                'financial_appointment_related_id' => $request_appointment_id ,
-                'financial_transaction_type'       => '+' ,
-                'financial_transaction_date'       => $show_all_appointments_on_this_date ,
-                'financial_transaction_time'       => $show_all_appointments_on_this_time ,
-                'financial_transaction_title'      => $appointment_service_type ,
-                'financial_transaction_amount'     => $money_receive_header_console ,
-                'financial_transaction_child_dr_related_name' => $appointment_child_dr_related_name
-            ]
-        ) ;
+        return self::create(
+        [
+            'financial_dr_related_id'          => $admin_id_from_users_table ,
+            'financial_patient_related_id'     => $appointment_patient_related_id ,
+            'financial_appointment_related_id' => $request_appointment_id ,
+            'financial_transaction_type'       => '+' ,
+            'financial_transaction_date'       => $show_all_appointments_on_this_date ,
+            'financial_transaction_time'       => $show_all_appointments_on_this_time ,
+            'financial_transaction_title'      => $appointment_service_type ,
+            'financial_transaction_amount'     => $money_receive_header_console ,
+            'financial_transaction_child_dr_related_name' => $appointment_child_dr_related_name
+        ]) ;
     }
 }
