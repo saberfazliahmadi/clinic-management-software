@@ -15,9 +15,9 @@ class UsersUpdatePasswordRequest extends FormRequest
     {
         return
         [
-            'current_password'    => [ 'required' , 'string' , 'min:8' , 'max:100' , app(CheckCurrentPasswordEnteredByUserShouldBeEqualToUserPassword::class) ] ,
-            'new_password'        => 'required|string|min:8|max:100|same:retype_new_password' ,
-            'retype_new_password' => 'required|string|min:8|max:100|same:new_password'        ,
+            'password'              => [ 'required' , 'string' , 'min:8' , 'max:100' , app(CheckCurrentPasswordEnteredByUserShouldBeEqualToUserPassword::class) ] ,
+            'new_password'          => 'required|string|min:8|max:100|same:re_type_new_password' ,
+            're_type_new_password'  => 'required|string|min:8|max:100|same:new_password'          ,
         ];
     }
 }

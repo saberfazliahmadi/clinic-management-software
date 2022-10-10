@@ -82,15 +82,15 @@ echo '
                 <input type="hidden" name="_token" value="'.csrf_token().'" >
                 <input type="hidden" name="_method" value="put" >
                 <h4 style="float:left;" > Please enter your current password | Minimum 8 Characters </h4>
-                <input type="password" name="current_password" value="" min="4" max="60" required="required" data-requiredmsg="Please enter your current password" title="Please enter your current password | Minimum 8 Characters"  alt="Please enter your current password" placeholder="Type your Current Password | Minimum 8 Characters" class="form-control col-md-12 col-xs-12" autocomplete="off" aria-expanded="false" style="margin-bottom:20px;" />
+                <input type="password" name="password" value="" required required="required" data-requiredmsg="Please enter your current password" title="Please enter your current password"  alt="Please enter your current password" placeholder="Type your Current Password" class="form-control col-md-12 col-xs-12" autocomplete="off" aria-expanded="false" style="margin-bottom:20px;" />
                 <Br>
                 <Br>
                 <h4 style="float:left;" > Type New password | Minimum 8 Characters </h4>
-                <input type="password" name="new_password" value="" min="4" max="60" required="required" data-requiredmsg="Please type a new password" title="Please type a new password | Minimum 8 Characters" alt="Please type a new password" placeholder="Type New password | Minimum 8 Characters" class="form-control col-md-12 col-xs-12" autocomplete="off" aria-expanded="false" style="margin-bottom:20px;" />
+                <input type="password" name="new_password" value="" required required="required" data-requiredmsg="Please type a new password" title="Please type a new password" alt="Please type a new password" placeholder="Type New password" class="form-control col-md-12 col-xs-12" autocomplete="off" aria-expanded="false" style="margin-bottom:20px;" />
                 <Br>
                 <Br>
-                <h4 style="float:left;" > Type New password | Minimum 8 Characters </h4>
-                <input type="password" name="retype_new_password" value="" min="4" max="60" required="required" data-requiredmsg="Please repeat the new password" title="Please Re-type the new password | Minimum 8 Characters" alt="Please Re-type the new password | Minimum 8 Characters" placeholder="Re-type the new password | Minimum 8 Characters" class="form-control col-md-12 col-xs-12" autocomplete="off" aria-expanded="false" style="margin-bottom:20px;" />
+                <h4 style="float:left;" > Re-Type New password | Minimum 8 Characters </h4>
+                <input type="password" name="re_type_new_password" value="" required required="required" data-requiredmsg="Please repeat the new password" title="Please Re-type the new password" alt="Please Re-type the new password" placeholder="Re-type the new password" class="form-control col-md-12 col-xs-12" autocomplete="off" aria-expanded="false" style="margin-bottom:20px;" />
                 <Br>
                 <Br>
                 <div class="form-group" style="margin-top:40px;">
