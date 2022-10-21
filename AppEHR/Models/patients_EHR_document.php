@@ -5,6 +5,7 @@ use Database\Factories\PatientsEHRDocumentFactory;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
+use Illuminate\Support\Facades\Auth;
 
 class patients_EHR_document extends Model
 {

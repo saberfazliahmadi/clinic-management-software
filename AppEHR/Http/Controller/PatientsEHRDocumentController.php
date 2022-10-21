@@ -11,8 +11,8 @@ use phpDocumentor\Reflection\Types\InterfaceString;
 use AppEHR\MessageSender;
 use AppEHR\MessageSenderFacade;
 
-/** In this controller, according to the Single Responsibility and Open-Closed Principles of SOLID We validate user inputs by using middleware.
- Furthermore, we use DB::transaction via middleware for some methods like store() in this controller.
+/** In this controller, according to the Single Responsibility and Open-Closed Principles of SOLID
+ we use DB::transaction via middleware for some methods like store() in this controller.
  In addition, to have a cleaner controller, all logic is transferred into the Services Layer.
 
  Remember that, when in a controller using a method from a Service class, you should pass all the required variable parameters one by one
@@ -21,7 +21,6 @@ use AppEHR\MessageSenderFacade;
  In fact, your Service's methods should be callable from wherever you will need them in the future.
  By definition, a service should take some variables from wherever they come, apply some logic to them, and finally return them.
  So, imagine that your service class is a separate unit, which should be able to deal with variables in the future that will be passed into that form wherever. */
-
 class PatientsEHRDocumentController extends Controller
 {
     private $PatientsEHRDocumentsService ;
@@ -125,7 +124,7 @@ class PatientsEHRDocumentController extends Controller
 
             return Responses::view('EHR::ehr_show' ,
             [
-                'title_of_page'                            => 'a new EHR information of <b>'.encryptDecrypt('decrypt', $request->encrypted_patient_name).'</b> <br> successfully saved at date '.date("Y/m/d") ,
+                'title_of_page'                            => 'The new EHR information for <b>'.encryptDecrypt('decrypt', $request->encrypted_patient_name).'</b><br>was successfully saved on the date '.date("Y/m/d") ,
                 'EHR_document_patient_related_id'          => $result_show_new_saved_ehr->EHR_document_patient_related_id ,
                 'EHR_document_prescribed_common_drug'      => $result_show_new_saved_ehr->EHR_document_prescribed_common_drug ,
                 'EHR_document_prescribed_common_diet'      => $result_show_new_saved_ehr->EHR_document_prescribed_common_diet ,

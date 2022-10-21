@@ -29,7 +29,7 @@ echo '
             <span class="step_descr">
                 <center>
                    <i class="glyphicon glyphicon-plus"></i>
-                   ' . $cms_menu_title_data_from_middleware[15] . '
+                   ' .__('general.Submit New Patient').'
                 </center>
               </span>
           </a>

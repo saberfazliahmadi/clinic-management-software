@@ -7,7 +7,7 @@
     <!-- CSRF Token -->
     <meta name="csrf-token" content="{{ csrf_token() }}">
 
-    <title>MatabeOnline Clinic Management Software</title>
+    <title>{{ config('global.app_name') }}</title>
 
     <!-- Scripts -->
     <script src="{{ asset('js/app.js') }}" defer></script>
@@ -42,7 +42,7 @@
 
         <div class="col-md-12 col-sm-12 col-xs-12" style="margin-top: 50px;margin-bottom: 50px;">
             <h1>
-                MatabeOnline Clinic Management Software
+                {{ config('global.app_name') }}
             </h1>
         </div>
 

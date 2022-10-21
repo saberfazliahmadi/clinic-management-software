@@ -109,8 +109,9 @@ echo '
     <div style="margin-top:15px;" class="col-md-12 col-sm-12 col-xs-12" align="center" >
         <h1 style="text-align:center;font-size:17pt;margin-top:10px;" align="center" >
             <div class="col-md-12 col-sm-12 col-xs-12" >
-                The information mentioned below will be sent to the Smartphone of the patient by BOT automatically
-                <br>
+                The information mentioned below<br>
+                will be sent to the Smartphone of the patient<br>
+                by BOT automatically<br>
                 <br>
                 <div class="smartphone">
                     <div class="contentphone" style="overflow-wrap: break-word; word-wrap: break-word; hyphens: auto;" >

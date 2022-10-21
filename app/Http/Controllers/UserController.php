@@ -5,11 +5,8 @@ use App\Http\Requests\UsersUpdateGroupRequest;
 use App\Http\Requests\UsersUpdatePasswordRequest;
 use App\Http\Requests\UsersUpdateRequest;
 use App\Models\User;
-use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\File;
-use mysql_xdevapi\Session;
-use phpDocumentor\Reflection\DocBlock\Tags\Uses;
 use Hash;
 use App\Responses\Responses ;
 // https://stackoverflow.com/questions/32718870/how-to-get-all-input-of-post-in-laravel
@@ -125,7 +122,7 @@ class UserController extends Controller
             }
             return Responses::success('users.edit.password' , '' , $response_message_success ) ;
         }
-        catch (\Exception $exception )
+        catch (\Exception $exception)
         {
             return Responses::failedWithException('users.edit.password' , '' , $response_message_failed , $exception) ;
         }
@@ -194,7 +191,7 @@ class UserController extends Controller
 
     public function prepareCmsMenuTitle($request_validated)
     {
-        return $request_validated['cms_menu_title_0']
+        return  $request_validated['cms_menu_title_0']
         . ',' . $request_validated['cms_menu_title_1']
         . ',' . $request_validated['cms_menu_title_2']
         . ',' . $request_validated['cms_menu_title_3']

@@ -2,7 +2,7 @@
 namespace App\Http\Controllers;
 
 use App\Http\Controllers\Controller;
-use App\Http\Requests\IfUserClickOnButtonOfSendPatientToDoctorRoom;
+use App\Http\Requests\IfUserClickOnButtonOfSendPatientToDoctorRoomRequest;
 use App\Models\financial_transaction;
 use App\Models\patients_appointment;
 use App\Responses\Responses;
@@ -11,14 +11,14 @@ use Illuminate\Support\Facades\View;
 
 class HeaderController extends Controller
 {
-    public function ifUserClickOnButtonSendPatientToDoctorRoom(IfUserClickOnButtonOfSendPatientToDoctorRoom $request)
+    public function ifUserClickOnButtonSendPatientToDoctorRoom(IfUserClickOnButtonOfSendPatientToDoctorRoomRequest $request)
     {
-        $request_validated = $request->validated() ;
+        $request_validated = $request->validated();
         try
         {
             $show_all_appointments_on_this_date  = date('Y-m-d');
-            $admin_id_from_users_table           = findAdminIdFromUsersTable() ;
-            $money_receive_header_console        = $this->prepareMoneyReceivedVariable($request_validated) ;
+            $admin_id_from_users_table           = findAdminIdFromUsersTable();
+            $money_receive_header_console        = $this->prepareMoneyReceivedVariable($request_validated);
 
             patients_appointment::updateThisAppointmentFromWatingStatusToDoneStatus($request_validated['appointment_id'] , $admin_id_from_users_table , $money_receive_header_console ) ;
 
@@ -39,12 +39,12 @@ class HeaderController extends Controller
         $show_all_appointments_on_this_date  = date('Y-m-d');
         try
         {
-            $admin_id_from_users_table  = findAdminIdFromUsersTable() ;
+            $admin_id_from_users_table  = findAdminIdFromUsersTable();
             $today_appointments         = patients_appointment::allAppointmentsOnThisDate($admin_id_from_users_table , $show_all_appointments_on_this_date ) ;
-            $count_of_today_appointment = $today_appointments->count() ;
+            $count_of_today_appointment = $today_appointments->count();
 
-            $count_of_today_waiting_appointments = 0 ;
-            $financial_management_data_in_header = '' ;
+            $count_of_today_waiting_appointments = 0;
+            $financial_management_data_in_header = '';
             if( $count_of_today_appointment > 0 )
             {
                 $count_of_today_waiting_appointments = patients_appointment::countAppointmentsOnThisDateWhichAreOnWaitingStatus($admin_id_from_users_table , $show_all_appointments_on_this_date ) ;

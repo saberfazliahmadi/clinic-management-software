@@ -22,8 +22,8 @@ if (!function_exists('encryptDecrypt'))
 
         $output         = false;
         $encrypt_method = "AES-256-CBC";
-        $secret_key     = Auth::user()->created_at;
-        $secret_iv      = Auth::id();
+        $secret_key     = findAdminIdFromUsersTable();
+        $secret_iv      = findAdminIdFromUsersTable();
         // hash
         $key            = hash('sha256', $secret_key);
         // iv - encrypt method AES-256-CBC expects 16 bytes - else you will get a warning

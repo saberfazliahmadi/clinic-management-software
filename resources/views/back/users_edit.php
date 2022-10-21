@@ -532,13 +532,6 @@ echo '
                                  Remaining SMS credit: ' . $result_show_main_settings_of_software_form->notif_sms_credit . '
                             </label>
                         </center>
-                        <div lass="col-md-12 col-sm-12 col-xs-12">
-                          <div class="form-control col-md-7 col-xs-12" style="border:0px solid;background:none;-webkit-box-shadow: none;text-align: center;padding-left: 0px!important;" contenteditable="false" >
-                            The cost of sending each SMS is 60 Tomans
-                            <br>
-                          </div>
-                        </div>
-    
                       </div>
                       
                   <button type="submit" name="setting_status" value="true" class="btn btn-success btn-group-justified uiuxtrick" style="font-size:27px;position: fixed;bottom: 0px;right: 0px;z-index: 1;" >

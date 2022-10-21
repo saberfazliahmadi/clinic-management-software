@@ -21,10 +21,10 @@ DELETE	    /photos/{photo}	        destroy	 photos.destroy */
 Auth::routes();
 Route::view('/' , 'auth.login');
 
-Route::group( [ 'middleware' => [ 'auth' , 'throttle:100,1' ] ],function()
+Route::group( [ 'middleware' => [ 'auth' , 'PreventBannedUsers' , 'throttle:100,1' ] ],function()
 {
     // Protected routes which are accessible for Authenticated User/Admin/SuperAdmin
-    Route::group( [ 'middleware' => 'protectedPageAccessibleForUserAndAdminAndSuperAdmin' ],function()
+    Route::group( [ 'middleware' => [ 'CheckPageAccessibilityBasedOnLevelOfUser:User' , 'ProvideHeaderData' ] ],function()
     {
         // All routes related to header
         Route::get('send_patient_to_doctor_room'        , [ HeaderController::class , 'ifUserClickOnButtonSendPatientToDoctorRoom' ] )->name('send_patient_to_doctor_room') ;
@@ -71,7 +71,7 @@ Route::group( [ 'middleware' => [ 'auth' , 'throttle:100,1' ] ],function()
 
     // Protected routes which are accessible for Authenticated Admin/SuperAdmin
     // All Routes related to patients__e_h_r_documents model
-    Route::group( [ 'prefix' => '/ehr' , 'middleware' => 'protectedPageAccessibleForAdminAndSuperAdmin' ] , function()
+    Route::group( [ 'prefix' => '/ehr' , 'middleware' => [ 'CheckPageAccessibilityBasedOnLevelOfUser:Admin' , 'ProvideHeaderData' ] ] , function()
     {
         //Route::get(''                                                                           , [ PatientsEHRDocumentController::class , 'index'  ] )->name('ehr.index'       ) ;
         Route::get('/create/{encrypted_patient_id}/{appointment_id?}/{child_dr_related_name?}' , [ PatientsEHRDocumentController::class , 'create' ] )->name('ehr.create')->whereAlphaNumeric('encrypted_patient_id')->whereNumber('appointment_id')->where(['child_dr_related_name' => config('global.regex_rule_of_encrypted_id') ])->middleware([ 'CheckValidityOfPatientID' , 'CheckValidityOfAppointmentID' ]);
@@ -87,25 +87,25 @@ Route::group( [ 'middleware' => [ 'auth' , 'throttle:100,1' ] ],function()
     // All Routes related to users model
     Route::group([ 'prefix' => '/users' ],function()
     {
-        Route::group(['middleware' => 'protectedPageAccessibleForSuperAdmin'],function()
+        Route::group(['middleware' => [ 'CheckPageAccessibilityBasedOnLevelOfUser:SuperAdmin' , 'ProvideHeaderData' ]],function()
         {
-            //Route::get(''                   , [ UserController::class , 'index'                 ] )->name('users.index'             ) ;
-            Route::get('/edit_group'      , [ UserController::class , 'editGroup'              ] )->name('users.edit.group'  ) ;
-            Route::put('/update_group'    , [ UserController::class , 'updateGroup'            ] )->name('users.update.group') ;
-            //Route::get('/{user_id}/destroy' , [ UserController::class , 'destroy'               ] )->name('users.destroy'           )->whereAlphaNumeric('user_id')->middleware('CheckValidityOfUserID');
-            Route::get('/activities_logs' , [ UserController::class , 'showLogs'               ] )->name('users.show.logs'   ) ;
+            //Route::get(''                   , [ UserController::class , 'index'         ] )->name('users.index'             ) ;
+            Route::get('/edit_group'      , [ UserController::class , 'editGroup'      ] )->name('users.edit.group'  ) ;
+            Route::put('/update_group'    , [ UserController::class , 'updateGroup'    ] )->name('users.update.group') ;
+            //Route::get('/{user_id}/destroy' , [ UserController::class , 'destroy'       ] )->name('users.destroy'           )->whereAlphaNumeric('user_id')->middleware('CheckValidityOfUserID');
+            Route::get('/activities_logs' , [ UserController::class , 'showLogs'       ] )->name('users.show.logs'   ) ;
         });
 
-        Route::group(['middleware' => 'protectedPageAccessibleForAdminAndSuperAdmin'],function()
+        Route::group(['middleware' => [ 'CheckPageAccessibilityBasedOnLevelOfUser:Admin' , 'ProvideHeaderData' ]],function()
         {
-            Route::get('/edit'            , [ UserController::class , 'edit'                   ] )->name('users.edit'        ) ;
-            Route::put('/update'          , [ UserController::class , 'update'                 ] )->name('users.update'      ) ;
+            Route::get('/edit'            , [ UserController::class , 'edit'           ] )->name('users.edit'        ) ;
+            Route::put('/update'          , [ UserController::class , 'update'         ] )->name('users.update'      ) ;
         });
 
-        Route::group(['middleware' => 'protectedPageAccessibleForUserAndAdminAndSuperAdmin'],function()
+        Route::group(['middleware' => [ 'CheckPageAccessibilityBasedOnLevelOfUser:User' , 'ProvideHeaderData' ]],function()
         {
-            Route::get('/edit_password'   , [ UserController::class , 'editPassword'    ] )->name('users.edit.password'  );
-            Route::put('/update_password' , [ UserController::class , 'updatePassword'  ] )->name('users.update.password');
+            Route::get('/edit_password'   , [ UserController::class , 'editPassword'   ] )->name('users.edit.password'  );
+            Route::put('/update_password' , [ UserController::class , 'updatePassword' ] )->name('users.update.password');
         });
     });
 

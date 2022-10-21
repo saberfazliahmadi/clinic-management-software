@@ -45,31 +45,6 @@ class Kernel extends HttpKernel
             'throttle:api',
             \Illuminate\Routing\Middleware\SubstituteBindings::class,
         ],
-
-        'protectedPageAccessibleForUserAndAdminAndSuperAdmin' =>
-        [
-            \App\Http\Middleware\Authenticate::class,
-            \App\Http\Middleware\PreventingBannedUsers::class ,
-            \App\Http\Middleware\CheckPageAccessibilityForUserLevel::class,
-            \App\Http\Middleware\ProvideHeaderData::class,
-        ],
-
-        'protectedPageAccessibleForAdminAndSuperAdmin' =>
-        [
-            \App\Http\Middleware\Authenticate::class,
-            \App\Http\Middleware\PreventingBannedUsers::class ,
-            \App\Http\Middleware\CheckPageAccessibilityForAdminLevel::class,
-            \App\Http\Middleware\ProvideHeaderData::class,
-        ],
-
-        'protectedPageAccessibleForSuperAdmin' =>
-        [
-            \App\Http\Middleware\Authenticate::class,
-            \App\Http\Middleware\PreventingBannedUsers::class ,
-            \App\Http\Middleware\CheckPageAccessibilityForSuperAdminLevel::class,
-            \App\Http\Middleware\ProvideHeaderData::class,
-        ],
-
     ];
 
     /**
@@ -90,11 +65,13 @@ class Kernel extends HttpKernel
         'throttle'      => \Illuminate\Routing\Middleware\ThrottleRequests::class,
         'verified'      => \Illuminate\Auth\Middleware\EnsureEmailIsVerified::class,
 
-        'TransactionOnDatabaseToRollbackWhenExceptionsHappen' => \App\Http\Middleware\TransactionOnDatabaseToRollbackWhenExceptionsHappen::class,
-
+        'ProvideHeaderData'                           => \App\Http\Middleware\ProvideHeaderData::class,
+        'PreventBannedUsers'                          => \App\Http\Middleware\PreventBannedUsers::class,
+        'CheckPageAccessibilityBasedOnLevelOfUser'    => \App\Http\Middleware\CheckPageAccessibilityBasedOnLevelOfUser::class,
         'CheckValidityOfPatientID'                    => \App\Http\Middleware\CheckValidityOfPatientID::class,
         'CheckValidityOfAppointmentID'                => \App\Http\Middleware\CheckValidityOfAppointmentID::class,
         'CheckValidityOfEHRID'                        => \AppEHR\Http\Middleware\CheckValidityOfEHRID::class,
         'CheckMobileNumberDuplication'                => \App\Http\Middleware\CheckMobileNumberDuplication::class,
+        'TransactionOnDatabaseToRollbackWhenExceptionsHappen' => \App\Http\Middleware\TransactionOnDatabaseToRollbackWhenExceptionsHappen::class,
     ];
 }

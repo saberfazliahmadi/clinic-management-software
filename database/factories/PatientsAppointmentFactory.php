@@ -3,6 +3,7 @@
 namespace Database\Factories;
 
 use App\Models\patients_appointment;
+use App\Models\patients_general_info;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 class PatientsAppointmentFactory extends Factory
@@ -15,9 +16,10 @@ class PatientsAppointmentFactory extends Factory
      */
     public function definition()
     {
+        $patients_general_info = patients_general_info::all()->random(1)->first();
         return [
-            'appointment_dr_related_id'             => mt_rand(1, 100) ,
-            'appointment_patient_related_id'        => mt_rand(1, 1000) ,
+            'appointment_dr_related_id'             => $patients_general_info->patient_dr_related_id ,
+            'appointment_patient_related_id'        => $patients_general_info->patient_id ,
             'appointment_date'                      => date('Y-m-d') ,
             'appointment_time'                      => $this->faker->time('H:i') ,
             'appointment_status'                    => '1'  ,

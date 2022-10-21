@@ -4,7 +4,7 @@ namespace App\Http\Requests;
 use App\Rules\CheckValidityOfAppointmentIDRule;
 use Illuminate\Foundation\Http\FormRequest;
 
-class IfUserClickOnButtonOfSendPatientToDoctorRoom extends FormRequest
+class IfUserClickOnButtonOfSendPatientToDoctorRoomRequest extends FormRequest
 {
     public function authorize()
     {

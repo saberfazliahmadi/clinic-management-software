@@ -1,29 +1,31 @@
 <?php
 return [
     // The URL of application that we want to use it as a link on different situation
-    'app_url' => 'https://matabeonline.ir/' ,
-    'app_name' => 'MatabeOnline Clinic Management Software' ,
+    'app_url'      => 'https://matabeonline.ir/' ,
+    'app_name'     => 'MatabeOnline Clinic Management Software' ,
+    'main_app_name_english'=> 'MatabeOnline' ,
+    'main_app_name_persian'=> 'مطب آنلاین' ,
 
     // The levels if user which will be checked on middleware
-    'guest_level'        => '0' ,
-    '0'        => 'guest level' ,
+    'guest_level'  => '0' ,
+    '0'            => 'guest level' ,
 
-    'user_level'         => '1' ,
-    '1'        => 'user level' ,
+    'user_level'   => '1' ,
+    '1'            => 'user level' ,
 
-    'admin_level'        => '2' ,
-    '2'        => 'admin level' ,
+    'admin_level'  => '2' ,
+    '2'            => 'admin level' ,
 
     'super_admin_level'  => '3' ,
-    '3'        => 'super admin level' ,
+    '3'            => 'super admin level' ,
 
     // Class name of button based on user status
-    'activated' => 'primary' ,
-    'banned'    => 'warning' ,
+    'activated'    => 'primary' ,
+    'banned'       => 'warning' ,
 
     // Strings should be saved in database as status of user
-    'active'   => 'activated' ,
-    'ban'      => 'banned' ,
+    'active'       => 'activated' ,
+    'ban'          => 'banned' ,
 
     // a definition rule of Regex for encrypted id that we have used in route.php
     'regex_rule_of_encrypted_id' => '[0-z--- ]+' ,

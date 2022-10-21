@@ -8,7 +8,7 @@ class HomeController extends Controller
     {
         return view('back.home',
         [
-            'title_of_page' => __('general.Welcome to MatabeOnline Clinic Management Software')
+            'title_of_page' => __('general.Welcome to Clinic Management Software')
         ] ) ;
     }
 }
