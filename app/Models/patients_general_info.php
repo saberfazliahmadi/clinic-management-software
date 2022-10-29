@@ -1,6 +1,7 @@
 <?php
 namespace App\Models;
 
+use App\Http\Requests\PatientsShowRequest;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Database\Factories\PatientsGeneralInfoFactory;
@@ -130,19 +131,18 @@ class patients_general_info extends Model
         ->count() ;
     }
 
-    static function fetchResultOfSearchForm()
+    public static function fetchResultOfSearchForm($request_validated_search_text)
     {
         return self::query()
         ->select( 'patient_id' , 'patient_dr_related_id' , 'patient_mobile_number' , 'patient_nationality_number' , 'patient_first_name' , 'patient_last_name' )
         ->where('patient_dr_related_id' , findAdminIdFromUsersTable() )
-        ->where(function($query)
-        {
-            $query->where( 'patient_mobile_number' , request('search_text') )
+        ->where(function($query) use ($request_validated_search_text) {
+            $query->where( 'patient_mobile_number' , $request_validated_search_text )
             ->orwhere(
             [
-            'patient_nationality_number' => request('search_text') ,
-            'patient_first_name'         => request('search_text') ,
-            'patient_last_name'          => request('search_text')
+            'patient_nationality_number' => $request_validated_search_text ,
+            'patient_first_name'         => $request_validated_search_text ,
+            'patient_last_name'          => $request_validated_search_text
             ]) ;
         })
         ->latest('patient_id')

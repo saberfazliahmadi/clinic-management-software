@@ -1,62 +1,61 @@
 <?php
 namespace App\Http\Requests;
 
-use App\Rules\CheckParentIdOfThisIdOfUser;
 use App\Rules\CheckValidityOfFinancialManagement;
 use Illuminate\Foundation\Http\FormRequest;
 
 class UsersUpdateRequest extends FormRequest
 {
-    public function authorize()
+    public function authorize() : bool
     {
         return true;
     }
 
-    public function rules()
+    public function rules() : array
     {
         return [
             '_method' => 'required|in:put',
-            'clinic_doctors_name' => 'string',
-            'common_hypersensitivity' => 'string',
-            'common_drug' => 'string',
-            'common_diet' => 'string',
-            'common_return_date' => 'string',
-            'gap_time_between_appointments' => 'numeric|min:1',
-            'phone_number' => 'numeric|min:1',
-            'college_branch' => 'string',
-            'contact_address' => 'string',
-            'money_console_status' => 'in:true,false',
+            'clinic_doctors_name' => 'sometimes|string',
+            'common_hypersensitivity' => 'sometimes|string',
+            'common_drug' => 'sometimes|string',
+            'common_diet' => 'sometimes|string',
+            'common_return_date' => 'sometimes|string',
+            'gap_time_between_appointments' => 'sometimes|numeric|min:1',
+            'phone_number' => 'sometimes|numeric|min:1',
+            'college_branch' => 'sometimes|string',
+            'contact_address' => 'sometimes|string',
+            'money_console_status' => 'sometimes|in:true,false',
             'financial_management' => ['required', 'string', app(CheckValidityOfFinancialManagement::class)],
-            'cms_menu_title_0' => 'string',
-            'cms_menu_title_1' => 'string',
-            'cms_menu_title_2' => 'string',
-            'cms_menu_title_3' => 'string',
-            'cms_menu_title_4' => 'string',
-            'cms_menu_title_5' => 'string',
+            'cms_menu_title_0' => 'sometimes|string',
+            'cms_menu_title_1' => 'sometimes|string',
+            'cms_menu_title_2' => 'sometimes|string',
+            'cms_menu_title_3' => 'sometimes|string',
+            'cms_menu_title_4' => 'sometimes|string',
+            'cms_menu_title_5' => 'sometimes|string',
 
-            'cms_menu_title_7' => 'string',
-            'cms_menu_title_8' => 'string',
-            'cms_menu_title_9' => 'string',
-            'cms_menu_title_10' => 'string',
-            'cms_menu_title_11' => 'string',
-            'cms_menu_title_12' => 'string',
-            'cms_menu_title_13' => 'string',
-            'cms_menu_title_14' => 'string',
-            'cms_menu_title_15' => 'string',
-            'cms_menu_title_16' => 'string',
-            'cms_menu_title_17' => 'string',
-            'cms_menu_title_18' => 'string',
-            'cms_menu_title_19' => 'string',
-            'cms_menu_title_20' => 'string',
-            'cms_menu_title_21' => 'string',
-            'cms_menu_title_22' => 'string',
-            'cms_menu_title_23' => 'string',
-            'cms_menu_title_24' => 'string',
-            'cms_menu_title_25' => 'string',
-            'cms_menu_title_26' => 'string',
-            'cms_menu_title_27' => 'string',
-            'cms_menu_title_28' => 'string',
-            'setting_status' => 'in:true,false',
+            'cms_menu_title_7'  => 'sometimes|string',
+            'cms_menu_title_8'  => 'sometimes|string',
+            'cms_menu_title_9'  => 'sometimes|string',
+            'cms_menu_title_10' => 'sometimes|string',
+            'cms_menu_title_11' => 'sometimes|string',
+            'cms_menu_title_12' => 'sometimes|string',
+            'cms_menu_title_13' => 'sometimes|string',
+            'cms_menu_title_14' => 'sometimes|string',
+            'cms_menu_title_15' => 'sometimes|string',
+            'cms_menu_title_16' => 'sometimes|string',
+            'cms_menu_title_17' => 'sometimes|string',
+            'cms_menu_title_18' => 'sometimes|string',
+            'cms_menu_title_19' => 'sometimes|string',
+            'cms_menu_title_20' => 'sometimes|string',
+            'cms_menu_title_21' => 'sometimes|string',
+            'cms_menu_title_22' => 'sometimes|string',
+            'cms_menu_title_23' => 'sometimes|string',
+            'cms_menu_title_24' => 'sometimes|string',
+            'cms_menu_title_25' => 'sometimes|string',
+            'cms_menu_title_26' => 'sometimes|string',
+            'cms_menu_title_27' => 'sometimes|string',
+            'cms_menu_title_28' => 'sometimes|string',
+            'setting_status'    => 'sometimes|in:true,false',
         ];
     }
 }

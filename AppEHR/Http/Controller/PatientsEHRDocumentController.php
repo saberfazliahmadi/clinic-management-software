@@ -12,7 +12,7 @@ use AppEHR\MessageSender;
 use AppEHR\MessageSenderFacade;
 
 /** In this controller, according to the Single Responsibility and Open-Closed Principles of SOLID
- we use DB::transaction via middleware for some methods like store() in this controller.
+ we use DB::transaction via middleware for some methods like store().
  In addition, to have a cleaner controller, all logic is transferred into the Services Layer.
 
  Remember that, when in a controller using a method from a Service class, you should pass all the required variable parameters one by one

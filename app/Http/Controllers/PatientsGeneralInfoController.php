@@ -68,33 +68,34 @@ class PatientsGeneralInfoController extends Controller
 
     public function show(PatientsShowRequest $request)
     {
+        $request_validated = $request->validated() ;
         try
         {
-            $result_of_run_search_form = patients_general_info::fetchResultOfSearchForm() ;
+            $result_of_run_search_form = patients_general_info::fetchResultOfSearchForm($request_validated['search_text']) ;
             if(!$result_of_run_search_form)
             {
                 return Responses::failed('patients.index', '', 'We have an Error to search for the word you entered!');
             }
 
-            if($result_of_run_search_form->count() === 0)
+            if($result_of_run_search_form->isEmpty())
             {
-                return Responses::failed('patients.index', '', 'There is not any result for <b style="color:blue;" >'.$request->search_text.'</b>');
+                return Responses::failed('patients.index', '', 'There is not any result for <b style="color:blue;" >"'.$request_validated['search_text'].'"</b>');
             }
 
             return Responses::view('back.patients_index',
-           [
-               'title_of_page'              => 'Search Patients',
-               'result_run_search_form'     => $result_of_run_search_form,
-               'success_message_of_search'  => '<b style="color:blue;" >'.$result_of_run_search_form->count().'</b> results found for <b style="color:blue;" >"'.$request->search_text.'"</b>'
-           ]);
+            [
+                'title_of_page'              => 'Search Patients',
+                'result_run_search_form'     => $result_of_run_search_form,
+                'success_message_of_search'  => '<b style="color:blue;" >'.$result_of_run_search_form->count().'</b> results found for <b style="color:blue;" >"'.$request_validated['search_text'].'"</b>'
+            ]);
         }
         catch (\Exception $exception)
         {
-            return Responses::failedWithException( 'patients.index' , '' ,'We have an error to search for this word <b style="color:blue;" >'.$request->search_text.'</b>' , $exception ) ;
+            return Responses::failedWithException( 'patients.index' , '' ,'We have an error to search for this word <b style="color:blue;" >"'.$request_validated['search_text'].'"</b>' , $exception ) ;
         }
     }
 
-    public function edit( $encrypted_patient_id )
+    public function edit($encrypted_patient_id)
     {
         try
         {
@@ -113,7 +114,7 @@ class PatientsGeneralInfoController extends Controller
         }
     }
 
-    public function update( PatientsUpdateRequest $request )
+    public function update(PatientsUpdateRequest $request)
     {
         $validated                        = $request->validated();
         $decrypted_update_this_patient_id = encryptDecrypt('decrypt', $request->encrypted_patient_id );
@@ -133,7 +134,7 @@ class PatientsGeneralInfoController extends Controller
         }
     }
 
-    public function destroy( Request $request)
+    public function destroy(Request $request)
     {
         $response_message_success = 'The requested patient successfully deleted' ;
         $response_message_failed  = 'We have an error to delete this patient Number<br> Maybe there is an appointment or a financial transaction related to this patient,<br> So if you want to delete this patient<br> at first, you need to delete all appointments and financial transactions related to him' ;

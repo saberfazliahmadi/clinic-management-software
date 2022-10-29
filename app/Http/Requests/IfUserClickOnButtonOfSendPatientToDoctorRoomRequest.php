@@ -6,16 +6,16 @@ use Illuminate\Foundation\Http\FormRequest;
 
 class IfUserClickOnButtonOfSendPatientToDoctorRoomRequest extends FormRequest
 {
-    public function authorize()
+    public function authorize() : bool
     {
         return true;
     }
 
-    public function rules()
+    public function rules() : array
     {
         return [
         'appointment_id'               => [ 'required' , 'integer' , app(CheckValidityOfAppointmentIDRule::class) ] ,
-        'money_receive'                => 'min:1|array'            ,
+        'money_receive'                => 'sometimes|min:1|array'            ,
         'send_patient_to_doctors_room' => 'required|in:true'
         ];
     }

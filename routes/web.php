@@ -21,10 +21,10 @@ DELETE	    /photos/{photo}	        destroy	 photos.destroy */
 Auth::routes();
 Route::view('/' , 'auth.login');
 
-Route::group( [ 'middleware' => [ 'auth' , 'PreventBannedUsers' , 'throttle:100,1' ] ],function()
+Route::middleware([ 'auth' , 'PreventBannedUsers' , 'throttle:100,1' ])->group(function()
 {
     // Protected routes which are accessible for Authenticated User/Admin/SuperAdmin
-    Route::group( [ 'middleware' => [ 'CheckPageAccessibilityBasedOnLevelOfUser:User' , 'ProvideHeaderData' ] ],function()
+    Route::middleware([ 'CheckPageAccessibilityBasedOnLevelOfUser:User' , 'ProvideHeaderData' ])->group(function()
     {
         // All routes related to header
         Route::get('send_patient_to_doctor_room'        , [ HeaderController::class , 'ifUserClickOnButtonSendPatientToDoctorRoom' ] )->name('send_patient_to_doctor_room') ;
@@ -32,7 +32,7 @@ Route::group( [ 'middleware' => [ 'auth' , 'PreventBannedUsers' , 'throttle:100,
         Route::get('/home'                              , [ HomeController::class   , 'index' ] )->name('home');
 
         // All Routes related to patients_general_infos model
-        Route::group( [ 'prefix' => '/patients' ],function()
+        Route::prefix('/patients')->group(function()
         {
             Route::get(''                               , [ PatientsGeneralInfoController::class, 'index'  ])->name('patients.index'  );
             Route::get('/create'                        , [ PatientsGeneralInfoController::class, 'create' ])->name('patients.create' );
@@ -44,7 +44,7 @@ Route::group( [ 'middleware' => [ 'auth' , 'PreventBannedUsers' , 'throttle:100,
         });
 
         // All Routes related to patients_appointments model
-        Route::group([ 'prefix' => '/appointments' ],function()
+        Route::prefix('/appointments')->group(function()
         {
             Route::get(''                                      , [ PatientsAppointmentController::class , 'index'  ])->name('appointments.index'   );
             Route::get('/create/{encrypted_patient_id}/{date}' , [ PatientsAppointmentController::class , 'create' ])->name('appointments.create'  )->whereAlphaNumeric('encrypted_patient_id' )->where(['date' => config('global.regex_rule_of_show_date') ])->middleware('CheckValidityOfPatientID');
@@ -56,7 +56,7 @@ Route::group( [ 'middleware' => [ 'auth' , 'PreventBannedUsers' , 'throttle:100,
         });
 
         // All Routes related to financial_transactions model
-        Route::group( [ 'prefix' => '/financial' ],function()
+        Route::prefix('/financial')->group(function()
         {
             Route::get(''                                     , [ FinancialTransactionController::class , 'index' ] )->name('financial.index') ;
             Route::get('/create'                              , [ FinancialTransactionController::class , 'create'] )->name('financial.create') ;
@@ -71,7 +71,7 @@ Route::group( [ 'middleware' => [ 'auth' , 'PreventBannedUsers' , 'throttle:100,
 
     // Protected routes which are accessible for Authenticated Admin/SuperAdmin
     // All Routes related to patients__e_h_r_documents model
-    Route::group( [ 'prefix' => '/ehr' , 'middleware' => [ 'CheckPageAccessibilityBasedOnLevelOfUser:Admin' , 'ProvideHeaderData' ] ] , function()
+    Route::prefix('/ehr')->middleware([ 'CheckPageAccessibilityBasedOnLevelOfUser:Admin' , 'ProvideHeaderData' ])->group(function()
     {
         //Route::get(''                                                                           , [ PatientsEHRDocumentController::class , 'index'  ] )->name('ehr.index'       ) ;
         Route::get('/create/{encrypted_patient_id}/{appointment_id?}/{child_dr_related_name?}' , [ PatientsEHRDocumentController::class , 'create' ] )->name('ehr.create')->whereAlphaNumeric('encrypted_patient_id')->whereNumber('appointment_id')->where(['child_dr_related_name' => config('global.regex_rule_of_encrypted_id') ])->middleware([ 'CheckValidityOfPatientID' , 'CheckValidityOfAppointmentID' ]);
@@ -85,9 +85,9 @@ Route::group( [ 'middleware' => [ 'auth' , 'PreventBannedUsers' , 'throttle:100,
     // These routes have different types of accessibility based on user's level field (User, Admin, SuperAdmin),
     // Which will be checked on group middleware
     // All Routes related to users model
-    Route::group([ 'prefix' => '/users' ],function()
+    Route::prefix('/users')->group(function()
     {
-        Route::group(['middleware' => [ 'CheckPageAccessibilityBasedOnLevelOfUser:SuperAdmin' , 'ProvideHeaderData' ]],function()
+        Route::middleware([ 'CheckPageAccessibilityBasedOnLevelOfUser:SuperAdmin' , 'ProvideHeaderData' ])->group(function()
         {
             //Route::get(''                   , [ UserController::class , 'index'         ] )->name('users.index'             ) ;
             Route::get('/edit_group'      , [ UserController::class , 'editGroup'      ] )->name('users.edit.group'  ) ;
@@ -96,13 +96,13 @@ Route::group( [ 'middleware' => [ 'auth' , 'PreventBannedUsers' , 'throttle:100,
             Route::get('/activities_logs' , [ UserController::class , 'showLogs'       ] )->name('users.show.logs'   ) ;
         });
 
-        Route::group(['middleware' => [ 'CheckPageAccessibilityBasedOnLevelOfUser:Admin' , 'ProvideHeaderData' ]],function()
+        Route::middleware([ 'CheckPageAccessibilityBasedOnLevelOfUser:Admin' , 'ProvideHeaderData' ])->group(function()
         {
             Route::get('/edit'            , [ UserController::class , 'edit'           ] )->name('users.edit'        ) ;
             Route::put('/update'          , [ UserController::class , 'update'         ] )->name('users.update'      ) ;
         });
 
-        Route::group(['middleware' => [ 'CheckPageAccessibilityBasedOnLevelOfUser:User' , 'ProvideHeaderData' ]],function()
+        Route::middleware([ 'CheckPageAccessibilityBasedOnLevelOfUser:User' , 'ProvideHeaderData' ])->group(function()
         {
             Route::get('/edit_password'   , [ UserController::class , 'editPassword'   ] )->name('users.edit.password'  );
             Route::put('/update_password' , [ UserController::class , 'updatePassword' ] )->name('users.update.password');
