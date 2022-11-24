@@ -1,25 +1,10 @@
 <?php
 use Illuminate\Support\Facades\Auth;
-//use Illuminate\Support\Facades\Crypt;
-//use Illuminate\Contracts\Encryption\DecryptException;
-//use App\Responses\Responses;
+
 if (!function_exists('encryptDecrypt'))
 {
     function encryptDecrypt($action, $string)
     {
-        //try {
-        //    if ($action === 'encrypt') {
-        //        return Crypt::encryptString($string);
-        //    } elseif ($action === 'decrypt') {
-        //        return Crypt::decryptString($string);
-        //    }
-        //    return Responses::Failed('home', '', '<span style="color:blue;">we have an error to encrypt data!</span>');
-        //}
-        //catch (DecryptException $e)
-        //{
-        //    return Responses::Failed('home', '', '<span style="color:blue;">we have an error to encrypt data!</span>');
-        //}
-
         $output         = false;
         $encrypt_method = "AES-256-CBC";
         $secret_key     = findAdminIdFromUsersTable();

@@ -1,8 +1,6 @@
 <?php
 
 return [
-
-    // I added this section manually
     // To hide important data from hackers when APP_DEBUG=true in .env file
     'debug_hide' =>
     [
@@ -20,6 +18,7 @@ return [
             'password',
         ],
     ],
+
     // To hide everything from hackers on debug mode use below code
     //'debug_hide' => [
     //    '_COOKIE' => array_keys($_COOKIE),
@@ -199,9 +198,6 @@ return [
         // App\Providers\BroadcastServiceProvider::class,
         App\Providers\EventServiceProvider::class,
         App\Providers\RouteServiceProvider::class,
-
-        // I added this ehrServiceProvider manually
-        AppEHR\Providers\EhrServiceProvider::class,
 
     ],
 

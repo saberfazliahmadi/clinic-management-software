@@ -35,6 +35,11 @@ class patients_appointment extends Model
         return new PatientsAppointmentFactory() ;
     }
 
+    public function scopeequalThisToAdminIdFromUserTable($query, $equal_this)
+    {
+        return $query->where($equal_this, findAdminIdFromUsersTable()) ;
+    }
+
     static function appointmentsOnSpecificDate($show_all_appointments_on_this_date)
     {
         return self::

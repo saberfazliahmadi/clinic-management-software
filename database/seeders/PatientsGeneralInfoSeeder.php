@@ -14,6 +14,6 @@ class PatientsGeneralInfoSeeder extends Seeder
      */
     public function run()
     {
-        patients_general_info::newFactory('100')->create() ;
+        patients_general_info::newFactory()->create() ;
     }
 }

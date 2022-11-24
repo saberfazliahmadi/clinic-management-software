@@ -89,7 +89,7 @@ trait ThrottlesLogins
      */
     protected function throttleKey(Request $request)
     {
-        return Str::lower($request->input($this->username())).'|'.$request->ip();
+        return Str::transliterate(Str::lower($request->input($this->username())).'|'.$request->ip());
     }
 
     /**

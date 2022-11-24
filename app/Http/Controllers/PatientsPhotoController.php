@@ -3,12 +3,7 @@ namespace App\Http\Controllers;
 
 use App\Models\patients_photo;
 use App\Http\Controllers\Controller;
-use App\Http\Requests\StorePatientsPhotoRequest;
-use App\Http\Requests\UpdatePatientsPhotoRequest;
 
-
-/** In this controller according to Single Responsibility and Open-Closed Principles of SOLID
-we validate user inputs by Middleware **/
 class PatientsPhotoController extends Controller
 {
     public function PrepareKeyboardParaClinic($request_keyboard_paraclinic_file_title)

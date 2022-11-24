@@ -33,6 +33,11 @@ class financial_transaction extends Model
         return new FinancialTransactionFactory;
     }
 
+    public function scopeequalThisToAdminIdFromUserTable($query, $equal_this)
+    {
+        return $query->where($equal_this, findAdminIdFromUsersTable()) ;
+    }
+
     public static function destroyThisFinancialTransaction($delete_this_financial_id)
     {
         return self::

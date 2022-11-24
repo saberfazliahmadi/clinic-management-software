@@ -26,6 +26,11 @@ class patients_photo extends Model
         return new PatientsPhotoFactory() ;
     }
 
+    public function scopeequalThisToAdminIdFromUserTable($query, $equal_this)
+    {
+        return $query->where($equal_this, findAdminIdFromUsersTable()) ;
+    }
+
     static function resultOfPatientEhrPhoto($request_patient_id)
     {
         return self::

@@ -14,6 +14,6 @@ class PatientsPhotoSeeder extends Seeder
      */
     public function run()
     {
-        patients_photo::newFactory('100')->create() ;
+        patients_photo::newFactory()->create() ;
     }
 }

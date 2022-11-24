@@ -1,5 +1,4 @@
 <?php
-
 namespace App\Http;
 
 use Illuminate\Foundation\Http\Kernel as HttpKernel;
@@ -55,23 +54,22 @@ class Kernel extends HttpKernel
      * @var array
      */
     protected $routeMiddleware = [
-        'auth'          => \App\Http\Middleware\Authenticate::class,
-        'auth.basic'    => \Illuminate\Auth\Middleware\AuthenticateWithBasicAuth::class,
-        'cache.headers' => \Illuminate\Http\Middleware\SetCacheHeaders::class,
-        'can'           => \Illuminate\Auth\Middleware\Authorize::class,
-        'guest'         => \App\Http\Middleware\RedirectIfAuthenticated::class,
-        'password.confirm' => \Illuminate\Auth\Middleware\RequirePassword::class,
-        'signed'        => \Illuminate\Routing\Middleware\ValidateSignature::class,
-        'throttle'      => \Illuminate\Routing\Middleware\ThrottleRequests::class,
-        'verified'      => \Illuminate\Auth\Middleware\EnsureEmailIsVerified::class,
+        'auth'              => \App\Http\Middleware\Authenticate::class,
+        'auth.basic'        => \Illuminate\Auth\Middleware\AuthenticateWithBasicAuth::class,
+        'cache.headers'     => \Illuminate\Http\Middleware\SetCacheHeaders::class,
+        'can'               => \Illuminate\Auth\Middleware\Authorize::class,
+        'guest'             => \App\Http\Middleware\RedirectIfAuthenticated::class,
+        'password.confirm'  => \Illuminate\Auth\Middleware\RequirePassword::class,
+        'signed'            => \Illuminate\Routing\Middleware\ValidateSignature::class,
+        'throttle'          => \Illuminate\Routing\Middleware\ThrottleRequests::class,
+        'verified'          => \Illuminate\Auth\Middleware\EnsureEmailIsVerified::class,
 
-        'ProvideHeaderData'                           => \App\Http\Middleware\ProvideHeaderData::class,
-        'PreventBannedUsers'                          => \App\Http\Middleware\PreventBannedUsers::class,
-        'CheckPageAccessibilityBasedOnLevelOfUser'    => \App\Http\Middleware\CheckPageAccessibilityBasedOnLevelOfUser::class,
-        'CheckValidityOfPatientID'                    => \App\Http\Middleware\CheckValidityOfPatientID::class,
-        'CheckValidityOfAppointmentID'                => \App\Http\Middleware\CheckValidityOfAppointmentID::class,
-        'CheckValidityOfEHRID'                        => \AppEHR\Http\Middleware\CheckValidityOfEHRID::class,
-        'CheckMobileNumberDuplication'                => \App\Http\Middleware\CheckMobileNumberDuplication::class,
+        'ProvideHeaderData'                                   => \App\Http\Middleware\ProvideHeaderData::class,
+        'PreventBannedUsers'                                  => \App\Http\Middleware\PreventBannedUsers::class,
+        'CheckPageAccessibilityBasedOnLevelOfUser'            => \App\Http\Middleware\CheckPageAccessibilityBasedOnLevelOfUser::class,
+        'CheckValidityOfPatientID'                            => \App\Http\Middleware\CheckValidityOfPatientID::class,
+        'CheckValidityOfAppointmentID'                        => \App\Http\Middleware\CheckValidityOfAppointmentID::class,
+        'CheckMobileNumberDuplication'                        => \App\Http\Middleware\CheckMobileNumberDuplication::class,
         'TransactionOnDatabaseToRollbackWhenExceptionsHappen' => \App\Http\Middleware\TransactionOnDatabaseToRollbackWhenExceptionsHappen::class,
     ];
 }

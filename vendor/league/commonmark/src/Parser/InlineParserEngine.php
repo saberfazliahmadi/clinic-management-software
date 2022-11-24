@@ -39,7 +39,7 @@ final class InlineParserEngine implements InlineParserEngineInterface
      * @psalm-var list<array{0: InlineParserInterface, 1: string, 2: bool}>
      * @phpstan-var array<int, array{0: InlineParserInterface, 1: string, 2: bool}>
      */
-    private array $parsers;
+    private array $parsers = [];
 
     public function __construct(EnvironmentInterface $environment, ReferenceMapInterface $referenceMap)
     {
@@ -154,10 +154,8 @@ final class InlineParserEngine implements InlineParserEngineInterface
                     // PREG_OFFSET_CAPTURE always returns the byte offset, not the char offset, which is annoying
                     $offset = \mb_strlen(\substr($contents, 0, $match[0][1]), 'UTF-8');
                 } else {
-                    $offset = $match[0][1];
+                    $offset = \intval($match[0][1]);
                 }
-
-                \assert(\is_int($offset));
 
                 // Remove the offsets, keeping only the matched text
                 $m = \array_column($match, 0);

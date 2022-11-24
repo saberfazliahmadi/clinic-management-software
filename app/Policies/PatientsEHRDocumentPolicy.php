@@ -3,7 +3,7 @@
 namespace App\Policies;
 
 use App\Models\User;
-use App\Models\patients_EHR_document;
+use App\Models\PatientsEHRDocument;
 use Illuminate\Auth\Access\HandlesAuthorization;
 
 class PatientsEHRDocumentPolicy
@@ -25,10 +25,10 @@ class PatientsEHRDocumentPolicy
      * Determine whether the user can view the model.
      *
      * @param  \App\Models\User  $user
-     * @param  \App\Models\patients_EHR_document  $patientsEHRDocument
+     * @param  \App\Models\PatientsEHRDocument  $patientsEHRDocument
      * @return \Illuminate\Auth\Access\Response|bool
      */
-    public function view(User $user, patients_EHR_document $patientsEHRDocument)
+    public function view(User $user, PatientsEHRDocument $patientsEHRDocument)
     {
         //
     }
@@ -48,10 +48,10 @@ class PatientsEHRDocumentPolicy
      * Determine whether the user can update the model.
      *
      * @param  \App\Models\User  $user
-     * @param  \App\Models\patients_EHR_document  $patientsEHRDocument
+     * @param  \App\Models\PatientsEHRDocument  $patientsEHRDocument
      * @return \Illuminate\Auth\Access\Response|bool
      */
-    public function update(User $user, patients_EHR_document $patientsEHRDocument)
+    public function update(User $user, PatientsEHRDocument $patientsEHRDocument)
     {
         //
     }
@@ -60,10 +60,10 @@ class PatientsEHRDocumentPolicy
      * Determine whether the user can delete the model.
      *
      * @param  \App\Models\User  $user
-     * @param  \App\Models\patients_EHR_document  $patientsEHRDocument
+     * @param  \App\Models\PatientsEHRDocument  $patientsEHRDocument
      * @return \Illuminate\Auth\Access\Response|bool
      */
-    public function delete(User $user, patients_EHR_document $patientsEHRDocument)
+    public function delete(User $user, PatientsEHRDocument $patientsEHRDocument)
     {
         //
     }
@@ -72,10 +72,10 @@ class PatientsEHRDocumentPolicy
      * Determine whether the user can restore the model.
      *
      * @param  \App\Models\User  $user
-     * @param  \App\Models\patients_EHR_document  $patientsEHRDocument
+     * @param  \App\Models\PatientsEHRDocument  $patientsEHRDocument
      * @return \Illuminate\Auth\Access\Response|bool
      */
-    public function restore(User $user, patients_EHR_document $patientsEHRDocument)
+    public function restore(User $user, PatientsEHRDocument $patientsEHRDocument)
     {
         //
     }
@@ -84,10 +84,10 @@ class PatientsEHRDocumentPolicy
      * Determine whether the user can permanently delete the model.
      *
      * @param  \App\Models\User  $user
-     * @param  \App\Models\patients_EHR_document  $patientsEHRDocument
+     * @param  \App\Models\PatientsEHRDocument  $patientsEHRDocument
      * @return \Illuminate\Auth\Access\Response|bool
      */
-    public function forceDelete(User $user, patients_EHR_document $patientsEHRDocument)
+    public function forceDelete(User $user, PatientsEHRDocument $patientsEHRDocument)
     {
         //
     }

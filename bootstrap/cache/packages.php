@@ -1,13 +1,9 @@
 <?php return array (
-  'barryvdh/laravel-debugbar' => 
+  'app/ehr' => 
   array (
     'providers' => 
     array (
-      0 => 'Barryvdh\\Debugbar\\ServiceProvider',
-    ),
-    'aliases' => 
-    array (
-      'Debugbar' => 'Barryvdh\\Debugbar\\Facades\\Debugbar',
+      0 => 'AppEHR\\Providers\\EhrServiceProvider',
     ),
   ),
   'facade/ignition' => 
@@ -26,17 +22,6 @@
     'providers' => 
     array (
       0 => 'Fruitcake\\Cors\\CorsServiceProvider',
-    ),
-  ),
-  'itsgoingd/clockwork' => 
-  array (
-    'providers' => 
-    array (
-      0 => 'Clockwork\\Support\\Laravel\\ClockworkServiceProvider',
-    ),
-    'aliases' => 
-    array (
-      'Clockwork' => 'Clockwork\\Support\\Laravel\\Facade',
     ),
   ),
   'laravel/sail' => 

@@ -7,6 +7,7 @@ use Exception;
 use Illuminate\Contracts\Debug\ExceptionHandler;
 use Illuminate\Contracts\Foundation\Application;
 use Illuminate\Log\LogManager;
+use Monolog\Handler\NullHandler;
 use Symfony\Component\Console\Output\ConsoleOutput;
 use Symfony\Component\ErrorHandler\Error\FatalError;
 use Throwable;
@@ -35,7 +36,7 @@ class HandleExceptions
      */
     public function bootstrap(Application $app)
     {
-        self::$reservedMemory = str_repeat('x', 10240);
+        self::$reservedMemory = str_repeat('x', 32768);
 
         $this->app = $app;
 
@@ -66,11 +67,11 @@ class HandleExceptions
      */
     public function handleError($level, $message, $file = '', $line = 0, $context = [])
     {
-        if (error_reporting() & $level) {
-            if ($this->isDeprecation($level)) {
-                return $this->handleDeprecation($message, $file, $line);
-            }
+        if ($this->isDeprecation($level)) {
+            return $this->handleDeprecation($message, $file, $line);
+        }
 
+        if (error_reporting() & $level) {
             throw new ErrorException($message, 0, $level, $file, $line);
         }
     }
@@ -85,6 +86,13 @@ class HandleExceptions
      */
     public function handleDeprecation($message, $file, $line)
     {
+        if (! class_exists(LogManager::class)
+            || ! $this->app->hasBeenBootstrapped()
+            || $this->app->runningUnitTests()
+        ) {
+            return;
+        }
+
         try {
             $logger = $this->app->make(LogManager::class);
         } catch (Exception $e) {
@@ -112,9 +120,30 @@ class HandleExceptions
                 return;
             }
 
+            $this->ensureNullLogDriverIsConfigured();
+
             $driver = $config->get('logging.deprecations') ?? 'null';
 
             $config->set('logging.channels.deprecations', $config->get("logging.channels.{$driver}"));
+        });
+    }
+
+    /**
+     * Ensure the "null" log driver is configured.
+     *
+     * @return void
+     */
+    protected function ensureNullLogDriverIsConfigured()
+    {
+        with($this->app['config'], function ($config) {
+            if ($config->get('logging.channels.null')) {
+                return;
+            }
+
+            $config->set('logging.channels.null', [
+                'driver' => 'monolog',
+                'handler' => NullHandler::class,
+            ]);
         });
     }
 
@@ -130,9 +159,9 @@ class HandleExceptions
      */
     public function handleException(Throwable $e)
     {
-        try {
-            self::$reservedMemory = null;
+        self::$reservedMemory = null;
 
+        try {
             $this->getExceptionHandler()->report($e);
         } catch (Exception $e) {
             //
@@ -174,6 +203,8 @@ class HandleExceptions
      */
     public function handleShutdown()
     {
+        self::$reservedMemory = null;
+
         if (! is_null($error = error_get_last()) && $this->isFatal($error['type'])) {
             $this->handleException($this->fatalErrorFromPhpError($error, 0));
         }

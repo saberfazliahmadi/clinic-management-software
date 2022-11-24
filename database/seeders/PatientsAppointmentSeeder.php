@@ -16,6 +16,6 @@ class PatientsAppointmentSeeder extends Seeder
     {
         // \App\Models\patients_appointment::factory(10)->create();
 
-        patients_appointment::newFactory('100')->create() ;
+        patients_appointment::newFactory()->create() ;
     }
 }

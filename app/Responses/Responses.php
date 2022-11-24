@@ -12,10 +12,10 @@ class Responses extends Facade
     // We made this facade method to support responses of HTML or VUE clients
     public static function getFacadeAccessor()
     {
-       if( request('client') !== 'json' )
+       if(request('client') === 'json')
        {
-           return HtmlResponses::class ;
+           return JsonResponses::class ;
        }
-        return JsonResponses::class ;
+       return HtmlResponses::class ;
     }
 }

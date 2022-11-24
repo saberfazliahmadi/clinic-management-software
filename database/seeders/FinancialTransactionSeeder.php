@@ -14,6 +14,6 @@ class FinancialTransactionSeeder extends Seeder
      */
     public function run()
     {
-        financial_transaction::newFactory('100')->create() ;
+        financial_transaction::newFactory()->create() ;
     }
 }

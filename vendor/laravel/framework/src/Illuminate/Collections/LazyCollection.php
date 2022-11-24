@@ -206,6 +206,19 @@ class LazyCollection implements CanBeEscapedWhenCastToString, Enumerable
     }
 
     /**
+     * Determine if an item is not contained in the enumerable.
+     *
+     * @param  mixed  $key
+     * @param  mixed  $operator
+     * @param  mixed  $value
+     * @return bool
+     */
+    public function doesntContain($key, $operator = null, $value = null)
+    {
+        return ! $this->contains(...func_get_args());
+    }
+
+    /**
      * Cross join the given iterables, returning all possible permutations.
      *
      * @param  array  ...$arrays
@@ -783,8 +796,8 @@ class LazyCollection implements CanBeEscapedWhenCastToString, Enumerable
         return new static(function () use ($step, $offset) {
             $position = 0;
 
-            foreach ($this as $item) {
-                if ($position % $step === $offset) {
+            foreach ($this->slice($offset) as $item) {
+                if ($position % $step === 0) {
                     yield $item;
                 }
 
@@ -1276,6 +1289,17 @@ class LazyCollection implements CanBeEscapedWhenCastToString, Enumerable
     }
 
     /**
+     * Sort the collection keys using a callback.
+     *
+     * @param  callable  $callback
+     * @return static
+     */
+    public function sortKeysUsing(callable $callback)
+    {
+        return $this->passthru('sortKeysUsing', func_get_args());
+    }
+
+    /**
      * Take the first or last {$limit} items.
      *
      * @param  int  $limit
@@ -1370,6 +1394,16 @@ class LazyCollection implements CanBeEscapedWhenCastToString, Enumerable
                 yield $key => $value;
             }
         });
+    }
+
+    /**
+     * Convert a flatten "dot" notation array into an expanded array.
+     *
+     * @return static
+     */
+    public function undot()
+    {
+        return $this->passthru('undot', []);
     }
 
     /**

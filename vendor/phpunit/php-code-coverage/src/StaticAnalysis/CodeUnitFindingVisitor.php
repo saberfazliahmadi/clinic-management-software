@@ -9,6 +9,7 @@
  */
 namespace SebastianBergmann\CodeCoverage\StaticAnalysis;
 
+use function assert;
 use function implode;
 use function rtrim;
 use function trim;
@@ -49,7 +50,7 @@ final class CodeUnitFindingVisitor extends NodeVisitorAbstract
      */
     private $functions = [];
 
-    public function enterNode(Node $node)
+    public function enterNode(Node $node): void
     {
         if ($node instanceof Class_) {
             if ($node->isAnonymous()) {
@@ -64,7 +65,7 @@ final class CodeUnitFindingVisitor extends NodeVisitorAbstract
         }
 
         if (!$node instanceof ClassMethod && !$node instanceof Function_) {
-            return null;
+            return;
         }
 
         if ($node instanceof ClassMethod) {
@@ -206,7 +207,7 @@ final class CodeUnitFindingVisitor extends NodeVisitorAbstract
 
         $this->classes[$namespacedName] = [
             'name'           => $name,
-            'namespacedName' => (string) $namespacedName,
+            'namespacedName' => $namespacedName,
             'namespace'      => $this->namespace($namespacedName, $name),
             'startLine'      => $node->getStartLine(),
             'endLine'        => $node->getEndLine(),
@@ -221,7 +222,7 @@ final class CodeUnitFindingVisitor extends NodeVisitorAbstract
 
         $this->traits[$namespacedName] = [
             'name'           => $name,
-            'namespacedName' => (string) $namespacedName,
+            'namespacedName' => $namespacedName,
             'namespace'      => $this->namespace($namespacedName, $name),
             'startLine'      => $node->getStartLine(),
             'endLine'        => $node->getEndLine(),
@@ -314,6 +315,8 @@ final class CodeUnitFindingVisitor extends NodeVisitorAbstract
             if ($_type instanceof Name) {
                 $types[] = $_type->toCodeString();
             } else {
+                assert($_type instanceof Identifier);
+
                 $types[] = $_type->toString();
             }
         }

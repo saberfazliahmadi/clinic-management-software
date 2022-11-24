@@ -1,0 +1,23 @@
+{
+  "name": "app/ehr",
+
+  "autoload":
+  {
+    "psr-4":
+    {
+      "AppEHR\\": "src/"
+    }
+  },
+
+  "extra":
+  {
+    "laravel":
+    {
+      "providers":
+      [
+        "AppEHR\\Providers\\EhrServiceProvider"
+      ]
+    }
+  }
+
+}

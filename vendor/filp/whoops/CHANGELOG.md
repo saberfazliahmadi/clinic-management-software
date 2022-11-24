@@ -1,3 +1,7 @@
+# 2.14.5
+
+* Allow ArrayAccess on super globals
+
 # 2.14.4
 
 * Fix PHP 5.5 support.
@@ -16,7 +20,7 @@
 
 * Switched syntax highlighting to Prism.js
 
-Avoids licensing issues with prettify, and uses a maintaned, modern project.
+Avoids licensing issues with prettify, and uses a maintained, modern project.
 
 # 2.13.0
 

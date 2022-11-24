@@ -7,6 +7,7 @@ class JsonResponses
 {
     public static function view($view , $data)
     {
+        LogTypes::runNormalLog('Success Action: '.Auth::user()->name.' redirected to this view file name =>'.$view.' with this data =>'.implode(" ",$data)) ;
         return response()->json([
                                     'view' => $view,
                                     'data' => $data,
@@ -22,7 +23,7 @@ class JsonResponses
     {
         LogTypes::runNormalLog('Success Action: '.$Message) ;
 
-        if( $RouteName === 'back_to_previous_page' )
+        if($RouteName === 'back_to_previous_page')
         {
             return self::redirectToPreviousPage($Message) ;
         }
@@ -36,7 +37,7 @@ class JsonResponses
     {
         LogTypes::runNormalLog('Failed Action: '.$Message) ;
 
-        if( $RouteName === 'back_to_previous_page' )
+        if($RouteName === 'back_to_previous_page')
         {
             return self::redirectToPreviousPage($Message) ;
         }
@@ -50,13 +51,13 @@ class JsonResponses
     public static function failedWithException( $RouteName , $RouteParameters , $Message, $Exception )
     {
         $Exception_trick = '' ;
-        if( strlen($Exception) > 0)
+        if(strlen($Exception) > 0)
         {
             $Exception_trick = $Exception ;
         }
         LogTypes::runNormalLog('Exception: '.$Exception_trick) ;
 
-        if( $RouteName === 'back_to_previous_page' )
+        if($RouteName === 'back_to_previous_page')
         {
             return self::redirectToPreviousPage($Message) ;
         }
@@ -67,7 +68,7 @@ class JsonResponses
                                 ]);
     }
 
-    public static function FailedAndLogout( $Message )
+    public static function FailedAndLogout($Message)
     {
         LogTypes::runNormalLog('Failed Action: '.$Message) ;
         Auth::logout();

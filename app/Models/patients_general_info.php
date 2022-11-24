@@ -1,7 +1,6 @@
 <?php
 namespace App\Models;
 
-use App\Http\Requests\PatientsShowRequest;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Database\Factories\PatientsGeneralInfoFactory;
@@ -49,10 +48,12 @@ class patients_general_info extends Model
      */
     protected static function newFactory()
     {
-        for($x = 0; $x <= 100; $x++)
-        {
-            return new PatientsGeneralInfoFactory() ;
-        }
+        return new PatientsGeneralInfoFactory() ;
+    }
+
+    public function scopeequalThisToAdminIdFromUserTable($query, $equal_this)
+    {
+        return $query->where($equal_this, findAdminIdFromUsersTable()) ;
     }
 
     public function scopepatient_id($query,$update_this_patient_id)
@@ -84,9 +85,9 @@ class patients_general_info extends Model
         ->limit('1')
         ->update( $request_validated +
         [
-            'patient_relationship_status'   => $trick_patient_relationship_status ,
-            'patient_gender'                => $trick_patient_gender
-         ]);
+            'patient_relationship_status' => $trick_patient_relationship_status ,
+            'patient_gender'              => $trick_patient_gender
+        ]);
     }
 
     public static function checkValidityOfPatientID($this_patient_id)

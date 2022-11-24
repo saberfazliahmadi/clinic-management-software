@@ -11,7 +11,7 @@ use Laravel\Sanctum\HasApiTokens;
 class User extends Authenticatable
 {
     use HasApiTokens, HasFactory, Notifiable, SoftDeletes ;
-    protected $primaryKey = 'id'   ;
+    protected $primaryKey = 'id' ;
 
     /**
      * The attributes that are mass assignable.
@@ -80,6 +80,11 @@ class User extends Authenticatable
     public static function scopeid($query,$Auth_user_id)
     {
         return $query->where('id' , $Auth_user_id) ;
+    }
+
+    public function scopeequalThisToAdminIdFromUserTable($query, $equal_this)
+    {
+        return $query->where($equal_this, findAdminIdFromUsersTable()) ;
     }
 
     public static function fetchMainSettingsOfSoftwareFormData()
@@ -153,7 +158,7 @@ class User extends Authenticatable
         ->id(Auth::id())
         ->name(Auth::user()->name)
         ->limit('1')
-        ->update( ['password' => $hashed_new_password ]);
+        ->update(['password' => $hashed_new_password ]);
     }
 
     public static function makeBanOrActiveThisUserIdByUpdateHisStatus($name_of_user , $id_of_user , $action)
@@ -170,8 +175,8 @@ class User extends Authenticatable
     {
         return self::
         select(['id','parent_id'])
-        ->where( [ 'id'        => $id_of_user ,
-                   'parent_id' => Auth::id() ] )
+        ->where([ 'id'        => $id_of_user ,
+                   'parent_id' => Auth::id() ])
         ->limit('1')
         ->count() ;
     }

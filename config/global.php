@@ -31,4 +31,7 @@ return [
     'regex_rule_of_encrypted_id' => '[0-z--- ]+' ,
     'regex_rule_of_decrypted_id' => '[0-9]+'     ,
     'regex_rule_of_show_date'    => '[0-9--]+'   ,
+
+    // Default number of seeders reputation for loop
+    'number_of_seeders_reputation_for_loop' => '1000' ,
 ];
