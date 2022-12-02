@@ -14,18 +14,21 @@ class EhrServiceProvider extends ServiceProvider
     {
         /** To use MYSQL database we bind EHRRepository::class
         If in the future, you decide to use a new type of database which Laravel does not support that
-        You can change EHRRepository::class to your DesiredRepository::class here via Repository Pattern Strategy that we have used in this Module **/
+        You can change EHRRepository::class to your DesiredRepositoryName::class here via Repository Pattern Strategy that we have used in this Module **/
         app()->bind(EHRRepositoryInterface::class,EHRRepository::class);
+        // $this->app()->make(Factory::class)->load(PatientsEHRDocumentFactory::class);
+        // Add the PatientsEHRDocumentSeeder::class to $seeders array variable as third(3) key in the DatabaseSeeder class
+        array_splice(DatabaseSeeder::$seeders,3,0,[PatientsEHRDocumentSeeder::class]);
     }
 
+    /** All the listeners should be written in boot() function,
+    It's better to write it in EventServiceProvider of that specific module **/
     public function boot()
     {
-        // $this->app()->make(Factory::class)->load(PatientsEHRDocumentFactory::class);
-        // DatabaseSeeder::$seeders = PatientsEHRDocumentSeeder::class;
         $this->loadRoutesFrom(base_path('AppEHR/src/Routes/web.php'));
         $this->loadMigrationsFrom(base_path('AppEHR/src/Database/Migrations/2022_01_31_134829_create_patients_e_h_r_documents_table.php'));
         $this->loadViewsFrom(base_path('AppEHR/src/Views'),'EHR');
-        // Define a new middleware specifically for EHR Module (you should remove it from Kernel.php)
+        // Define a new middleware specifically for EHR Module (you should remove it from Kernel.php if it exists there)
         app('router')->aliasMiddleware('CheckValidityOfEHRID',CheckValidityOfEHRID::class);
     }
 }

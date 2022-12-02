@@ -4,6 +4,7 @@ namespace AppEHR\Database\Seeders;
 
 use AppEHR\Models\PatientsEHRDocument;
 use Illuminate\Database\Seeder;
+use Illuminate\Support\Facades\Auth;
 
 class PatientsEHRDocumentSeeder extends Seeder
 {

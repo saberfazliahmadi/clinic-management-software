@@ -30,10 +30,15 @@ if (!function_exists('findAdminIdFromUsersTable'))
 {
     function findAdminIdFromUsersTable()
     {
-        // If the user has a parent_id so user_level = 'global.user_level' OR user_level = 'global.admin_level' ,So we return Auth::user()->parent_id
-        if(strlen(Auth::user()->parent_id) > 0)
-        {  return Auth::user()->parent_id ; }
-        // If the user DOES NOT have parent_id so user_level='global.super_admin_level' , So we return Auth::id()
-        return Auth::id();
+        if(Auth::user() !== null)
+        {
+            // If the user has a parent_id so user_level = 'global.user_level' OR user_level = 'global.admin_level' ,So we return Auth::user()->parent_id
+            if (strlen(Auth::user()->parent_id) > 0)
+            {
+                return Auth::user()->parent_id;
+            }
+            // If the user DOES NOT have parent_id so user_level='global.super_admin_level' , So we return Auth::id()
+            return Auth::id();
+        }
     }
 }

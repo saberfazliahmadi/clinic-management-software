@@ -7,13 +7,17 @@
             "dist": {
                 "type": "path",
                 "url": "./AppEHR",
-                "reference": "d77dab604428039d133272596122fbe89e9e7831"
+                "reference": "a35293a34a3f8f98ee1fbcffb0f46c72fbc45168"
+            },
+            "require": {
+                "php": "^7.3|^8.0"
             },
             "type": "library",
             "extra": {
                 "laravel": {
                     "providers": [
-                        "AppEHR\\Providers\\EhrServiceProvider"
+                        "AppEHR\\Providers\\EhrServiceProvider",
+                        "AppEHR\\Providers\\EventServiceProvider"
                     ]
                 }
             },

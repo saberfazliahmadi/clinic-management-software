@@ -37,11 +37,12 @@ class PatientsEHRDocument extends Model
         return new PatientsEHRDocumentFactory() ;
     }
 
-    public function scopeequalThisToAdminIdFromUserTable($query, $equal_this)
+    public function scopeequalThisToAdminIdFromUserTable($query,$equal_this)
     {
-        return $query->where($equal_this, findAdminIdFromUsersTable()) ;
+        return $query->where($equal_this,findAdminIdFromUsersTable()) ;
     }
 
+    /** we decide to make this type of encryption disable because when we want to use EHR db:seed we need to encrypt PrescribedCommonDrug and PrescribedCommonDiet and to encrypt them we need authenticated user id and as we can not authenticate there we decide to disable encrypt data in here */
     public function getEHRDocumentPrescribedCommonDrugAttribute($value)
     {
         if($value !== NULL)

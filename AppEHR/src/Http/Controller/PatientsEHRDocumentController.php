@@ -88,9 +88,9 @@ class PatientsEHRDocumentController extends Controller
             }
             return Responses::Success('ehr.show' , [ 'encrypted_ehr_id' => encryptDecrypt('encrypt', $result_store_new_ehr_doc->EHR_document_id ) , 'encrypted_patient_name' => $request_validated['encrypted_patient_name'] , 'is_photo_uploaded' => $is_photo_uploaded ] , '' ) ;
         }
-        catch ( QueryException $exception )
+        catch (QueryException $exception)
         {
-            return Responses::failedWithException('home', '' , '<b style="color:blue;">Because of an error, we CAN NOT save the new EHR information, new personal information and new photo of this patient!</b>' , $exception ) ;
+            return Responses::failedWithException('home', '' , '<b style="color:blue;">Because of an error, we CAN NOT save :<br>the new EHR information<br> and new personal information<br> and new photo of this patient!</b>' , $exception) ;
         }
     }
 
@@ -115,7 +115,9 @@ class PatientsEHRDocumentController extends Controller
             // $a = Event::dispatch('a' , '1111111111111111' , true ) ;
             // echo $a ;
             //$saber = Event::dispatch(EHRRepositoryInterface::class, 'aaaaaaaaaaaaaa', true) ;
-            //echo $saber;
+            // $saber = Event::dispatch('saber', '');
+            //dd($saber);
+
             
             return Responses::view('EHR::ehr_show' ,
             [

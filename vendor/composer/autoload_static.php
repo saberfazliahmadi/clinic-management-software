@@ -547,6 +547,7 @@ class ComposerStaticInitcefd90bede8c4a90dab5041f37c93b61
         'AppEHR\\Interfaces\\EHRRepositoryInterface' => __DIR__ . '/..' . '/app/ehr/src/Interfaces/EHRRepositoryInterface.php',
         'AppEHR\\Models\\PatientsEHRDocument' => __DIR__ . '/..' . '/app/ehr/src/Models/PatientsEHRDocument.php',
         'AppEHR\\Providers\\EhrServiceProvider' => __DIR__ . '/..' . '/app/ehr/src/Providers/EhrServiceProvider.php',
+        'AppEHR\\Providers\\EventServiceProvider' => __DIR__ . '/..' . '/app/ehr/src/Providers/EventServiceProvider.php',
         'AppEHR\\Repositories\\EHRRepository' => __DIR__ . '/..' . '/app/ehr/src/Repositories/EHRRepository.php',
         'AppEHR\\Services\\PatientsEHRDocumentsService' => __DIR__ . '/..' . '/app/ehr/src/Services/PatientsEHRDocumentsService.php',
         'App\\Console\\Kernel' => __DIR__ . '/../..' . '/app/Console/Kernel.php',

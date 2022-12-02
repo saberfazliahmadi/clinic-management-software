@@ -5,7 +5,7 @@
         'type' => 'project',
         'install_path' => __DIR__ . '/../../',
         'aliases' => array(),
-        'reference' => '2d502d9bed975caa33ae63a5ae4f907eac89e631',
+        'reference' => '6ae56d8256a1ac534e69e5c8f30e8dfbb3244f01',
         'name' => 'laravel/laravel',
         'dev' => true,
     ),
@@ -16,7 +16,7 @@
             'type' => 'library',
             'install_path' => __DIR__ . '/../app/ehr',
             'aliases' => array(),
-            'reference' => 'd77dab604428039d133272596122fbe89e9e7831',
+            'reference' => 'a35293a34a3f8f98ee1fbcffb0f46c72fbc45168',
             'dev_requirement' => false,
         ),
         'asm89/stack-cors' => array(
@@ -409,7 +409,7 @@
             'type' => 'project',
             'install_path' => __DIR__ . '/../../',
             'aliases' => array(),
-            'reference' => '2d502d9bed975caa33ae63a5ae4f907eac89e631',
+            'reference' => '6ae56d8256a1ac534e69e5c8f30e8dfbb3244f01',
             'dev_requirement' => false,
         ),
         'laravel/sail' => array(

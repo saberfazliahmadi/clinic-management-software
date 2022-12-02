@@ -12,7 +12,6 @@
         }
     ],
 
-
     "require": {
         "php": "^7.3|^8.0",
         "app/ehr": "dev-developing",
@@ -22,7 +21,8 @@
         "laravel/sanctum": "^2.11",
         "laravel/tinker": "^2.5",
         "laravel/ui": "^3.4",
-        "phpunit/phpunit": "^9.5"
+        "phpunit/phpunit": "^9.5",
+        "ext-openssl": "*"
     },
     "require-dev": {
         "facade/ignition": "^2.5",

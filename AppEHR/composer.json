@@ -1,5 +1,10 @@
 {
+
   "name": "app/ehr",
+
+  "require": {
+    "php": "^7.3|^8.0"
+  },
 
   "autoload":
   {
@@ -15,7 +20,8 @@
     {
       "providers":
       [
-        "AppEHR\\Providers\\EhrServiceProvider"
+        "AppEHR\\Providers\\EhrServiceProvider",
+        "AppEHR\\Providers\\EventServiceProvider"
       ]
     }
   }

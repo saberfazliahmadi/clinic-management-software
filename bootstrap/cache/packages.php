@@ -4,6 +4,7 @@
     'providers' => 
     array (
       0 => 'AppEHR\\Providers\\EhrServiceProvider',
+      1 => 'AppEHR\\Providers\\EventServiceProvider',
     ),
   ),
   'facade/ignition' => 

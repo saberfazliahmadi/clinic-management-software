@@ -21,6 +21,7 @@ return array(
     'AppEHR\\Interfaces\\EHRRepositoryInterface' => $vendorDir . '/app/ehr/src/Interfaces/EHRRepositoryInterface.php',
     'AppEHR\\Models\\PatientsEHRDocument' => $vendorDir . '/app/ehr/src/Models/PatientsEHRDocument.php',
     'AppEHR\\Providers\\EhrServiceProvider' => $vendorDir . '/app/ehr/src/Providers/EhrServiceProvider.php',
+    'AppEHR\\Providers\\EventServiceProvider' => $vendorDir . '/app/ehr/src/Providers/EventServiceProvider.php',
     'AppEHR\\Repositories\\EHRRepository' => $vendorDir . '/app/ehr/src/Repositories/EHRRepository.php',
     'AppEHR\\Services\\PatientsEHRDocumentsService' => $vendorDir . '/app/ehr/src/Services/PatientsEHRDocumentsService.php',
     'App\\Console\\Kernel' => $baseDir . '/app/Console/Kernel.php',
