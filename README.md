@@ -1,154 +1,131 @@
 # Clinic Management Software
 
-Clinic Management Software is a custom Laravel-based web application built to help a clinic manage patients, appointments, financial records, and administrative settings from a single dashboard.
+A custom Laravel-based clinic management system for handling patient records, appointments, financial tasks, and clinic administration from a single web dashboard.
 
-The system is designed for day-to-day clinic operations, allowing staff to register patients, schedule appointments, track payments, and manage core software settings while keeping the interface simple and practical.
+This project is designed to support the day-to-day workflow of a clinic with a practical interface for staff and administrators. It centralizes patient data, appointment scheduling, and financial tracking into one application.
+
+## Overview
+
+Clinic Management Software is built on Laravel 8 and uses the default MVC structure with custom business logic and a Bootstrap-based admin dashboard. The app includes role-aware access control and a set of operational workflows tailored to clinic management.
+
+## Features
+
+### Patient management
+- Create and update patient profiles
+- View patient demographic details
+- Search for patients by relevant criteria
+- Store medical background and related patient information
+
+### Appointment management
+- Schedule appointments by date and time
+- View appointment tables for specific days
+- Manage appointment status and cancellations
+- Link appointments to patient records
+
+### Financial management
+- Record financial transactions
+- Track revenue and payment-related records
+- Associate transactions with patients and appointments
+- Review transaction reporting and financial settings
+
+### Administration
+- User login and authentication
+- Change password support
+- Admin-only management screens
+- Software settings and financial configuration controls
 
 ## Tech Stack
 
 - PHP
 - Laravel 8
 - MySQL
-- Blade templating
-- Bootstrap-based admin UI
+- Blade templates
+- Bootstrap
 - Laravel UI authentication
+- npm / Laravel Mix for frontend asset compilation
 
-## Project Overview
-
-This repository is not a generic Laravel starter app. It is a customized clinic operations platform created around a small set of core business entities:
-
-- Patients
-- Appointments
-- Financial transactions
-- Users and settings
-
-The project structure follows the standard Laravel architecture, with route definitions in `routes/web.php`, Eloquent models in `app/Models`, controllers in `app/Http/Controllers`, and Blade views in `resources/views`.
-
-A custom admin-themed frontend is included in `public/back`, giving the app a dashboard-style UI for clinic management tasks.
-
-## Core Features
-
-### Patient Management
-- Add new patient records
-- Update existing patient information
-- Search patient data
-- Manage patient demographic and medical details
-
-### Appointment Scheduling
-- View appointment slots by date
-- Schedule patient visits by time
-- Review appointment status
-- Delete or cancel appointments when needed
-
-### Financial Management
-- Record incoming or outgoing financial transactions
-- Associate transactions with patients and appointments
-- View financial tracking and reporting screens
-- Manage receiving-money settings
-
-### Admin and User Access
-- Login and authentication via Laravel auth system
-- Middleware-based access control
-- User-level and admin-level permission separation
-- Password change support
-
-## Repository Structure
+## Project Structure
 
 ```text
 app/
   Http/
-    Controllers/        Main app logic for patients, appointments, finances, and auth
-    Middleware/          Access control and request handling
-  Models/               Eloquent models for clinic data
+    Controllers/         Application logic for patients, appointments, finances, and auth
+    Middleware/           Access control and request flow checks
+  Models/                Eloquent models for the main business entities
 
-config/                 Laravel configuration files
+config/                  Laravel configuration files
 
 database/
-  migrations/            Database schema for users, patient data, appointments, and finances
-  seeders/               Seed data support
+  migrations/             Database schema for the application
+  seeders/                Seeding support for initial data
 
 public/
-  back/                  Custom admin dashboard theme and frontend assets
+  back/                   Custom admin dashboard frontend and bundled assets
 
 resources/
-  views/                 Blade templates for login and dashboard screens
-  js/                    Frontend JavaScript
-  sass/                  Styling sources
+  views/                  Blade templates for auth and backend screens
+  js/                     JavaScript frontend files
+  sass/                   Sass stylesheets
 
 routes/
-  web.php                Main application routes
+  web.php                 Main application routes
 
-.env.example            Example env configuration
-composer.json           PHP package dependencies
-package.json            Frontend dependencies and scripts
-phpunit.xml             PHPUnit configuration
-README.md               Project documentation
+.env.example             Example environment file
+composer.json            PHP dependencies
+package.json             Frontend build scripts
+phpunit.xml              PHPUnit configuration
+README.md                Project documentation
 ```
 
 ## Main Models
 
-The project uses several key Eloquent models:
+The application centers around these model classes:
 
-- `app/Models/User.php` — authentication and application user information
+- `app/Models/User.php` — user authentication and admin/user profile information
 - `app/Models/patients_general_info.php` — patient personal and medical details
-- `app/Models/patients_appointment.php` — appointment records and scheduling
-- `app/Models/financial_transaction.php` — financial transactions and billing data
+- `app/Models/patients_appointment.php` — appointment scheduling and status
+- `app/Models/financial_transaction.php` — billing and financial records
 
-## Routing Overview
+## Core Workflow
 
-The application routes are defined in `routes/web.php` and cover:
+The application follows a standard Laravel flow:
 
-- login and auth pages
-- patient creation/edit/search
-- appointment viewing and management
-- financial reporting and transaction handling
-- system settings and password change screens
-- admin-only sections protected by middleware
-
-## Authentication and Access Control
-
-This application uses Laravel's built-in authentication system and custom middleware for role-based access:
-
-- `app/Http/Middleware/middleware_check_page_access_for_user_level.php`
-- `app/Http/Middleware/middleware_check_page_access_for_admin_level.php`
-
-These middleware checks control which pages are visible or usable based on user access level.
+1. Requests enter through `routes/web.php`
+2. Controllers handle logic for patient, appointment, or financial operations
+3. Eloquent models interact with the database
+4. Blade views render the dashboard and forms
+5. Middleware enforces access rules for user and admin functionality
 
 ## Installation
 
 ### Prerequisites
 
-- PHP 7.3 or newer (project is compatible with Laravel 8)
+- PHP 7.3+ or compatible Laravel 8 environment
 - Composer
 - Node.js and npm
 - MySQL database
 
-### 1. Clone the repository
+### Clone the repository
 
 ```bash
 git clone https://github.com/saberfazliahmadi/clinic-management-software.git
 cd clinic-management-software
 ```
 
-### 2. Install PHP dependencies
+### Install dependencies
 
 ```bash
 composer install
-```
-
-### 3. Install frontend dependencies
-
-```bash
 npm install
 ```
 
-### 4. Create your environment file
+### Configure environment
 
 ```bash
 cp .env.example .env
 ```
 
-Then update the database settings in `.env`:
+Update the database values in `.env`:
 
 ```env
 DB_CONNECTION=mysql
@@ -159,25 +136,25 @@ DB_USERNAME=your_database_user
 DB_PASSWORD=your_database_password
 ```
 
-### 5. Generate the Laravel app key
+### Generate application key
 
 ```bash
 php artisan key:generate
 ```
 
-### 6. Run the database migrations
+### Run migrations
 
 ```bash
 php artisan migrate
 ```
 
-### 7. Build frontend assets
+### Build frontend assets
 
 ```bash
 npm run dev
 ```
 
-### 8. Start the application
+### Start the app
 
 ```bash
 php artisan serve
@@ -189,38 +166,39 @@ Then open:
 http://localhost:8000
 ```
 
-## Login
+## Authentication and Access Control
 
-The login page is stored in:
+The app uses Laravel's built-in authentication system. Login functionality is provided through standard auth routes and the login view located in:
 
 - `resources/views/auth/login.blade.php`
 
-The project also uses Laravel's generated auth routes via:
+Access is controlled with custom middleware, including:
 
-```php
-Auth::routes();
-```
+- `app/Http/Middleware/middleware_check_page_access_for_user_level.php`
+- `app/Http/Middleware/middleware_check_page_access_for_admin_level.php`
 
-## Notes
+These middleware checks protect user-specific and admin-only sections of the system.
 
-- This project is a custom clinic operations dashboard rather than a generic starter template.
-- It includes a bundled admin panel frontend under `public/back`.
-- Many model and controller names use custom snake_case naming conventions, which reflect the project's original implementation style.
-- Some parts of the project appear to be based on a legacy admin template or custom dashboard assets bundled into the repository.
+## Important Notes
+
+- This repository is a custom clinic operations system rather than a generic Laravel starter project.
+- The app includes a bundled admin dashboard theme under `public/back`.
+- The codebase contains a mix of standard Laravel conventions and custom naming styles, such as snake_case model names and custom controller methods.
+- Some assets appear to be derived from bundled frontend templates or legacy static admin UI resources.
 
 ## License
 
-The project does not currently document a distinct custom license in the README. If you intend to distribute or commercialize this software, confirm the final licensing terms before publishing or deploying it externally.
+This repository does not currently declare a project-specific license in the README. Before commercial use or public distribution, confirm the correct licensing terms for the project and any bundled assets.
 
 ## Contribution
 
 Contributions are welcome for improvements related to:
 
-- patient workflow management
-- appointment logic
-- financial reporting
-- UI and dashboard usability
-- access control and security
+- patient workflow efficiency
+- appointment handling
+- financial reporting and tracking
+- admin and user access control
+- UI/UX improvements
 - code cleanup and modernization
 
-If you want to contribute, open a pull request or contact the repository maintainer.
+If you would like to contribute, open a pull request or contact the repo maintainer.
