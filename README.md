@@ -1,60 +1,61 @@
 # MatabeOnline Clinic Management Software
 
-MatabeOnline Clinic Management Software is a custom Laravel-based clinic management system built to handle the daily operations of a clinic. It provides a centralized dashboard for patient management, appointment scheduling, financial tracking, and administrative configuration.
+MatabeOnline Clinic Management Software is a custom Laravel-based clinic management system built to streamline daily clinical operations. It provides a single dashboard for patient management, appointment planning, financial tracking, and clinic administration.
 
-This project is designed as a practical clinic operations platform rather than a generic Laravel starter app. It helps clinic staff manage patient records, reservation workflows, and transaction reporting from a single system.
+This repository is not a generic Laravel starter project. It is a practical healthcare-management application tailored to the needs of a clinic, with workflows for patient intake, appointment coordination, billing, and configurable admin settings.
 
 ## Overview
 
-The application is built with Laravel 8 and follows the standard MVC pattern with custom business logic for a medical practice environment. The project includes:
+The application is built with Laravel 8 and follows the standard MVC architecture used by Laravel, but the actual business logic is customized for clinic operations. The project includes:
 
 - patient registration and profile management
-- appointment booking and scheduling
+- appointment scheduling and time-slot management
 - financial transaction recording and reporting
-- clinic settings and configuration
-- admin/user access restrictions
-- a custom admin-style dashboard stored in the `public/back` directory
+- clinic configuration and administrative settings
+- user/admin access control through custom middleware
+- a dashboard-style frontend under `public/back`
 
 ## Why this project exists
 
-This system addresses the core needs of a small or mid-sized clinic:
+The app is designed to support the day-to-day operational workflow of a clinic:
 
-- keep all patient information in one place
-- manage appointments by date and time
-- monitor revenue and patient-related financial activity
-- configure doctor names, service types, and practice defaults
-- control access to internal management features
+- keep patient records in one place
+- organize appointment dates and times
+- record financial transactions tied to patient activity
+- define clinic service prices and doctor names
+- control user access to sensitive admin sections
 
-## Features
+## Main Features
 
 ### Patient management
-- add and update patient records
-- search patients by ID, name, mobile number, or national ID
-- track personal and medical details
-- keep last appointment information for each patient
-- avoid duplicate mobile numbers in the same clinic scope
+- add, edit, and search patient records
+- store patient personal and medical information
+- track patient last appointment details
+- prevent duplicate mobile numbers within a clinic context
+- keep history fields such as surgery history, diagnosis background, medications, and allergies
 
-### Appointment scheduling
-- schedule appointments for a selected patient
-- assign appointment date and time
-- calculate available time slots based on configured gaps
-- show date-based appointment lists
-- support doctor assignment and service type configuration
-- manage appointment cancellation and deletion flows
+### Appointment management
+- schedule appointments for specific dates and times
+- generate available time slots based on configured clinic intervals
+- display appointments on a selected day
+- assign doctor names and service types when relevant
+- support appointment deletion and rescheduling workflows
 
-### Financial operations
+### Financial management
 - record incoming and outgoing financial transactions
-- link financial entries to patients and appointments
-- store transaction titles, amounts, and timestamps
-- generate report views for date-based financial activity
-- configure service pricing and receive-money settings
+- link transactions to patients and appointment records
+- store payment title, date, time, and amount
+- generate filtered reports for date ranges
+- define pricing and service names in admin settings
 
 ### Administration and settings
-- user login and authentication
-- password update support
-- clinic configuration for doctor names and service categories
-- practice settings for menu titles, appointment intervals, and financial defaults
-- access restriction for user/admin pages using middleware
+- login and authentication
+- password change workflow
+- clinic doctor configuration
+- financial service configuration
+- appointment gap configuration
+- general clinic software settings
+- admin/user role restrictions on sensitive pages
 
 ## Tech Stack
 
@@ -62,88 +63,90 @@ This system addresses the core needs of a small or mid-sized clinic:
 - Laravel 8
 - MySQL
 - Blade templates
-- Bootstrap-based admin UI
+- Bootstrap-based admin interface
 - Laravel authentication
-- npm + Laravel Mix
+- npm + Laravel Mix for frontend asset compilation
 
-## Project Structure
+## Application Architecture
+
+The application follows the standard Laravel folder structure, while tying together clinic-specific modules:
 
 ```text
 app/
   Http/
-    Controllers/        business logic for patient, appointment, user, and financial flows
-    Middleware/          access-control checks and protected-page logic
-  Models/               Eloquent models for clinic data
+    Controllers/        logic for patient, appointment, financial, and user workflows
+    Middleware/          access control and protected-page checks
+  Models/               Eloquent models for clinic entities
 
-config/                 Laravel config files
+config/                 Laravel application configuration
 
 database/
-  migrations/            database schema for users, patients, appointments, and finances
-  seeders/               seed support
+  migrations/            schema definition for users, patients, appointments, and money records
+  seeders/               optional seed support
 
 public/
-  back/                  bundled admin dashboard assets and frontend UI resources
+  back/                  bundled admin dashboard frontend assets and static UI resources
 
 resources/
-  views/                 Blade templates for auth and dashboard screens
+  views/                 Blade templates for auth and admin screens
   js/                    frontend JavaScript
   sass/                  frontend stylesheets
 
 routes/
-  web.php                main application routes
+  web.php                route definitions
 
-.env.example            environment template
-composer.json           PHP dependencies
-package.json            frontend dependencies and scripts
+.env.example            example environment file
+composer.json           PHP dependency list
+package.json            frontend dependency list and scripts
 phpunit.xml             PHPUnit configuration
 README.md               project documentation
 ```
 
 ## Core Modules
 
-### 1. Patient module
-Key files:
+### Patient module
+Relevant files:
 
 - `app/Http/Controllers/PatientsGeneralInfoController.php`
 - `app/Models/patients_general_info.php`
 - `resources/views/back/submit_new_patient_form.php`
 - `resources/views/back/show_patient_search_from.php`
 
-This module handles patient creation, record updates, duplicate checking, and search behavior.
+This module manages patient creation, editing, validation, duplicate prevention, and patient search workflows.
 
-### 2. Appointment module
-Key files:
+### Appointment module
+Relevant files:
 
 - `app/Http/Controllers/PatientsAppointmentController.php`
 - `app/Models/patients_appointment.php`
 - `resources/views/back/show_form_of_appointments_on_specific_date.php`
 - `resources/views/back/show_patient_time_appointment_table.php`
 
-This module schedules appointments, checks slot availability, and organizes appointments by date and time.
+This module handles date-based clinic scheduling, time slot visibility, and appointment assignments for patients.
 
-### 3. Financial module
-Key files:
+### Financial module
+Relevant files:
 
 - `app/Http/Controllers/FinancialTransactionController.php`
 - `app/Models/financial_transaction.php`
 - `resources/views/back/show_submit_financial_transaction_form.php`
 - `resources/views/back/show_financial_transaction_reporting_form.php`
 
-This module records clinic financial transactions and supports filtered reporting for a date range.
+This module stores financial records and produces transaction reports based on date ranges and selected filters.
 
-### 4. User and settings module
-Key files:
+### User and settings module
+Relevant files:
 
 - `app/Http/Controllers/UserController.php`
 - `app/Models/User.php`
 - `resources/views/back/show_main_settings_of_software_form.php`
 - `resources/views/back/show_change_password_form.php`
 
-This module manages clinic configuration such as doctors, service pricing, appointment intervals, and account settings.
+This module contains configuration logic for doctor names, service pricing, appointment intervals, clinic contact info, and general software settings.
 
 ## Database Model Summary
 
-The application has several key migrations that define the main clinic data model:
+The application includes migrations for its main operational tables:
 
 - `database/migrations/2014_10_12_000000_create_users_table.php`
 - `database/migrations/2021_12_09_055150_create_patients_general_infos_table.php`
@@ -151,26 +154,28 @@ The application has several key migrations that define the main clinic data mode
 - `database/migrations/2021_12_25_134116_create_financial_transactions_table.php`
 
 ### `users`
-Stores user account details and practice configuration, including:
+The users table stores core account information and clinic configuration values, including:
 
+- `parent_id` and `user_type`
 - `name`, `email`, `password`
-- `user_type`, `parent_id`
+- `company_name`, `contact_address`, `phone_number`, `mobile_number`, `website`
 - `gap_time_between_appointments`
-- `company_name`, `contact_address`
-- `phone_number`, `mobile_number`, `website`
 - `clinic_doctors_name`
 - `financial_management`
 - `cms_menu_title`
 - `options_for_user`
 
+This suggests the app is designed for clinic-level configuration and a hierarchical user/admin model.
+
 ### `patients_general_infos`
-Stores patient-level information:
+This table stores patient demographics and clinical history, including:
 
 - `patient_first_name`, `patient_last_name`
-- `patient_mobile_number`, `patient_phone_number`
 - `patient_birth_day`, `patient_gender`
+- `patient_mobile_number`, `patient_phone_number`
 - `patient_address`, `patient_email_address`
-- `patient_relationship_status`
+- `patient_nationality_number`
+- `patient_relation_ship_status`
 - `patient_surgery_history`
 - `patient_disease_background`
 - `patient_medication_history`
@@ -179,7 +184,7 @@ Stores patient-level information:
 - `patient_last_appointment_date`, `patient_last_appointment_time`
 
 ### `patients_appointments`
-Tracks appointment records:
+This table stores scheduled visits and appointment metadata, including:
 
 - `appointment_dr_related_id`
 - `appointment_patient_related_id`
@@ -192,12 +197,12 @@ Tracks appointment records:
 - `appointment_canceling_status`
 
 ### `financial_transactions`
-Tracks all money movement:
+This table captures monetary records for the clinic:
 
 - `financial_dr_related_id`
 - `financial_patient_related_id`
 - `financial_appointment_related_id`
-- `financial_transaction_type` (`+` = income, `-` = expense)
+- `financial_transaction_type` (`+` for income, `-` for expense)
 - `financial_transaction_date`, `financial_transaction_time`
 - `financial_transaction_title`
 - `financial_transaction_amount`
@@ -205,7 +210,7 @@ Tracks all money movement:
 
 ## Authentication and Access Control
 
-The app uses Laravel's built-in authentication and custom middleware to protect management areas.
+The application uses Laravel authentication and custom middleware to restrict access to certain pages.
 
 Relevant files:
 
@@ -213,11 +218,13 @@ Relevant files:
 - `app/Http/Middleware/middleware_check_page_access_for_user_level.php`
 - `app/Http/Middleware/middleware_check_page_access_for_admin_level.php`
 
-The project also uses the standard auth routes:
+Authentication is registered via:
 
 ```php
 Auth::routes();
 ```
+
+The app also redirects unauthenticated users to the login page.
 
 ## Installation
 
@@ -247,13 +254,13 @@ composer install
 npm install
 ```
 
-### 4. Configure environment variables
+### 4. Configure the environment file
 
 ```bash
 cp .env.example .env
 ```
 
-Update the database configuration in `.env`:
+Update the database values in `.env`:
 
 ```env
 DB_CONNECTION=mysql
@@ -264,7 +271,7 @@ DB_USERNAME=root
 DB_PASSWORD=
 ```
 
-### 5. Generate the Laravel app key
+### 5. Generate the application key
 
 ```bash
 php artisan key:generate
@@ -288,43 +295,43 @@ npm run dev
 php artisan serve
 ```
 
-Open the app at:
+Then open:
 
 ```text
 http://localhost:8000
 ```
 
-## Typical Usage Flow
+## Typical Workflow
 
-A standard clinic workflow in this application is:
+A common clinic workflow in this application is:
 
-1. staff logs into the system
-2. patient record is created or searched
-3. appointment is scheduled for a specific date and time
-4. financial transaction is recorded for service/payment
-5. reports are generated over a date range
-6. admin adjusts settings, doctors, and financial configuration
+1. admin or staff logs in
+2. patient is created or searched
+3. appointment is scheduled for a selected date and time
+4. financial transaction is recorded for the service or payment
+5. report is generated for the selected date range
+6. clinic settings are managed through the admin screen
 
 ## Notes
 
-- This repository is a custom clinic operations system, not a generic Laravel starter template.
-- The admin UI is bundled under `public/back` and includes custom/template-based frontend assets.
-- Some parts of the codebase were built in a more legacy/custom style and may benefit from future cleanup and modernization.
-- The project is practical and operational, but it is not a fully polished enterprise SaaS product out of the box.
+- This is a custom healthcare operations application rather than a generic Laravel starter template.
+- The app includes a custom administrative dashboard under `public/back`.
+- Some implementation patterns reflect legacy custom development and may benefit from future cleanup or modernization.
+- The project is operational and purpose-built for clinic use, but it is not a polished SaaS product template out of the box.
 
 ## License
 
-This project does not currently document a project-specific license in the README. Before public distribution, commercial use, or deployment in production, verify the appropriate licensing status and check whether any bundled assets in `public/back` have separate license terms.
+This repository does not currently declare a specific project license in the README. Before public distribution, commercial use, or deployment in a production environment, verify the intended licensing terms and check whether any bundled frontend assets under `public/back` have their own license obligations.
 
-## Contributing
+## Contribution
 
 Contributions are welcome for:
 
 - patient workflow improvements
-- appointment scheduling and validation
-- financial reporting and transaction handling
-- admin/user access improvements
-- UI and UX enhancements
+- appointment scheduling logic
+- financial reporting and integrity
+- access control improvements
+- dashboard usability and UI refinement
 - maintainability and modernization
 
 If you would like to contribute, open a pull request or contact the repository maintainer.
