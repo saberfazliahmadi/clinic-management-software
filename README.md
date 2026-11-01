@@ -1,4 +1,5 @@
 <p align="center">
+  <img src="https://github.com/saberfazliahmadi/clinic-management-software/blob/master/images/AI_Clinic_Management_System_Overview.png" width="32%" alt="AI Clinic Management System Overview" />
   <img src="images/AI_Clinic_Management_System_Overview.png" width="32%" alt="AI Clinic Management System Overview" />
   <img src="images/Architecting_the_Intelligent_Clinic_-_Slide_1.png" width="32%" alt="Architecting the Intelligent Clinic Slide 1" />
   <img src="images/Architecting_the_Intelligent_Clinic_-_Slide_2.png" width="32%" alt="Architecting the Intelligent Clinic Slide 2" />
