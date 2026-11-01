@@ -1,8 +1,14 @@
+<p align="center">
+  <img src="images/AI_Clinic_Management_System_Overview.png" width="32%" alt="AI Clinic Management System Overview" />
+  <img src="images/Architecting_the_Intelligent_Clinic_-_Slide_1.png" width="32%" alt="Architecting the Intelligent Clinic Slide 1" />
+  <img src="images/Architecting_the_Intelligent_Clinic_-_Slide_2.png" width="32%" alt="Architecting the Intelligent Clinic Slide 2" />
+</p>
+
 # MatabeOnline Clinic Management Software
 
 MatabeOnline Clinic Management Software is a custom Laravel-based clinic management system designed to support the daily operations of a medical clinic. It provides a central dashboard for managing patients, appointments, financial records, and administrative settings.
 
-This repository is not a generic Laravel starter project. It was built as a practical clinic operations platform for handling patient intake, appointment coordination, billing, and internal admin configuration in one place.
+This repository is not a generic Laravel starter project. It was built as a practical clinic operations platform for handling patient intake, appointment coordination, billing, and internal admin control.
 
 ## Overview
 
@@ -307,7 +313,7 @@ A normal clinic workflow in this project looks like this:
 
 ## License
 
-This repository does not currently declare a project-specific license in the README. Before public distribution, commercial use, or production deployment, confirm the proper licensing terms and check whether any bundled frontend assets under `public/back` have their own license requirements.
+This repository does not currently declare a project-specific license in the README. Before public distribution, commercial use, or production deployment, confirm the proper licensing terms and conditions for your intended use.
 
 ## Contributing
 
